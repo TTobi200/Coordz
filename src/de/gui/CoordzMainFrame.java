@@ -13,8 +13,8 @@ import de.util.CoordzFileUtil;
 
 public class CoordzMainFrame extends Application
 {
-	public static final String TITLE = "Coffez";
-	private static final String FXML = "CoffezGui.fxml";
+	public static final String TITLE = "Coordz";
+	private static final String FXML = "CoordzGui.fxml";
 
 	@Override
 	public void start(Stage primaryStage) throws Exception
@@ -27,9 +27,6 @@ public class CoordzMainFrame extends Application
 		primaryScene.getStylesheets().add("/include/fxml/stylesheet.css");
 		primaryStage.setScene(primaryScene);
 		
-		// First maximize, otherwise display bug on startup with windows
-		primaryStage.setMaximized(true);
-		primaryStage.setFullScreen(true);
 		primaryStage.getIcons().add(CoordzFileUtil.getResourceIcon(
 			"U-Logo.png"));
 		primaryStage.setTitle(TITLE);
