@@ -4,7 +4,7 @@
  * $Log$
  * Copyright © 2015 T.Ohm . All Rights Reserved.
  */
-package de.coordz;
+package de.coordz.database;
 
 public class CoordzProject
 {

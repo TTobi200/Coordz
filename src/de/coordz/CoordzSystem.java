@@ -7,6 +7,7 @@
 package de.coordz;
 
 import javafx.application.Platform;
+import de.coordz.database.CoordzDatabase;
 import de.util.CoordzPreferencesUtil;
 
 public class CoordzSystem
@@ -35,6 +36,7 @@ public class CoordzSystem
 	public static void exit(int status)
 	{
 		CoordzPreferencesUtil.setCoordzRunning(false);
+		CoordzDatabase.shutdown();
 		Platform.exit();
 		
 		if(status != NORMAL)

@@ -2,5 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="src/include/jar/derby.jar"/>
+	<classpathentry kind="lib" path="src/include/jar/derbyclient.jar"/>
+	<classpathentry kind="lib" path="src/include/jar/derbynet.jar"/>
+	<classpathentry kind="lib" path="src/include/jar/derbytools.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

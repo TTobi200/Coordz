@@ -1,4 +1,4 @@
-package de.coordz;
+package de.coordz.database;
 
 public class CoordzCoordinates
 {

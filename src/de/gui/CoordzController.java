@@ -15,6 +15,7 @@ import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.stage.*;
 import de.coordz.*;
+import de.coordz.database.*;
 import de.util.CoordzLoggerUtil;
 import de.util.log.CoordzLog;
 
@@ -77,6 +78,10 @@ public class CoordzController implements Initializable
 	@SuppressWarnings("unchecked")
 	private void loadTestProjects()
 	{
+		// FORTEST Create databse connection
+		CoordzDatabase.createConnection();
+		
+		// FORTEST Add Projects to tree
 		TreeItem<CoordzProject> root = new TreeItem<CoordzProject>(
 			new CoordzProject("Projekte"));
 		
@@ -84,8 +89,6 @@ public class CoordzController implements Initializable
 			new TreeItem<CoordzProject>(new CoordzProject("A2015.10051 Mischek")),
 			new TreeItem<CoordzProject>(new CoordzProject("A2014.10438 SBE")),
 			new TreeItem<CoordzProject>(new CoordzProject("A2014.10331 Geelen")));
-		
-		
 		
 		prjTreeView.setRoot(root);
 		prjTreeView.getSelectionModel().selectedItemProperty().addListener((old, curr, newV) -> 
