@@ -7,14 +7,18 @@
 package de.gui;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import javafx.event.EventHandler;
+import javafx.fxml.*;
+import javafx.scene.control.*;
 import javafx.stage.*;
-import de.coordz.CoordzSystem;
+import de.coordz.*;
 import de.util.CoordzLoggerUtil;
 import de.util.log.CoordzLog;
 
-public class CoordzController
+public class CoordzController implements Initializable
 {
 	public static final boolean REORG_LOGS = true;
 	public static final int DAYS_TO_SAVE_LOGS = 7;
@@ -22,6 +26,11 @@ public class CoordzController
 
 	protected static CoordzController instance;
 	protected Stage primaryStage;
+
+	@FXML
+	protected TreeView<CoordzProject> prjTreeView;
+	@FXML
+	protected Label lblPrj;
 
 	public static Object getInstance(Stage primaryStage)
 	{
@@ -57,5 +66,31 @@ public class CoordzController
 			CoordzLog.error("Error while initializing controller.",
 				e);
 		}
+	}
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources)
+	{
+		loadTestProjects();		
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void loadTestProjects()
+	{
+		TreeItem<CoordzProject> root = new TreeItem<CoordzProject>(
+			new CoordzProject("Projekte"));
+		
+		root.getChildren().addAll(
+			new TreeItem<CoordzProject>(new CoordzProject("A2015.10051 Mischek")),
+			new TreeItem<CoordzProject>(new CoordzProject("A2014.10438 SBE")),
+			new TreeItem<CoordzProject>(new CoordzProject("A2014.10331 Geelen")));
+		
+		
+		
+		prjTreeView.setRoot(root);
+		prjTreeView.getSelectionModel().selectedItemProperty().addListener((old, curr, newV) -> 
+		{
+			lblPrj.setText(newV.getValue().getName());
+		});
 	}
 }

@@ -1,1 +1,16 @@
 # Coordz
+  - Messpunkte-Eingabe
+    - *.ply-Datei generieren
+    - Abweichungsalgorithmus
+  - 3D-Modelierung
+  - DB für Messergebnisse
+  - Globale Einstellungen von LAP Software
+  - Einstellungen in Access DB
+    - Maschine
+    - Maschine_Subsystem
+    - Maschine_Pt_Typ
+    - PSR_Variante
+    - PSR_Schablone
+    - Maschine_Produkt_Pt_Typ
+    - Stamm_Lc
+    - Stamm_Lc_Station

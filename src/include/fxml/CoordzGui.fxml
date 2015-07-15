@@ -1,29 +1,137 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.CheckMenuItem?>
-<?import java.lang.String?>
-<?import javafx.scene.chart.BarChart?>
-<?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.chart.StackedBarChart?>
-<?import java.lang.Object?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8"
-	xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="508.0" prefWidth="917.0"
+	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+	<top>
+		<MenuBar BorderPane.alignment="CENTER">
+			<menus>
+				<Menu mnemonicParsing="false" text="Datei">
+					<items>
+						<MenuItem mnemonicParsing="false" text="Öffnen" />
+						<MenuItem mnemonicParsing="false" text="Beenden" />
+					</items>
+				</Menu>
+				<Menu mnemonicParsing="false" text="Bearbeiten">
+					<items>
+						<MenuItem mnemonicParsing="false" text="Kopieren" />
+						<MenuItem mnemonicParsing="false" text="Ausschneiden" />
+						<MenuItem mnemonicParsing="false" text="Löschen" />
+					</items>
+				</Menu>
+				<Menu mnemonicParsing="false" text="Optionen">
+					<items>
+						<MenuItem mnemonicParsing="false" text="Einstellungen" />
+					</items>
+				</Menu>
+				<Menu mnemonicParsing="false" text="Hilfe">
+					<items>
+						<MenuItem mnemonicParsing="false" text="Über" />
+					</items>
+				</Menu>
+			</menus>
+		</MenuBar>
+	</top>
+	<center>
+		<SplitPane dividerPositions="0.2" prefHeight="445.0"
+			prefWidth="917.0" BorderPane.alignment="CENTER">
+			<items>
+				<TreeView fx:id="prjTreeView" />
+				<BorderPane>
+					<center>
+						<SplitPane dividerPositions="0.16, 0.54" orientation="VERTICAL"
+							BorderPane.alignment="CENTER">
+							<items>
+								<BorderPane>
+									<top>
+										<Label fx:id="lblPrj" >
+											<font>
+												<Font size="16"></Font>
+											</font>
+										</Label>
+									</top>
+									<center>
+										<GridPane hgap="5" vgap="5" BorderPane.alignment="CENTER">
+											<columnConstraints>
+												<ColumnConstraints hgrow="NEVER" minWidth="10.0" />
+												<ColumnConstraints hgrow="ALWAYS"
+													minWidth="10.0" prefWidth="100.0" />
+											</columnConstraints>
+											<children>
+												<Label text="Kunde" />
+												<Label text="Anschrift" GridPane.rowIndex="1" />
+												<Label text="Datum" GridPane.rowIndex="2" />
+												<TextField GridPane.columnIndex="1" />
+												<TextField GridPane.columnIndex="1"
+													GridPane.rowIndex="1" />
+												<TextField GridPane.columnIndex="1"
+													GridPane.rowIndex="2" />
+											</children>
+										</GridPane>
+									</center>
+								</BorderPane>
+								<BorderPane>
+									<center>
+										<TableView>
+											<columns>
+												<TableColumn text="Nr" />
+												<TableColumn text="Station" />
+												<TableColumn text="MAC" />
+												<TableColumn text="Anzahl Laser" />
+												<TableColumn text="Datei" />
+												<TableColumn text="Gesamtabweichung" />
+											</columns>
+										</TableView>
+									</center>
+									<bottom>
+										<ToolBar nodeOrientation="RIGHT_TO_LEFT">
+											<items>
+												<Button>
+													<graphic>
+														<ImageView pickOnBounds="true" preserveRatio="true">
+															<image>
+																<Image url="@/include/icons/delete.png" />
+															</image>
+														</ImageView>
+													</graphic>
+												</Button>
+												<Button>
+													<graphic>
+														<ImageView pickOnBounds="true" preserveRatio="true">
+															<image>
+																<Image url="@/include/icons/add.png" />
+															</image>
+														</ImageView>
+													</graphic>
+												</Button>
+											</items>
+										</ToolBar>
+									</bottom>
+								</BorderPane>
+								<TabPane>
+									<tabs>
+										<Tab text="Messpunkte" />
+										<Tab text="3D-Ansicht">
+										</Tab>
+										<Tab text="Notizen">
+										</Tab>
+									</tabs>
+								</TabPane>
+							</items>
+						</SplitPane>
+					</center>
+				</BorderPane>
+			</items>
+		</SplitPane>
+	</center>
 </BorderPane>
