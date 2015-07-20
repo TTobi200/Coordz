@@ -14,14 +14,12 @@ public class Startup
 	public static void main(String[] args)
 	{
 		// XXX Add this after debug
-//		// Check if coffez already running
 //		if(CoordzPreferencesUtil.isCoordzAlreadyRunning())
 //		{
-//			System.err.println("ERROR: Coffez already running");
+//			System.err.println("ERROR: Coordz already running");
 //			CoordzSystem.exit(CoordzSystem.FATAL);
 //		}
 //
-//		// Set coffez running
 //		CoordzPreferencesUtil.setCoordzRunning(true);
 
 		Application.launch(CoordzMainFrame.class, args);

@@ -7,7 +7,7 @@
 package de.coordz;
 
 import javafx.application.Platform;
-import de.coordz.database.CoordzDatabase;
+import de.coordz.database.*;
 import de.util.CoordzPreferencesUtil;
 
 public class CoordzSystem
@@ -19,6 +19,7 @@ public class CoordzSystem
 	public static final int SERVER_ERROR = 0x10;
 	
 	private static CoordzXMLProperties systemProperties = CoordzXMLProperties.getSystemProperties();
+	private static CoordzDB systemDatabase = new CoordzDerbyDB(); 
 
 	/**
 	 * Normal ending of this application
@@ -36,7 +37,7 @@ public class CoordzSystem
 	public static void exit(int status)
 	{
 		CoordzPreferencesUtil.setCoordzRunning(false);
-		CoordzDatabase.shutdown();
+		getSystemDatabase().shutdown();
 		Platform.exit();
 		
 		if(status != NORMAL)
@@ -54,5 +55,10 @@ public class CoordzSystem
 	public static CoordzXMLProperties getSystemProperties()
 	{
 		return systemProperties;
+	}
+	
+	public static CoordzDB getSystemDatabase()
+	{
+		return systemDatabase;
 	}
 }

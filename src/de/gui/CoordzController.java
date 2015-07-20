@@ -14,7 +14,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.stage.*;
-import de.coordz.*;
+import de.coordz.CoordzSystem;
 import de.coordz.database.*;
 import de.util.CoordzLoggerUtil;
 import de.util.log.CoordzLog;
@@ -72,28 +72,35 @@ public class CoordzController implements Initializable
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
 	{
-		loadTestProjects();		
+		loadTestProjects();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private void loadTestProjects()
 	{
 		// FORTEST Create databse connection
-		CoordzDatabase.createConnection();
-		
+		CoordzDB db = CoordzSystem.getSystemDatabase();
+		db.connect("CoordzDB", "ut", "ut", true);
+
 		// FORTEST Add Projects to tree
 		TreeItem<CoordzProject> root = new TreeItem<CoordzProject>(
 			new CoordzProject("Projekte"));
-		
-		root.getChildren().addAll(
-			new TreeItem<CoordzProject>(new CoordzProject("A2015.10051 Mischek")),
-			new TreeItem<CoordzProject>(new CoordzProject("A2014.10438 SBE")),
-			new TreeItem<CoordzProject>(new CoordzProject("A2014.10331 Geelen")));
-		
+
+		root.getChildren()
+			.addAll(
+				new TreeItem<CoordzProject>(new CoordzProject(
+					"A2015.10051 Mischek")),
+				new TreeItem<CoordzProject>(
+					new CoordzProject("A2014.10438 SBE")),
+				new TreeItem<CoordzProject>(new CoordzProject(
+					"A2014.10331 Geelen")));
+
 		prjTreeView.setRoot(root);
-		prjTreeView.getSelectionModel().selectedItemProperty().addListener((old, curr, newV) -> 
-		{
-			lblPrj.setText(newV.getValue().getName());
-		});
+		prjTreeView.getSelectionModel()
+			.selectedItemProperty()
+			.addListener((old, curr, newV) ->
+			{
+				lblPrj.setText(newV.getValue().getName());
+			});
 	}
 }
