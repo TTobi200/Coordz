@@ -84,16 +84,17 @@ public class CoordzController implements Initializable
 
 		// FORTEST Add Projects to tree
 		TreeItem<CoordzProject> root = new TreeItem<CoordzProject>(
-			new CoordzProject("Projekte"));
+			new CoordzProject("Kunde"));
 
-		root.getChildren()
-			.addAll(
-				new TreeItem<CoordzProject>(new CoordzProject(
-					"A2015.10051 Mischek")),
-				new TreeItem<CoordzProject>(
-					new CoordzProject("A2014.10438 SBE")),
-				new TreeItem<CoordzProject>(new CoordzProject(
-					"A2014.10331 Geelen")));
+		TreeItem itmMischek = new TreeItem<CoordzProject>(new CoordzProject("Mischek"));
+		TreeItem itmSBE = new TreeItem<CoordzProject>(new CoordzProject("SBE"));
+		
+		itmMischek.getChildren().add(new TreeItem<CoordzProject>(new CoordzProject(
+			"A2015.10051 Laser Einrichtung")));
+		itmMischek.getChildren().add(new TreeItem<CoordzProject>(new CoordzProject(
+			"A2015.10084 Laser Update")));
+		
+		root.getChildren().addAll(itmMischek, itmSBE);
 
 		prjTreeView.setRoot(root);
 		prjTreeView.getSelectionModel()

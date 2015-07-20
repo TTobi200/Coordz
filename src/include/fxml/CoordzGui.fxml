@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
@@ -10,9 +12,9 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.control.TextArea?>
 
-<BorderPane prefHeight="508.0" prefWidth="917.0"
-	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 	<top>
 		<MenuBar BorderPane.alignment="CENTER">
 			<menus>
@@ -46,89 +48,138 @@
 		<SplitPane dividerPositions="0.2" prefHeight="445.0"
 			prefWidth="917.0" BorderPane.alignment="CENTER">
 			<items>
-				<TreeView fx:id="prjTreeView" />
 				<BorderPane>
 					<center>
-						<SplitPane dividerPositions="0.16, 0.54" orientation="VERTICAL"
-							BorderPane.alignment="CENTER">
+						<TreeView fx:id="prjTreeView" />
+					</center>
+					<bottom>
+						<ToolBar nodeOrientation="RIGHT_TO_LEFT">
 							<items>
-								<BorderPane>
-									<top>
-										<Label fx:id="lblPrj" >
-											<font>
-												<Font size="16"></Font>
-											</font>
-										</Label>
-									</top>
-									<center>
-										<GridPane hgap="5" vgap="5" BorderPane.alignment="CENTER">
-											<columnConstraints>
-												<ColumnConstraints hgrow="NEVER" minWidth="10.0" />
-												<ColumnConstraints hgrow="ALWAYS"
-													minWidth="10.0" prefWidth="100.0" />
-											</columnConstraints>
-											<children>
-												<Label text="Kunde" />
-												<Label text="Anschrift" GridPane.rowIndex="1" />
-												<Label text="Datum" GridPane.rowIndex="2" />
-												<TextField GridPane.columnIndex="1" />
-												<TextField GridPane.columnIndex="1"
-													GridPane.rowIndex="1" />
-												<TextField GridPane.columnIndex="1"
-													GridPane.rowIndex="2" />
-											</children>
-										</GridPane>
-									</center>
-								</BorderPane>
-								<BorderPane>
-									<center>
-										<TableView>
-											<columns>
-												<TableColumn text="Nr" />
-												<TableColumn text="Station" />
-												<TableColumn text="MAC" />
-												<TableColumn text="Anzahl Laser" />
-												<TableColumn text="Datei" />
-												<TableColumn text="Gesamtabweichung" />
-											</columns>
-										</TableView>
-									</center>
-									<bottom>
-										<ToolBar nodeOrientation="RIGHT_TO_LEFT">
-											<items>
-												<Button>
-													<graphic>
-														<ImageView pickOnBounds="true" preserveRatio="true">
-															<image>
-																<Image url="@/include/icons/delete.png" />
-															</image>
-														</ImageView>
-													</graphic>
-												</Button>
-												<Button>
-													<graphic>
-														<ImageView pickOnBounds="true" preserveRatio="true">
-															<image>
-																<Image url="@/include/icons/add.png" />
-															</image>
-														</ImageView>
-													</graphic>
-												</Button>
-											</items>
-										</ToolBar>
-									</bottom>
-								</BorderPane>
-								<TabPane>
-									<tabs>
-										<Tab text="Messpunkte" />
-										<Tab text="3D-Ansicht">
-										</Tab>
-										<Tab text="Notizen">
-										</Tab>
-									</tabs>
-								</TabPane>
+								<Button>
+									<graphic>
+										<ImageView pickOnBounds="true" preserveRatio="true">
+											<image>
+												<Image url="@/include/icons/delete.png" />
+											</image>
+										</ImageView>
+									</graphic>
+								</Button>
+								<Button>
+									<graphic>
+										<ImageView pickOnBounds="true" preserveRatio="true">
+											<image>
+												<Image url="@/include/icons/add.png" />
+											</image>
+										</ImageView>
+									</graphic>
+								</Button>
 							</items>
-						</SplitPane>
+						</ToolBar>
+					</bottom>
+				</BorderPane>
+				<BorderPane>
+					<center>
+						<Accordion BorderPane.alignment="CENTER">
+							<panes>
+								<TitledPane text="Allgemein">
+									<content>
+										<BorderPane>
+											<top>
+												<Label fx:id="lblPrj">
+													<font>
+														<Font size="16" />
+													</font>
+												</Label>
+											</top>
+											<center>
+												<GridPane hgap="5" vgap="5" BorderPane.alignment="CENTER">
+													<columnConstraints>
+														<ColumnConstraints hgrow="NEVER"
+															minWidth="10.0" />
+														<ColumnConstraints hgrow="ALWAYS"
+															minWidth="10.0" prefWidth="100.0" />
+													</columnConstraints>
+													<children>
+														<Label text="Kunde" />
+														<Label text="Anschrift" GridPane.rowIndex="1" />
+														<Label text="Datum" GridPane.rowIndex="2" />
+														<TextField GridPane.columnIndex="1" />
+														<TextField GridPane.columnIndex="1"
+															GridPane.rowIndex="1" />
+														<TextField GridPane.columnIndex="1"
+															GridPane.rowIndex="2" />
+													</children>
+													<rowConstraints>
+														<RowConstraints />
+														<RowConstraints />
+														<RowConstraints />
+													</rowConstraints>
+												</GridPane>
+											</center>
+										</BorderPane>
+									</content>
+								</TitledPane>
+								<TitledPane text="Messung">
+									<content>
+										<SplitPane dividerPositions="0.0" orientation="VERTICAL">
+											<items>
+												<BorderPane>
+													<center>
+														<TableView>
+															<columns>
+																<TableColumn text="Nr" />
+																<TableColumn text="Station" />
+																<TableColumn text="MAC" />
+																<TableColumn text="Anzahl Laser" />
+																<TableColumn text="Datei" />
+																<TableColumn text="Gesamtabweichung" />
+															</columns>
+														</TableView>
+													</center>
+													<bottom>
+														<ToolBar nodeOrientation="RIGHT_TO_LEFT">
+															<items>
+																<Button>
+																	<graphic>
+																		<ImageView pickOnBounds="true"
+																			preserveRatio="true">
+																			<image>
+																				<Image url="@/include/icons/delete.png" />
+																			</image>
+																		</ImageView>
+																	</graphic>
+																</Button>
+																<Button>
+																	<graphic>
+																		<ImageView pickOnBounds="true"
+																			preserveRatio="true">
+																			<image>
+																				<Image url="@/include/icons/add.png" />
+																			</image>
+																		</ImageView>
+																	</graphic>
+																</Button>
+															</items>
+														</ToolBar>
+													</bottom>
+												</BorderPane>
+												<TabPane>
+													<tabs>
+														<Tab text="Messpunkte" />
+														<Tab text="3D-Ansicht">
+														</Tab>
+														<Tab text="Notizen">
+															<TextArea>
+															</TextArea>
+														</Tab>
+													</tabs>
+												</TabPane>
+											</items>
+										</SplitPane>
+									</content>
+								</TitledPane>
+							</panes>
+						</Accordion>
 					</center>
 				</BorderPane>
 			</items>
