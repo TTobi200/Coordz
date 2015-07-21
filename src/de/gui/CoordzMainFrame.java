@@ -28,7 +28,7 @@ public class CoordzMainFrame extends Application
 		primaryStage.setScene(primaryScene);
 		
 		primaryStage.getIcons().add(CoordzFileUtil.getResourceIcon(
-			"U-Logo.png"));
+			"Logo.png"));
 		primaryStage.setTitle(TITLE);
 		primaryStage.show();
 	}

@@ -20,25 +20,108 @@
 			<menus>
 				<Menu mnemonicParsing="false" text="Datei">
 					<items>
-						<MenuItem mnemonicParsing="false" text="Öffnen" />
-						<MenuItem mnemonicParsing="false" text="Beenden" />
+						<MenuItem mnemonicParsing="false" text="Neu">
+							<graphic>
+								<ImageView pickOnBounds="true" preserveRatio="true">
+									<image>
+										<Image url="/include/icons/new.png" />
+									</image>
+								</ImageView>
+							</graphic>
+						</MenuItem>
+						<MenuItem mnemonicParsing="false" text="Öffnen">
+							<graphic>
+								<ImageView pickOnBounds="true" preserveRatio="true">
+									<image>
+										<Image url="/include/icons/open.png" />
+									</image>
+								</ImageView>
+							</graphic>
+						</MenuItem>
+						<MenuItem mnemonicParsing="false" text="Beenden">
+							<graphic>
+								<ImageView pickOnBounds="true" preserveRatio="true">
+									<image>
+										<Image url="/include/icons/exit.png" />
+									</image>
+								</ImageView>
+							</graphic>
+						</MenuItem>
 					</items>
 				</Menu>
 				<Menu mnemonicParsing="false" text="Bearbeiten">
 					<items>
-						<MenuItem mnemonicParsing="false" text="Kopieren" />
-						<MenuItem mnemonicParsing="false" text="Ausschneiden" />
-						<MenuItem mnemonicParsing="false" text="Löschen" />
+						<MenuItem mnemonicParsing="false" text="Kopieren">
+							<graphic>
+								<ImageView pickOnBounds="true" preserveRatio="true">
+									<image>
+										<Image url="/include/icons/copy.png" />
+									</image>
+								</ImageView>
+							</graphic>
+						</MenuItem>
+						<MenuItem mnemonicParsing="false" text="Ausschneiden">
+							<graphic>
+								<ImageView pickOnBounds="true" preserveRatio="true">
+									<image>
+										<Image url="/include/icons/cut.png" />
+									</image>
+								</ImageView>
+							</graphic>
+						</MenuItem>
+						<MenuItem mnemonicParsing="false" text="Einfügen">
+							<graphic>
+								<ImageView pickOnBounds="true" preserveRatio="true">
+									<image>
+										<Image url="/include/icons/paste.png" />
+									</image>
+								</ImageView>
+							</graphic>
+						</MenuItem>
+						<MenuItem mnemonicParsing="false" text="Löschen">
+							<graphic>
+								<ImageView pickOnBounds="true" preserveRatio="true">
+									<image>
+										<Image url="/include/icons/delete.png" />
+									</image>
+								</ImageView>
+							</graphic>
+						</MenuItem>
 					</items>
 				</Menu>
 				<Menu mnemonicParsing="false" text="Optionen">
 					<items>
-						<MenuItem mnemonicParsing="false" text="Einstellungen" />
+						<MenuItem mnemonicParsing="false" text="Einstellungen">
+							<graphic>
+								<ImageView pickOnBounds="true" preserveRatio="true">
+									<image>
+										<Image url="/include/icons/settings.png" />
+									</image>
+								</ImageView>
+							</graphic>
+						</MenuItem>
 					</items>
 				</Menu>
 				<Menu mnemonicParsing="false" text="Hilfe">
 					<items>
-						<MenuItem mnemonicParsing="false" text="Über" />
+						<MenuItem mnemonicParsing="false" text="Hilfe">
+							<graphic>
+								<ImageView pickOnBounds="true" preserveRatio="true">
+									<image>
+										<Image url="/include/icons/help.png" />
+									</image>
+								</ImageView>
+							</graphic>
+						</MenuItem>
+						<MenuItem mnemonicParsing="false" text="Über">
+							<graphic>
+								<ImageView pickOnBounds="true" preserveRatio="true">
+									<image>
+										<Image url="/include/icons/about.png" />
+									</image>
+								</ImageView>
+							</graphic>
+						</MenuItem>
 					</items>
 				</Menu>
 			</menus>
@@ -81,7 +164,7 @@
 					<center>
 						<Accordion BorderPane.alignment="CENTER">
 							<panes>
-								<TitledPane text="Allgemein">
+								<TitledPane text="Stammdaten">
 									<content>
 										<BorderPane>
 											<top>
@@ -100,14 +183,26 @@
 															minWidth="10.0" prefWidth="100.0" />
 													</columnConstraints>
 													<children>
-														<Label text="Kunde" />
-														<Label text="Anschrift" GridPane.rowIndex="1" />
-														<Label text="Datum" GridPane.rowIndex="2" />
+														<Label text="Ansprechpartner" GridPane.rowIndex="0" />
+														<Label text="Telefon" GridPane.rowIndex="1" />
+														<Label text="Adresse" GridPane.rowIndex="2" />
+														<Label text="Datum IBN" GridPane.rowIndex="3" />
+														<Label text="UniCAM Version" GridPane.rowIndex="4" />
+														<Label text="Leitrechner BS" GridPane.rowIndex="5" />
+														<Label text="Kommunikation" GridPane.rowIndex="6" />
 														<TextField GridPane.columnIndex="1" />
 														<TextField GridPane.columnIndex="1"
 															GridPane.rowIndex="1" />
 														<TextField GridPane.columnIndex="1"
 															GridPane.rowIndex="2" />
+														<TextField GridPane.columnIndex="1"
+															GridPane.rowIndex="3" />
+														<TextField GridPane.columnIndex="1"
+															GridPane.rowIndex="4" />
+														<TextField GridPane.columnIndex="1"
+															GridPane.rowIndex="5" />
+														<TextField GridPane.columnIndex="1"
+															GridPane.rowIndex="6" />
 													</children>
 													<rowConstraints>
 														<RowConstraints />
@@ -165,10 +260,32 @@
 												</BorderPane>
 												<TabPane>
 													<tabs>
-														<Tab text="Messpunkte" />
+														<Tab text="Messpunkte">
+															<graphic>
+																<ImageView pickOnBounds="true" preserveRatio="true">
+																	<image>
+																		<Image url="/include/icons/coordinates.png" />
+																	</image>
+																</ImageView>
+															</graphic>
+														</Tab>
 														<Tab text="3D-Ansicht">
+															<graphic>
+																<ImageView pickOnBounds="true" preserveRatio="true">
+																	<image>
+																		<Image url="/include/icons/3d.png" />
+																	</image>
+																</ImageView>
+															</graphic>
 														</Tab>
 														<Tab text="Notizen">
+															<graphic>
+																<ImageView pickOnBounds="true" preserveRatio="true">
+																	<image>
+																		<Image url="/include/icons/notes.png" />
+																	</image>
+																</ImageView>
+															</graphic>
 															<TextArea>
 															</TextArea>
 														</Tab>
