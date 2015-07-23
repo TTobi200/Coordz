@@ -15,7 +15,7 @@ import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.stage.*;
 import de.coordz.CooSystem;
-import de.coordz.data.*;
+import de.coordz.data.CooProject;
 import de.coordz.data.db.CooDB;
 import de.util.CooLoggerUtil;
 import de.util.log.CooLog;
@@ -87,8 +87,8 @@ public class CooController implements Initializable
 		TreeItem<CooProject> root = new TreeItem<CooProject>(
 			new CooProject("Kunde"));
 
-		TreeItem itmMischek = new TreeItem<CooProject>(new CooProject("Mischek"));
-		TreeItem itmSBE = new TreeItem<CooProject>(new CooProject("SBE"));
+		TreeItem<CooProject> itmMischek = new TreeItem<CooProject>(new CooProject("Mischek"));
+		TreeItem<CooProject> itmSBE = new TreeItem<CooProject>(new CooProject("SBE"));
 		
 		itmMischek.getChildren().add(new TreeItem<CooProject>(new CooProject(
 			"A2015.10051 Laser Einrichtung")));

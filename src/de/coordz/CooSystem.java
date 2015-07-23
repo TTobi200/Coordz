@@ -7,7 +7,6 @@
 package de.coordz;
 
 import javafx.application.Platform;
-import de.coordz.data.*;
 import de.coordz.data.db.*;
 import de.util.CooPreferencesUtil;
 
