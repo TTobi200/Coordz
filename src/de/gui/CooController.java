@@ -98,11 +98,11 @@ public class CooController implements Initializable
 		root.getChildren().addAll(itmMischek, itmSBE);
 
 		prjTreeView.setRoot(root);
-		prjTreeView.getSelectionModel()
-			.selectedItemProperty()
-			.addListener((old, curr, newV) ->
-			{
-				lblPrj.setText(newV.getValue().getName());
-			});
+//		prjTreeView.getSelectionModel()
+//			.selectedItemProperty()
+//			.addListener((old, curr, newV) ->
+//			{
+//				lblPrj.setText(newV.getValue().getName());
+//			});
 	}
 }

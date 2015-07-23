@@ -18,7 +18,6 @@ public class CooSystem
 	public static final int FATAL = 0x1;
 	public static final int SERVER_ERROR = 0x10;
 	
-	private static CooXMLProperties systemProperties = CooXMLProperties.getSystemProperties();
 	private static CooDB systemDatabase = new CooDerbyDB(); 
 
 	/**
@@ -52,11 +51,6 @@ public class CooSystem
 						"scenebuilder");
 	}
 
-	public static CooXMLProperties getSystemProperties()
-	{
-		return systemProperties;
-	}
-	
 	public static CooDB getSystemDatabase()
 	{
 		return systemDatabase;
