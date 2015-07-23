@@ -6,7 +6,7 @@
  */
 package de.util.log;
 
-public interface CoordzLogger
+public interface CooLogger
 {
 	/**
 	 * Log the given message in the given level.
@@ -14,7 +14,7 @@ public interface CoordzLogger
 	 * @param level The level to log at
 	 * @param message the message to log
 	 */
-	public default void log(CoordzLogLevel level, String message)
+	public default void log(CooLogLevel level, String message)
 	{
 		log(level, message, null);
 	}
@@ -26,110 +26,110 @@ public interface CoordzLogger
 	 * @param message the message to log
 	 * @param cause a throwable to log, will be ignored if null.
 	 */
-	public void log(CoordzLogLevel level, String message, Throwable cause);
+	public void log(CooLogLevel level, String message, Throwable cause);
 
 	/**
-	 * Log the given message in the {@link CoordzLogLevel#INFO}-level.
+	 * Log the given message in the {@link CooLogLevel#INFO}-level.
 	 *
 	 * @param message the message to log
 	 */
 	public default void info(String message)
 	{
-		log(CoordzLogLevel.INFO, message);
+		log(CooLogLevel.INFO, message);
 	}
 
 	/**
-	 * Log the given message in the {@link CoordzLogLevel#INFO}-level.
+	 * Log the given message in the {@link CooLogLevel#INFO}-level.
 	 *
 	 * @param message the message to log
 	 * @param cause a throwable to log, will be ignored if null.
 	 */
 	public default void info(String message, Throwable cause)
 	{
-		log(CoordzLogLevel.INFO, message, cause);
+		log(CooLogLevel.INFO, message, cause);
 	}
 
 	/**
-	 * Log the given message in the {@link CoordzLogLevel#DEBUG}-level.
+	 * Log the given message in the {@link CooLogLevel#DEBUG}-level.
 	 *
 	 * @param message the message to log
 	 */
 	public default void debug(String message)
 	{
-		log(CoordzLogLevel.DEBUG, message);
+		log(CooLogLevel.DEBUG, message);
 	}
 
 	/**
-	 * Log the given message in the {@link CoordzLogLevel#DEBUG}-level.
+	 * Log the given message in the {@link CooLogLevel#DEBUG}-level.
 	 *
 	 * @param message the message to log
 	 * @param cause a throwable to log, will be ignored if null.
 	 */
 	public default void debug(String message, Throwable cause)
 	{
-		log(CoordzLogLevel.DEBUG, message, cause);
+		log(CooLogLevel.DEBUG, message, cause);
 	}
 
 	/**
-	 * Log the given message in the {@link CoordzLogLevel#WARN}-level.
+	 * Log the given message in the {@link CooLogLevel#WARN}-level.
 	 *
 	 * @param message the message to log
 	 */
 	public default void warn(String message)
 	{
-		log(CoordzLogLevel.WARN, message);
+		log(CooLogLevel.WARN, message);
 	}
 
 	/**
-	 * Log the given message in the {@link CoordzLogLevel#WARN}-level.
+	 * Log the given message in the {@link CooLogLevel#WARN}-level.
 	 *
 	 * @param message the message to log
 	 * @param cause a throwable to log, will be ignored if null.
 	 */
 	public default void warn(String message, Throwable cause)
 	{
-		log(CoordzLogLevel.WARN, message, cause);
+		log(CooLogLevel.WARN, message, cause);
 	}
 
 	/**
-	 * Log the given message in the {@link CoordzLogLevel#ERROR}-level.
+	 * Log the given message in the {@link CooLogLevel#ERROR}-level.
 	 *
 	 * @param message the message to log
 	 */
 	public default void error(String message)
 	{
-		log(CoordzLogLevel.ERROR, message);
+		log(CooLogLevel.ERROR, message);
 	}
 
 	/**
-	 * Log the given message in the {@link CoordzLogLevel#ERROR}-level.
+	 * Log the given message in the {@link CooLogLevel#ERROR}-level.
 	 *
 	 * @param message the message to log
 	 * @param cause a throwable to log, will be ignored if null.
 	 */
 	public default void error(String message, Throwable cause)
 	{
-		log(CoordzLogLevel.ERROR, message, cause);
+		log(CooLogLevel.ERROR, message, cause);
 	}
 
 	/**
-	 * Log the given message in the {@link CoordzLogLevel#FATAL}-level.
+	 * Log the given message in the {@link CooLogLevel#FATAL}-level.
 	 *
 	 * @param message the message to log
 	 */
 	public default void fatal(String message)
 	{
-		log(CoordzLogLevel.FATAL, message);
+		log(CooLogLevel.FATAL, message);
 	}
 
 	/**
-	 * Log the given message in the {@link CoordzLogLevel#FATAL}-level.
+	 * Log the given message in the {@link CooLogLevel#FATAL}-level.
 	 *
 	 * @param message the message to log
 	 * @param cause a throwable to log, will be ignored if null.
 	 */
 	public default void fatal(String message, Throwable cause)
 	{
-		log(CoordzLogLevel.FATAL, message, cause);
+		log(CooLogLevel.FATAL, message, cause);
 	}
 }

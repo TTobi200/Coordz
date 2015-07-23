@@ -4,11 +4,11 @@
  * $Log$
  * Copyright © 2015 T.Ohm . All Rights Reserved.
  */
-package de.coordz.database;
+package de.coordz.data.db;
 
 import java.sql.*;
 
-public interface CoordzDBStmt
+public interface CooDBStmt
 { 
 	public default void createTable(String name) throws SQLException
 	{

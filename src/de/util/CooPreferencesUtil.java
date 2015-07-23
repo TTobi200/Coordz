@@ -8,12 +8,12 @@ package de.util;
 
 import java.util.prefs.Preferences;
 
-import de.gui.CoordzController;
+import de.gui.CooController;
 
-public class CoordzPreferencesUtil
+public class CooPreferencesUtil
 {
 	public static final Preferences COORDZ_PREFERENCES = Preferences
-			.userNodeForPackage(CoordzController.class);
+			.userNodeForPackage(CooController.class);
 
 	public static final String PREFERENCES_NODE_PREFIX = "Coordz";
 	

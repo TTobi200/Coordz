@@ -14,22 +14,23 @@ import javafx.event.EventHandler;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.stage.*;
-import de.coordz.CoordzSystem;
-import de.coordz.database.*;
-import de.util.CoordzLoggerUtil;
-import de.util.log.CoordzLog;
+import de.coordz.CooSystem;
+import de.coordz.data.*;
+import de.coordz.data.db.CooDB;
+import de.util.CooLoggerUtil;
+import de.util.log.CooLog;
 
-public class CoordzController implements Initializable
+public class CooController implements Initializable
 {
 	public static final boolean REORG_LOGS = true;
 	public static final int DAYS_TO_SAVE_LOGS = 7;
 	public static final String LOGGING_FOLDER = "./logging";
 
-	protected static CoordzController instance;
+	protected static CooController instance;
 	protected Stage primaryStage;
 
 	@FXML
-	protected TreeView<CoordzProject> prjTreeView;
+	protected TreeView<CooProject> prjTreeView;
 	@FXML
 	protected Label lblPrj;
 
@@ -37,17 +38,17 @@ public class CoordzController implements Initializable
 	{
 		if(instance == null)
 		{
-			instance = new CoordzController(primaryStage);
+			instance = new CooController(primaryStage);
 		}
 		return instance;
 	}
 
-	public CoordzController(Stage primaryStage)
+	public CooController(Stage primaryStage)
 	{
 		try
 		{
 			this.primaryStage = primaryStage;
-			CoordzLoggerUtil.initLogging(LOGGING_FOLDER, DAYS_TO_SAVE_LOGS,
+			CooLoggerUtil.initLogging(LOGGING_FOLDER, DAYS_TO_SAVE_LOGS,
 				REORG_LOGS);
 
 			// Exit System on close requested
@@ -58,13 +59,13 @@ public class CoordzController implements Initializable
 					public void handle(final WindowEvent event)
 					{
 						event.consume();
-						CoordzSystem.exit();
+						CooSystem.exit();
 					}
 				});
 		}
 		catch(IOException e)
 		{
-			CoordzLog.error("Error while initializing controller.",
+			CooLog.error("Error while initializing controller.",
 				e);
 		}
 	}
@@ -79,19 +80,19 @@ public class CoordzController implements Initializable
 	private void loadTestProjects()
 	{
 		// FORTEST Create databse connection
-		CoordzDB db = CoordzSystem.getSystemDatabase();
+		CooDB db = CooSystem.getSystemDatabase();
 		db.connect("CoordzDB", "ut", "ut", true);
 
 		// FORTEST Add Projects to tree
-		TreeItem<CoordzProject> root = new TreeItem<CoordzProject>(
-			new CoordzProject("Kunde"));
+		TreeItem<CooProject> root = new TreeItem<CooProject>(
+			new CooProject("Kunde"));
 
-		TreeItem itmMischek = new TreeItem<CoordzProject>(new CoordzProject("Mischek"));
-		TreeItem itmSBE = new TreeItem<CoordzProject>(new CoordzProject("SBE"));
+		TreeItem itmMischek = new TreeItem<CooProject>(new CooProject("Mischek"));
+		TreeItem itmSBE = new TreeItem<CooProject>(new CooProject("SBE"));
 		
-		itmMischek.getChildren().add(new TreeItem<CoordzProject>(new CoordzProject(
+		itmMischek.getChildren().add(new TreeItem<CooProject>(new CooProject(
 			"A2015.10051 Laser Einrichtung")));
-		itmMischek.getChildren().add(new TreeItem<CoordzProject>(new CoordzProject(
+		itmMischek.getChildren().add(new TreeItem<CooProject>(new CooProject(
 			"A2015.10084 Laser Update")));
 		
 		root.getChildren().addAll(itmMischek, itmSBE);

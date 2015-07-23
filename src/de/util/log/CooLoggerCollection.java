@@ -8,18 +8,18 @@ package de.util.log;
 
 import java.util.*;
 
-public class CoordzLoggerCollection implements CoordzLogger
+public class CooLoggerCollection implements CooLogger
 {
 	/** the loggers to log to */
-	protected Collection<CoordzLogger> logger;
+	protected Collection<CooLogger> logger;
 
-	public CoordzLoggerCollection(CoordzLogger... logger)
+	public CooLoggerCollection(CooLogger... logger)
 	{
 		this.logger = new ArrayList<>(Arrays.asList(logger));
 	}
 
 	@Override
-	public void log(CoordzLogLevel level, String message, Throwable cause)
+	public void log(CooLogLevel level, String message, Throwable cause)
 	{
 		logger.forEach(logger -> logger.log(level, message, cause));
 	}
@@ -27,7 +27,7 @@ public class CoordzLoggerCollection implements CoordzLogger
 	/**
 	 * @param logger additional loggers for this collection
 	 */
-	public void addLogger(CoordzLogger... logger)
+	public void addLogger(CooLogger... logger)
 	{
 		this.logger.addAll(Arrays.asList(logger));
 	}
@@ -35,7 +35,7 @@ public class CoordzLoggerCollection implements CoordzLogger
 	/**
 	 * @param logger loggers to be removed from this collection
 	 */
-	public void removeLogger(CoordzLogger... logger)
+	public void removeLogger(CooLogger... logger)
 	{
 		this.logger.removeAll(Arrays.asList(logger));
 	}

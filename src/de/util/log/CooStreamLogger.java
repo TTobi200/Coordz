@@ -9,9 +9,9 @@ package de.util.log;
 import java.io.*;
 import java.util.Objects;
 
-import de.util.CoordzLoggerUtil;
+import de.util.CooLoggerUtil;
 
-public class CoordzStreamLogger implements CoordzLogger
+public class CooStreamLogger implements CooLogger
 {
 	/** the stream used for outputting the logs. */
 	protected OutputStream out;
@@ -21,7 +21,7 @@ public class CoordzStreamLogger implements CoordzLogger
 	/**
 	 * @param stream the underlying stream to use
 	 */
-	public CoordzStreamLogger(OutputStream stream)
+	public CooStreamLogger(OutputStream stream)
 	{
 		this(stream, false);
 	}
@@ -30,18 +30,18 @@ public class CoordzStreamLogger implements CoordzLogger
 	 * @param stream the underlying stream to use
 	 * @param addLineSeparator whether to add a lineseparator after each log-call
 	 */
-	public CoordzStreamLogger(OutputStream stream, boolean addLineSeparator)
+	public CooStreamLogger(OutputStream stream, boolean addLineSeparator)
 	{
 		out = Objects.requireNonNull(stream);
 		this.addLineSeparator = addLineSeparator;
 	}
 
 	@Override
-	public void log(CoordzLogLevel level, String message, Throwable cause)
+	public void log(CooLogLevel level, String message, Throwable cause)
 	{
 		try
 		{
-			message = CoordzLoggerUtil.creMessageString(level, message);
+			message = CooLoggerUtil.creMessageString(level, message);
 			out.write(message.getBytes());
 
 			if(addLineSeparator && !message.endsWith(System.lineSeparator()))

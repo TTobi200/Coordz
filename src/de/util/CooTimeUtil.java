@@ -9,7 +9,7 @@ package de.util;
 import java.text.*;
 import java.time.format.DateTimeFormatter;
 
-public class CoordzTimeUtil
+public class CooTimeUtil
 {
 	public static final DateTimeFormatter DEFAULT_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 	/** The formatter for times, that should be used in file-names */

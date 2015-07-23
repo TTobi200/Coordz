@@ -14,19 +14,19 @@ import javafx.collections.ObservableMap;
 
 import com.sun.javafx.collections.ObservableMapWrapper;
 
-public abstract class CoordzProperties extends
+public abstract class CooProperties extends
 				ObservableMapWrapper<String, Property<?>> implements
 				ObservableMap<String, Property<?>>
 {
 	public static final String XML_FILE_START = "<?xml";
 	public static final String XML_ROOT_ELEMENT = "Coordz-Settings";
 
-	public CoordzProperties()
+	public CooProperties()
 	{
 		this(new HashMap<>());
 	}
 
-	public CoordzProperties(Map<String, Property<?>> map)
+	public CooProperties(Map<String, Property<?>> map)
 	{
 		super(map);
 	}

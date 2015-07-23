@@ -6,7 +6,7 @@
  */
 package de.util;
 
-import static de.util.CoordzTimeUtil.DEFAULT_FORMATTER;
+import static de.util.CooTimeUtil.DEFAULT_FORMATTER;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -20,7 +20,7 @@ import de.util.log.*;
 /**
  * utility class for logging-related actions
  */
-public class CoordzLoggerUtil
+public class CooLoggerUtil
 {
 	/** extions of files containing error logs */
 	public static final String ERR_FILE_EXT = ".error";
@@ -31,7 +31,7 @@ public class CoordzLoggerUtil
 
 	/**
 	 * create the logging-message for the given message in the given level using
-	 * {@link CoordzTimeUtil#DEFAULT_FORMATTER}
+	 * {@link CooTimeUtil#DEFAULT_FORMATTER}
 	 *
 	 * @param level
 	 *            the level, the message should be logged in
@@ -40,7 +40,7 @@ public class CoordzLoggerUtil
 	 * @return The message for logging containing information on the original message, the level and
 	 *         the time
 	 */
-	public static String creMessageString(CoordzLogLevel level, String message)
+	public static String creMessageString(CooLogLevel level, String message)
 	{
 		return creMessageString(level, message, DEFAULT_FORMATTER);
 	}
@@ -57,7 +57,7 @@ public class CoordzLoggerUtil
 	 * @return The message for logging containing information on the original message, the level and
 	 *         the time
 	 */
-	public static String creMessageString(CoordzLogLevel level, String message,
+	public static String creMessageString(CooLogLevel level, String message,
 		DateTimeFormatter formatter)
 	{
 		LocalDateTime now = LocalDateTime.now();
@@ -90,20 +90,20 @@ public class CoordzLoggerUtil
 		// + dateFormat.format(date)
 		// + DEBUG_FILE_EXT));
 
-		CoordzStreamLogger errLogger = new CoordzStreamLogger(new PrintStream(
+		CooStreamLogger errLogger = new CooStreamLogger(new PrintStream(
 				logFolder.getAbsolutePath() + File.separator
-						+ CoordzTimeUtil.FILE_NAME_TIME_FORMATTER.format(now)
+						+ CooTimeUtil.FILE_NAME_TIME_FORMATTER.format(now)
 						// + dateFormat.format(date)
 						+ ERR_FILE_EXT));
-		CoordzStreamLogger outLogger = new CoordzStreamLogger(new PrintStream(
+		CooStreamLogger outLogger = new CooStreamLogger(new PrintStream(
 				logFolder.getAbsolutePath() + File.separator
-						+ CoordzTimeUtil.FILE_NAME_TIME_FORMATTER.format(now)
+						+ CooTimeUtil.FILE_NAME_TIME_FORMATTER.format(now)
 						// + dateFormat.format(date)
 						+ DEBUG_FILE_EXT));
 		
-		CoordzLogger err = new CoordzLoggerCollection(errLogger, new CoordzStreamLogger(System.err,
+		CooLogger err = new CooLoggerCollection(errLogger, new CooStreamLogger(System.err,
 				true));
-		CoordzLogger oout = new CoordzLoggerCollection(outLogger, new CoordzStreamLogger(System.out,
+		CooLogger oout = new CooLoggerCollection(outLogger, new CooStreamLogger(System.out,
 				true));
 		
 		System.setErr(new PrintStream(errLogger.getOutputStream())
@@ -169,16 +169,16 @@ public class CoordzLoggerUtil
 		Arrays.asList(logFold.listFiles()).forEach(f ->
 		{
 			String name = f.getName();
-			if(name.endsWith(CoordzLoggerUtil.DEBUG_FILE_EXT))
+			if(name.endsWith(CooLoggerUtil.DEBUG_FILE_EXT))
 			{
 				String dateStr = name.replace(
-					CoordzLoggerUtil.DEBUG_FILE_EXT, "");
+					CooLoggerUtil.DEBUG_FILE_EXT, "");
 				addToMap(dateToFiles, dateStr, f);
 			}
-			else if(name.endsWith(CoordzLoggerUtil.ERR_FILE_EXT))
+			else if(name.endsWith(CooLoggerUtil.ERR_FILE_EXT))
 			{
 				String dateStr = name.replace(
-					CoordzLoggerUtil.ERR_FILE_EXT, "");
+					CooLoggerUtil.ERR_FILE_EXT, "");
 				addToMap(dateToFiles, dateStr, f);
 			}
 		});

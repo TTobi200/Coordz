@@ -6,7 +6,7 @@
  */
 package de.coordz;
 
-import static de.util.CoordzXmlDomUtil.*;
+import static de.util.CooXmlDomUtil.*;
 
 import java.io.File;
 import java.util.Objects;
@@ -19,22 +19,22 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.*;
 
-public class CoordzXMLProperties extends CoordzProperties
+public class CooXMLProperties extends CooProperties
 {
 	public static final String PROP_FILE = "./Coordz.save";
-	private static CoordzXMLProperties systemProperties = new CoordzXMLProperties();
+	private static CooXMLProperties systemProperties = new CooXMLProperties();
 
-	public static CoordzXMLProperties getSystemProperties()
+	public static CooXMLProperties getSystemProperties()
 	{
 		return systemProperties;
 	}
 
 	public static void setSystemProperties(
-					CoordzXMLProperties systemProperties)
+					CooXMLProperties systemProperties)
 	{
 		if(Objects.nonNull(systemProperties))
 		{
-			CoordzXMLProperties.systemProperties = systemProperties;
+			CooXMLProperties.systemProperties = systemProperties;
 		}
 	}
 

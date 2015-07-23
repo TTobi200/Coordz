@@ -7,10 +7,11 @@
 package de.coordz;
 
 import javafx.application.Platform;
-import de.coordz.database.*;
-import de.util.CoordzPreferencesUtil;
+import de.coordz.data.*;
+import de.coordz.data.db.*;
+import de.util.CooPreferencesUtil;
 
-public class CoordzSystem
+public class CooSystem
 {
 	/** int symbolizing a a normal ending */
 	public static final int NORMAL = 0x0;
@@ -18,8 +19,8 @@ public class CoordzSystem
 	public static final int FATAL = 0x1;
 	public static final int SERVER_ERROR = 0x10;
 	
-	private static CoordzXMLProperties systemProperties = CoordzXMLProperties.getSystemProperties();
-	private static CoordzDB systemDatabase = new CoordzDerbyDB(); 
+	private static CooXMLProperties systemProperties = CooXMLProperties.getSystemProperties();
+	private static CooDB systemDatabase = new CooDerbyDB(); 
 
 	/**
 	 * Normal ending of this application
@@ -36,7 +37,7 @@ public class CoordzSystem
 	 */
 	public static void exit(int status)
 	{
-		CoordzPreferencesUtil.setCoordzRunning(false);
+		CooPreferencesUtil.setCoordzRunning(false);
 		getSystemDatabase().shutdown();
 		Platform.exit();
 		
@@ -52,12 +53,12 @@ public class CoordzSystem
 						"scenebuilder");
 	}
 
-	public static CoordzXMLProperties getSystemProperties()
+	public static CooXMLProperties getSystemProperties()
 	{
 		return systemProperties;
 	}
 	
-	public static CoordzDB getSystemDatabase()
+	public static CooDB getSystemDatabase()
 	{
 		return systemDatabase;
 	}

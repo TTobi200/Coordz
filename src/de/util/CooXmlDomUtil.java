@@ -12,7 +12,7 @@ import javax.xml.parsers.*;
 
 import org.w3c.dom.*;
 
-public class CoordzXmlDomUtil
+public class CooXmlDomUtil
 {
     public static Attr addAttribute(Document doc, Element parent,
                     String attribute, Object value)

@@ -16,7 +16,7 @@ import javafx.scene.*;
 import javafx.scene.image.Image;
 import javafx.stage.*;
 
-public class CoordzFileUtil
+public class CooFileUtil
 {
 	public static final String IN_JAR_SEPERATOR = "/";
 
@@ -65,19 +65,19 @@ public class CoordzFileUtil
 
 	public static String getResourceFile(String path)
 	{
-		return CoordzFileUtil.class.getClassLoader()
+		return CooFileUtil.class.getClassLoader()
 			.getResource(path)
 			.getFile();
 	}
 
 	public static URL getResourceURL(String path)
 	{
-		return CoordzFileUtil.class.getClassLoader().getResource(path);
+		return CooFileUtil.class.getClassLoader().getResource(path);
 	}
 
 	public static InputStream getResourceStream(String icon)
 	{
-		return CoordzFileUtil.class.getClassLoader()
+		return CooFileUtil.class.getClassLoader()
 			.getResourceAsStream(icon);
 	}
 
@@ -155,7 +155,7 @@ public class CoordzFileUtil
 		throws IOException
 	{
 		FXMLLoader loader = new FXMLLoader(
-			CoordzFileUtil.getResourceURL(fxml));
+			CooFileUtil.getResourceURL(fxml));
 
 		if(root != null)
 		{

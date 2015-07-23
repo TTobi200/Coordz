@@ -4,15 +4,15 @@
  * $Log$
  * Copyright © 2015 T.Ohm . All Rights Reserved.
  */
-package de.coordz.database;
+package de.coordz.data;
 
-public class CoordzProject
+public class CooProject
 {
 	// TODO implement class for coordz project
 
 	private String name;
 	
-	public CoordzProject(String name)
+	public CooProject(String name)
 	{
 		this.name = name;
 	}

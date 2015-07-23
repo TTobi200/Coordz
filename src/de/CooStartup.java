@@ -7,9 +7,9 @@
 package de;
 
 import javafx.application.Application;
-import de.gui.CoordzMainFrame;
+import de.gui.CooMainFrame;
 
-public class Startup
+public class CooStartup
 {
 	public static void main(String[] args)
 	{
@@ -22,6 +22,6 @@ public class Startup
 //
 //		CoordzPreferencesUtil.setCoordzRunning(true);
 
-		Application.launch(CoordzMainFrame.class, args);
+		Application.launch(CooMainFrame.class, args);
 	}
 }

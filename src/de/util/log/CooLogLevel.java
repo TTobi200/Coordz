@@ -6,7 +6,7 @@
  */
 package de.util.log;
 
-public enum CoordzLogLevel
+public enum CooLogLevel
 {
 	/** the smallest level, just for developers */
 	DEBUG("DEBUG"),
@@ -24,7 +24,7 @@ public enum CoordzLogLevel
 
 	private String name;
 
-	private CoordzLogLevel(String name)
+	private CooLogLevel(String name)
 	{
 		this.name = name;
 	}

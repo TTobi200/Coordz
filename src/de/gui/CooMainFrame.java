@@ -9,9 +9,9 @@ package de.gui;
 import javafx.application.Application;
 import javafx.scene.*;
 import javafx.stage.Stage;
-import de.util.CoordzFileUtil;
+import de.util.CooFileUtil;
 
-public class CoordzMainFrame extends Application
+public class CooMainFrame extends Application
 {
 	public static final String TITLE = "Coordz";
 	private static final String FXML = "CoordzGui.fxml";
@@ -19,15 +19,15 @@ public class CoordzMainFrame extends Application
 	@Override
 	public void start(Stage primaryStage) throws Exception
 	{
-		Parent root = CoordzFileUtil.loadFXML(
-			CoordzController.getInstance(primaryStage),
-			CoordzFileUtil.FXML_FOLDER + CoordzFileUtil.IN_JAR_SEPERATOR + FXML);
+		Parent root = CooFileUtil.loadFXML(
+			CooController.getInstance(primaryStage),
+			CooFileUtil.FXML_FOLDER + CooFileUtil.IN_JAR_SEPERATOR + FXML);
 		Scene primaryScene = new Scene(root);
 
 		primaryScene.getStylesheets().add("/include/fxml/stylesheet.css");
 		primaryStage.setScene(primaryScene);
 		
-		primaryStage.getIcons().add(CoordzFileUtil.getResourceIcon(
+		primaryStage.getIcons().add(CooFileUtil.getResourceIcon(
 			"Logo.png"));
 		primaryStage.setTitle(TITLE);
 		primaryStage.show();

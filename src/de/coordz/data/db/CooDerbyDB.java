@@ -4,14 +4,14 @@
  * $Log$
  * Copyright © 2015 T.Ohm . All Rights Reserved.
  */
-package de.coordz.database;
+package de.coordz.data.db;
 
 import java.sql.*;
 import java.util.Objects;
 
-import de.util.log.CoordzLog;
+import de.util.log.CooLog;
 
-public class CoordzDerbyDB extends CoordzDB
+public class CooDerbyDB extends CooDB
 {
 	private static String APACHE_CLIENT_DRIVER = "org.apache.derby.jdbc.ClientDriver";
 
@@ -38,7 +38,7 @@ public class CoordzDerbyDB extends CoordzDB
 		}
 		catch(Exception e)
 		{
-			CoordzLog.error("Error while establish "
+			CooLog.error("Error while establish "
 							+ "DB connection", e);
 		}
 	}

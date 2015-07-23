@@ -8,18 +8,18 @@ package de.util.log;
 
 import java.util.Objects;
 
-import de.util.CoordzLoggerUtil;
+import de.util.CooLoggerUtil;
 
-public class CoordzLog
+public class CooLog
 {
 	/** A logger using {@link System#out} and {@link System#err} for logging */
-	public static final CoordzLogger systemLogger = (level, message, cause) -> {
+	public static final CooLogger systemLogger = (level, message, cause) -> {
 		switch(level)
 		{
 			case INFO:
 			case DEBUG:
 			{
-				System.out.println(CoordzLoggerUtil.creMessageString(level, message));
+				System.out.println(CooLoggerUtil.creMessageString(level, message));
 				if(Objects.nonNull(cause))
 				{
 					cause.printStackTrace(System.out);
@@ -30,7 +30,7 @@ public class CoordzLog
 			case FATAL:
 			case WARN:
 			{
-				System.err.println(CoordzLoggerUtil.creMessageString(level, message));
+				System.err.println(CooLoggerUtil.creMessageString(level, message));
 				if(Objects.nonNull(cause))
 				{
 					cause.printStackTrace(System.err);
@@ -41,12 +41,12 @@ public class CoordzLog
 	};
 
 	/** The default logger for this application */
-	private static CoordzLogger defaultLogger = systemLogger;
+	private static CooLogger defaultLogger = systemLogger;
 
 	/**
 	 * @return The current default-logger for this application
 	 */
-	public static CoordzLogger getDefaultLogger()
+	public static CooLogger getDefaultLogger()
 	{
 		return defaultLogger;
 	}
@@ -54,62 +54,62 @@ public class CoordzLog
 	/**
 	 * @param defaultLogger The new default-logger for this application
 	 */
-	public static void setDefaultLogger(CoordzLogger defaultLogger)
+	public static void setDefaultLogger(CooLogger defaultLogger)
 	{
-		CoordzLog.defaultLogger = defaultLogger;
+		CooLog.defaultLogger = defaultLogger;
 	}
 
-	public static void log(CoordzLogLevel level, String message)
+	public static void log(CooLogLevel level, String message)
 	{
 		log(level, message, null);
 	}
-	public static void log(CoordzLogLevel level, String message, Throwable cause)
+	public static void log(CooLogLevel level, String message, Throwable cause)
 	{
 		getDefaultLogger().log(level, message, cause);
 	}
 
 	public static void info(String message)
 	{
-		log(CoordzLogLevel.INFO, message);
+		log(CooLogLevel.INFO, message);
 	}
 	public static void info(String message, Throwable cause)
 	{
-		log(CoordzLogLevel.INFO, message, cause);
+		log(CooLogLevel.INFO, message, cause);
 	}
 
 	public static void debug(String message)
 	{
-		log(CoordzLogLevel.DEBUG, message);
+		log(CooLogLevel.DEBUG, message);
 	}
 	public static void debug(String message, Throwable cause)
 	{
-		log(CoordzLogLevel.DEBUG, message, cause);
+		log(CooLogLevel.DEBUG, message, cause);
 	}
 
 	public static void warn(String message)
 	{
-		log(CoordzLogLevel.WARN, message);
+		log(CooLogLevel.WARN, message);
 	}
 	public static void warn(String message, Throwable cause)
 	{
-		log(CoordzLogLevel.WARN, message, cause);
+		log(CooLogLevel.WARN, message, cause);
 	}
 
 	public static void error(String message)
 	{
-		log(CoordzLogLevel.ERROR, message);
+		log(CooLogLevel.ERROR, message);
 	}
 	public static void error(String message, Throwable cause)
 	{
-		log(CoordzLogLevel.ERROR, message, cause);
+		log(CooLogLevel.ERROR, message, cause);
 	}
 
 	public static void fatal(String message)
 	{
-		log(CoordzLogLevel.FATAL, message);
+		log(CooLogLevel.FATAL, message);
 	}
 	public static void fatal(String message, Throwable cause)
 	{
-		log(CoordzLogLevel.FATAL, message, cause);
+		log(CooLogLevel.FATAL, message, cause);
 	}
 }
