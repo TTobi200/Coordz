@@ -6,7 +6,7 @@
  */
 package de.coordz.data.base;
 
-import static de.util.CooXmlDomUtil.addElement;
+import static de.util.CooXmlDomUtil.*;
 
 import java.io.File;
 import java.util.*;
@@ -60,5 +60,30 @@ public class CooStation extends CooData
 
 		verifyMeasurement.toXML(doc, station);
 		gateway.toXML(doc, station);
+	}
+	
+	@Override
+	public void fromXML(Element root)
+	{
+		Element station = getSingleElement(root, "Station");
+		if(Objects.nonNull(station))
+		{
+			name = station.getAttribute("Name");
+			// TODO parse to file, or only text?
+//			file = Integer.valueOf(station.getAttribute("X"));
+			XOffset = Integer.valueOf(station.getAttribute("XOffset"));
+			YOffset = Integer.valueOf(station.getAttribute("YOffset"));
+			ZOffset = Integer.valueOf(station.getAttribute("ZOffset"));
+			
+			totalStation.fromXML(station);
+			regionDeviding.fromXML(station);
+			
+			// Load all measurements
+			addToList("Measurements", station,
+				CooMeasurement.class, measurements);
+			
+			verifyMeasurement.fromXML(station);
+			gateway.fromXML(station);
+		}
 	}
 }

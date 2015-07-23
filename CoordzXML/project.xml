@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<CoordzData>
+    <Project>
+        <General Date="null" PrjNumber="A2015.10051"/>
+        <LAPSoftware Name="ProSoft 2D" Version="3.5.8 beta4"/>
+        <Stations>
+            <Station File="D:\Unitechnik\repos\Coordz" Name="U1" XOffset="-17" YOffset="-3" ZOffset="-4">
+                <Totalstation DeltaX="1.0E-4" DeltaY="1.0E-4" X="-592" Y="-1775" Z="898"/>
+                <RegionDividing/>
+                <Measurements>
+                    <Measurement Date="null" From="10.00Uhr" Name="07.07.15(2)" To="18.00Uhr" Weather="Sonnig">
+                        <Reticles>
+                            <Reticle Name="1" X="3550" Y="24" Z="15"/>
+                        </Reticles>
+                        <Targets>
+                            <Reticle Name="1" X="3550" Y="24" Z="15"/>
+                        </Targets>
+                    </Measurement>
+                </Measurements>
+                <VerifyMeasurement>
+                    <Specification>
+                        <Rectangle D1="0" D2="0" Height="0" Length="0" Name="Rechteck 1" Width="0" X="0" Y="0" Z="0"/>
+                    </Specification>
+                    <Result>
+                        <Rectangle D1="0" D2="0" Height="0" Length="0" Name="Rechteck 1" Width="0" X="0" Y="0" Z="0"/>
+                    </Result>
+                </VerifyMeasurement>
+                <Gateway IP="" MAC=""/>
+            </Station>
+        </Stations>
+    </Project>
+</CoordzData>

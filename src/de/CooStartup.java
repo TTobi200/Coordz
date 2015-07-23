@@ -41,20 +41,35 @@ public class CooStartup
 	{
 		try
 		{
-			CooCustomer costomerTest = new CooCustomer();
+			// Create Costomer and Project
+			CooCustomer customerTest = new CooCustomer();
 			CooProject projectTest = new CooProject("Test");
-			
-			Document doc = getDocumentBuilder().newDocument();
-			Element root = addElement(doc, doc, "CoordzData");
-			projectTest.toXML(doc, root);
-			CooXmlDomUtil.saveFile(doc, new File("./CoordzXML/customer.xml"));
 
-			// ---------------------------------------------------------------------- //
+//			// Load Customer
+//			Element root = getDocumentBuilder().parse(
+//				new File("./CoordzXML/customer.xml"))
+//				 .getDocumentElement();
+//			customerTest.fromXML(root);
+//			
+//			// Save Customer
+//			Document doc = getDocumentBuilder().newDocument();
+//			Element root2 = addElement(doc, doc, "CoordzData");
+//			customerTest.toXML(doc, root2);
+//			CooXmlDomUtil.saveFile(doc, new File(
+//				"./CoordzXML/customer.xml"));
 			
-			doc = getDocumentBuilder().newDocument();
-			root = addElement(doc, doc, "CoordzData");
-			costomerTest.toXML(doc, root);
-			CooXmlDomUtil.saveFile(doc, new File("./CoordzXML/project.xml"));
+			// Load Project
+			Element root = getDocumentBuilder().parse(
+				new File("./CoordzXML/project.xml"))
+				 .getDocumentElement();
+			projectTest.fromXML(root);
+			
+			// Save Project
+			Document doc = getDocumentBuilder().newDocument();
+			Element root2 = addElement(doc, doc, "CoordzData");
+			projectTest.toXML(doc, root2);
+			CooXmlDomUtil.saveFile(doc, new File(
+				"./CoordzXML/project.xml"));
 		}
 		catch(Exception e)
 		{

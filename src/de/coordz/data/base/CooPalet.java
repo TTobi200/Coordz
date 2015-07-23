@@ -6,7 +6,9 @@
  */
 package de.coordz.data.base;
 
-import static de.util.CooXmlDomUtil.addElement;
+import static de.util.CooXmlDomUtil.*;
+
+import java.util.Objects;
 
 import org.w3c.dom.*;
 
@@ -17,7 +19,7 @@ public class CooPalet extends CooData
 {
 	protected CooPaletType type;
 	protected int width;
-	protected int height;
+	protected int length;
 	
 	@Override
 	public void toXML(Document doc, Element root)
@@ -25,6 +27,19 @@ public class CooPalet extends CooData
 		Element palet = addElement(doc, root, "Palet");
 		palet.setAttribute("Type", String.valueOf(type));
 		palet.setAttribute("Width", String.valueOf(width));
-		palet.setAttribute("Height", String.valueOf(height));
+		palet.setAttribute("Length", String.valueOf(length));
+	}
+	
+	@Override
+	public void fromXML(Element root)
+	{
+		Element palet = getSingleElement(root, "Palet");
+		if(Objects.nonNull(palet))
+		{
+			// TODO parse the Type
+//			type = palet.getAttribute("Type");
+			width = Integer.valueOf(palet.getAttribute("Width"));
+			length = Integer.valueOf(palet.getAttribute("Length"));
+		}
 	}
 }

@@ -6,7 +6,9 @@
  */
 package de.coordz.data.base;
 
-import static de.util.CooXmlDomUtil.addElement;
+import static de.util.CooXmlDomUtil.*;
+
+import java.util.Objects;
 
 import org.w3c.dom.*;
 
@@ -15,10 +17,23 @@ public class CooReticle extends CooTarget
 	@Override
 	public void toXML(Document doc, Element root)
 	{
-		Element target = addElement(doc, root, "Reticle");
-		target.setAttribute("Name", name);
-		target.setAttribute("X", String.valueOf(x));
-		target.setAttribute("Y", String.valueOf(y));
-		target.setAttribute("Z", String.valueOf(z));
+		Element reticle = addElement(doc, root, "Reticle");
+		reticle.setAttribute("Name", name);
+		reticle.setAttribute("X", String.valueOf(x));
+		reticle.setAttribute("Y", String.valueOf(y));
+		reticle.setAttribute("Z", String.valueOf(z));
+	}
+	
+	@Override
+	public void fromXML(Element root)
+	{
+		Element reticle = getSingleElement(root, "Reticle");
+		if(Objects.nonNull(reticle))
+		{
+			name = reticle.getAttribute("Name");
+			x = Integer.valueOf(reticle.getAttribute("X"));
+			y = Integer.valueOf(reticle.getAttribute("Y"));
+			z = Integer.valueOf(reticle.getAttribute("Z"));
+		}
 	}
 }

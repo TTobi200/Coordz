@@ -6,7 +6,9 @@
  */
 package de.coordz.data.base;
 
-import static de.util.CooXmlDomUtil.addElement;
+import static de.util.CooXmlDomUtil.*;
+
+import java.util.Objects;
 
 import org.w3c.dom.*;
 
@@ -24,4 +26,15 @@ public class CooLAPSoftware	extends CooData
 		lapSoftware.setAttribute("Name", name);
 		lapSoftware.setAttribute("Version", version);
 	}	
+	
+	@Override
+	public void fromXML(Element root)
+	{
+		Element lapSoftware = getSingleElement(root, "LAPSoftware");
+		if(Objects.nonNull(lapSoftware))
+		{
+			name = lapSoftware.getAttribute("Name");
+			version = lapSoftware.getAttribute("Version");
+		}
+	}
 }

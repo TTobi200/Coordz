@@ -6,7 +6,7 @@
  */
 package de.coordz.data;
 
-import static de.util.CooXmlDomUtil.addElement;
+import static de.util.CooXmlDomUtil.*;
 
 import java.util.*;
 
@@ -20,7 +20,7 @@ public class CooProject extends CooData
 	protected CooGeneral general;
 	protected CooLAPSoftware lapSoftware;
 	protected List<CooStation> stations;
-	
+
 	public CooProject(String name)
 	{
 		this.name = name;
@@ -28,7 +28,7 @@ public class CooProject extends CooData
 		lapSoftware = new CooLAPSoftware();
 		stations = new ArrayList<CooStation>();
 	}
-	
+
 	@Override
 	public String toString()
 	{
@@ -41,8 +41,25 @@ public class CooProject extends CooData
 		Element project = addElement(doc, root, "Project");
 		general.toXML(doc, project);
 		lapSoftware.toXML(doc, project);
-		
+
 		// Add all stations
-		stations.forEach(s -> s.toXML(doc, project));
+		Element stations = addElement(doc, project, "Stations");
+		this.stations.forEach(s -> s.toXML(doc, stations));
+	}
+
+	@Override
+	public void fromXML(Element root)
+	{
+		Element project = getSingleElement(root, "Project");
+		if(Objects.nonNull(project))
+		{
+			name = project.getAttribute("Name");
+			general.fromXML(project);
+			lapSoftware.fromXML(project);
+
+			// Load all stations
+			addToList("Stations", project,  
+				CooStation.class, stations);
+		}
 	}
 }

@@ -6,7 +6,9 @@
  */
 package de.coordz.data.base;
 
-import static de.util.CooXmlDomUtil.addElement;
+import static de.util.CooXmlDomUtil.*;
+
+import java.util.Objects;
 
 import org.w3c.dom.*;
 
@@ -27,5 +29,18 @@ public class CooTarget extends CooData
 		target.setAttribute("X", String.valueOf(x));
 		target.setAttribute("Y", String.valueOf(y));
 		target.setAttribute("Z", String.valueOf(z));
+	}
+	
+	@Override
+	public void fromXML(Element root)
+	{
+		Element target = getSingleElement(root, "Target");
+		if(Objects.nonNull(target))
+		{
+			name = target.getAttribute("Name");
+			x = Integer.valueOf(target.getAttribute("X"));
+			y = Integer.valueOf(target.getAttribute("Y"));
+			z = Integer.valueOf(target.getAttribute("Z"));
+		}
 	}
 }

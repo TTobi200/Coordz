@@ -6,7 +6,7 @@
  */
 package de.coordz.data.base;
 
-import static de.util.CooXmlDomUtil.addElement;
+import static de.util.CooXmlDomUtil.*;
 
 import java.util.*;
 
@@ -34,5 +34,16 @@ public class CooGateway extends CooData
 		gateway.setAttribute("MAC", mac);
 		
 		laser.forEach(l -> l.toXML(doc, gateway));
+	}
+	
+	@Override
+	public void fromXML(Element root)
+	{
+		Element gateway = getSingleElement(root, "Gateway");
+		if(Objects.nonNull(gateway))
+		{
+			ip = gateway.getAttribute("IP");
+			mac = gateway.getAttribute("MAC");
+		}
 	}
 }

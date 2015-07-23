@@ -6,9 +6,9 @@
  */
 package de.coordz.data;
 
-import de.coordz.data.xml.CooToXML;
+import de.coordz.data.xml.CooXML;
 
-public abstract class CooData implements CooToXML
+public abstract class CooData implements CooXML
 {
 	// Abstract interface for all Coordz Data
 }

@@ -6,7 +6,9 @@
  */
 package de.coordz.data.base;
 
-import static de.util.CooXmlDomUtil.addElement;
+import static de.util.CooXmlDomUtil.*;
+
+import java.util.Objects;
 
 import org.w3c.dom.*;
 
@@ -29,5 +31,19 @@ public class CooTotalstation extends CooData
 		totalstation.setAttribute("Z", String.valueOf(z));
 		totalstation.setAttribute("DeltaX", String.valueOf(deltaX));
 		totalstation.setAttribute("DeltaY", String.valueOf(deltaY));
+	}
+	
+	@Override
+	public void fromXML(Element root)
+	{
+		Element totalstation = getSingleElement(root, "Totalstation");
+		if(Objects.nonNull(totalstation))
+		{
+			x = Integer.valueOf(totalstation.getAttribute("X"));
+			y = Integer.valueOf(totalstation.getAttribute("Y"));
+			z = Integer.valueOf(totalstation.getAttribute("Z"));
+			deltaX = Double.valueOf(totalstation.getAttribute("DeltaX"));
+			deltaY = Double.valueOf(totalstation.getAttribute("DeltaY"));
+		}
 	}
 }

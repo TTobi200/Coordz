@@ -6,7 +6,7 @@
  */
 package de.coordz.data.base;
 
-import static de.util.CooXmlDomUtil.addElement;
+import static de.util.CooXmlDomUtil.*;
 
 import java.util.*;
 
@@ -17,17 +17,28 @@ import de.coordz.data.CooData;
 public class CooRegionDividing extends CooData
 {
 	protected List<CooLaser> laser;
-	
+
 	public CooRegionDividing()
 	{
 		laser = new ArrayList<CooLaser>();
 	}
-	
+
 	@Override
 	public void toXML(Document doc, Element root)
 	{
 		Element regionDividing = addElement(doc, root,
 			"RegionDividing");
 		laser.forEach(l -> l.toXML(doc, regionDividing));
+	}
+
+	@Override
+	public void fromXML(Element root)
+	{
+		Element regionDividing = getSingleElement(root,
+			"RegionDividing");
+
+		// Load all lasers
+		addToList("RegionDividing", regionDividing,
+			CooLaser.class, laser);
 	}
 }

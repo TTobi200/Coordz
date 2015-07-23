@@ -6,7 +6,9 @@
  */
 package de.coordz.data.base;
 
-import static de.util.CooXmlDomUtil.addElement;
+import static de.util.CooXmlDomUtil.*;
+
+import java.util.Objects;
 
 import org.w3c.dom.*;
 
@@ -18,7 +20,7 @@ public class CooContact extends CooData
 	protected String lastName;
 	protected String phone;
 	protected String mail;
-	
+
 	@Override
 	public void toXML(Document doc, Element root)
 	{
@@ -27,5 +29,18 @@ public class CooContact extends CooData
 		contact.setAttribute("LastName", lastName);
 		contact.setAttribute("Phone", phone);
 		contact.setAttribute("Mail", mail);
+	}
+
+	@Override
+	public void fromXML(Element root)
+	{
+		Element contact = getSingleElement(root, "Contact");
+		if(Objects.nonNull(contact))
+		{
+			firstName = contact.getAttribute("FirstName");
+			lastName = contact.getAttribute("LastName");
+			phone = contact.getAttribute("Phone");
+			mail = contact.getAttribute("Mail");
+		}
 	}
 }

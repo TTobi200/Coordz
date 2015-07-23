@@ -6,7 +6,7 @@
  */
 package de.coordz.data;
 
-import static de.util.CooXmlDomUtil.addElement;
+import static de.util.CooXmlDomUtil.*;
 
 import java.util.*;
 
@@ -46,5 +46,24 @@ public class CooCustomer extends CooData
 		contacts.forEach(c -> c.toXML(doc, customer));
 		
 		palet.toXML(doc, customer);
+	}
+	
+	@Override
+	public void fromXML(Element root)
+	{
+		Element customer = getSingleElement(root, "Customer");
+		if(Objects.nonNull(customer))
+		{
+			name = customer.getAttribute("Name");
+			adress = customer.getAttribute("Adress");
+			street = customer.getAttribute("Street");
+			plz = customer.getAttribute("PLZ");
+			location = customer.getAttribute("Location");
+			
+			// Load all contacts
+			contacts.forEach(c -> c.fromXML(customer));
+			
+			palet.fromXML(customer);
+		}
 	}
 }

@@ -16,6 +16,8 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.*;
 
+import de.coordz.data.CooData;
+
 public class CooXmlDomUtil
 {
 	public static Attr addAttribute(Document doc, Element parent,
@@ -136,5 +138,27 @@ public class CooXmlDomUtil
 		StreamResult result = new StreamResult(file);
 
 		transformer.transform(source, result);
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static void addToList(String tagName, Element parent, 
+			Class clazz, List listToAdd)
+	{
+		try
+		{
+			NodeList stationsXml = parent.getElementsByTagName(
+				tagName);
+
+			for(int i = 0; i < stationsXml.getLength(); i++)
+			{
+				CooData data = (CooData)clazz.newInstance();
+				data.fromXML((Element)stationsXml.item(i));
+				listToAdd.add(data);
+			}
+		}
+		catch(InstantiationException | IllegalAccessException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }
