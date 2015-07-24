@@ -95,6 +95,11 @@ public class CooCustomer extends CooData
 		}
 	}
 	
+	/**
+	 * Method to add {@link CooProject} to this customer.
+	 * @param ident = the project identifier
+	 * @param project = the {@link CooProject} to add
+	 */
 	public void addProject(String ident, CooProject project)
 	{
 		if(Objects.nonNull(project))
@@ -103,41 +108,73 @@ public class CooCustomer extends CooData
 		}
 	}
 	
+	/**
+	 * Method to access {@link CooContact}
+	 * @return {@link #contacts}
+	 */
 	public ObservableList<CooContact> getContacts()
 	{
 		return contacts;
 	}
 	
+	/**
+	 * Method to access {@link CooPalet}
+	 * @return {@link #palets}
+	 */
 	public ObservableList<CooPalet> getPalets()
 	{
 		return palets;
 	}
 	
+	/**
+	 * Method to access {@link CooProject}
+	 * @return {@link #projects}
+	 */
 	public ObservableMap<String, CooProject> getProjects()
 	{
 		return projects;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #name}
+	 */
 	public StringProperty nameProperty()
 	{
 		return name;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #address}
+	 */
 	public StringProperty adressProperty()
 	{
 		return address;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #street}
+	 */
 	public StringProperty streetProperty()
 	{
 		return street;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #plz}
+	 */
 	public StringProperty plzProperty()
 	{
 		return plz;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #location}
+	 */
 	public StringProperty locationProperty()
 	{
 		return location;

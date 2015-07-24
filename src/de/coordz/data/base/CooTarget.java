@@ -57,21 +57,37 @@ public class CooTarget extends CooData
 		}
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #name}
+	 */
 	public StringProperty nameProperty()
 	{
 		return name;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #x}
+	 */
 	public IntegerProperty xProperty()
 	{
 		return x;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #y}
+	 */
 	public IntegerProperty yProperty()
 	{
 		return y;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #z}
+	 */
 	public IntegerProperty zProperty()
 	{
 		return z;

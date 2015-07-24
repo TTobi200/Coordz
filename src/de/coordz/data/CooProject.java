@@ -69,21 +69,37 @@ public class CooProject extends CooData
 		}
 	}
 	
+	/**
+	 * Method to access {@link CooStation}
+	 * @return {@link #stations}
+	 */
 	public ObservableList<CooStation> getStations()
 	{
 		return stations;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #name}
+	 */
 	public StringProperty nameProperty()
 	{
 		return name;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #date}
+	 */
 	public ObjectProperty<LocalDate> dateProperty()
 	{
 		return date;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #lapSoftware}
+	 */
 	public ObjectProperty<CooLAPSoftware> lapSoftwareProperty()
 	{
 		return lapSoftware;

@@ -93,36 +93,64 @@ public class CooMeasurement extends CooData
 		}
 	}
 	
+	/**
+	 * Method to access {@link CooReticle}
+	 * @return {@link #reticles}
+	 */
 	public ObservableList<CooReticle> getReticles()
 	{
 		return reticles;
 	}
 	
+	/**
+	 * Method to access {@link CooTarget}
+	 * @return {@link #targets}
+	 */
 	public ObservableList<CooTarget> getTargets()
 	{
 		return targets;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #name}
+	 */
 	public StringProperty nameProperty()
 	{
 		return name;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #date}
+	 */
 	public ObjectProperty<LocalDate> dateProperty()
 	{
 		return date;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #from}
+	 */
 	public StringProperty fromProperty()
 	{
 		return from;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #to}
+	 */
 	public StringProperty toProperty()
 	{
 		return to;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #weather}
+	 */
 	public StringProperty weatherProperty()
 	{
 		return weather;

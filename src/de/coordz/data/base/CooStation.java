@@ -113,51 +113,91 @@ public class CooStation extends CooData
 		}
 	}
 	
+	/**
+	 * Method to access {@link CooMeasurement}
+	 * @return {@link #measurements}
+	 */
 	public ObservableList<CooMeasurement> getMeasurements()
 	{
 		return measurements;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #name}
+	 */
 	public StringProperty nameProperty()
 	{
 		return name;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #file}
+	 */
 	public ObjectProperty<File> fileProperty()
 	{
 		return file;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #xOffset}
+	 */
 	public IntegerProperty xOffsetProperty()
 	{
 		return xOffset;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #yOffset}
+	 */
 	public IntegerProperty yOffsetProperty()
 	{
 		return yOffset;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #zOffset}
+	 */
 	public IntegerProperty zOffsetProperty()
 	{
 		return zOffset;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #totalStation}
+	 */
 	public ObjectProperty<CooTotalstation> totalStationProperty()
 	{
 		return totalStation;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #regionDeviding}
+	 */
 	public ObjectProperty<CooRegionDividing> regionDevidingProperty()
 	{
 		return regionDeviding;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #verifyMeasurement}
+	 */
 	public ObjectProperty<CooVerifyMeasurement> verifyMeasurementProperty()
 	{
 		return verifyMeasurement;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #gateway}
+	 */
 	public ObjectProperty<CooGateway> gatewayProperty()
 	{
 		return gateway;

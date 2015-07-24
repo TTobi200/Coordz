@@ -45,6 +45,10 @@ public class CooRegionDividing extends CooData
 		}
 	}
 	
+	/**
+	 * Method to access {@link CooLaser}
+	 * @return {@link #laser}
+	 */
 	public ObservableList<CooLaser> getLaser()
 	{
 		return laser;

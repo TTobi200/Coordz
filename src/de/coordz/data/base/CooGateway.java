@@ -59,16 +59,28 @@ public class CooGateway extends CooData
 		}
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #laser}
+	 */
 	public ObservableList<CooLaser> getLaser()
 	{
 		return laser;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #ip}
+	 */
 	public StringProperty ipProperty()
 	{
 		return ip;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #mac}
+	 */
 	public StringProperty macProperty()
 	{
 		return mac;

@@ -57,21 +57,37 @@ public class CooContact extends CooData
 		}
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #firstName}
+	 */
 	public StringProperty firstNameProperty()
 	{
 		return firstName;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #lastName}
+	 */
 	public StringProperty lastNameProperty()
 	{
 		return lastName;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #phone}
+	 */
 	public StringProperty phoneroperty()
 	{
 		return phone;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #mail}
+	 */
 	public StringProperty mailProperty()
 	{
 		return mail;

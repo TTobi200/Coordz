@@ -54,16 +54,28 @@ public class CooPalet extends CooData
 		}
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #type}
+	 */
 	public ObjectProperty<CooPaletType> typeProperty()
 	{
 		return type;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #width}
+	 */
 	public IntegerProperty widthProperty()
 	{
 		return width;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #length}
+	 */
 	public IntegerProperty lengthProperty()
 	{
 		return length;

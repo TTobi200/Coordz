@@ -47,11 +47,19 @@ public class CooLAPSoftware	extends CooData
 		}
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #name}
+	 */
 	public StringProperty nameProperty()
 	{
 		return name;
 	}
 	
+	/**
+	 * Method to access Property
+	 * @return {@link #version}
+	 */
 	public StringProperty versionProperty()
 	{
 		return version;

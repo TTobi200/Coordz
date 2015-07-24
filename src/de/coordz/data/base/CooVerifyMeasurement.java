@@ -65,11 +65,19 @@ public class CooVerifyMeasurement extends CooData
 		}
 	}
 	
+	/**
+	 * Method to access {@link CooRectangle}
+	 * @return {@link #specification}
+	 */
 	public ObservableList<CooRectangle> getSpecification()
 	{
 		return specification;
 	}
 	
+	/**
+	 * Method to access {@link CooRectangle}
+	 * @return {@link #result}
+	 */
 	public ObservableList<CooRectangle> getResult()
 	{
 		return result;
