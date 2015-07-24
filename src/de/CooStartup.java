@@ -32,8 +32,8 @@ public class CooStartup
 //		CoordzPreferencesUtil.setCoordzRunning(true);
 		
 		// FORTEST Test the new xml db
-		textXMLBasedDB();
-
+//		textXMLBasedDB();
+		
 		Application.launch(CooMainFrame.class, args);
 	}
 

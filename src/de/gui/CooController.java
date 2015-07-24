@@ -6,17 +6,18 @@
  */
 package de.gui;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import javafx.event.EventHandler;
 import javafx.fxml.*;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
 import javafx.stage.*;
 import de.coordz.CooSystem;
-import de.coordz.data.CooProject;
-import de.util.CooLoggerUtil;
+import de.coordz.data.CooCustomer;
+import de.gui.comp.*;
+import de.util.*;
 import de.util.log.CooLog;
 
 public class CooController implements Initializable
@@ -29,7 +30,7 @@ public class CooController implements Initializable
 	protected Stage primaryStage;
 
 	@FXML
-	protected TreeView<CooProject> prjTreeView;
+	protected CooCustomerTreeView prjTreeView;
 	@FXML
 	protected Label lblPrj;
 
@@ -75,23 +76,20 @@ public class CooController implements Initializable
 		loadTestProjects();
 	}
 
-	@SuppressWarnings("unchecked")
 	private void loadTestProjects()
 	{
-		// FORTEST Add Projects to tree
-		TreeItem<CooProject> root = new TreeItem<CooProject>(
-			new CooProject("Kunde"));
-
-		TreeItem<CooProject> itmMischek = new TreeItem<CooProject>(new CooProject("Mischek"));
-		TreeItem<CooProject> itmSBE = new TreeItem<CooProject>(new CooProject("SBE"));
+		CooCustomerTreeItem root = new CooCustomerTreeItem("Kunden",
+			null);
+		List<CooCustomer> customers = CooXMLDBUtil.getAllCustomers(
+			new File("./CoordzXML/"));
 		
-		itmMischek.getChildren().add(new TreeItem<CooProject>(new CooProject(
-			"A2015.10051 Laser Einrichtung")));
-		itmMischek.getChildren().add(new TreeItem<CooProject>(new CooProject(
-			"A2015.10084 Laser Update")));
+		customers.forEach(c -> 
+		{
+			CooCustomerTreeItem customer = new CooCustomerTreeItem(
+				c.getName(), c);
+			root.getChildren().add(customer);
+		});
 		
-		root.getChildren().addAll(itmMischek, itmSBE);
-
 		prjTreeView.setRoot(root);
 	}
 }

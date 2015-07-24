@@ -25,10 +25,13 @@ public class CooCustomer extends CooData
 	protected List<CooContact> contacts;
 	protected List<CooPalet> palets;
 	
+	protected Map<String, CooProject> projects;
+	
 	public CooCustomer()
 	{
 		contacts = new ArrayList<CooContact>();
 		palets = new ArrayList<CooPalet>();
+		projects = new HashMap<String, CooProject>();
 	}
 	
 	
@@ -74,5 +77,23 @@ public class CooCustomer extends CooData
 			addToList("Palet", palets,
 					CooPalet.class, this.palets);
 		}
+	}
+	
+	public void addProject(String ident, CooProject project)
+	{
+		if(Objects.nonNull(project))
+		{
+			projects.put(ident, project);
+		}
+	}
+	
+	public Map<String, CooProject> getProjects()
+	{
+		return projects;
+	}
+	
+	public String getName()
+	{
+		return name;
 	}
 }
