@@ -6,7 +6,7 @@
  */
 package de.coordz.data.base;
 
-import static de.util.CooXmlDomUtil.*;
+import static de.util.CooXmlDomUtil.addElement;
 
 import java.util.Objects;
 
@@ -28,9 +28,8 @@ public class CooLAPSoftware	extends CooData
 	}	
 	
 	@Override
-	public void fromXML(Element root)
+	public void fromXML(Element lapSoftware)
 	{
-		Element lapSoftware = getSingleElement(root, "LAPSoftware");
 		if(Objects.nonNull(lapSoftware))
 		{
 			name = lapSoftware.getAttribute("Name");

@@ -6,7 +6,7 @@
  */
 package de.coordz.data.base;
 
-import static de.util.CooXmlDomUtil.*;
+import static de.util.CooXmlDomUtil.addElement;
 
 import java.util.Objects;
 
@@ -31,9 +31,8 @@ public class CooPalet extends CooData
 	}
 	
 	@Override
-	public void fromXML(Element root)
+	public void fromXML(Element palet)
 	{
-		Element palet = getSingleElement(root, "Palet");
 		if(Objects.nonNull(palet))
 		{
 			// TODO parse the Type

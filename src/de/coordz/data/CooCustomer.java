@@ -23,12 +23,12 @@ public class CooCustomer extends CooData
 	protected String location;
 	
 	protected List<CooContact> contacts;
-	protected CooPalet palet;
+	protected List<CooPalet> palets;
 	
 	public CooCustomer()
 	{
 		contacts = new ArrayList<CooContact>();
-		palet = new CooPalet();
+		palets = new ArrayList<CooPalet>();
 	}
 	
 	
@@ -43,15 +43,17 @@ public class CooCustomer extends CooData
 		customer.setAttribute("Location", location);
 		
 		// Add all contacts
-		contacts.forEach(c -> c.toXML(doc, customer));
+		Element contacts = addElement(doc, customer, "Contacts");
+		this.contacts.forEach(s -> s.toXML(doc, contacts));
 		
-		palet.toXML(doc, customer);
+		// Add all palets
+		Element palets = addElement(doc, customer, "Palets");
+		this.palets.forEach(s -> s.toXML(doc, palets));
 	}
 	
 	@Override
-	public void fromXML(Element root)
+	public void fromXML(Element customer)
 	{
-		Element customer = getSingleElement(root, "Customer");
 		if(Objects.nonNull(customer))
 		{
 			name = customer.getAttribute("Name");
@@ -61,9 +63,16 @@ public class CooCustomer extends CooData
 			location = customer.getAttribute("Location");
 			
 			// Load all contacts
-			contacts.forEach(c -> c.fromXML(customer));
+			Element contacts = getSingleElement(customer,
+							"Contacts");
+			addToList("Contact", contacts,
+					CooContact.class, this.contacts);
 			
-			palet.fromXML(customer);
+			// Load all palets
+			Element palets = getSingleElement(customer,
+							"Palets");
+			addToList("Palet", palets,
+					CooPalet.class, this.palets);
 		}
 	}
 }

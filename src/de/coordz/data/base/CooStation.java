@@ -65,8 +65,6 @@ public class CooStation extends CooData
 	@Override
 	public void fromXML(Element station)
 	{
-		// Not needed we get the single station here
-//		Element station = getSingleElement(root, "Station");
 		if(Objects.nonNull(station))
 		{
 			name = station.getAttribute("Name");
@@ -76,8 +74,10 @@ public class CooStation extends CooData
 			YOffset = Integer.valueOf(station.getAttribute("YOffset"));
 			ZOffset = Integer.valueOf(station.getAttribute("ZOffset"));
 			
-			totalStation.fromXML(station);
-			regionDeviding.fromXML(station);
+			totalStation.fromXML(getSingleElement(station,
+				"Totalstation"));
+			regionDeviding.fromXML(getSingleElement(station,
+				"RegionDividing"));
 			
 			// Load all measurements
 			Element measurements = getSingleElement(station,
@@ -85,8 +85,10 @@ public class CooStation extends CooData
 			addToList("Measurement", measurements,
 				CooMeasurement.class, this.measurements);
 			
-			verifyMeasurement.fromXML(station);
-			gateway.fromXML(station);
+			verifyMeasurement.fromXML(getSingleElement(station,
+				"VerifyMeasurement"));
+			gateway.fromXML(getSingleElement(station,
+				"Gateway"));
 		}
 	}
 }

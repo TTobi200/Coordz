@@ -6,7 +6,7 @@
  */
 package de.coordz.data.base;
 
-import static de.util.CooXmlDomUtil.*;
+import static de.util.CooXmlDomUtil.addElement;
 
 import java.util.Objects;
 
@@ -34,9 +34,8 @@ public class CooTotalstation extends CooData
 	}
 	
 	@Override
-	public void fromXML(Element root)
+	public void fromXML(Element totalstation)
 	{
-		Element totalstation = getSingleElement(root, "Totalstation");
 		if(Objects.nonNull(totalstation))
 		{
 			x = Integer.valueOf(totalstation.getAttribute("X"));

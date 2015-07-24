@@ -48,14 +48,15 @@ public class CooProject extends CooData
 	}
 
 	@Override
-	public void fromXML(Element root)
+	public void fromXML(Element project)
 	{
-		Element project = getSingleElement(root, "Project");
 		if(Objects.nonNull(project))
 		{
 			name = project.getAttribute("Name");
-			general.fromXML(project);
-			lapSoftware.fromXML(project);
+			general.fromXML(getSingleElement(project,
+				"General"));
+			lapSoftware.fromXML(getSingleElement(project,
+				"LAPSoftware"));
 
 			// Load all stations
 			Element stations = getSingleElement(project,

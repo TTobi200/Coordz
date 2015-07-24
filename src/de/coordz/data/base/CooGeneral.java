@@ -6,7 +6,7 @@
  */
 package de.coordz.data.base;
 
-import static de.util.CooXmlDomUtil.*;
+import static de.util.CooXmlDomUtil.addElement;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -29,14 +29,13 @@ public class CooGeneral extends CooData
 	}
 	
 	@Override
-	public void fromXML(Element root)
+	public void fromXML(Element general)
 	{
-		Element contact = getSingleElement(root, "General");
-		if(Objects.nonNull(contact))
+		if(Objects.nonNull(general))
 		{
-			prjNr = contact.getAttribute("PrjNumber");
+			prjNr = general.getAttribute("PrjNumber");
 			// TODO Format the date to LocalDate format
-//			date = contact.getAttribute("Date");
+//			date = general.getAttribute("Date");
 		}
 	}
 }

@@ -34,8 +34,6 @@ public class CooTarget extends CooData
 	@Override
 	public void fromXML(Element target)
 	{
-		// Not needed we get the single target here
-//		Element target = getSingleElement(root, "Target");
 		if(Objects.nonNull(target))
 		{
 			name = target.getAttribute("Name");

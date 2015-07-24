@@ -27,8 +27,6 @@ public class CooReticle extends CooTarget
 	@Override
 	public void fromXML(Element reticle)
 	{
-		// Not needed we get the single reticle here
-//		Element reticle = getSingleElement(root, "Reticle");
 		if(Objects.nonNull(reticle))
 		{
 			name = reticle.getAttribute("Name");

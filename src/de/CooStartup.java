@@ -14,7 +14,7 @@ import javafx.application.Application;
 
 import org.w3c.dom.*;
 
-import de.coordz.data.*;
+import de.coordz.data.CooProject;
 import de.gui.CooMainFrame;
 import de.util.CooXmlDomUtil;
 
@@ -42,27 +42,15 @@ public class CooStartup
 		try
 		{
 			// Create Costomer and Project
-			CooCustomer customerTest = new CooCustomer();
 			CooProject projectTest = new CooProject("Test");
+//			CooCustomer customerTest = new CooCustomer();
 
-//			// Load Customer
-//			Element root = getDocumentBuilder().parse(
-//				new File("./CoordzXML/customer.xml"))
-//				 .getDocumentElement();
-//			customerTest.fromXML(root);
-//			
-//			// Save Customer
-//			Document doc = getDocumentBuilder().newDocument();
-//			Element root2 = addElement(doc, doc, "CoordzData");
-//			customerTest.toXML(doc, root2);
-//			CooXmlDomUtil.saveFile(doc, new File(
-//				"./CoordzXML/customer.xml"));
-			
 			// Load Project
 			Element root = getDocumentBuilder().parse(
 				new File("./CoordzXML/project.xml"))
 				 .getDocumentElement();
-			projectTest.fromXML(root);
+			projectTest.fromXML(getSingleElement(root,
+				"Project"));
 			
 			// Save Project
 			Document doc = getDocumentBuilder().newDocument();
@@ -70,6 +58,20 @@ public class CooStartup
 			projectTest.toXML(doc, root2);
 			CooXmlDomUtil.saveFile(doc, new File(
 				"./CoordzXML/project.xml"));
+			
+//			// Load Customer
+//			Element root = getDocumentBuilder().parse(
+//				new File("./CoordzXML/customer.xml"))
+//				 .getDocumentElement();
+//			customerTest.fromXML(getSingleElement(root,
+//				"Customer"));
+//			
+//			// Save Project
+//			Document doc = getDocumentBuilder().newDocument();
+//			Element root2 = addElement(doc, doc, "CoordzData");
+//			customerTest.toXML(doc, root2);
+//			CooXmlDomUtil.saveFile(doc, new File(
+//				"./CoordzXML/customer.xml"));
 		}
 		catch(Exception e)
 		{

@@ -16,7 +16,6 @@ import javafx.scene.control.*;
 import javafx.stage.*;
 import de.coordz.CooSystem;
 import de.coordz.data.CooProject;
-import de.coordz.data.db.CooDB;
 import de.util.CooLoggerUtil;
 import de.util.log.CooLog;
 
@@ -79,10 +78,6 @@ public class CooController implements Initializable
 	@SuppressWarnings("unchecked")
 	private void loadTestProjects()
 	{
-		// FORTEST Create databse connection
-		CooDB db = CooSystem.getSystemDatabase();
-		db.connect("CoordzDB", "ut", "ut", true);
-
 		// FORTEST Add Projects to tree
 		TreeItem<CooProject> root = new TreeItem<CooProject>(
 			new CooProject("Kunde"));
@@ -98,11 +93,5 @@ public class CooController implements Initializable
 		root.getChildren().addAll(itmMischek, itmSBE);
 
 		prjTreeView.setRoot(root);
-//		prjTreeView.getSelectionModel()
-//			.selectedItemProperty()
-//			.addListener((old, curr, newV) ->
-//			{
-//				lblPrj.setText(newV.getValue().getName());
-//			});
 	}
 }

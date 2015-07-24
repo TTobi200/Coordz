@@ -43,10 +43,8 @@ public class CooVerifyMeasurement extends CooData
 	}
 
 	@Override
-	public void fromXML(Element root)
+	public void fromXML(Element verifyMeasurement)
 	{
-		Element verifyMeasurement = getSingleElement(root,
-			"VerifyMeasurement");
 		if(Objects.nonNull(verifyMeasurement))
 		{
 			// Load all specification rectangles

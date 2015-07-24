@@ -37,9 +37,8 @@ public class CooGateway extends CooData
 	}
 	
 	@Override
-	public void fromXML(Element root)
+	public void fromXML(Element gateway)
 	{
-		Element gateway = getSingleElement(root, "Gateway");
 		if(Objects.nonNull(gateway))
 		{
 			ip = gateway.getAttribute("IP");

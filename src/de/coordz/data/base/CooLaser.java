@@ -42,8 +42,6 @@ public class CooLaser extends CooData
 	@Override
 	public void fromXML(Element laser)
 	{
-		// Not needed we get the single laser here
-//		Element laser = getSingleElement(root, "Laser");
 		if(Objects.nonNull(laser))
 		{
 			name = laser.getAttribute("Name");

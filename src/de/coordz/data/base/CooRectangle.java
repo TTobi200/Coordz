@@ -6,7 +6,7 @@
  */
 package de.coordz.data.base;
 
-import static de.util.CooXmlDomUtil.*;
+import static de.util.CooXmlDomUtil.addElement;
 
 import java.util.Objects;
 
@@ -42,9 +42,8 @@ public class CooRectangle extends CooData
 	}
 	
 	@Override
-	public void fromXML(Element root)
+	public void fromXML(Element rectangle)
 	{
-		Element rectangle = getSingleElement(root, "Rectangle");
 		if(Objects.nonNull(rectangle))
 		{
 			name = rectangle.getAttribute("Name");

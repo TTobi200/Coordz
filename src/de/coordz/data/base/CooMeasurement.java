@@ -54,8 +54,6 @@ public class CooMeasurement extends CooData
 	@Override
 	public void fromXML(Element measurement)
 	{
-		// Not needed we get the single target here
-//		Element measurement = getSingleElement(root, "Measurement");
 		if(Objects.nonNull(measurement))
 		{
 			name = measurement.getAttribute("Name");

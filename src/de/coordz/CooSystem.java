@@ -36,7 +36,6 @@ public class CooSystem
 	public static void exit(int status)
 	{
 		CooPreferencesUtil.setCoordzRunning(false);
-		getSystemDatabase().shutdown();
 		Platform.exit();
 		
 		if(status != NORMAL)

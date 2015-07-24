@@ -32,13 +32,13 @@ public class CooRegionDividing extends CooData
 	}
 
 	@Override
-	public void fromXML(Element root)
+	public void fromXML(Element regionDividing)
 	{
-		Element regionDividing = getSingleElement(root,
-			"RegionDividing");
-
-		// Load all lasers
-		addToList("Laser", regionDividing,
-			CooLaser.class, this.laser);
+		if(Objects.nonNull(regionDividing))
+		{
+			// Load all lasers
+			addToList("Laser", regionDividing,
+				CooLaser.class, this.laser);
+		}
 	}
 }
