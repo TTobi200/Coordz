@@ -6,8 +6,8 @@
             <Contact FirstName="" LastName="Traxler" Mail="" Phone=""/>
         </Contacts>
         <Palets>
-            <Palet Length="0" Type="null" Width="0"/>
-            <Palet Length="0" Type="null" Width="0"/>
+            <Palet Length="0" Type="U" Width="0"/>
+            <Palet Length="0" Type="U" Width="0"/>
         </Palets>
     </Customer>
 </CoordzData>

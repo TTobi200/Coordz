@@ -47,8 +47,7 @@ public class CooPalet extends CooData
 	{
 		if(Objects.nonNull(palet))
 		{
-			// TODO parse the Type
-//			type = palet.getAttribute("Type");
+			type.set(CooPaletType.parse(palet.getAttribute("Type")));
 			width.set(Integer.valueOf(palet.getAttribute("Width")));
 			length.set(Integer.valueOf(palet.getAttribute("Length")));
 		}
