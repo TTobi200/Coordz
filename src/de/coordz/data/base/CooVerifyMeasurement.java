@@ -16,12 +16,12 @@ import de.coordz.data.CooData;
 
 public class CooVerifyMeasurement extends CooData
 {
-	protected List<CooRectangle> spefication;
+	protected List<CooRectangle> specification;
 	protected List<CooRectangle> result;
 
 	public CooVerifyMeasurement()
 	{
-		spefication = new ArrayList<CooRectangle>();
+		specification = new ArrayList<CooRectangle>();
 		result = new ArrayList<CooRectangle>();
 	}
 
@@ -34,7 +34,7 @@ public class CooVerifyMeasurement extends CooData
 		// Add all rectangles from specification
 		Element specification = addElement(doc, verifyMeasurement,
 			"Specification");
-		this.spefication.forEach(r -> r.toXML(doc, specification));
+		this.specification.forEach(r -> r.toXML(doc, specification));
 
 		// Add all rectangles from result
 		Element result = addElement(doc, verifyMeasurement,
@@ -49,13 +49,17 @@ public class CooVerifyMeasurement extends CooData
 			"VerifyMeasurement");
 		if(Objects.nonNull(verifyMeasurement))
 		{
-			// Load all lasers
-			addToList("Specification", verifyMeasurement,
-				CooRectangle.class, spefication);
+			// Load all specification rectangles
+			Element specification = getSingleElement(verifyMeasurement,
+							"Specification");
+			addToList("Rectangle", specification,
+				CooRectangle.class, this.specification);
 
-			// Load all lasers
-			addToList("Result", verifyMeasurement,
-				CooRectangle.class, result);
+			// Load all result rectangles
+			Element result = getSingleElement(verifyMeasurement,
+							"Result");
+			addToList("Rectangle", result,
+				CooRectangle.class, this.result);
 		}
 	}
 }

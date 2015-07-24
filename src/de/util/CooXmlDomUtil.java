@@ -146,13 +146,13 @@ public class CooXmlDomUtil
 	{
 		try
 		{
-			NodeList stationsXml = parent.getElementsByTagName(
+			NodeList xmlNode = parent.getElementsByTagName(
 				tagName);
 
-			for(int i = 0; i < stationsXml.getLength(); i++)
+			for(int i = 0; i < xmlNode.getLength(); i++)
 			{
 				CooData data = (CooData)clazz.newInstance();
-				data.fromXML((Element)stationsXml.item(i));
+				data.fromXML((Element)xmlNode.item(i));
 				listToAdd.add(data);
 			}
 		}

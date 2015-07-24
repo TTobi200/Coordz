@@ -6,7 +6,7 @@
  */
 package de.coordz.data.base;
 
-import static de.util.CooXmlDomUtil.*;
+import static de.util.CooXmlDomUtil.addElement;
 
 import java.util.Objects;
 
@@ -25,9 +25,10 @@ public class CooReticle extends CooTarget
 	}
 	
 	@Override
-	public void fromXML(Element root)
+	public void fromXML(Element reticle)
 	{
-		Element reticle = getSingleElement(root, "Reticle");
+		// Not needed we get the single reticle here
+//		Element reticle = getSingleElement(root, "Reticle");
 		if(Objects.nonNull(reticle))
 		{
 			name = reticle.getAttribute("Name");

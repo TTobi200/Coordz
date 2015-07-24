@@ -44,6 +44,10 @@ public class CooGateway extends CooData
 		{
 			ip = gateway.getAttribute("IP");
 			mac = gateway.getAttribute("MAC");
+			
+			// Load all laser
+			addToList("Laser", gateway,
+				CooLaser.class, this.laser);
 		}
 	}
 }

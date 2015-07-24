@@ -6,7 +6,7 @@
  */
 package de.coordz.data.base;
 
-import static de.util.CooXmlDomUtil.*;
+import static de.util.CooXmlDomUtil.addElement;
 
 import java.util.Objects;
 
@@ -32,9 +32,10 @@ public class CooTarget extends CooData
 	}
 	
 	@Override
-	public void fromXML(Element root)
+	public void fromXML(Element target)
 	{
-		Element target = getSingleElement(root, "Target");
+		// Not needed we get the single target here
+//		Element target = getSingleElement(root, "Target");
 		if(Objects.nonNull(target))
 		{
 			name = target.getAttribute("Name");

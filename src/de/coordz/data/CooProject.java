@@ -58,8 +58,10 @@ public class CooProject extends CooData
 			lapSoftware.fromXML(project);
 
 			// Load all stations
-			addToList("Stations", project,  
-				CooStation.class, stations);
+			Element stations = getSingleElement(project,
+							"Stations");
+			addToList("Station", stations,
+				CooStation.class, this.stations);
 		}
 	}
 }

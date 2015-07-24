@@ -23,12 +23,12 @@ public class CooMeasurement extends CooData
 	protected String to;
 	protected String weather;
 
-	protected List<CooReticle> reticle;
+	protected List<CooReticle> reticles;
 	protected List<CooTarget> targets;
 	
 	public CooMeasurement()
 	{
-		reticle = new ArrayList<CooReticle>();
+		reticles = new ArrayList<CooReticle>();
 		targets = new ArrayList<CooTarget>();
 	}
 
@@ -44,17 +44,18 @@ public class CooMeasurement extends CooData
 
 		Element reticles = addElement(doc, measurement,
 			"Reticles");
-		reticle.forEach(r -> r.toXML(doc, reticles));
+		this.reticles.forEach(r -> r.toXML(doc, reticles));
 
 		Element targets = addElement(doc, measurement,
 			"Targets");
-		reticle.forEach(r -> r.toXML(doc, targets));
+		this.targets.forEach(t -> t.toXML(doc, targets));
 	}
 
 	@Override
-	public void fromXML(Element root)
+	public void fromXML(Element measurement)
 	{
-		Element measurement = getSingleElement(root, "Measurement");
+		// Not needed we get the single target here
+//		Element measurement = getSingleElement(root, "Measurement");
 		if(Objects.nonNull(measurement))
 		{
 			name = measurement.getAttribute("Name");
@@ -65,12 +66,16 @@ public class CooMeasurement extends CooData
 			weather = measurement.getAttribute("Weather");
 
 			// Load all reticles
-			addToList("Reticles", measurement,
-				CooReticle.class, reticle);
+			Element reticles = getSingleElement(measurement,
+							"Reticles");
+			addToList("Reticle", reticles,
+				CooReticle.class, this.reticles);
 
 			// Load all targets
-			addToList("Targets", measurement,
-				CooTarget.class, targets);
+			Element targets = getSingleElement(measurement,
+				"Targets");
+			addToList("Target", targets,
+				CooTarget.class, this.targets);
 		}
 	}
 }

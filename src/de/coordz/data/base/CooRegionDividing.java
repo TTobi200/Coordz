@@ -38,7 +38,7 @@ public class CooRegionDividing extends CooData
 			"RegionDividing");
 
 		// Load all lasers
-		addToList("RegionDividing", regionDividing,
-			CooLaser.class, laser);
+		addToList("Laser", regionDividing,
+			CooLaser.class, this.laser);
 	}
 }

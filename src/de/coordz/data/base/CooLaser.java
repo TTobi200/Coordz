@@ -6,7 +6,7 @@
  */
 package de.coordz.data.base;
 
-import static de.util.CooXmlDomUtil.*;
+import static de.util.CooXmlDomUtil.addElement;
 
 import java.util.Objects;
 
@@ -40,9 +40,10 @@ public class CooLaser extends CooData
 	}
 	
 	@Override
-	public void fromXML(Element root)
+	public void fromXML(Element laser)
 	{
-		Element laser = getSingleElement(root, "Laser");
+		// Not needed we get the single laser here
+//		Element laser = getSingleElement(root, "Laser");
 		if(Objects.nonNull(laser))
 		{
 			name = laser.getAttribute("Name");
