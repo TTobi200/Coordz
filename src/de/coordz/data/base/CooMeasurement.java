@@ -17,6 +17,7 @@ import javafx.collections.*;
 import org.w3c.dom.*;
 
 import de.coordz.data.CooData;
+import de.util.CooTimeUtil;
 
 public class CooMeasurement extends CooData
 {
@@ -73,8 +74,9 @@ public class CooMeasurement extends CooData
 		if(Objects.nonNull(measurement))
 		{
 			name.set(measurement.getAttribute("Name"));
-			// TODO add LocalDate format
-			// date = laser.getAttribute("Date");
+			date.set(LocalDate.parse(measurement.getAttribute("Date"),
+				CooTimeUtil.SIMPLE_DATE_FORMATTER));
+			
 			from.set(measurement.getAttribute("From"));
 			to.set(measurement.getAttribute("To"));
 			weather.set(measurement.getAttribute("Weather"));

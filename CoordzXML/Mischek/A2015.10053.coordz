@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <CoordzData>
-    <Project Date="null" Name="A2015.10053">
+    <Project Date="2005-01-01" Name="A2015.10053">
         <LAPSoftware Name="ProSoft 2D" Version="3.5.8 beta4"/>
         <Stations>
             <Station File="D:\Unitechnik\repos\Coordz" Name="U1" XOffset="-17" YOffset="-3" ZOffset="-4">
@@ -10,7 +10,7 @@
                     <Laser MAC="" Name="Las2" SerialNr="" TotalDeviation="0.0" X="0" Y="0" Z="0"/>
                 </RegionDividing>
                 <Measurements>
-                    <Measurement Date="null" From="10.00Uhr" Name="07.07.15(2)" To="18.00Uhr" Weather="Sonnig">
+                    <Measurement Date="2005-01-01" From="10.00Uhr" Name="07.07.15(2)" To="18.00Uhr" Weather="Sonnig">
                         <Reticles>
                             <Reticle Name="1" X="3550" Y="24" Z="15"/>
                             <Reticle Name="2" X="3550" Y="24" Z="15"/>

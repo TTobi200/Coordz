@@ -15,6 +15,9 @@ public class CooTimeUtil
 	/** The formatter for times, that should be used in file-names */
 	public static final DateTimeFormatter FILE_NAME_TIME_FORMATTER = DateTimeFormatter
 			.ofPattern("YYYY_MM_dd_HHmmss");
+	/** The formatter for dates, that should be used in xml files */
+	public static final DateTimeFormatter SIMPLE_DATE_FORMATTER = DateTimeFormatter
+			.ofPattern("yyyy-MM-dd");
 	/** Pattern for time date/display */
 	public static final DateFormat displayTimeFormat = new SimpleDateFormat(
 		"dd-MM-yyyy HH:mm:ss");

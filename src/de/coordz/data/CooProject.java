@@ -17,6 +17,7 @@ import javafx.collections.*;
 import org.w3c.dom.*;
 
 import de.coordz.data.base.*;
+import de.util.CooTimeUtil;
 
 public class CooProject extends CooData
 {
@@ -56,8 +57,8 @@ public class CooProject extends CooData
 		if(Objects.nonNull(project))
 		{
 			name.set(project.getAttribute("Name"));
-			// TODO parse the date
-//			date.set(LocalDate.parse(project.getAttribute("Date")));
+			date.set(LocalDate.parse(project.getAttribute("Date"),
+				CooTimeUtil.SIMPLE_DATE_FORMATTER));
 			lapSoftware.get().fromXML(getSingleElement(project,
 				"LAPSoftware"));
 
