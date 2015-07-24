@@ -37,12 +37,13 @@ public class CooStartup
 		Application.launch(CooMainFrame.class, args);
 	}
 
+	@SuppressWarnings("unused")
 	private static void textXMLBasedDB()
 	{
 		try
 		{
 			// Create Costomer and Project
-			CooProject projectTest = new CooProject("Test");
+			CooProject projectTest = new CooProject();
 //			CooCustomer customerTest = new CooCustomer();
 
 			// Load Project

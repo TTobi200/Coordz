@@ -10,21 +10,31 @@ import static de.util.CooXmlDomUtil.addElement;
 
 import java.util.Objects;
 
+import javafx.beans.property.*;
+
 import org.w3c.dom.*;
 
 import de.coordz.data.CooData;
 
 public class CooLAPSoftware	extends CooData
 {
-	protected String name;
-	protected String version;
+	/** {@link StringProperty} for the lap software name */
+	protected StringProperty name;
+	/** {@link StringProperty} for the lap software version */
+	protected StringProperty version;
+	
+	public CooLAPSoftware()
+	{
+		name = new SimpleStringProperty();
+		version = new SimpleStringProperty();
+	}
 	
 	@Override
 	public void toXML(Document doc, Element root)
 	{
 		Element lapSoftware = addElement(doc, root, "LAPSoftware");
-		lapSoftware.setAttribute("Name", name);
-		lapSoftware.setAttribute("Version", version);
+		lapSoftware.setAttribute("Name", name.get());
+		lapSoftware.setAttribute("Version", version.get());
 	}	
 	
 	@Override
@@ -32,8 +42,18 @@ public class CooLAPSoftware	extends CooData
 	{
 		if(Objects.nonNull(lapSoftware))
 		{
-			name = lapSoftware.getAttribute("Name");
-			version = lapSoftware.getAttribute("Version");
+			name.set(lapSoftware.getAttribute("Name"));
+			version.set(lapSoftware.getAttribute("Version"));
 		}
+	}
+	
+	public StringProperty nameProperty()
+	{
+		return name;
+	}
+	
+	public StringProperty versionProperty()
+	{
+		return version;
 	}
 }

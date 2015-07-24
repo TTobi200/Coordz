@@ -10,6 +10,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.*;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.*;
 import javafx.scene.control.Label;
@@ -78,15 +79,18 @@ public class CooController implements Initializable
 
 	private void loadTestProjects()
 	{
-		CooCustomerTreeItem root = new CooCustomerTreeItem("Kunden",
-			null);
+		// Create Tree Root
+		CooCustomerTreeItem root = new CooCustomerTreeItem(
+			new SimpleStringProperty("Kunde"), null);
+		// Load all customers from xml DB
 		List<CooCustomer> customers = CooXMLDBUtil.getAllCustomers(
 			new File("./CoordzXML/"));
 		
+		// Add Customers to Tree Root
 		customers.forEach(c -> 
 		{
 			CooCustomerTreeItem customer = new CooCustomerTreeItem(
-				c.getName(), c);
+				c.nameProperty(), c);
 			root.getChildren().add(customer);
 		});
 		

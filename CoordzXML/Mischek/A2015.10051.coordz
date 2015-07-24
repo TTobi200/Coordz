@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <CoordzData>
-    <Project>
-        <General Date="null" PrjNumber="A2015.10051"/>
+    <Project Date="null" Name="A2015.10051">
         <LAPSoftware Name="ProSoft 2D" Version="3.5.8 beta4"/>
         <Stations>
             <Station File="D:\Unitechnik\repos\Coordz" Name="U1" XOffset="-17" YOffset="-3" ZOffset="-4">

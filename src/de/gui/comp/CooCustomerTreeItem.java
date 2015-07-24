@@ -8,6 +8,7 @@ package de.gui.comp;
 
 import java.util.Objects;
 
+import javafx.beans.property.StringProperty;
 import javafx.scene.control.TreeItem;
 import de.coordz.data.*;
 
@@ -15,9 +16,9 @@ public class CooCustomerTreeItem extends TreeItem<String>
 {
 	protected CooCustomer customer;
 
-	public CooCustomerTreeItem(String name, CooCustomer customer)
+	public CooCustomerTreeItem(StringProperty name, CooCustomer customer)
 	{
-		super(name);
+		this.valueProperty().bind(name);
 		this.customer = customer;
 		
 		if(Objects.nonNull(customer))

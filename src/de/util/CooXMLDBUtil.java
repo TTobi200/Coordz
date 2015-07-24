@@ -56,9 +56,7 @@ public class CooXMLDBUtil
 				{
 					if(!p.getName().equals(customerXml.getName()))
 					{
-						String prjName = p.getName().replace(
-							DATA_FILE_EXT, "");
-						CooProject project = new CooProject(prjName);
+						CooProject project = new CooProject();
 
 						try
 						{
@@ -67,7 +65,8 @@ public class CooXMLDBUtil
 							project.fromXML(getSingleElement(root,
 								XML_PROJECT_ROOT));
 							
-							customer.addProject(prjName, project);
+							customer.addProject(project.nameProperty().get(),
+								project);
 						}
 						catch(Exception e)
 						{

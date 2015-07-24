@@ -9,7 +9,10 @@ package de.coordz.data.base;
 import static de.util.CooXmlDomUtil.*;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Objects;
+
+import javafx.beans.property.*;
+import javafx.collections.*;
 
 import org.w3c.dom.*;
 
@@ -17,30 +20,43 @@ import de.coordz.data.CooData;
 
 public class CooMeasurement extends CooData
 {
-	protected String name;
-	protected LocalDate date;
-	protected String from;
-	protected String to;
-	protected String weather;
+	/** {@link StringProperty} for the measurement name */
+	protected StringProperty name;
+	/** {@link StringProperty} for the measurement {@link LocalDate} */
+	protected ObjectProperty<LocalDate> date;
+	/** {@link StringProperty} for the measurement time from */
+	protected StringProperty from;
+	/** {@link StringProperty} for the measurement time to */
+	protected StringProperty to;
+	/** {@link StringProperty} for the measurement weather outside */
+	protected StringProperty weather;
 
-	protected List<CooReticle> reticles;
-	protected List<CooTarget> targets;
+	/** {@link ObservableList} with all measurement {@link CooReticle} */
+	protected ObservableList<CooReticle> reticles;
+	/** {@link ObservableList} with all measurement {@link CooTarget} */
+	protected ObservableList<CooTarget> targets;
 	
 	public CooMeasurement()
 	{
-		reticles = new ArrayList<CooReticle>();
-		targets = new ArrayList<CooTarget>();
+		name = new SimpleStringProperty();
+		date = new SimpleObjectProperty<LocalDate>();
+		from = new SimpleStringProperty();
+		to = new SimpleStringProperty();
+		weather = new SimpleStringProperty();
+		reticles = FXCollections.observableArrayList();
+		targets = FXCollections.observableArrayList();
 	}
 
 	@Override
 	public void toXML(Document doc, Element root)
 	{
-		Element measurement = addElement(doc, root, "Measurement");
-		measurement.setAttribute("Name", name);
-		measurement.setAttribute("Date", String.valueOf(date));
-		measurement.setAttribute("From", from);
-		measurement.setAttribute("To", to);
-		measurement.setAttribute("Weather", weather);
+		Element measurement = addElement(doc, root,
+			"Measurement");
+		measurement.setAttribute("Name", name.get());
+		measurement.setAttribute("Date", String.valueOf(date.get()));
+		measurement.setAttribute("From", from.get());
+		measurement.setAttribute("To", to.get());
+		measurement.setAttribute("Weather", weather.get());
 
 		Element reticles = addElement(doc, measurement,
 			"Reticles");
@@ -56,12 +72,12 @@ public class CooMeasurement extends CooData
 	{
 		if(Objects.nonNull(measurement))
 		{
-			name = measurement.getAttribute("Name");
+			name.set(measurement.getAttribute("Name"));
 			// TODO add LocalDate format
 			// date = laser.getAttribute("Date");
-			from = measurement.getAttribute("From");
-			to = measurement.getAttribute("To");
-			weather = measurement.getAttribute("Weather");
+			from.set(measurement.getAttribute("From"));
+			to.set(measurement.getAttribute("To"));
+			weather.set(measurement.getAttribute("Weather"));
 
 			// Load all reticles
 			Element reticles = getSingleElement(measurement,
@@ -75,5 +91,40 @@ public class CooMeasurement extends CooData
 			addToList("Target", targets,
 				CooTarget.class, this.targets);
 		}
+	}
+	
+	public ObservableList<CooReticle> getReticles()
+	{
+		return reticles;
+	}
+	
+	public ObservableList<CooTarget> getTargets()
+	{
+		return targets;
+	}
+	
+	public StringProperty nameProperty()
+	{
+		return name;
+	}
+	
+	public ObjectProperty<LocalDate> dateProperty()
+	{
+		return date;
+	}
+	
+	public StringProperty fromProperty()
+	{
+		return from;
+	}
+	
+	public StringProperty toProperty()
+	{
+		return to;
+	}
+	
+	public StringProperty weatherProperty()
+	{
+		return weather;
 	}
 }

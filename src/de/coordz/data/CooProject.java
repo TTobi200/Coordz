@@ -8,7 +8,10 @@ package de.coordz.data;
 
 import static de.util.CooXmlDomUtil.*;
 
+import java.time.LocalDate;
 import java.util.*;
+
+import javafx.beans.property.*;
 
 import org.w3c.dom.*;
 
@@ -16,31 +19,30 @@ import de.coordz.data.base.*;
 
 public class CooProject extends CooData
 {
-	protected String name;
-	protected CooGeneral general;
-	protected CooLAPSoftware lapSoftware;
+	/** {@link StringProperty} for the project name */
+	protected StringProperty name;
+	/** {@link ObjectProperty} for the project {@link LocalDate} */
+	protected ObjectProperty<LocalDate> date;
+	/** {@link ObjectProperty} for the project {@link CooLAPSoftware} */
+	protected ObjectProperty<CooLAPSoftware> lapSoftware;
+	
+	/** {@link List} with all project {@link CooStation} */
 	protected List<CooStation> stations;
 
-	public CooProject(String name)
+	public CooProject()
 	{
-		this.name = name;
-		general = new CooGeneral();
-		lapSoftware = new CooLAPSoftware();
+		name = new SimpleStringProperty();
+		date = new SimpleObjectProperty<LocalDate>();
+		lapSoftware = new SimpleObjectProperty<CooLAPSoftware>(
+						new CooLAPSoftware());
 		stations = new ArrayList<CooStation>();
-	}
-
-	@Override
-	public String toString()
-	{
-		return name;
 	}
 
 	@Override
 	public void toXML(Document doc, Element root)
 	{
 		Element project = addElement(doc, root, "Project");
-		general.toXML(doc, project);
-		lapSoftware.toXML(doc, project);
+		lapSoftware.get().toXML(doc, project);
 
 		// Add all stations
 		Element stations = addElement(doc, project, "Stations");
@@ -52,10 +54,10 @@ public class CooProject extends CooData
 	{
 		if(Objects.nonNull(project))
 		{
-			name = project.getAttribute("Name");
-			general.fromXML(getSingleElement(project,
-				"General"));
-			lapSoftware.fromXML(getSingleElement(project,
+			name.set(project.getAttribute("Name"));
+			// TODO parse the date
+//			date.set(LocalDate.parse(project.getAttribute("Date")));
+			lapSoftware.get().fromXML(getSingleElement(project,
 				"LAPSoftware"));
 
 			// Load all stations
@@ -64,5 +66,25 @@ public class CooProject extends CooData
 			addToList("Station", stations,
 				CooStation.class, this.stations);
 		}
+	}
+	
+	public List<CooStation> getStations()
+	{
+		return stations;
+	}
+	
+	public StringProperty nameProperty()
+	{
+		return name;
+	}
+	
+	public ObjectProperty<LocalDate> dateProperty()
+	{
+		return date;
+	}
+	
+	public ObjectProperty<CooLAPSoftware> lapSoftwareProperty()
+	{
+		return lapSoftware;
 	}
 }
