@@ -10,25 +10,39 @@ import static de.util.CooXmlDomUtil.addElement;
 
 import java.util.Objects;
 
+import javafx.beans.property.*;
+
 import org.w3c.dom.*;
 
 import de.coordz.data.CooData;
 
 public class CooTarget extends CooData
 {
-	protected String name;
-	protected int x;
-	protected int y;
-	protected int z;
+	/** {@link StringProperty} for the target name */
+	protected StringProperty name;
+	/** {@link IntegerProperty} for the target x coordinate */
+	protected IntegerProperty x;
+	/** {@link IntegerProperty} for the target y coordinate */
+	protected IntegerProperty y;
+	/** {@link IntegerProperty} for the target z coordinate */
+	protected IntegerProperty z;
+	
+	public CooTarget()
+	{
+		name = new SimpleStringProperty();
+		x = new SimpleIntegerProperty();
+		y = new SimpleIntegerProperty();
+		z = new SimpleIntegerProperty();
+	}
 	
 	@Override
 	public void toXML(Document doc, Element root)
 	{
 		Element target = addElement(doc, root, "Target");
-		target.setAttribute("Name", name);
-		target.setAttribute("X", String.valueOf(x));
-		target.setAttribute("Y", String.valueOf(y));
-		target.setAttribute("Z", String.valueOf(z));
+		target.setAttribute("Name", name.get());
+		target.setAttribute("X", String.valueOf(x.get()));
+		target.setAttribute("Y", String.valueOf(y.get()));
+		target.setAttribute("Z", String.valueOf(z.get()));
 	}
 	
 	@Override
@@ -36,10 +50,30 @@ public class CooTarget extends CooData
 	{
 		if(Objects.nonNull(target))
 		{
-			name = target.getAttribute("Name");
-			x = Integer.valueOf(target.getAttribute("X"));
-			y = Integer.valueOf(target.getAttribute("Y"));
-			z = Integer.valueOf(target.getAttribute("Z"));
+			name.set(target.getAttribute("Name"));
+			x.set(Integer.valueOf(target.getAttribute("X")));
+			y.set(Integer.valueOf(target.getAttribute("Y")));
+			z.set(Integer.valueOf(target.getAttribute("Z")));
 		}
+	}
+	
+	public StringProperty nameProperty()
+	{
+		return name;
+	}
+	
+	public IntegerProperty xProperty()
+	{
+		return x;
+	}
+	
+	public IntegerProperty yProperty()
+	{
+		return y;
+	}
+	
+	public IntegerProperty zProperty()
+	{
+		return z;
 	}
 }

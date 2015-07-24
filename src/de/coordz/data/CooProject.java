@@ -9,9 +9,10 @@ package de.coordz.data;
 import static de.util.CooXmlDomUtil.*;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Objects;
 
 import javafx.beans.property.*;
+import javafx.collections.*;
 
 import org.w3c.dom.*;
 
@@ -26,8 +27,8 @@ public class CooProject extends CooData
 	/** {@link ObjectProperty} for the project {@link CooLAPSoftware} */
 	protected ObjectProperty<CooLAPSoftware> lapSoftware;
 	
-	/** {@link List} with all project {@link CooStation} */
-	protected List<CooStation> stations;
+	/** {@link ObservableList} with all project {@link CooStation} */
+	protected ObservableList<CooStation> stations;
 
 	public CooProject()
 	{
@@ -35,7 +36,7 @@ public class CooProject extends CooData
 		date = new SimpleObjectProperty<LocalDate>();
 		lapSoftware = new SimpleObjectProperty<CooLAPSoftware>(
 						new CooLAPSoftware());
-		stations = new ArrayList<CooStation>();
+		stations = FXCollections.observableArrayList();
 	}
 
 	@Override
@@ -68,7 +69,7 @@ public class CooProject extends CooData
 		}
 	}
 	
-	public List<CooStation> getStations()
+	public ObservableList<CooStation> getStations()
 	{
 		return stations;
 	}

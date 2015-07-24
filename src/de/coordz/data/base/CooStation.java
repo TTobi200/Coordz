@@ -9,7 +9,10 @@ package de.coordz.data.base;
 import static de.util.CooXmlDomUtil.*;
 
 import java.io.File;
-import java.util.*;
+import java.util.Objects;
+
+import javafx.beans.property.*;
+import javafx.collections.*;
 
 import org.w3c.dom.*;
 
@@ -17,40 +20,58 @@ import de.coordz.data.CooData;
 
 public class CooStation extends CooData
 {
-	protected String name;
-	protected File file;
-	protected int XOffset;
-	protected int YOffset;
-	protected int ZOffset;
+	/** {@link StringProperty} for the station name */
+	protected StringProperty name;
+	/** {@link ObjectProperty} for the station file */
+	protected ObjectProperty<File> file;
+	/** {@link IntegerProperty} for the station x offset */
+	protected IntegerProperty xOffset;
+	/** {@link IntegerProperty} for the station y offset */
+	protected IntegerProperty yOffset;
+	/** {@link IntegerProperty} for the station z offset */
+	protected IntegerProperty zOffset;
 
-	protected CooTotalstation totalStation;
-	protected CooRegionDividing regionDeviding;
-	protected List<CooMeasurement> measurements;
-	protected CooVerifyMeasurement verifyMeasurement;
-	protected CooGateway gateway;
+	/** {@link ObjectProperty} for the station {@link CooTotalstation} */
+	protected ObjectProperty<CooTotalstation> totalStation;
+	/** {@link ObjectProperty} for the station {@link CooRegionDividing} */
+	protected ObjectProperty<CooRegionDividing> regionDeviding;
+	/** {@link ObservableList} with all station {@link CooMeasurement} */
+	protected ObservableList<CooMeasurement> measurements;
+	/** {@link ObjectProperty} for the station {@link CooVerifyMeasurement} */
+	protected ObjectProperty<CooVerifyMeasurement> verifyMeasurement;
+	/** {@link ObjectProperty} for the station {@link CooGateway} */
+	protected ObjectProperty<CooGateway> gateway;
 	
 	public CooStation()
 	{
-		file = new File("");
-		totalStation = new CooTotalstation();
-		regionDeviding = new CooRegionDividing();
-		measurements = new ArrayList<CooMeasurement>();
-		verifyMeasurement = new CooVerifyMeasurement();
-		gateway = new CooGateway();
+		name = new SimpleStringProperty();
+		file = new SimpleObjectProperty<File>();
+		xOffset = new SimpleIntegerProperty();
+		yOffset = new SimpleIntegerProperty();
+		zOffset = new SimpleIntegerProperty();
+		totalStation = new SimpleObjectProperty<CooTotalstation>(
+						new CooTotalstation());
+		regionDeviding = new SimpleObjectProperty<CooRegionDividing>(
+						new CooRegionDividing());
+		measurements = FXCollections.observableArrayList();
+		verifyMeasurement = new SimpleObjectProperty<CooVerifyMeasurement>(
+						new CooVerifyMeasurement());
+		gateway = new SimpleObjectProperty<CooGateway>(
+						new CooGateway());
 	}
 
 	@Override
 	public void toXML(Document doc, Element root)
 	{
 		Element station = addElement(doc, root, "Station");
-		station.setAttribute("Name", name);
-		station.setAttribute("File", file.getAbsolutePath());
-		station.setAttribute("XOffset", String.valueOf(XOffset));
-		station.setAttribute("YOffset", String.valueOf(YOffset));
-		station.setAttribute("ZOffset", String.valueOf(ZOffset));
+		station.setAttribute("Name", name.get());
+		station.setAttribute("File", file.get().getAbsolutePath());
+		station.setAttribute("XOffset", String.valueOf(xOffset.get()));
+		station.setAttribute("YOffset", String.valueOf(yOffset.get()));
+		station.setAttribute("ZOffset", String.valueOf(zOffset.get()));
 
-		totalStation.toXML(doc, station);
-		regionDeviding.toXML(doc, station);
+		totalStation.get().toXML(doc, station);
+		regionDeviding.get().toXML(doc, station);
 
 		// Add all measurements
 		Element measurements = addElement(doc, station,
@@ -58,8 +79,8 @@ public class CooStation extends CooData
 		this.measurements.forEach(measurement ->
 			measurement.toXML(doc, measurements));
 
-		verifyMeasurement.toXML(doc, station);
-		gateway.toXML(doc, station);
+		verifyMeasurement.get().toXML(doc, station);
+		gateway.get().toXML(doc, station);
 	}
 	
 	@Override
@@ -67,16 +88,16 @@ public class CooStation extends CooData
 	{
 		if(Objects.nonNull(station))
 		{
-			name = station.getAttribute("Name");
+			name.set(station.getAttribute("Name"));
 			// TODO parse to file, or only text?
-//			file = Integer.valueOf(station.getAttribute("X"));
-			XOffset = Integer.valueOf(station.getAttribute("XOffset"));
-			YOffset = Integer.valueOf(station.getAttribute("YOffset"));
-			ZOffset = Integer.valueOf(station.getAttribute("ZOffset"));
+//			file.set(Integer.valueOf(station.getAttribute("X"));
+			xOffset.set(Integer.valueOf(station.getAttribute("XOffset")));
+			yOffset.set(Integer.valueOf(station.getAttribute("YOffset")));
+			zOffset.set(Integer.valueOf(station.getAttribute("ZOffset")));
 			
-			totalStation.fromXML(getSingleElement(station,
+			totalStation.get().fromXML(getSingleElement(station,
 				"Totalstation"));
-			regionDeviding.fromXML(getSingleElement(station,
+			regionDeviding.get().fromXML(getSingleElement(station,
 				"RegionDividing"));
 			
 			// Load all measurements
@@ -85,10 +106,60 @@ public class CooStation extends CooData
 			addToList("Measurement", measurements,
 				CooMeasurement.class, this.measurements);
 			
-			verifyMeasurement.fromXML(getSingleElement(station,
+			verifyMeasurement.get().fromXML(getSingleElement(station,
 				"VerifyMeasurement"));
-			gateway.fromXML(getSingleElement(station,
+			gateway.get().fromXML(getSingleElement(station,
 				"Gateway"));
 		}
+	}
+	
+	public ObservableList<CooMeasurement> getMeasurements()
+	{
+		return measurements;
+	}
+	
+	public StringProperty nameProperty()
+	{
+		return name;
+	}
+	
+	public ObjectProperty<File> fileProperty()
+	{
+		return file;
+	}
+	
+	public IntegerProperty xOffsetProperty()
+	{
+		return xOffset;
+	}
+	
+	public IntegerProperty yOffsetProperty()
+	{
+		return yOffset;
+	}
+	
+	public IntegerProperty zOffsetProperty()
+	{
+		return zOffset;
+	}
+	
+	public ObjectProperty<CooTotalstation> totalStationProperty()
+	{
+		return totalStation;
+	}
+	
+	public ObjectProperty<CooRegionDividing> regionDevidingProperty()
+	{
+		return regionDeviding;
+	}
+	
+	public ObjectProperty<CooVerifyMeasurement> verifyMeasurementProperty()
+	{
+		return verifyMeasurement;
+	}
+	
+	public ObjectProperty<CooGateway> gatewayProperty()
+	{
+		return gateway;
 	}
 }

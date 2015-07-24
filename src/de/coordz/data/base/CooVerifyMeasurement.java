@@ -8,7 +8,9 @@ package de.coordz.data.base;
 
 import static de.util.CooXmlDomUtil.*;
 
-import java.util.*;
+import java.util.Objects;
+
+import javafx.collections.*;
 
 import org.w3c.dom.*;
 
@@ -16,13 +18,15 @@ import de.coordz.data.CooData;
 
 public class CooVerifyMeasurement extends CooData
 {
-	protected List<CooRectangle> specification;
-	protected List<CooRectangle> result;
+	/** {@link ObservableList} with all verify measurement specification {@link CooRectangle} */
+	protected ObservableList<CooRectangle> specification;
+	/** {@link ObservableList} with all verify measurement result {@link CooRectangle} */
+	protected ObservableList<CooRectangle> result;
 
 	public CooVerifyMeasurement()
 	{
-		specification = new ArrayList<CooRectangle>();
-		result = new ArrayList<CooRectangle>();
+		specification = FXCollections.observableArrayList();
+		result = FXCollections.observableArrayList();
 	}
 
 	@Override
@@ -59,5 +63,15 @@ public class CooVerifyMeasurement extends CooData
 			addToList("Rectangle", result,
 				CooRectangle.class, this.result);
 		}
+	}
+	
+	public ObservableList<CooRectangle> getSpecification()
+	{
+		return specification;
+	}
+	
+	public ObservableList<CooRectangle> getResult()
+	{
+		return result;
 	}
 }

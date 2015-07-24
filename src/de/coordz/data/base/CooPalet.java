@@ -10,6 +10,8 @@ import static de.util.CooXmlDomUtil.addElement;
 
 import java.util.Objects;
 
+import javafx.beans.property.*;
+
 import org.w3c.dom.*;
 
 import de.coordz.data.CooData;
@@ -17,17 +19,27 @@ import de.util.CooPaletType;
 
 public class CooPalet extends CooData
 {
-	protected CooPaletType type;
-	protected int width;
-	protected int length;
+	/** {@link ObjectProperty} for the palet {@link CooPaletType} */
+	protected ObjectProperty<CooPaletType> type;
+	/** {@link IntegerProperty} for the palet width */
+	protected IntegerProperty width;
+	/** {@link IntegerProperty} for the palet width */
+	protected IntegerProperty length;
+	
+	public CooPalet()
+	{
+		type = new SimpleObjectProperty<CooPaletType>();
+		width = new SimpleIntegerProperty();
+		length = new SimpleIntegerProperty();
+	}
 	
 	@Override
 	public void toXML(Document doc, Element root)
 	{
 		Element palet = addElement(doc, root, "Palet");
-		palet.setAttribute("Type", String.valueOf(type));
-		palet.setAttribute("Width", String.valueOf(width));
-		palet.setAttribute("Length", String.valueOf(length));
+		palet.setAttribute("Type", String.valueOf(type.get()));
+		palet.setAttribute("Width", String.valueOf(width.get()));
+		palet.setAttribute("Length", String.valueOf(length.get()));
 	}
 	
 	@Override
@@ -37,8 +49,23 @@ public class CooPalet extends CooData
 		{
 			// TODO parse the Type
 //			type = palet.getAttribute("Type");
-			width = Integer.valueOf(palet.getAttribute("Width"));
-			length = Integer.valueOf(palet.getAttribute("Length"));
+			width.set(Integer.valueOf(palet.getAttribute("Width")));
+			length.set(Integer.valueOf(palet.getAttribute("Length")));
 		}
+	}
+	
+	public ObjectProperty<CooPaletType> typeProperty()
+	{
+		return type;
+	}
+	
+	public IntegerProperty widthProperty()
+	{
+		return width;
+	}
+	
+	public IntegerProperty lengthProperty()
+	{
+		return length;
 	}
 }

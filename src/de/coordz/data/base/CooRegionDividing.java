@@ -8,7 +8,9 @@ package de.coordz.data.base;
 
 import static de.util.CooXmlDomUtil.*;
 
-import java.util.*;
+import java.util.Objects;
+
+import javafx.collections.*;
 
 import org.w3c.dom.*;
 
@@ -16,11 +18,12 @@ import de.coordz.data.CooData;
 
 public class CooRegionDividing extends CooData
 {
-	protected List<CooLaser> laser;
+	/** {@link ObservableList} with all region dividing {@link CooLaser} */
+	protected ObservableList<CooLaser> laser;
 
 	public CooRegionDividing()
 	{
-		laser = new ArrayList<CooLaser>();
+		laser = FXCollections.observableArrayList();
 	}
 
 	@Override
@@ -40,5 +43,10 @@ public class CooRegionDividing extends CooData
 			addToList("Laser", regionDividing,
 				CooLaser.class, this.laser);
 		}
+	}
+	
+	public ObservableList<CooLaser> getLaser()
+	{
+		return laser;
 	}
 }

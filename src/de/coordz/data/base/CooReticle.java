@@ -18,10 +18,10 @@ public class CooReticle extends CooTarget
 	public void toXML(Document doc, Element root)
 	{
 		Element reticle = addElement(doc, root, "Reticle");
-		reticle.setAttribute("Name", name);
-		reticle.setAttribute("X", String.valueOf(x));
-		reticle.setAttribute("Y", String.valueOf(y));
-		reticle.setAttribute("Z", String.valueOf(z));
+		reticle.setAttribute("Name", name.get());
+		reticle.setAttribute("X", String.valueOf(x.get()));
+		reticle.setAttribute("Y", String.valueOf(y.get()));
+		reticle.setAttribute("Z", String.valueOf(z.get()));
 	}
 	
 	@Override
@@ -29,10 +29,10 @@ public class CooReticle extends CooTarget
 	{
 		if(Objects.nonNull(reticle))
 		{
-			name = reticle.getAttribute("Name");
-			x = Integer.valueOf(reticle.getAttribute("X"));
-			y = Integer.valueOf(reticle.getAttribute("Y"));
-			z = Integer.valueOf(reticle.getAttribute("Z"));
+			name.set(reticle.getAttribute("Name"));
+			x.set(Integer.valueOf(reticle.getAttribute("X")));
+			y.set(Integer.valueOf(reticle.getAttribute("Y")));
+			z.set(Integer.valueOf(reticle.getAttribute("Z")));
 		}
 	}
 }

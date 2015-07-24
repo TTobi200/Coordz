@@ -11,6 +11,7 @@ import static de.util.CooXmlDomUtil.*;
 import java.util.*;
 
 import javafx.beans.property.*;
+import javafx.collections.*;
 
 import org.w3c.dom.*;
 
@@ -29,13 +30,13 @@ public class CooCustomer extends CooData
 	/** {@link StringProperty} for the customer location */
 	protected StringProperty location;
 	
-	/** {@link List} with all customer contacts */
-	protected List<CooContact> contacts;
-	/** {@link List} with all customer palets */
-	protected List<CooPalet> palets;
+	/** {@link List} with all customer {@link CooContact} */
+	protected ObservableList<CooContact> contacts;
+	/** {@link List} with all customer {@link CooPalet} */
+	protected ObservableList<CooPalet> palets;
 	
 	/** {@link Map} with all customer projects mapped to identifier */
-	protected Map<String, CooProject> projects;
+	protected ObservableMap<String, CooProject> projects;
 	
 	public CooCustomer()
 	{
@@ -45,9 +46,9 @@ public class CooCustomer extends CooData
 		plz = new SimpleStringProperty();
 		location = new SimpleStringProperty();
 		
-		contacts = new ArrayList<CooContact>();
-		palets = new ArrayList<CooPalet>();
-		projects = new HashMap<String, CooProject>();
+		contacts = FXCollections.observableArrayList();
+		palets = FXCollections.observableArrayList();
+		projects = FXCollections.observableHashMap();
 	}
 	
 	@Override
@@ -102,17 +103,17 @@ public class CooCustomer extends CooData
 		}
 	}
 	
-	public List<CooContact> getContacts()
+	public ObservableList<CooContact> getContacts()
 	{
 		return contacts;
 	}
 	
-	public List<CooPalet> getPalets()
+	public ObservableList<CooPalet> getPalets()
 	{
 		return palets;
 	}
 	
-	public Map<String, CooProject> getProjects()
+	public ObservableMap<String, CooProject> getProjects()
 	{
 		return projects;
 	}
