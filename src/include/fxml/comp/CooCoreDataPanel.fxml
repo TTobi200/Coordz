@@ -39,7 +39,7 @@
 	<center>
 		<VBox BorderPane.alignment="CENTER">
 			<children>
-				<GridPane vgap="5" hgap="5" >
+				<GridPane vgap="5" hgap="5">
 					<columnConstraints>
 						<ColumnConstraints hgrow="NEVER" />
 						<ColumnConstraints hgrow="ALWAYS" />
@@ -60,20 +60,76 @@
 							GridPane.rowIndex="3" />
 					</children>
 				</GridPane>
-				<TableView >
-					<columns>
-						<TableColumn text="Vorname" />
-						<TableColumn text="Nachname" />
-						<TableColumn text="Mail" />
-					</columns>
-				</TableView>
-				<TableView >
-					<columns>
-						<TableColumn text="Länge" />
-						<TableColumn text="Breite" />
-						<TableColumn text="Typ" />
-					</columns>
-				</TableView>
+				<BorderPane>
+					<center>
+						<TableView>
+							<columns>
+								<TableColumn text="Vorname" />
+								<TableColumn text="Nachname" />
+								<TableColumn text="Mail" />
+							</columns>
+						</TableView>
+					</center>
+					<bottom>
+						<ToolBar nodeOrientation="RIGHT_TO_LEFT">
+							<items>
+								<Button>
+									<graphic>
+										<ImageView pickOnBounds="true" preserveRatio="true">
+											<image>
+												<Image url="@/include/icons/delete.png" />
+											</image>
+										</ImageView>
+									</graphic>
+								</Button>
+								<Button>
+									<graphic>
+										<ImageView pickOnBounds="true" preserveRatio="true">
+											<image>
+												<Image url="@/include/icons/add.png" />
+											</image>
+										</ImageView>
+									</graphic>
+								</Button>
+							</items>
+						</ToolBar>
+					</bottom>
+				</BorderPane>
+				<BorderPane>
+					<center>
+						<TableView>
+							<columns>
+								<TableColumn text="Länge" />
+								<TableColumn text="Breite" />
+								<TableColumn text="Typ" />
+							</columns>
+						</TableView>
+					</center>
+					<bottom>
+						<ToolBar nodeOrientation="RIGHT_TO_LEFT">
+							<items>
+								<Button>
+									<graphic>
+										<ImageView pickOnBounds="true" preserveRatio="true">
+											<image>
+												<Image url="@/include/icons/delete.png" />
+											</image>
+										</ImageView>
+									</graphic>
+								</Button>
+								<Button>
+									<graphic>
+										<ImageView pickOnBounds="true" preserveRatio="true">
+											<image>
+												<Image url="@/include/icons/add.png" />
+											</image>
+										</ImageView>
+									</graphic>
+								</Button>
+							</items>
+						</ToolBar>
+					</bottom>
+				</BorderPane>
 			</children>
 		</VBox>
 	</center>
