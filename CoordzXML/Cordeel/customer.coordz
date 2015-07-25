@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <CoordzData>
-    <Customer Adress="" Location="Gerasdorf bei Wien" Name="Mischek Systembau GmbH" PLZ="2201" Street="Hugo-Mischek-Strasse 10">
+    <Customer Adress="" Location="" Name="Cordeel" PLZ="" Street="">
         <Contacts>
-            <Contact FirstName="" LastName="Traxler" Mail="" Phone=""/>
-            <Contact FirstName="" LastName="Traxler" Mail="" Phone=""/>
+            <Contact FirstName="" LastName="" Mail="" Phone=""/>
+            <Contact FirstName="" LastName="" Mail="" Phone=""/>
         </Contacts>
         <Palets>
             <Palet Length="0" Type="U" Width="0"/>

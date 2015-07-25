@@ -31,6 +31,9 @@ public class CooController implements Initializable
 	protected Stage primaryStage;
 
 	@FXML
+	protected CooCoreDataPanel coreDataPnl;
+	
+	@FXML
 	protected CooCustomerTreeView prjTreeView;
 	@FXML
 	protected Label lblPrj;
@@ -75,25 +78,27 @@ public class CooController implements Initializable
 	public void initialize(URL location, ResourceBundle resources)
 	{
 		loadTestProjects();
+		prjTreeView.addDataChangedListener(coreDataPnl);
 	}
 
 	private void loadTestProjects()
 	{
 		// Create Tree Root
 		CooCustomerTreeItem root = new CooCustomerTreeItem(
-			new SimpleStringProperty("Kunde"), null);
+			new SimpleStringProperty("Kunden"), new CooCustomer());
 		// Load all customers from xml DB
 		List<CooCustomer> customers = CooXMLDBUtil.getAllCustomers(
 			new File("./CoordzXML/"));
-		
+
 		// Add Customers to Tree Root
-		customers.forEach(c -> 
+		customers.forEach(c ->
 		{
 			CooCustomerTreeItem customer = new CooCustomerTreeItem(
 				c.nameProperty(), c);
 			root.getChildren().add(customer);
 		});
-		
+
 		prjTreeView.setRoot(root);
+		root.setExpanded(true);
 	}
 }

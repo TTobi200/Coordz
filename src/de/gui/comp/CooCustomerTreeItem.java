@@ -8,18 +8,18 @@ package de.gui.comp;
 
 import java.util.Objects;
 
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.scene.control.TreeItem;
 import de.coordz.data.*;
 
 public class CooCustomerTreeItem extends TreeItem<String>
 {
-	protected CooCustomer customer;
+	protected ObjectProperty<CooCustomer> customer;
 
 	public CooCustomerTreeItem(StringProperty name, CooCustomer customer)
 	{
 		this.valueProperty().bind(name);
-		this.customer = customer;
+		this.customer = new SimpleObjectProperty<CooCustomer>(customer);
 		
 		if(Objects.nonNull(customer))
 		{
@@ -30,6 +30,11 @@ public class CooCustomerTreeItem extends TreeItem<String>
 				getChildren().add(project);
 			});
 		}
+	}
+	
+	public ObjectProperty<CooCustomer> customerProperty()
+	{
+		return customer;
 	}
 	
 	public class CooProjectTreeItem extends TreeItem<String>
