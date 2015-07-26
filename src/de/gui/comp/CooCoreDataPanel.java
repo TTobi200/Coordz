@@ -20,9 +20,6 @@ import de.util.log.CooLog;
 public class CooCoreDataPanel extends BorderPane implements CooDataChanged
 {
 	@FXML
-	protected Label lblPrjName;
-
-	@FXML
 	protected TextField txtCustomer;
 	@FXML
 	protected TextField txtStreet;
@@ -30,6 +27,17 @@ public class CooCoreDataPanel extends BorderPane implements CooDataChanged
 	protected TextField txtPLZ;
 	@FXML
 	protected TextField txtLocation;
+	
+	@FXML
+	protected TableView<TableColumn<String, String>> tblContacts;
+	@FXML
+	protected ToolBar btnBarContacts;
+	
+	@FXML
+	protected TableView<TableColumn<String, String>> tblPalets;
+	@FXML
+	protected ToolBar btnBarPalets;
+	
 
 	public CooCoreDataPanel()
 	{
@@ -73,7 +81,5 @@ public class CooCoreDataPanel extends BorderPane implements CooDataChanged
 	@Override
 	public void projectChanged(CooProject project)
 	{
-		lblPrjName.textProperty().bind(
-			project.nameProperty());
 	}
 }

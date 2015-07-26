@@ -30,6 +30,8 @@ public class CooMainFrame extends Application
 		primaryStage.getIcons().add(CooFileUtil.getResourceIcon(
 			"Logo.png"));
 		primaryStage.setTitle(TITLE);
+		primaryStage.setWidth(900);
+		primaryStage.setHeight(500);
 		primaryStage.show();
 	}
 }

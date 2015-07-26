@@ -130,8 +130,7 @@
 		</MenuBar>
 	</top>
 	<center>
-		<SplitPane dividerPositions="0.2" prefHeight="445.0"
-			prefWidth="917.0" BorderPane.alignment="CENTER">
+		<SplitPane dividerPositions="0.2" BorderPane.alignment="CENTER">
 			<items>
 				<BorderPane>
 					<center>
@@ -164,16 +163,17 @@
 				</BorderPane>
 				<BorderPane>
 					<center>
-						<Accordion BorderPane.alignment="CENTER">
-							<panes>
-								<TitledPane text="Stammdaten">
+						<TabPane tabClosingPolicy="UNAVAILABLE"
+							BorderPane.alignment="CENTER">
+							<tabs>
+								<Tab text="Stammdaten">
 									<content>
-										<CooCoreDataPanel fx:id="coreDataPnl"/>
+										<CooCoreDataPanel fx:id="coreDataPnl" />
 									</content>
-								</TitledPane>
-								<TitledPane text="Messung">
+								</Tab>
+								<Tab text="Mesungen">
 									<content>
-										<SplitPane dividerPositions="0.0" orientation="VERTICAL">
+										<SplitPane orientation="VERTICAL">
 											<items>
 												<BorderPane>
 													<center>
@@ -182,9 +182,8 @@
 																<TableColumn text="Nr" />
 																<TableColumn text="Station" />
 																<TableColumn text="MAC" />
-																<TableColumn text="Anzahl Laser" />
+																<TableColumn text="Laser" />
 																<TableColumn text="Datei" />
-																<TableColumn text="Gesamtabweichung" />
 															</columns>
 														</TableView>
 													</center>
@@ -243,17 +242,19 @@
 																	</image>
 																</ImageView>
 															</graphic>
-															<TextArea>
-															</TextArea>
+															<content>
+																<TextArea>
+																</TextArea>
+															</content>
 														</Tab>
 													</tabs>
 												</TabPane>
 											</items>
 										</SplitPane>
 									</content>
-								</TitledPane>
-							</panes>
-						</Accordion>
+								</Tab>
+							</tabs>
+						</TabPane>
 					</center>
 				</BorderPane>
 			</items>

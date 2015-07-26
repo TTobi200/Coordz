@@ -10,7 +10,9 @@ import java.util.Objects;
 
 import javafx.beans.property.*;
 import javafx.scene.control.TreeItem;
+import javafx.scene.image.ImageView;
 import de.coordz.data.*;
+import de.util.CooFileUtil;
 
 public class CooCustomerTreeItem extends TreeItem<String>
 {
@@ -43,7 +45,8 @@ public class CooCustomerTreeItem extends TreeItem<String>
 
 		public CooProjectTreeItem(String name, CooProject project)
 		{
-			super(name);
+			super(name, new ImageView(
+				CooFileUtil.getResourceIcon("laser_icon.png")));
 			this.project = project;
 		}
 
