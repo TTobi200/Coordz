@@ -30,97 +30,61 @@
 	<center>
 		<VBox BorderPane.alignment="CENTER">
 			<children>
-				<GridPane vgap="5" hgap="5">
-					<columnConstraints>
-						<ColumnConstraints hgrow="NEVER" />
-						<ColumnConstraints hgrow="ALWAYS" />
-					</columnConstraints>
-					<rowConstraints>
-					</rowConstraints>
-					<children>
-						<Label text="Firma" />
-						<Label text="Straße" GridPane.rowIndex="1" />
-						<Label text="PLZ" GridPane.rowIndex="2" />
-						<Label text="Ort" GridPane.rowIndex="3" />
-						<TextField fx:id="txtCustomer" GridPane.columnIndex="1" />
-						<TextField fx:id="txtStreet" GridPane.columnIndex="1"
-							GridPane.rowIndex="1" />
-						<TextField fx:id="txtPLZ" GridPane.columnIndex="1"
-							GridPane.rowIndex="2" />
-						<TextField fx:id="txtLocation" GridPane.columnIndex="1"
-							GridPane.rowIndex="3" />
-					</children>
-				</GridPane>
-				<BorderPane>
-					<center>
-						<TableView fx:id="tblContacts">
-							<columns>
-								<TableColumn text="Vorname" />
-								<TableColumn text="Nachname" />
-								<TableColumn text="Mail" />
-							</columns>
-						</TableView>
-					</center>
-					<bottom>
-						<ToolBar fx:id="btnBarContacts" nodeOrientation="RIGHT_TO_LEFT">
-							<items>
-								<Button>
-									<graphic>
-										<ImageView pickOnBounds="true" preserveRatio="true">
-											<image>
-												<Image url="@/include/icons/delete.png" />
-											</image>
-										</ImageView>
-									</graphic>
-								</Button>
-								<Button>
-									<graphic>
-										<ImageView pickOnBounds="true" preserveRatio="true">
-											<image>
-												<Image url="@/include/icons/add.png" />
-											</image>
-										</ImageView>
-									</graphic>
-								</Button>
-							</items>
-						</ToolBar>
-					</bottom>
-				</BorderPane>
-				<BorderPane>
-					<center>
-						<TableView fx:id="tblPalets">
-							<columns>
-								<TableColumn text="Länge" />
-								<TableColumn text="Breite" />
-								<TableColumn text="Typ" />
-							</columns>
-						</TableView>
-					</center>
-					<bottom>
-						<ToolBar fx:id="btnBarPalets" nodeOrientation="RIGHT_TO_LEFT">
-							<items>
-								<Button>
-									<graphic>
-										<ImageView pickOnBounds="true" preserveRatio="true">
-											<image>
-												<Image url="@/include/icons/delete.png" />
-											</image>
-										</ImageView>
-									</graphic>
-								</Button>
-								<Button>
-									<graphic>
-										<ImageView pickOnBounds="true" preserveRatio="true">
-											<image>
-												<Image url="@/include/icons/add.png" />
-											</image>
-										</ImageView>
-									</graphic>
-								</Button>
-							</items>
-						</ToolBar>
-					</bottom>
-				</BorderPane>
+				<TitledPane text="Kunden Daten">
+					<content>
+						<GridPane vgap="5" hgap="5">
+							<columnConstraints>
+								<ColumnConstraints hgrow="NEVER" />
+								<ColumnConstraints hgrow="ALWAYS" />
+							</columnConstraints>
+							<rowConstraints>
+							</rowConstraints>
+							<children>
+								<Label text="Firma" />
+								<Label text="Straße" GridPane.rowIndex="1" />
+								<Label text="PLZ" GridPane.rowIndex="2" />
+								<Label text="Ort" GridPane.rowIndex="3" />
+								<TextField fx:id="txtCustomer" GridPane.columnIndex="1" />
+								<TextField fx:id="txtStreet" GridPane.columnIndex="1"
+									GridPane.rowIndex="1" />
+								<TextField fx:id="txtPLZ" GridPane.columnIndex="1"
+									GridPane.rowIndex="2" />
+								<TextField fx:id="txtLocation" GridPane.columnIndex="1"
+									GridPane.rowIndex="3" />
+							</children>
+						</GridPane>
+					</content>
+				</TitledPane>
+				<TitledPane text="Kontakte">
+					<content>
+						<BorderPane>
+							<center>
+								<TableView fx:id="tblContacts">
+									<columns>
+										<TableColumn text="Vorname" />
+										<TableColumn text="Nachname" />
+										<TableColumn text="Mail" />
+									</columns>
+								</TableView>
+							</center>
+						</BorderPane>
+					</content>
+				</TitledPane>
+				<TitledPane text="Paletten">
+					<content>
+						<BorderPane>
+							<center>
+								<TableView fx:id="tblPalets">
+									<columns>
+										<TableColumn text="Länge" />
+										<TableColumn text="Breite" />
+										<TableColumn text="Typ" />
+									</columns>
+								</TableView>
+							</center>
+						</BorderPane>
+					</content>
+				</TitledPane>
 			</children>
 		</VBox>
 	</center>
