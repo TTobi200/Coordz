@@ -64,7 +64,7 @@
 						</TableView>
 					</center>
 				</BorderPane>
-				<TabPane>
+				<TabPane tabClosingPolicy="UNAVAILABLE">
 					<tabs>
 						<Tab text="Messpunkte">
 							<graphic>
