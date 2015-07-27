@@ -12,7 +12,7 @@ import java.util.Objects;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import de.coordz.data.*;
+import de.coordz.data.CooCustomer;
 import de.coordz.data.base.*;
 import de.gui.CooDataChanged;
 import de.util.CooFileUtil;
@@ -34,6 +34,10 @@ public class CooCoreDataPnl extends BorderPane implements CooDataChanged
 	@FXML
 	protected TableView<CooPalet> tblPalets;
 
+	// vvvv See the comment below vvvv
+	// Only as a workaround
+	protected CooCustomer last;
+
 	public CooCoreDataPnl()
 	{
 		try
@@ -47,10 +51,6 @@ public class CooCoreDataPnl extends BorderPane implements CooDataChanged
 			CooLog.debug("Could not load FXML", e);
 		}
 	}
-
-	// vvvv See the comment below vvvv
-	// Only as a workaround
-	protected CooCustomer last;
 
 	@Override
 	public void customerChanged(CooCustomer customer)
@@ -76,10 +76,5 @@ public class CooCoreDataPnl extends BorderPane implements CooDataChanged
 
 		tblContacts.setItems(customer.getContacts());
 		tblPalets.setItems(customer.getPalets());
-	}
-
-	@Override
-	public void projectChanged(CooProject project)
-	{
 	}
 }

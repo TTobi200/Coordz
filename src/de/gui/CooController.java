@@ -34,7 +34,9 @@ public class CooController implements Initializable
 	protected CooCoreDataPnl coreDataPnl;
 	
 	@FXML
-	protected CooTreeViewPnl cooTreeViewPnl;
+	protected CooTreeViewPnl treeViewPnl;
+	@FXML
+	protected CooMeasurementsPnl measurementsPnl;
 	@FXML
 	protected Label lblPrj;
 
@@ -78,7 +80,8 @@ public class CooController implements Initializable
 	public void initialize(URL location, ResourceBundle resources)
 	{
 		loadTestProjects();
-		cooTreeViewPnl.addDataChangedListener(coreDataPnl);
+		treeViewPnl.addDataChangedListener(coreDataPnl);
+		treeViewPnl.addDataChangedListener(measurementsPnl);
 	}
 
 	private void loadTestProjects()
@@ -98,7 +101,7 @@ public class CooController implements Initializable
 			root.getChildren().add(customer);
 		});
 
-		cooTreeViewPnl.getPrjTreeView().setRoot(root);
+		treeViewPnl.getPrjTreeView().setRoot(root);
 		root.setExpanded(true);
 	}
 }

@@ -8,7 +8,6 @@ package de.coordz.data.base;
 
 import static de.util.CooXmlDomUtil.*;
 
-import java.io.File;
 import java.util.Objects;
 
 import javafx.beans.property.*;
@@ -22,8 +21,8 @@ public class CooStation extends CooData
 {
 	/** {@link StringProperty} for the station name */
 	protected StringProperty name;
-	/** {@link ObjectProperty} for the station file */
-	protected ObjectProperty<File> file;
+	/** {@link StringProperty} for the station file */
+	protected StringProperty file;
 	/** {@link IntegerProperty} for the station x offset */
 	protected IntegerProperty xOffset;
 	/** {@link IntegerProperty} for the station y offset */
@@ -45,7 +44,7 @@ public class CooStation extends CooData
 	public CooStation()
 	{
 		name = new SimpleStringProperty();
-		file = new SimpleObjectProperty<File>();
+		file = new SimpleStringProperty();
 		xOffset = new SimpleIntegerProperty();
 		yOffset = new SimpleIntegerProperty();
 		zOffset = new SimpleIntegerProperty();
@@ -65,7 +64,7 @@ public class CooStation extends CooData
 	{
 		Element station = addElement(doc, root, "Station");
 		station.setAttribute("Name", name.get());
-		station.setAttribute("File", file.get().getAbsolutePath());
+		station.setAttribute("File", file.get());
 		station.setAttribute("XOffset", String.valueOf(xOffset.get()));
 		station.setAttribute("YOffset", String.valueOf(yOffset.get()));
 		station.setAttribute("ZOffset", String.valueOf(zOffset.get()));
@@ -89,8 +88,7 @@ public class CooStation extends CooData
 		if(Objects.nonNull(station))
 		{
 			name.set(station.getAttribute("Name"));
-			// TODO parse to file, or only text?
-//			file.set(Integer.valueOf(station.getAttribute("X"));
+			file.set(station.getAttribute("File"));
 			xOffset.set(Integer.valueOf(station.getAttribute("XOffset")));
 			yOffset.set(Integer.valueOf(station.getAttribute("YOffset")));
 			zOffset.set(Integer.valueOf(station.getAttribute("ZOffset")));
@@ -135,7 +133,7 @@ public class CooStation extends CooData
 	 * Method to access Property
 	 * @return {@link #file}
 	 */
-	public ObjectProperty<File> fileProperty()
+	public StringProperty fileProperty()
 	{
 		return file;
 	}

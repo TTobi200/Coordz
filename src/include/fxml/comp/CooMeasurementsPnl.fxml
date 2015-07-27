@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import java.lang.String?>
+<?import javafx.scene.effect.BoxBlur?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.effect.Reflection?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+
+<fx:root type="BorderPane" xmlns="http://javafx.com/javafx/8"
+	xmlns:fx="http://javafx.com/fxml/1">
+	<center>
+		<SplitPane dividerPositions="0.1" orientation="VERTICAL">
+			<items>
+				<BorderPane>
+					<center>
+						<TableView fx:id="tblStations">
+							<columns>
+								<TableColumn text="Station">
+									<cellValueFactory>
+										<PropertyValueFactory property="name" />
+									</cellValueFactory>
+								</TableColumn>
+								<TableColumn text="X-Offset">
+									<cellValueFactory>
+										<PropertyValueFactory property="xOffset" />
+									</cellValueFactory>
+								</TableColumn>
+								<TableColumn text="Y-Offset">
+									<cellValueFactory>
+										<PropertyValueFactory property="yOffset" />
+									</cellValueFactory>
+								</TableColumn>
+								<TableColumn text="Z-Offset">
+									<cellValueFactory>
+										<PropertyValueFactory property="zOffset" />
+									</cellValueFactory>
+								</TableColumn>
+								<TableColumn text="Datei">
+									<cellValueFactory>
+										<PropertyValueFactory property="file" />
+									</cellValueFactory>
+								</TableColumn>
+							</columns>
+						</TableView>
+					</center>
+				</BorderPane>
+				<TabPane>
+					<tabs>
+						<Tab text="Messpunkte">
+							<graphic>
+								<ImageView pickOnBounds="true" preserveRatio="true">
+									<image>
+										<Image url="/include/icons/coordinates.png" />
+									</image>
+								</ImageView>
+							</graphic>
+						</Tab>
+						<Tab text="3D-Ansicht">
+							<graphic>
+								<ImageView pickOnBounds="true" preserveRatio="true">
+									<image>
+										<Image url="/include/icons/3d.png" />
+									</image>
+								</ImageView>
+							</graphic>
+						</Tab>
+						<Tab text="Notizen">
+							<graphic>
+								<ImageView pickOnBounds="true" preserveRatio="true">
+									<image>
+										<Image url="/include/icons/notes.png" />
+									</image>
+								</ImageView>
+							</graphic>
+							<content>
+								<TextArea>
+								</TextArea>
+							</content>
+						</Tab>
+					</tabs>
+				</TabPane>
+			</items>
+		</SplitPane>
+	</center>
+</fx:root>

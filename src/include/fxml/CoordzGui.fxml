@@ -15,6 +15,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import de.gui.comp.CooCoreDataPnl?>
 <?import de.gui.comp.CooTreeViewPnl?>
+<?import de.gui.comp.CooMeasurementsPnl?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 	<top>
@@ -132,7 +133,7 @@
 	<center>
 		<SplitPane dividerPositions="0.2" BorderPane.alignment="CENTER">
 			<items>
-				<CooTreeViewPnl fx:id="cooTreeViewPnl" />
+				<CooTreeViewPnl fx:id="treeViewPnl" />
 				<BorderPane>
 					<center>
 						<TabPane tabClosingPolicy="UNAVAILABLE"
@@ -159,58 +160,7 @@
 										</ImageView>
 									</graphic>
 									<content>
-										<SplitPane dividerPositions="0.1" orientation="VERTICAL">
-											<items>
-												<BorderPane>
-													<center>
-														<TableView>
-															<columns>
-																<TableColumn text="Nr" />
-																<TableColumn text="Station" />
-																<TableColumn text="MAC" />
-																<TableColumn text="Laser" />
-																<TableColumn text="Datei" />
-															</columns>
-														</TableView>
-													</center>
-												</BorderPane>
-												<TabPane>
-													<tabs>
-														<Tab text="Messpunkte">
-															<graphic>
-																<ImageView pickOnBounds="true" preserveRatio="true">
-																	<image>
-																		<Image url="/include/icons/coordinates.png" />
-																	</image>
-																</ImageView>
-															</graphic>
-														</Tab>
-														<Tab text="3D-Ansicht">
-															<graphic>
-																<ImageView pickOnBounds="true" preserveRatio="true">
-																	<image>
-																		<Image url="/include/icons/3d.png" />
-																	</image>
-																</ImageView>
-															</graphic>
-														</Tab>
-														<Tab text="Notizen">
-															<graphic>
-																<ImageView pickOnBounds="true" preserveRatio="true">
-																	<image>
-																		<Image url="/include/icons/notes.png" />
-																	</image>
-																</ImageView>
-															</graphic>
-															<content>
-																<TextArea>
-																</TextArea>
-															</content>
-														</Tab>
-													</tabs>
-												</TabPane>
-											</items>
-										</SplitPane>
+										<CooMeasurementsPnl fx:id="measurementsPnl"/>
 									</content>
 								</Tab>
 							</tabs>

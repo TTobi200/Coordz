@@ -10,7 +10,13 @@ import de.coordz.data.*;
 
 public interface CooDataChanged
 {
-	public void customerChanged(CooCustomer customer);
+	public default void customerChanged(CooCustomer customer)
+	{
+		// Do nothing if not overwritten
+	}
 	
-	public void projectChanged(CooProject project);
+	public default void projectChanged(CooProject project)
+	{
+		// Do nothing if not overwritten
+	}
 }
