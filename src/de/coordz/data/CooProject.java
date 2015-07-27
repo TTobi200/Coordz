@@ -44,6 +44,10 @@ public class CooProject extends CooData
 	public void toXML(Document doc, Element root)
 	{
 		Element project = addElement(doc, root, "Project");
+		project.setAttribute("Name", name.get());
+		project.setAttribute("Date", String.valueOf(date.get() 
+			!= null ? date.get() : LocalDate.now()));
+		
 		lapSoftware.get().toXML(doc, project);
 
 		// Add all stations

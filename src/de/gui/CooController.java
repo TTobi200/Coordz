@@ -6,7 +6,7 @@
  */
 package de.gui;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
@@ -90,8 +90,7 @@ public class CooController implements Initializable
 		CooCustomerTreeItem root = new CooCustomerTreeItem(
 			new SimpleStringProperty("Kunden"), new CooCustomer());
 		// Load all customers from xml DB
-		List<CooCustomer> customers = CooXMLDBUtil.getAllCustomers(
-			new File("./CoordzXML/"));
+		List<CooCustomer> customers = CooXMLDBUtil.getAllCustomers();
 
 		// Add Customers to Tree Root
 		customers.forEach(c ->

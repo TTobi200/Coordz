@@ -17,13 +17,16 @@ import javafx.scene.layout.BorderPane;
 import de.coordz.data.*;
 import de.gui.*;
 import de.gui.comp.CooCustomerTreeItem.CooProjectTreeItem;
-import de.util.CooFileUtil;
+import de.util.*;
 import de.util.log.CooLog;
 
 public class CooTreeViewPnl extends BorderPane
 {
 	protected ObservableList<CooDataChanged> components;
-	
+
+	@FXML
+	protected Button btnAdd;
+
 	@FXML
 	protected TreeView<String> prjTreeView;
 
@@ -58,10 +61,10 @@ public class CooTreeViewPnl extends BorderPane
 					{
 						CooCustomer customer = ((CooCustomerTreeItem)selectedItem.getParent())
 							.customerProperty().get();
-						
+
 						CooProject project = ((CooProjectTreeItem)selectedItem)
-										.projectProperty().get();
-						
+							.projectProperty().get();
+
 						if(customer != lastSelCustomer)
 						{
 							lastSelCustomer = customer;
@@ -86,19 +89,19 @@ public class CooTreeViewPnl extends BorderPane
 				}
 			});
 	}
-	
+
 	@FXML
 	protected void add()
 	{
 		TreeItem<String> selItem = prjTreeView.getSelectionModel()
-						.getSelectedItem();
-		
+			.getSelectedItem();
+
 		// If root is selected - add new customer
 		if(selItem == prjTreeView.getRoot())
 		{
 			CooCustomer newCustomer = new CooCustomer();
 			newCustomer.nameProperty().set("Neuer Kunde");
-			
+
 			selItem.getChildren().add(
 				new CooCustomerTreeItem(newCustomer.nameProperty(),
 					newCustomer));
@@ -109,38 +112,100 @@ public class CooTreeViewPnl extends BorderPane
 			newPrj.nameProperty().set("Neues Projekt");
 			((CooCustomerTreeItem)selItem).customerProperty()
 				.get().addProject(newPrj);
-			
+
 			selItem.getChildren().add(new CooProjectTreeItem(
 				newPrj.nameProperty(), newPrj));
 		}
 	}
-	
+
+	@FXML
+	protected void save()
+	{
+		TreeItem<String> selItem = prjTreeView.getSelectionModel()
+			.getSelectedItem();
+
+		// Save all projects and the customer
+		if(selItem == prjTreeView.getRoot())
+		{
+			selItem.getChildren().filtered(treeItm -> treeItm instanceof
+				CooCustomerTreeItem).forEach(treeItm ->
+			{
+				CooCustomer customer = ((CooCustomerTreeItem)treeItm)
+					.customerProperty().get();
+
+				customer.getProjects().forEach(prj ->
+					CooXMLDBUtil.saveProject(customer, prj));
+				CooXMLDBUtil.saveCustomer(customer);
+			});
+		}
+		else if(selItem instanceof CooCustomerTreeItem)
+		{
+			CooCustomer customer = ((CooCustomerTreeItem)selItem)
+				.customerProperty().get();
+
+			customer.getProjects().forEach(prj ->
+				CooXMLDBUtil.saveProject(customer, prj));
+			CooXMLDBUtil.saveCustomer(customer);
+
+		} // Only save selected project
+		else if(selItem instanceof CooProjectTreeItem)
+		{
+			CooCustomer customer = ((CooCustomerTreeItem)selItem.getParent())
+				.customerProperty().get();
+
+			CooXMLDBUtil.saveProject(customer,
+				((CooProjectTreeItem)selItem).projectProperty().get());
+		}
+	}
+
 	@FXML
 	protected void delete()
 	{
 		TreeItem<String> selItem = prjTreeView.getSelectionModel()
-						.getSelectedItem();
-		
+			.getSelectedItem();
+
 		if(Objects.nonNull(selItem) && selItem != prjTreeView.getRoot())
 		{
 			String itmType = selItem instanceof CooProjectTreeItem
-							? "Projekt "  : "Kunde ";
+							? "Projekt " : "Kunde ";
 			itmType += "\"" + selItem.getValue() + "\"";
-			
+
 			if(CooDialogs.showConfirmDialog(getScene().getWindow(),
-				itmType + " löschen", "Wollen Sie " + itmType + " wirklich löschen?"))
+				itmType + " löschen", "Wollen Sie " + itmType
+										+ " wirklich löschen?"))
 			{
+				// If project selected - delete it from customer project list
+				if(selItem instanceof CooProjectTreeItem)
+				{
+					CooCustomer customer = ((CooCustomerTreeItem)selItem.getParent())
+									.customerProperty()
+									.get();
+					CooProject project = ((CooProjectTreeItem)selItem)
+									.projectProperty().get();
+					
+					
+					CooXMLDBUtil.deleteProject(customer, project);
+				}
+				else if(selItem instanceof CooCustomerTreeItem)
+				{
+					CooCustomer customer = ((CooCustomerTreeItem)selItem)
+									.customerProperty().get();
+					
+					CooXMLDBUtil.deleteCustomer(customer);
+				}
+				
+				// Remove the selected item
 				selItem.getParent().getChildren().remove(
 					selItem);
 			}
 		}
 	}
-	
+
 	public void addDataChangedListener(CooDataChanged component)
 	{
 		components.add(component);
 	}
-	
+
 	public TreeView<String> getPrjTreeView()
 	{
 		return prjTreeView;

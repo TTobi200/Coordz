@@ -131,7 +131,7 @@
 		</MenuBar>
 	</top>
 	<center>
-		<SplitPane dividerPositions="0.2" BorderPane.alignment="CENTER">
+		<SplitPane dividerPositions="0.18" BorderPane.alignment="CENTER">
 			<items>
 				<CooTreeViewPnl fx:id="treeViewPnl" />
 				<BorderPane>

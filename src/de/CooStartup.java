@@ -22,14 +22,6 @@ public class CooStartup
 		}
 
 		CooPreferencesUtil.setCoordzRunning(true);
-		
-		// Save Project
-//		Document doc = getDocumentBuilder().newDocument();
-//		Element root2 = addElement(doc, doc, "CoordzData");
-//		projectTest.toXML(doc, root2);
-//		CooXmlDomUtil.saveFile(doc, new File(
-//			"./CoordzXML/project.xml"));
-		
 		Application.launch(CooMainFrame.class, args);
 	}
 }

@@ -14,7 +14,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Callback;
-import de.coordz.data.CooCustomer;
+import de.coordz.data.*;
 import de.coordz.data.base.*;
 import de.gui.*;
 import de.util.CooFileUtil;
@@ -32,13 +32,17 @@ public class CooCoreDataPnl extends BorderPane implements CooDataChanged
 	protected TextField txtLocation;
 
 	@FXML
+	protected TextField txtPrjName;
+
+	@FXML
 	protected TableView<CooContact> tblContacts;
 	@FXML
 	protected TableView<CooPalet> tblPalets;
 
 	// vvvv See the comment below vvvv
 	// Only as a workaround
-	protected CooCustomer last;
+	protected CooCustomer lastCustomer;
+	protected CooProject lastProject;
 
 	public CooCoreDataPnl()
 	{
@@ -68,7 +72,8 @@ public class CooCoreDataPnl extends BorderPane implements CooDataChanged
 					@Override
 					public void handle(ActionEvent event)
 					{
-						CooDialogs.showEditTable(getScene().getWindow(), tblContacts,
+						CooDialogs.showEditTable(getScene().getWindow(),
+							tblContacts,
 							"Kontakt hinzufügen");
 					}
 				});
@@ -95,15 +100,18 @@ public class CooCoreDataPnl extends BorderPane implements CooDataChanged
 		// TODO Try to find a solution
 		// Bidirectional bindings have to be unbind bidirectional
 		// Only .unbind of all customer propertys not working
-		if(Objects.nonNull(last))
+		if(Objects.nonNull(lastCustomer))
 		{
-			txtCustomer.textProperty().unbindBidirectional(last.nameProperty());
-			txtStreet.textProperty().unbindBidirectional(last.streetProperty());
-			txtPLZ.textProperty().unbindBidirectional(last.plzProperty());
+			txtCustomer.textProperty().unbindBidirectional(
+				lastCustomer.nameProperty());
+			txtStreet.textProperty().unbindBidirectional(
+				lastCustomer.streetProperty());
+			txtPLZ.textProperty().unbindBidirectional(
+				lastCustomer.plzProperty());
 			txtLocation.textProperty().unbindBidirectional(
-				last.locationProperty());
+				lastCustomer.locationProperty());
 		}
-		last = customer;
+		lastCustomer = customer;
 
 		txtCustomer.textProperty().bindBidirectional(customer.nameProperty());
 		txtStreet.textProperty().bindBidirectional(customer.streetProperty());
@@ -113,5 +121,21 @@ public class CooCoreDataPnl extends BorderPane implements CooDataChanged
 
 		tblContacts.setItems(customer.getContacts());
 		tblPalets.setItems(customer.getPalets());
+	}
+
+	@Override
+	public void projectChanged(CooProject project)
+	{
+		// TODO Try to find a solution
+		// Bidirectional bindings have to be unbind bidirectional
+		// Only .unbind of all customer propertys not working
+		if(Objects.nonNull(lastProject))
+		{
+			txtPrjName.textProperty().unbindBidirectional(
+				lastProject.nameProperty());
+		}
+		lastProject = project;
+		
+		txtPrjName.textProperty().bindBidirectional(project.nameProperty());
 	}
 }

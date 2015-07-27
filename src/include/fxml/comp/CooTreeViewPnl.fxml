@@ -44,7 +44,16 @@
 						</ImageView>
 					</graphic>
 				</Button>
-				<Button onAction="#add">
+				<Button onAction="#save">
+					<graphic>
+						<ImageView pickOnBounds="true" preserveRatio="true">
+							<image>
+								<Image url="@/include/icons/save.png" />
+							</image>
+						</ImageView>
+					</graphic>
+				</Button>
+				<Button fx:id="btnAdd" onAction="#add">
 					<graphic>
 						<ImageView pickOnBounds="true" preserveRatio="true">
 							<image>
