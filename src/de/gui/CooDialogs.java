@@ -8,9 +8,10 @@ package de.gui;
 
 import java.util.*;
 
-import javafx.collections.FXCollections;
+import javafx.collections.*;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Window;
 import de.util.CooGuiUtil;
 
@@ -57,6 +58,39 @@ public class CooDialogs
 		dlg.setHeaderText(head);
 
 		return dlg.showAndWait();
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static Optional<ButtonType> showEditTable(Window owner, 
+		TableView tblView, String head)
+	{
+		GridPane pane = new GridPane();
+		pane.setHgap(5d);
+		pane.setVgap(5d);
+		ObservableList<TableColumn<?, ?>> columns = 
+						tblView.getColumns();
+		for(int i = 0; i < columns.size(); i++)
+		{
+			Label lbl = new Label(columns.get(i).getText());
+			TextField txt = new TextField();
+			
+			GridPane.setRowIndex(lbl, i);
+			GridPane.setColumnIndex(lbl, 1);
+			GridPane.setRowIndex(txt, i);
+			GridPane.setColumnIndex(txt, 2);
+			pane.getChildren().addAll(lbl, txt);
+		}
+		
+		Alert dlg = new Alert(AlertType.CONFIRMATION);
+		dlg.setTitle(CooMainFrame.TITLE);
+		CooGuiUtil.grayOutParent(owner,
+			dlg.showingProperty());
+		dlg.initOwner(owner);
+		dlg.setHeaderText(head);
+		dlg.getDialogPane().setContent(pane);
+		dlg.showAndWait();
+		
+		return null;
 	}
 
 	public static <T> T showChooseDialog(Window owner, String header,

@@ -58,10 +58,10 @@ public class CooTreeViewPnl extends BorderPane
 					{
 						CooCustomer customer = ((CooCustomerTreeItem)selectedItem.getParent())
 							.customerProperty().get();
-
-						CooProject project = customer.getProjects().get(
-							selectedItem.getValue());
-
+						
+						CooProject project = ((CooProjectTreeItem)selectedItem)
+										.projectProperty().get();
+						
 						if(customer != lastSelCustomer)
 						{
 							lastSelCustomer = customer;
@@ -107,6 +107,8 @@ public class CooTreeViewPnl extends BorderPane
 		{
 			CooProject newPrj = new CooProject();
 			newPrj.nameProperty().set("Neues Projekt");
+			((CooCustomerTreeItem)selItem).customerProperty()
+				.get().addProject(newPrj);
 			
 			selItem.getChildren().add(new CooProjectTreeItem(
 				newPrj.nameProperty(), newPrj));

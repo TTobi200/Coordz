@@ -35,8 +35,8 @@ public class CooCustomer extends CooData
 	/** {@link List} with all customer {@link CooPalet} */
 	protected ObservableList<CooPalet> palets;
 	
-	/** {@link Map} with all customer projects mapped to identifier */
-	protected ObservableMap<String, CooProject> projects;
+	/** {@link List} with all customer projects */
+	protected ObservableList<CooProject> projects;
 	
 	public CooCustomer()
 	{
@@ -48,7 +48,7 @@ public class CooCustomer extends CooData
 		
 		contacts = FXCollections.observableArrayList();
 		palets = FXCollections.observableArrayList();
-		projects = FXCollections.observableHashMap();
+		projects = FXCollections.observableArrayList();
 	}
 	
 	@Override
@@ -100,11 +100,11 @@ public class CooCustomer extends CooData
 	 * @param ident = the project identifier
 	 * @param project = the {@link CooProject} to add
 	 */
-	public void addProject(String ident, CooProject project)
+	public void addProject(CooProject project)
 	{
 		if(Objects.nonNull(project))
 		{
-			projects.put(ident, project);
+			projects.add(project);
 		}
 	}
 	
@@ -130,7 +130,7 @@ public class CooCustomer extends CooData
 	 * Method to access {@link CooProject}
 	 * @return {@link #projects}
 	 */
-	public ObservableMap<String, CooProject> getProjects()
+	public  ObservableList<CooProject> getProjects()
 	{
 		return projects;
 	}

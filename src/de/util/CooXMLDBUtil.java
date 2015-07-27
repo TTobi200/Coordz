@@ -65,8 +65,7 @@ public class CooXMLDBUtil
 							project.fromXML(getSingleElement(root,
 								XML_PROJECT_ROOT));
 							
-							customer.addProject(project.nameProperty().get(),
-								project);
+							customer.addProject(project);
 						}
 						catch(Exception e)
 						{

@@ -9,12 +9,14 @@ package de.gui.comp;
 import java.io.IOException;
 import java.util.Objects;
 
+import javafx.event.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.util.Callback;
 import de.coordz.data.CooCustomer;
 import de.coordz.data.base.*;
-import de.gui.CooDataChanged;
+import de.gui.*;
 import de.util.CooFileUtil;
 import de.util.log.CooLog;
 
@@ -50,6 +52,41 @@ public class CooCoreDataPnl extends BorderPane implements CooDataChanged
 		{
 			CooLog.debug("Could not load FXML", e);
 		}
+
+		tblContacts.setRowFactory(new Callback<TableView<CooContact>, TableRow<CooContact>>()
+		{
+			@Override
+			public TableRow<CooContact> call(TableView<CooContact> tableView)
+			{
+				final TableRow<CooContact> row = new TableRow<>();
+				final ContextMenu contextMenu = new ContextMenu();
+				final MenuItem addMenuItem = new MenuItem("Hinzufügen");
+				final MenuItem removeMenuItem = new MenuItem("Entfernen");
+
+				addMenuItem.setOnAction(new EventHandler<ActionEvent>()
+				{
+					@Override
+					public void handle(ActionEvent event)
+					{
+						CooDialogs.showEditTable(getScene().getWindow(), tblContacts,
+							"Kontakt hinzufügen");
+					}
+				});
+
+				removeMenuItem.setOnAction(new EventHandler<ActionEvent>()
+				{
+					@Override
+					public void handle(ActionEvent event)
+					{
+						tblContacts.getItems().remove(row.getItem());
+					}
+				});
+				contextMenu.getItems().addAll(addMenuItem,
+					removeMenuItem);
+				row.setContextMenu(contextMenu);
+				return row;
+			}
+		});
 	}
 
 	@Override

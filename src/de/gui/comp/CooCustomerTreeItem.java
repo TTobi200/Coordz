@@ -25,10 +25,10 @@ public class CooCustomerTreeItem extends TreeItem<String>
 		
 		if(Objects.nonNull(customer))
 		{
-			customer.getProjects().forEach((ident, prj) -> 
+			customer.getProjects().forEach((prj) -> 
 			{
 				CooProjectTreeItem project = new CooProjectTreeItem(
-					new SimpleStringProperty(ident), prj);
+					prj.nameProperty(), prj);
 				getChildren().add(project);
 			});
 		}
@@ -41,24 +41,19 @@ public class CooCustomerTreeItem extends TreeItem<String>
 	
 	public static class CooProjectTreeItem extends TreeItem<String>
 	{
-		private CooProject project;
+		private ObjectProperty<CooProject> project;
 
 		public CooProjectTreeItem(StringProperty name, CooProject project)
 		{
 			super(name.get(), new ImageView(
 				CooFileUtil.getResourceIcon("laser_icon.png")));
 			this.valueProperty().bind(name);
-			this.project = project;
+			this.project = new SimpleObjectProperty<CooProject>(project);
 		}
 
-		public CooProject getProject()
+		public ObjectProperty<CooProject> projectProperty()
 		{
 			return project;
-		}
-
-		public void setProject(CooProject project)
-		{
-			this.project = project;
 		}
 	}
 }
