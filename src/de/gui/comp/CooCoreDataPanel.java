@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import de.coordz.data.*;
+import de.coordz.data.base.*;
 import de.gui.CooDataChanged;
 import de.util.CooFileUtil;
 import de.util.log.CooLog;
@@ -27,17 +28,11 @@ public class CooCoreDataPanel extends BorderPane implements CooDataChanged
 	protected TextField txtPLZ;
 	@FXML
 	protected TextField txtLocation;
-	
+
 	@FXML
-	protected TableView<TableColumn<String, String>> tblContacts;
+	protected TableView<CooContact> tblContacts;
 	@FXML
-	protected ToolBar btnBarContacts;
-	
-	@FXML
-	protected TableView<TableColumn<String, String>> tblPalets;
-	@FXML
-	protected ToolBar btnBarPalets;
-	
+	protected TableView<CooPalet> tblPalets;
 
 	public CooCoreDataPanel()
 	{
@@ -56,7 +51,7 @@ public class CooCoreDataPanel extends BorderPane implements CooDataChanged
 	// vvvv See the comment below vvvv
 	// Only as a workaround
 	protected CooCustomer last;
-	
+
 	@Override
 	public void customerChanged(CooCustomer customer)
 	{
@@ -68,14 +63,19 @@ public class CooCoreDataPanel extends BorderPane implements CooDataChanged
 			txtCustomer.textProperty().unbindBidirectional(last.nameProperty());
 			txtStreet.textProperty().unbindBidirectional(last.streetProperty());
 			txtPLZ.textProperty().unbindBidirectional(last.plzProperty());
-			txtLocation.textProperty().unbindBidirectional(last.locationProperty());
+			txtLocation.textProperty().unbindBidirectional(
+				last.locationProperty());
 		}
 		last = customer;
-		
+
 		txtCustomer.textProperty().bindBidirectional(customer.nameProperty());
 		txtStreet.textProperty().bindBidirectional(customer.streetProperty());
 		txtPLZ.textProperty().bindBidirectional(customer.plzProperty());
-		txtLocation.textProperty().bindBidirectional(customer.locationProperty());
+		txtLocation.textProperty().bindBidirectional(
+			customer.locationProperty());
+
+		tblContacts.setItems(customer.getContacts());
+		tblPalets.setItems(customer.getPalets());
 	}
 
 	@Override

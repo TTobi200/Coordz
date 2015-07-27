@@ -2,12 +2,12 @@
 <CoordzData>
     <Customer Adress="" Location="Gerasdorf bei Wien" Name="Mischek Systembau GmbH" PLZ="2201" Street="Hugo-Mischek-Strasse 10">
         <Contacts>
-            <Contact FirstName="" LastName="Traxler" Mail="" Phone=""/>
-            <Contact FirstName="" LastName="Traxler" Mail="" Phone=""/>
+            <Contact FirstName="M" LastName="Traxler" Mail="traxler@mischek.com" Phone="0800 456"/>
+            <Contact FirstName="Max" LastName="Mustermann" Mail="max.mustermann@gmx.de" Phone="0800 456"/>
         </Contacts>
         <Palets>
-            <Palet Length="0" Type="U" Width="0"/>
-            <Palet Length="0" Type="U" Width="0"/>
+            <Palet Length="6000" Type="U" Width="3000"/>
+            <Palet Length="6000" Type="T" Width="3000"/>
         </Palets>
     </Customer>
 </CoordzData>

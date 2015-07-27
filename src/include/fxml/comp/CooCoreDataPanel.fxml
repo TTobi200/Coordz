@@ -24,6 +24,7 @@
 <?import javafx.scene.effect.Reflection?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 
 <fx:root type="BorderPane" xmlns="http://javafx.com/javafx/8"
 	xmlns:fx="http://javafx.com/fxml/1">
@@ -61,9 +62,26 @@
 							<center>
 								<TableView fx:id="tblContacts">
 									<columns>
-										<TableColumn text="Vorname" />
-										<TableColumn text="Nachname" />
-										<TableColumn text="Mail" />
+										<TableColumn text="Vorname" fx:id="firstNameCol">
+											<cellValueFactory>
+												<PropertyValueFactory property="firstName" />
+											</cellValueFactory>
+										</TableColumn>
+										<TableColumn text="Nachname">
+											<cellValueFactory>
+												<PropertyValueFactory property="lastName" />
+											</cellValueFactory>
+										</TableColumn>
+										<TableColumn text="Telefon">
+											<cellValueFactory>
+												<PropertyValueFactory property="phone" />
+											</cellValueFactory>
+										</TableColumn>
+										<TableColumn text="Mail">
+											<cellValueFactory>
+												<PropertyValueFactory property="mail" />
+											</cellValueFactory>
+										</TableColumn>
 									</columns>
 								</TableView>
 							</center>
@@ -76,9 +94,21 @@
 							<center>
 								<TableView fx:id="tblPalets">
 									<columns>
-										<TableColumn text="Länge" />
-										<TableColumn text="Breite" />
-										<TableColumn text="Typ" />
+										<TableColumn text="Länge">
+											<cellValueFactory>
+												<PropertyValueFactory property="length" />
+											</cellValueFactory>
+										</TableColumn>
+										<TableColumn text="Breite">
+											<cellValueFactory>
+												<PropertyValueFactory property="width" />
+											</cellValueFactory>
+										</TableColumn>
+										<TableColumn text="Typ">
+											<cellValueFactory>
+												<PropertyValueFactory property="type" />
+											</cellValueFactory>
+										</TableColumn>
 									</columns>
 								</TableView>
 							</center>

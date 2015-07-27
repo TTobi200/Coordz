@@ -173,7 +173,7 @@
 								</Tab>
 								<Tab text="Mesungen">
 									<content>
-										<SplitPane orientation="VERTICAL">
+										<SplitPane dividerPositions="0.1" orientation="VERTICAL">
 											<items>
 												<BorderPane>
 													<center>
@@ -187,32 +187,6 @@
 															</columns>
 														</TableView>
 													</center>
-													<bottom>
-														<ToolBar nodeOrientation="RIGHT_TO_LEFT">
-															<items>
-																<Button>
-																	<graphic>
-																		<ImageView pickOnBounds="true"
-																			preserveRatio="true">
-																			<image>
-																				<Image url="@/include/icons/delete.png" />
-																			</image>
-																		</ImageView>
-																	</graphic>
-																</Button>
-																<Button>
-																	<graphic>
-																		<ImageView pickOnBounds="true"
-																			preserveRatio="true">
-																			<image>
-																				<Image url="@/include/icons/add.png" />
-																			</image>
-																		</ImageView>
-																	</graphic>
-																</Button>
-															</items>
-														</ToolBar>
-													</bottom>
 												</BorderPane>
 												<TabPane>
 													<tabs>

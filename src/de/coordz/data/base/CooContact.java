@@ -79,7 +79,7 @@ public class CooContact extends CooData
 	 * Method to access Property
 	 * @return {@link #phone}
 	 */
-	public StringProperty phoneroperty()
+	public StringProperty phoneProperty()
 	{
 		return phone;
 	}
