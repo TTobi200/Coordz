@@ -123,19 +123,4 @@ public class CooCoreDataPnl extends BorderPane implements CooDataChanged
 		tblPalets.setItems(customer.getPalets());
 	}
 
-	@Override
-	public void projectChanged(CooProject project)
-	{
-		// TODO Try to find a solution
-		// Bidirectional bindings have to be unbind bidirectional
-		// Only .unbind of all customer propertys not working
-		if(Objects.nonNull(lastProject))
-		{
-			txtPrjName.textProperty().unbindBidirectional(
-				lastProject.nameProperty());
-		}
-		lastProject = project;
-		
-		txtPrjName.textProperty().bindBidirectional(project.nameProperty());
-	}
 }

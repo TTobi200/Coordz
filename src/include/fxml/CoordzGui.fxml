@@ -16,6 +16,7 @@
 <?import de.gui.comp.CooCoreDataPnl?>
 <?import de.gui.comp.CooTreeViewPnl?>
 <?import de.gui.comp.CooMeasurementsPnl?>
+<?import de.gui.comp.CooProjectDataPnl?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 	<top>
@@ -149,6 +150,18 @@
 									</graphic>
 									<content>
 										<CooCoreDataPnl fx:id="coreDataPnl" />
+									</content>
+								</Tab>
+								<Tab text="Projektdaten" >
+									<graphic>
+										<ImageView pickOnBounds="true" preserveRatio="true">
+											<image>
+												<Image url="/include/icons/project.png" />
+											</image>
+										</ImageView>
+									</graphic>
+									<content>
+										<CooProjectDataPnl fx:id="projectDataPnl" />
 									</content>
 								</Tab>
 								<Tab text="Messdaten">

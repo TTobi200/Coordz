@@ -56,20 +56,6 @@
 						</GridPane>
 					</content>
 				</TitledPane>
-				<TitledPane text="Projekt" >
-					<GridPane vgap="5" hgap="5">
-							<columnConstraints>
-								<ColumnConstraints hgrow="NEVER" />
-								<ColumnConstraints hgrow="ALWAYS" />
-							</columnConstraints>
-							<rowConstraints>
-							</rowConstraints>
-							<children>
-								<Label text="Name" />
-								<TextField fx:id="txtPrjName" GridPane.columnIndex="1" />
-							</children>
-						</GridPane>
-				</TitledPane>
 				<TitledPane text="Kontakte">
 					<content>
 						<BorderPane>

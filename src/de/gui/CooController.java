@@ -36,6 +36,8 @@ public class CooController implements Initializable
 	@FXML
 	protected CooTreeViewPnl treeViewPnl;
 	@FXML
+	protected CooProjectDataPnl projectDataPnl;
+	@FXML
 	protected CooMeasurementsPnl measurementsPnl;
 	@FXML
 	protected Label lblPrj;
@@ -81,6 +83,7 @@ public class CooController implements Initializable
 	{
 		loadTestProjects();
 		treeViewPnl.addDataChangedListener(coreDataPnl);
+		treeViewPnl.addDataChangedListener(projectDataPnl);
 		treeViewPnl.addDataChangedListener(measurementsPnl);
 	}
 
