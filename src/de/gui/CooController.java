@@ -31,10 +31,10 @@ public class CooController implements Initializable
 	protected Stage primaryStage;
 
 	@FXML
-	protected CooCoreDataPanel coreDataPnl;
+	protected CooCoreDataPnl coreDataPnl;
 	
 	@FXML
-	protected CooCustomerTreeView prjTreeView;
+	protected CooTreeViewPnl cooTreeViewPnl;
 	@FXML
 	protected Label lblPrj;
 
@@ -78,7 +78,7 @@ public class CooController implements Initializable
 	public void initialize(URL location, ResourceBundle resources)
 	{
 		loadTestProjects();
-		prjTreeView.addDataChangedListener(coreDataPnl);
+		cooTreeViewPnl.addDataChangedListener(coreDataPnl);
 	}
 
 	private void loadTestProjects()
@@ -98,7 +98,7 @@ public class CooController implements Initializable
 			root.getChildren().add(customer);
 		});
 
-		prjTreeView.setRoot(root);
+		cooTreeViewPnl.getPrjTreeView().setRoot(root);
 		root.setExpanded(true);
 	}
 }

@@ -18,7 +18,7 @@ import de.gui.CooDataChanged;
 import de.util.CooFileUtil;
 import de.util.log.CooLog;
 
-public class CooCoreDataPanel extends BorderPane implements CooDataChanged
+public class CooCoreDataPnl extends BorderPane implements CooDataChanged
 {
 	@FXML
 	protected TextField txtCustomer;
@@ -34,13 +34,13 @@ public class CooCoreDataPanel extends BorderPane implements CooDataChanged
 	@FXML
 	protected TableView<CooPalet> tblPalets;
 
-	public CooCoreDataPanel()
+	public CooCoreDataPnl()
 	{
 		try
 		{
 			CooFileUtil.loadFXML(this, CooFileUtil.FXML_COMP +
 										CooFileUtil.IN_JAR_SEPERATOR
-										+ "CooCoreDataPanel.fxml", this);
+										+ "CooCoreDataPnl.fxml", this);
 		}
 		catch(IOException e)
 		{

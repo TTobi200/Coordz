@@ -31,7 +31,7 @@
 	<center>
 		<VBox BorderPane.alignment="CENTER">
 			<children>
-				<TitledPane text="Kundendaten">
+				<TitledPane text="Kunde">
 					<content>
 						<GridPane vgap="5" hgap="5">
 							<columnConstraints>
