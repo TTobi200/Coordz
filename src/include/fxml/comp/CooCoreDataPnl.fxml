@@ -25,6 +25,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import de.gui.comp.CooTextField?>
 
 <fx:root type="BorderPane" xmlns="http://javafx.com/javafx/8"
 	xmlns:fx="http://javafx.com/fxml/1">
@@ -45,12 +46,12 @@
 								<Label text="Straße" GridPane.rowIndex="1" />
 								<Label text="PLZ" GridPane.rowIndex="2" />
 								<Label text="Ort" GridPane.rowIndex="3" />
-								<TextField fx:id="txtCustomer" GridPane.columnIndex="1" />
-								<TextField fx:id="txtStreet" GridPane.columnIndex="1"
+								<CooTextField fx:id="txtCustomer" GridPane.columnIndex="1" />
+								<CooTextField fx:id="txtStreet" GridPane.columnIndex="1"
 									GridPane.rowIndex="1" />
-								<TextField fx:id="txtPLZ" GridPane.columnIndex="1"
+								<CooTextField fx:id="txtPLZ" GridPane.columnIndex="1"
 									GridPane.rowIndex="2" />
-								<TextField fx:id="txtLocation" GridPane.columnIndex="1"
+								<CooTextField fx:id="txtLocation" GridPane.columnIndex="1"
 									GridPane.rowIndex="3" />
 							</children>
 						</GridPane>

@@ -25,45 +25,124 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import de.gui.comp.CooTextField?>
+<?import de.gui.comp.CooCoreDataPnl?>
+<?import javafx.scene.layout.VBox?>
 
 <fx:root type="BorderPane" xmlns="http://javafx.com/javafx/8"
 	xmlns:fx="http://javafx.com/fxml/1">
 	<center>
 		<VBox BorderPane.alignment="CENTER">
 			<children>
-				<TitledPane text="Projekt" >
+				<TitledPane text="Projekt">
 					<GridPane vgap="5" hgap="5">
-							<columnConstraints>
-								<ColumnConstraints hgrow="NEVER" />
-								<ColumnConstraints hgrow="ALWAYS" />
-							</columnConstraints>
-							<rowConstraints>
-							</rowConstraints>
-							<children>
-								<Label text="Name" />
-								<Label text="Datum" GridPane.rowIndex="1" />
-								<TextField fx:id="txtPrjName" GridPane.columnIndex="1" />
-								<TextField fx:id="txtPrjDate" GridPane.columnIndex="1"
-									GridPane.rowIndex="1" />
-							</children>
-						</GridPane>
+						<columnConstraints>
+							<ColumnConstraints hgrow="NEVER" />
+							<ColumnConstraints hgrow="ALWAYS" />
+						</columnConstraints>
+						<rowConstraints>
+						</rowConstraints>
+						<children>
+							<Label text="Name" />
+							<Label text="Datum" GridPane.rowIndex="1" />
+							<CooTextField fx:id="txtPrjName"
+								GridPane.columnIndex="1" />
+							<CooTextField fx:id="txtPrjDate"
+								GridPane.columnIndex="1" GridPane.rowIndex="1" />
+						</children>
+					</GridPane>
 				</TitledPane>
-				<TitledPane text="LAP Software" >
+				<TitledPane text="Stationen">
+					<content>
+						<BorderPane>
+							<center>
+								<TableView fx:id="tblStations">
+									<columns>
+										<TableColumn text="Name">
+											<cellValueFactory>
+												<PropertyValueFactory property="name" />
+											</cellValueFactory>
+										</TableColumn>
+										<TableColumn text="Beschreibung">
+											<cellValueFactory>
+												<PropertyValueFactory property="description" />
+											</cellValueFactory>
+										</TableColumn>
+									</columns>
+								</TableView>
+							</center>
+						</BorderPane>
+					</content>
+				</TitledPane>
+				<TitledPane text="LAP Software">
 					<GridPane vgap="5" hgap="5">
-							<columnConstraints>
-								<ColumnConstraints hgrow="NEVER" />
-								<ColumnConstraints hgrow="ALWAYS" />
-							</columnConstraints>
-							<rowConstraints>
-							</rowConstraints>
-							<children>
-								<Label text="Name" />
-								<Label text="Version" GridPane.rowIndex="1" />
-								<TextField fx:id="txtSoftName" GridPane.columnIndex="1" />
-								<TextField fx:id="txtSoftVersion" GridPane.columnIndex="1"
-									GridPane.rowIndex="1" />
-							</children>
-						</GridPane>
+						<columnConstraints>
+							<ColumnConstraints hgrow="NEVER" />
+							<ColumnConstraints hgrow="ALWAYS" />
+						</columnConstraints>
+						<rowConstraints>
+						</rowConstraints>
+						<children>
+							<Label text="Name" />
+							<Label text="Version" GridPane.rowIndex="1" />
+							<CooTextField fx:id="txtSoftName"
+								GridPane.columnIndex="1" />
+							<CooTextField fx:id="txtSoftVersion"
+								GridPane.columnIndex="1" GridPane.rowIndex="1" />
+						</children>
+					</GridPane>
+				</TitledPane>
+				<TitledPane text="Gateways">
+					<VBox spacing="5">
+						<children>
+							<GridPane vgap="5" hgap="5" HBox.hgrow="ALWAYS">
+								<columnConstraints>
+									<ColumnConstraints hgrow="NEVER" />
+									<ColumnConstraints hgrow="ALWAYS" />
+								</columnConstraints>
+								<rowConstraints>
+								</rowConstraints>
+								<children>
+									<Label text="Station" />
+									<Label text="Ip" GridPane.rowIndex="1" />
+									<Label text="MAC" GridPane.rowIndex="2" />
+									<ComboBox fx:id="cbStation" GridPane.columnIndex="1"
+										maxWidth="Infinity" />
+									<CooTextField fx:id="txtGateIp"
+										GridPane.columnIndex="1" GridPane.rowIndex="1" />
+									<CooTextField fx:id="txtGateMAC"
+										GridPane.columnIndex="1" GridPane.rowIndex="2" />
+								</children>
+							</GridPane>
+							<TitledPane text="Laser" expanded="false">
+								<content>
+									<BorderPane>
+										<center>
+											<TableView fx:id="tblLaser">
+												<columns>
+													<TableColumn text="Name">
+														<cellValueFactory>
+															<PropertyValueFactory property="name" />
+														</cellValueFactory>
+													</TableColumn>
+													<TableColumn text="MAC">
+														<cellValueFactory>
+															<PropertyValueFactory property="mac" />
+														</cellValueFactory>
+													</TableColumn>
+													<TableColumn text="Serial Nr.">
+														<cellValueFactory>
+															<PropertyValueFactory property="serialNr" />
+														</cellValueFactory>
+													</TableColumn>
+												</columns>
+											</TableView>
+										</center>
+									</BorderPane>
+								</content>
+							</TitledPane>
+						</children>
+					</VBox>
 				</TitledPane>
 			</children>
 		</VBox>

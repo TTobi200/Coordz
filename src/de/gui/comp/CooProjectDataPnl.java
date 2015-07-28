@@ -9,38 +9,46 @@ package de.gui.comp;
 import java.io.IOException;
 import java.util.Objects;
 
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import de.coordz.data.CooProject;
+import de.coordz.data.base.*;
 import de.gui.CooDataChanged;
 import de.util.CooFileUtil;
 import de.util.log.CooLog;
 
 public class CooProjectDataPnl extends BorderPane implements CooDataChanged
 {
-
-	// vvvv See the comment below vvvv
-	// Only as a workaround
-	protected CooProject lastProject;
-	
 	@FXML
-	protected TextField txtPrjName;
+	protected CooTextField txtPrjName;
 	@FXML
-	protected TextField txtPrjDate;
+	protected CooTextField txtPrjDate;
 
 	@FXML
-	protected TextField txtSoftName;
+	protected CooTextField txtSoftName;
 	@FXML
-	protected TextField txtSoftVersion;
-	
+	protected CooTextField txtSoftVersion;
+
+	@FXML
+	protected TableView<CooStation> tblStations;
+
+	@FXML
+	protected ComboBox<CooStation> cbStation;
+	@FXML
+	protected CooTextField txtGateIp;
+	@FXML
+	protected CooTextField txtGateMAC;
+	@FXML
+	protected TableView<CooLaser> tblLaser;
+
 	public CooProjectDataPnl()
 	{
 		try
 		{
 			CooFileUtil.loadFXML(this, CooFileUtil.FXML_COMP +
-										CooFileUtil.IN_JAR_SEPERATOR
-										+ "CooProjectDataPnl.fxml", this);
+					CooFileUtil.IN_JAR_SEPERATOR + "CooProjectDataPnl.fxml", this);
 		}
 		catch(IOException e)
 		{
@@ -52,29 +60,42 @@ public class CooProjectDataPnl extends BorderPane implements CooDataChanged
 	@Override
 	public void projectChanged(CooProject project)
 	{
-		// TODO Try to find a solution
-		// Bidirectional bindings have to be unbind bidirectional
-		// Only .unbind of all customer propertys not working
-		if(Objects.nonNull(lastProject))
-		{
-			txtPrjName.textProperty().unbindBidirectional(
-				lastProject.nameProperty());
-			txtPrjDate.textProperty().unbindBidirectional(
-				lastProject.dateProperty());
-			
-			txtSoftName.textProperty().unbindBidirectional(
-				lastProject.lapSoftwareProperty().get().nameProperty());
-			txtSoftVersion.textProperty().unbindBidirectional(
-				lastProject.lapSoftwareProperty().get().nameProperty());
-		}
-		lastProject = project;
-
-		txtPrjName.textProperty().bindBidirectional(project.nameProperty());
+		txtPrjName.bindBidirectional(project.nameProperty());
 		// TODO Bind ObjectProperty to an textfield?
-//		txtPrjDate.textProperty().bindBidirectional(project.dateProperty());
-		
-		txtSoftName.textProperty().bindBidirectional(project.lapSoftwareProperty().get().nameProperty());
-		txtSoftVersion.textProperty().bindBidirectional(project.lapSoftwareProperty().get().versionProperty());
+		// txtPrjDate.textProperty().bindBidirectional(project.dateProperty());
+
+		// LAP Software fields
+		txtSoftName.bindBidirectional(project.lapSoftwareProperty()
+			.get()
+			.nameProperty());
+		txtSoftVersion.bindBidirectional(project.lapSoftwareProperty()
+			.get()
+			.versionProperty());
+
+		// Station fields
+		tblStations.setItems(project.getStations());
+
+		// Gateway fields
+		cbStation.setItems(project.getStations());
+		cbStation.getSelectionModel().selectedItemProperty().addListener(
+			(old, curr, newV) ->
+			{
+				if(Objects.nonNull(newV))
+				{
+					CooGateway gateway = newV.gatewayProperty().get();
+					tblLaser.setItems(gateway.getLaser());
+					txtGateIp.bindBidirectional(
+						gateway.ipProperty());
+					txtGateMAC.bindBidirectional(
+						gateway.macProperty());
+				}
+				else
+				{
+					txtGateIp.unbindBidirectional();
+					txtGateMAC.unbindBidirectional();
+					tblLaser.setItems(FXCollections.observableArrayList());
+				}
+			});
 	}
 
 }

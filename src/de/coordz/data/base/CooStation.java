@@ -200,4 +200,10 @@ public class CooStation extends CooData
 	{
 		return gateway;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return nameProperty().get();
+	}
 }

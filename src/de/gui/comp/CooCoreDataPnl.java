@@ -7,14 +7,13 @@
 package de.gui.comp;
 
 import java.io.IOException;
-import java.util.Objects;
 
 import javafx.event.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Callback;
-import de.coordz.data.*;
+import de.coordz.data.CooCustomer;
 import de.coordz.data.base.*;
 import de.gui.*;
 import de.util.CooFileUtil;
@@ -23,34 +22,25 @@ import de.util.log.CooLog;
 public class CooCoreDataPnl extends BorderPane implements CooDataChanged
 {
 	@FXML
-	protected TextField txtCustomer;
+	protected CooTextField txtCustomer;
 	@FXML
-	protected TextField txtStreet;
+	protected CooTextField txtStreet;
 	@FXML
-	protected TextField txtPLZ;
+	protected CooTextField txtPLZ;
 	@FXML
-	protected TextField txtLocation;
-
-	@FXML
-	protected TextField txtPrjName;
+	protected CooTextField txtLocation;
 
 	@FXML
 	protected TableView<CooContact> tblContacts;
 	@FXML
 	protected TableView<CooPalet> tblPalets;
 
-	// vvvv See the comment below vvvv
-	// Only as a workaround
-	protected CooCustomer lastCustomer;
-	protected CooProject lastProject;
-
 	public CooCoreDataPnl()
 	{
 		try
 		{
 			CooFileUtil.loadFXML(this, CooFileUtil.FXML_COMP +
-										CooFileUtil.IN_JAR_SEPERATOR
-										+ "CooCoreDataPnl.fxml", this);
+				CooFileUtil.IN_JAR_SEPERATOR + "CooCoreDataPnl.fxml", this);
 		}
 		catch(IOException e)
 		{
@@ -97,26 +87,10 @@ public class CooCoreDataPnl extends BorderPane implements CooDataChanged
 	@Override
 	public void customerChanged(CooCustomer customer)
 	{
-		// TODO Try to find a solution
-		// Bidirectional bindings have to be unbind bidirectional
-		// Only .unbind of all customer propertys not working
-		if(Objects.nonNull(lastCustomer))
-		{
-			txtCustomer.textProperty().unbindBidirectional(
-				lastCustomer.nameProperty());
-			txtStreet.textProperty().unbindBidirectional(
-				lastCustomer.streetProperty());
-			txtPLZ.textProperty().unbindBidirectional(
-				lastCustomer.plzProperty());
-			txtLocation.textProperty().unbindBidirectional(
-				lastCustomer.locationProperty());
-		}
-		lastCustomer = customer;
-
-		txtCustomer.textProperty().bindBidirectional(customer.nameProperty());
-		txtStreet.textProperty().bindBidirectional(customer.streetProperty());
-		txtPLZ.textProperty().bindBidirectional(customer.plzProperty());
-		txtLocation.textProperty().bindBidirectional(
+		txtCustomer.bindBidirectional(customer.nameProperty());
+		txtStreet.bindBidirectional(customer.streetProperty());
+		txtPLZ.bindBidirectional(customer.plzProperty());
+		txtLocation.bindBidirectional(
 			customer.locationProperty());
 
 		tblContacts.setItems(customer.getContacts());
