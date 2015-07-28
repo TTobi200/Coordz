@@ -4,7 +4,7 @@
  * $Log$
  * Copyright © 2015 T.Ohm . All Rights Reserved.
  */
-package de.gui.comp;
+package de.gui.pnl;
 
 import java.io.IOException;
 

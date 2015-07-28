@@ -17,6 +17,9 @@
 <?import de.gui.comp.CooTreeViewPnl?>
 <?import de.gui.comp.CooMeasurementsPnl?>
 <?import de.gui.comp.CooProjectDataPnl?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.ProgressIndicator?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 	<top>
@@ -140,7 +143,7 @@
 						<TabPane tabClosingPolicy="UNAVAILABLE"
 							BorderPane.alignment="CENTER">
 							<tabs>
-								<Tab text="Stammdaten" >
+								<Tab text="Stammdaten">
 									<graphic>
 										<ImageView pickOnBounds="true" preserveRatio="true">
 											<image>
@@ -152,7 +155,7 @@
 										<CooCoreDataPnl fx:id="coreDataPnl" />
 									</content>
 								</Tab>
-								<Tab text="Projektdaten" >
+								<Tab text="Projektdaten">
 									<graphic>
 										<ImageView pickOnBounds="true" preserveRatio="true">
 											<image>
@@ -173,7 +176,7 @@
 										</ImageView>
 									</graphic>
 									<content>
-										<CooMeasurementsPnl fx:id="measurementsPnl"/>
+										<CooMeasurementsPnl fx:id="measurementsPnl" />
 									</content>
 								</Tab>
 							</tabs>

@@ -4,7 +4,7 @@
  * $Log$
  * Copyright © 2015 T.Ohm . All Rights Reserved.
  */
-package de.gui.comp;
+package de.gui.pnl;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -16,6 +16,7 @@ import javafx.scene.layout.BorderPane;
 import de.coordz.data.CooProject;
 import de.coordz.data.base.*;
 import de.gui.CooDataChanged;
+import de.gui.comp.CooTextField;
 import de.util.CooFileUtil;
 import de.util.log.CooLog;
 

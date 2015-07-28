@@ -18,6 +18,7 @@ import javafx.stage.*;
 import de.coordz.CooSystem;
 import de.coordz.data.CooCustomer;
 import de.gui.comp.*;
+import de.gui.pnl.*;
 import de.util.*;
 import de.util.log.CooLog;
 

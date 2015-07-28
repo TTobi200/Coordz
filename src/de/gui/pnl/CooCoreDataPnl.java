@@ -4,7 +4,7 @@
  * $Log$
  * Copyright © 2015 T.Ohm . All Rights Reserved.
  */
-package de.gui.comp;
+package de.gui.pnl;
 
 import java.io.IOException;
 
@@ -16,6 +16,7 @@ import javafx.util.Callback;
 import de.coordz.data.CooCustomer;
 import de.coordz.data.base.*;
 import de.gui.*;
+import de.gui.comp.CooTextField;
 import de.util.CooFileUtil;
 import de.util.log.CooLog;
 
