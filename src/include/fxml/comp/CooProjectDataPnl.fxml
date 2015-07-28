@@ -26,7 +26,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import de.gui.comp.CooTextField?>
-<?import de.gui.comp.CooCoreDataPnl?>
+<?import de.gui.pnl.CooCoreDataPnl?>
 <?import javafx.scene.layout.VBox?>
 
 <fx:root type="BorderPane" xmlns="http://javafx.com/javafx/8"

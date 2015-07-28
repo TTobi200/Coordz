@@ -13,10 +13,10 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.control.TextArea?>
-<?import de.gui.comp.CooCoreDataPnl?>
-<?import de.gui.comp.CooTreeViewPnl?>
-<?import de.gui.comp.CooMeasurementsPnl?>
-<?import de.gui.comp.CooProjectDataPnl?>
+<?import de.gui.pnl.CooCoreDataPnl?>
+<?import de.gui.pnl.CooTreeViewPnl?>
+<?import de.gui.pnl.CooMeasurementsPnl?>
+<?import de.gui.pnl.CooProjectDataPnl?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.control.ProgressIndicator?>
