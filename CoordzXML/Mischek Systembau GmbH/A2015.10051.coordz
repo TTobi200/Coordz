@@ -35,7 +35,7 @@
                         <Rectangle D1="0" D2="0" Height="0" Length="0" Name="" Width="0" X="0" Y="0" Z="0"/>
                     </Result>
                 </VerifyMeasurement>
-              <Gateway IP="112112" MAC="243243">
+                <Gateway IP="112112" MAC="243243">
                     <Laser MAC="32424325" Name="Las2" SerialNr="353525" TotalDeviation="0.0" X="0" Y="0" Z="0"/>
                     <Laser MAC="2243432535" Name="Las2" SerialNr="352523" TotalDeviation="0.0" X="0" Y="0" Z="0"/>
                 </Gateway>

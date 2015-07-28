@@ -8,6 +8,7 @@ package de.gui;
 
 import java.util.*;
 
+import javafx.beans.property.Property;
 import javafx.collections.*;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -61,27 +62,34 @@ public class CooDialogs
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static Optional<ButtonType> showEditTable(Window owner, 
-		TableView tblView, String head)
+	public static void showEditTable(Window owner,
+					TableView tblView, String head)
 	{
 		GridPane pane = new GridPane();
 		pane.setHgap(5d);
 		pane.setVgap(5d);
-		ObservableList<TableColumn<?, ?>> columns = 
+		ObservableList<TableColumn<?, ?>> columns =
 						tblView.getColumns();
 		for(int i = 0; i < columns.size(); i++)
 		{
 			Label lbl = new Label(columns.get(i).getText());
 			TextField txt = new TextField();
-			
+			txt.setMinWidth(280);
+
+			txt.textProperty().bindBidirectional(
+				(Property<String>)
+				((TableColumn<?, ?>)tblView.getColumns().get(i))
+					.getCellObservableValue(tblView.getSelectionModel()
+						.getSelectedIndex()));
+
 			GridPane.setRowIndex(lbl, i);
 			GridPane.setColumnIndex(lbl, 1);
 			GridPane.setRowIndex(txt, i);
 			GridPane.setColumnIndex(txt, 2);
 			pane.getChildren().addAll(lbl, txt);
 		}
-		
-		Alert dlg = new Alert(AlertType.CONFIRMATION);
+
+		Alert dlg = new Alert(AlertType.INFORMATION);
 		dlg.setTitle(CooMainFrame.TITLE);
 		CooGuiUtil.grayOutParent(owner,
 			dlg.showingProperty());
@@ -89,8 +97,6 @@ public class CooDialogs
 		dlg.setHeaderText(head);
 		dlg.getDialogPane().setContent(pane);
 		dlg.showAndWait();
-		
-		return null;
 	}
 
 	public static <T> T showChooseDialog(Window owner, String header,
