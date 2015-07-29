@@ -140,7 +140,7 @@
 				<CooTreeViewPnl fx:id="treeViewPnl" />
 				<BorderPane>
 					<center>
-						<TabPane tabClosingPolicy="UNAVAILABLE"
+						<TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE"
 							BorderPane.alignment="CENTER">
 							<tabs>
 								<Tab text="Stammdaten">

@@ -13,11 +13,11 @@ import java.util.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.*;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.stage.*;
 import de.coordz.CooSystem;
 import de.coordz.data.CooCustomer;
-import de.gui.comp.*;
+import de.gui.comp.CooCustomerTreeItem;
 import de.gui.pnl.*;
 import de.util.*;
 import de.util.log.CooLog;
@@ -42,6 +42,9 @@ public class CooController implements Initializable
 	protected CooMeasurementsPnl measurementsPnl;
 	@FXML
 	protected Label lblPrj;
+	
+	@FXML
+	protected TabPane tabPane;
 
 	public static Object getInstance(Stage primaryStage)
 	{
@@ -86,6 +89,8 @@ public class CooController implements Initializable
 		treeViewPnl.addDataChangedListener(coreDataPnl);
 		treeViewPnl.addDataChangedListener(projectDataPnl);
 		treeViewPnl.addDataChangedListener(measurementsPnl);
+		
+		CooTabPaneDetacherUtil.create().makeTabsDetachable(tabPane);
 	}
 
 	private void loadTestProjects()

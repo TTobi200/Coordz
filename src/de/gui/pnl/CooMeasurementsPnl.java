@@ -9,18 +9,21 @@ package de.gui.pnl;
 import java.io.IOException;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import de.coordz.data.CooProject;
 import de.coordz.data.base.CooStation;
 import de.gui.CooDataChanged;
 import de.gui.comp.CooTableView;
-import de.util.CooFileUtil;
+import de.util.*;
 import de.util.log.CooLog;
 
 public class CooMeasurementsPnl extends BorderPane implements CooDataChanged
 {
 	@FXML
 	protected CooTableView<CooStation> tblStations;
+	@FXML
+	protected TabPane tabMeasurements;
 	
 	public CooMeasurementsPnl()
 	{
@@ -35,6 +38,8 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged
 		}
 		
 		tblStations.setClazz(CooStation.class);
+		CooTabPaneDetacherUtil.create().makeTabsDetachable(
+			tabMeasurements);
 	}
 	
 	@Override

@@ -69,7 +69,7 @@
 						</BorderPane>
 					</content>
 				</TitledPane>
-				<TabPane tabClosingPolicy="UNAVAILABLE">
+				<TabPane fx:id="tabMeasurements" tabClosingPolicy="UNAVAILABLE">
 					<tabs>
 						<Tab text="Messpunkte">
 							<graphic>
@@ -79,6 +79,12 @@
 									</image>
 								</ImageView>
 							</graphic>
+							<content>
+								<BorderPane>
+									<center>
+									</center>
+								</BorderPane>
+							</content>
 						</Tab>
 						<Tab text="3D-Ansicht">
 							<graphic>
@@ -88,6 +94,12 @@
 									</image>
 								</ImageView>
 							</graphic>
+							<content>
+								<BorderPane>
+									<center>
+									</center>
+								</BorderPane>
+							</content>
 						</Tab>
 						<Tab text="Notizen">
 							<graphic>
@@ -98,8 +110,12 @@
 								</ImageView>
 							</graphic>
 							<content>
-								<TextArea>
-								</TextArea>
+								<BorderPane>
+									<center>
+										<TextArea>
+										</TextArea>
+									</center>
+								</BorderPane>
 							</content>
 						</Tab>
 					</tabs>
