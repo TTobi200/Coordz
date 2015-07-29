@@ -28,6 +28,7 @@
 <?import de.gui.comp.CooTextField?>
 <?import de.gui.pnl.CooCoreDataPnl?>
 <?import javafx.scene.layout.VBox?>
+<?import de.gui.comp.CooTableView?>
 
 <fx:root type="BorderPane" xmlns="http://javafx.com/javafx/8"
 	xmlns:fx="http://javafx.com/fxml/1">
@@ -56,7 +57,7 @@
 					<content>
 						<BorderPane>
 							<center>
-								<TableView fx:id="tblStations">
+								<CooTableView fx:id="tblStations">
 									<columns>
 										<TableColumn text="Name">
 											<cellValueFactory>
@@ -69,7 +70,7 @@
 											</cellValueFactory>
 										</TableColumn>
 									</columns>
-								</TableView>
+								</CooTableView>
 							</center>
 						</BorderPane>
 					</content>
@@ -118,7 +119,7 @@
 								<content>
 									<BorderPane>
 										<center>
-											<TableView fx:id="tblLaser">
+											<CooTableView fx:id="tblLaser">
 												<columns>
 													<TableColumn text="Name">
 														<cellValueFactory>
@@ -136,7 +137,7 @@
 														</cellValueFactory>
 													</TableColumn>
 												</columns>
-											</TableView>
+											</CooTableView>
 										</center>
 									</BorderPane>
 								</content>

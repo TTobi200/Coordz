@@ -9,7 +9,6 @@ package de.gui.pnl;
 import java.io.IOException;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import de.coordz.data.CooCustomer;
 import de.coordz.data.base.*;
@@ -30,9 +29,9 @@ public class CooCoreDataPnl extends BorderPane implements CooDataChanged
 	protected CooTextField txtLocation;
 
 	@FXML
-	protected TableView<CooContact> tblContacts;
+	protected CooTableView<CooContact> tblContacts;
 	@FXML
-	protected TableView<CooPalet> tblPalets;
+	protected CooTableView<CooPalet> tblPalets;
 
 	public CooCoreDataPnl()
 	{
@@ -46,7 +45,8 @@ public class CooCoreDataPnl extends BorderPane implements CooDataChanged
 			CooLog.debug("Could not load FXML", e);
 		}
 
-		tblContacts.setRowFactory(new CooRowFactory());
+		tblContacts.setClazz(CooContact.class);
+		tblPalets.setClazz(CooPalet.class);
 	}
 
 	@Override

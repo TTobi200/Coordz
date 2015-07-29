@@ -8,12 +8,13 @@ package de.gui;
 
 import java.util.*;
 
-import javafx.beans.property.Property;
+import javafx.beans.property.*;
 import javafx.collections.*;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Window;
+import javafx.util.converter.NumberStringConverter;
 import de.util.CooGuiUtil;
 
 public class CooDialogs
@@ -76,11 +77,19 @@ public class CooDialogs
 			TextField txt = new TextField();
 			txt.setMinWidth(280);
 
-			txt.textProperty().bindBidirectional(
-				(Property<String>)
-				((TableColumn<?, ?>)tblView.getColumns().get(i))
-					.getCellObservableValue(tblView.getSelectionModel()
-						.getSelectedIndex()));
+			Property p = (Property)((TableColumn<?, ?>)tblView.getColumns().get(i))
+				.getCellObservableValue(tblView.getSelectionModel()
+					.getSelectedIndex());
+			
+			if(p instanceof IntegerProperty || p instanceof DoubleProperty || p instanceof FloatProperty)
+			{
+				txt.textProperty().bindBidirectional(
+					p, new NumberStringConverter());
+			}
+			else if(p instanceof StringProperty)
+			{
+				txt.textProperty().bindBidirectional(p);
+			}
 
 			GridPane.setRowIndex(lbl, i);
 			GridPane.setColumnIndex(lbl, 1);

@@ -11,12 +11,12 @@ import java.util.Objects;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.BorderPane;
 import de.coordz.data.CooProject;
 import de.coordz.data.base.*;
 import de.gui.CooDataChanged;
-import de.gui.comp.CooTextField;
+import de.gui.comp.*;
 import de.util.CooFileUtil;
 import de.util.log.CooLog;
 
@@ -33,7 +33,7 @@ public class CooProjectDataPnl extends BorderPane implements CooDataChanged
 	protected CooTextField txtSoftVersion;
 
 	@FXML
-	protected TableView<CooStation> tblStations;
+	protected CooTableView<CooStation> tblStations;
 
 	@FXML
 	protected ComboBox<CooStation> cbStation;
@@ -42,7 +42,7 @@ public class CooProjectDataPnl extends BorderPane implements CooDataChanged
 	@FXML
 	protected CooTextField txtGateMAC;
 	@FXML
-	protected TableView<CooLaser> tblLaser;
+	protected CooTableView<CooLaser> tblLaser;
 
 	public CooProjectDataPnl()
 	{
@@ -56,6 +56,8 @@ public class CooProjectDataPnl extends BorderPane implements CooDataChanged
 			CooLog.debug("Could not load FXML", e);
 		}
 
+		tblStations.setClazz(CooStation.class);
+		tblLaser.setClazz(CooLaser.class);
 	}
 
 	@Override
