@@ -16,7 +16,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import de.coordz.data.*;
 import de.gui.*;
-import de.gui.comp.CooCustomerTreeItem;
+import de.gui.comp.*;
 import de.gui.comp.CooCustomerTreeItem.CooProjectTreeItem;
 import de.util.*;
 import de.util.log.CooLog;
@@ -98,7 +98,7 @@ public class CooTreeViewPnl extends BorderPane
 			.getSelectedItem();
 
 		// If root is selected - add new customer
-		if(selItem == prjTreeView.getRoot())
+		if(Objects.nonNull(selItem) && selItem == prjTreeView.getRoot())
 		{
 			CooCustomer newCustomer = new CooCustomer();
 			newCustomer.nameProperty().set("Neuer Kunde");
@@ -126,7 +126,7 @@ public class CooTreeViewPnl extends BorderPane
 			.getSelectedItem();
 
 		// Save all projects and the customer
-		if(selItem == prjTreeView.getRoot())
+		if(Objects.nonNull(selItem) && selItem == prjTreeView.getRoot())
 		{
 			selItem.getChildren().filtered(treeItm -> treeItm instanceof
 				CooCustomerTreeItem).forEach(treeItm ->

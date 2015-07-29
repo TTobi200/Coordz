@@ -9,6 +9,7 @@ package de.coordz;
 import javafx.application.Platform;
 import de.coordz.data.db.*;
 import de.util.CooPreferencesUtil;
+import de.util.pref.CooSystemPreferences;
 
 public class CooSystem
 {
@@ -19,7 +20,7 @@ public class CooSystem
 	public static final int SERVER_ERROR = 0x10;
 	
 	private static CooDB systemDatabase = new CooDerbyDB(); 
-
+	
 	/**
 	 * Normal ending of this application
 	 */
@@ -36,6 +37,7 @@ public class CooSystem
 	public static void exit(int status)
 	{
 		CooPreferencesUtil.setCoordzRunning(false);
+		CooSystemPreferences.getSystemPreferences().save();
 		Platform.exit();
 		
 		if(status != NORMAL)

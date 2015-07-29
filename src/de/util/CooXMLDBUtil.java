@@ -11,6 +11,8 @@ import static de.util.CooXmlDomUtil.*;
 import java.io.File;
 import java.util.*;
 
+import javafx.beans.property.*;
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
@@ -21,8 +23,7 @@ import de.util.log.CooLog;
 
 public class CooXMLDBUtil
 {
-	/** {@link String} for the xml DB folder path */
-	public static final String XML_DB_ROOT = "./CoordzXML/";
+	protected static ObjectProperty<File> xmlDBFolder = new SimpleObjectProperty<File>();;
 
 	/** {@link String} for the xml root node */
 	public static final String XML_COORDZ_DATA_ROOT = "CoordzData";
@@ -43,8 +44,11 @@ public class CooXMLDBUtil
 	 */
 	public static void saveProject(CooCustomer customer, CooProject project)
 	{
-		File prjFile = new File(XML_DB_ROOT + customer.nameProperty().get() +
-								"/" + project.nameProperty().get()
+		File prjFile = new File(xmlDBFolder.get().getAbsolutePath()
+								+ File.separator
+								+ customer.nameProperty().get()
+								+ File.separator
+								+ project.nameProperty().get()
 								+ DATA_FILE_EXT);
 		File customerFold = prjFile.getParentFile();
 
@@ -67,9 +71,11 @@ public class CooXMLDBUtil
 	 */
 	public static void saveCustomer(CooCustomer customer)
 	{
-		File customerFile = new File(XML_DB_ROOT
-										+ customer.nameProperty().get() +
-										"/" + CUSTOMER_FILE);
+		File customerFile = new File(xmlDBFolder.get().getAbsolutePath()
+										+ File.separator
+										+ customer.nameProperty().get()
+										+ File.separator
+										+ CUSTOMER_FILE);
 		customerFile.getParentFile().mkdirs();
 
 		saveData(customer, customerFile);
@@ -99,15 +105,6 @@ public class CooXMLDBUtil
 	}
 
 	/**
-	 * Method to parse all {@link CooCustomer}.
-	 * @return {@link List} with all {@link CooCustomer}
-	 */
-	public static List<CooCustomer> getAllCustomers()
-	{
-		return getAllCustomers((new File(XML_DB_ROOT)));
-	}
-
-	/**
 	 * Method to parse all {@link CooCustomer} from given xml-Databse.
 	 * @param xmlDB = the xml-Database folder
 	 * @return {@link List} with all {@link CooCustomer}
@@ -116,76 +113,88 @@ public class CooXMLDBUtil
 	{
 		List<CooCustomer> customers = new ArrayList<CooCustomer>();
 
-		Arrays.asList(xmlDB.listFiles()).forEach(f ->
+		if(Objects.nonNull(xmlDB) && xmlDB.exists() && xmlDB.isDirectory())
 		{
-			// Found customer directory
-			if(f.isDirectory())
+			xmlDBFolder.set(xmlDB);
+
+			Arrays.asList(xmlDB.listFiles()).forEach(f ->
 			{
-				File customerXml = new File(f, CUSTOMER_FILE);
-				CooCustomer customer = new CooCustomer();
-				customers.add(customer);
+				// Found customer directory
+				if(f.isDirectory())
+				{
+					File customerXml = new File(f, CUSTOMER_FILE);
+					CooCustomer customer = new CooCustomer();
+					customers.add(customer);
 
-				try
-				{
-					Element customerRot = getDocumentBuilder().parse(
-						customerXml)
-						.getDocumentElement();
-					customer.fromXML(getSingleElement(customerRot,
-						XML_CUSTOMER_ROOT));
-				}
-				catch(Exception e)
-				{
-					CooLog.error("Could not load customer", e);
-				}
-
-				Arrays.asList(f.listFiles()).forEach(p ->
-				{
-					if(!p.getName().equals(customerXml.getName()))
+					try
 					{
-						CooProject project = new CooProject();
-
-						try
-						{
-							Element root = getDocumentBuilder().parse(p)
-								.getDocumentElement();
-							project.fromXML(getSingleElement(root,
-								XML_PROJECT_ROOT));
-
-							customer.addProject(project);
-						}
-						catch(Exception e)
-						{
-							CooLog.error("Could not load project", e);
-						}
+						Element customerRot = getDocumentBuilder().parse(
+							customerXml)
+							.getDocumentElement();
+						customer.fromXML(getSingleElement(customerRot,
+							XML_CUSTOMER_ROOT));
 					}
-				});
-			}
-		});
+					catch(Exception e)
+					{
+						CooLog.error("Could not load customer", e);
+					}
+
+					Arrays.asList(f.listFiles()).forEach(p ->
+					{
+						if(!p.getName().equals(customerXml.getName()))
+						{
+							CooProject project = new CooProject();
+
+							try
+							{
+								Element root = getDocumentBuilder().parse(p)
+									.getDocumentElement();
+								project.fromXML(getSingleElement(root,
+									XML_PROJECT_ROOT));
+
+								customer.addProject(project);
+							}
+							catch(Exception e)
+							{
+								CooLog.error("Could not load project", e);
+							}
+						}
+					});
+				}
+			});
+		}
 
 		return customers;
 	}
-	
+
 	public static void deleteCustomer(CooCustomer customer)
 	{
-		File customerFolder = new File(XML_DB_ROOT
-			+ customer.nameProperty().get() + "/");
-		
+		File customerFolder = new File(xmlDBFolder.get().getAbsolutePath()
+										+ File.separator
+										+ customer.nameProperty().get() 
+										+ File.separator);
+
 		Arrays.asList(customerFolder.listFiles()).forEach(
-			f -> {f.delete();});
+			f -> {
+				f.delete();
+			});
 		customerFolder.delete();
-		
+
 		CooLog.debug("Delete Customer: " + customerFolder.getAbsolutePath());
 	}
 
 	public static void deleteProject(CooCustomer customer, CooProject project)
 	{
 		customer.getProjects().remove(project);
-		File prjFile = new File(XML_DB_ROOT + customer.nameProperty().get() +
-								"/" + project.nameProperty().get()
+		File prjFile = new File(xmlDBFolder.get().getAbsolutePath()
+								+ File.separator
+								+ customer.nameProperty().get()
+								+ File.separator
+								+ project.nameProperty().get()
 								+ DATA_FILE_EXT);
-		
+
 		prjFile.delete();
-		
+
 		CooLog.debug("Delete Project: " + prjFile.getAbsolutePath());
 	}
 }

@@ -6,7 +6,7 @@
  */
 package de.gui;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.*;
 
@@ -21,6 +21,7 @@ import de.gui.comp.CooCustomerTreeItem;
 import de.gui.pnl.*;
 import de.util.*;
 import de.util.log.CooLog;
+import de.util.pref.CooSystemPreferences;
 
 public class CooController implements Initializable
 {
@@ -85,31 +86,74 @@ public class CooController implements Initializable
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
 	{
-		loadTestProjects();
 		treeViewPnl.addDataChangedListener(coreDataPnl);
 		treeViewPnl.addDataChangedListener(projectDataPnl);
 		treeViewPnl.addDataChangedListener(measurementsPnl);
 		
 		CooTabPaneDetacherUtil.create().makeTabsDetachable(tabPane);
+		
+		File lastOpened = new File(CooSystemPreferences.getSystemPreferences().getString(
+			CooSystemPreferences.GENERAL_LAST_OPENED));
+		if(Objects.nonNull(lastOpened) && lastOpened.exists())
+		{
+			openXMLDB(lastOpened);
+		}
+	}
+	
+	@FXML
+	protected void newXMLDB()
+	{
+		File newDBFolder = CooDialogs.showOpenFolderDialog(primaryStage,
+			"Neue Coordz DB");
+		
+		if(Objects.nonNull(newDBFolder))
+		{
+			openXMLDB(newDBFolder);
+		}
 	}
 
-	private void loadTestProjects()
+	@FXML
+	protected void openXMLDB()
 	{
-		// Create Tree Root
-		CooCustomerTreeItem root = new CooCustomerTreeItem(
-			new SimpleStringProperty("Kunden"), new CooCustomer());
-		// Load all customers from xml DB
-		List<CooCustomer> customers = CooXMLDBUtil.getAllCustomers();
-
-		// Add Customers to Tree Root
-		customers.forEach(c ->
+		openXMLDB(null);
+	}
+	
+	@FXML
+	protected void exit()
+	{
+		CooSystem.exit();
+	}
+	
+	protected void openXMLDB(File xmlDBFolder)
+	{
+		if(Objects.isNull(xmlDBFolder))
 		{
-			CooCustomerTreeItem customer = new CooCustomerTreeItem(
-				c.nameProperty(), c);
-			root.getChildren().add(customer);
-		});
-
-		treeViewPnl.getPrjTreeView().setRoot(root);
-		root.setExpanded(true);
+			xmlDBFolder = CooDialogs.showOpenFolderDialog(primaryStage, 
+				"Datenbank öffnen");
+		}
+		
+		if(Objects.nonNull(xmlDBFolder))
+		{
+			// Create Tree Root
+			CooCustomerTreeItem root = new CooCustomerTreeItem(
+				new SimpleStringProperty("Kunden"), new CooCustomer());
+			// Load all customers from xml DB
+			List<CooCustomer> customers = CooXMLDBUtil.getAllCustomers(
+				xmlDBFolder);
+			
+			// Add Customers to Tree Root
+			customers.forEach(c ->
+			{
+				CooCustomerTreeItem customer = new CooCustomerTreeItem(
+					c.nameProperty(), c);
+				root.getChildren().add(customer);
+			});
+			
+			treeViewPnl.getPrjTreeView().setRoot(root);
+			root.setExpanded(true);
+			CooSystemPreferences.getSystemPreferences()
+				.getStringProperty(CooSystemPreferences.GENERAL_LAST_OPENED)
+				.setValue(xmlDBFolder.getAbsolutePath());
+		}
 	}
 }

@@ -6,6 +6,7 @@
  */
 package de.gui;
 
+import java.io.File;
 import java.util.*;
 
 import javafx.beans.property.*;
@@ -13,7 +14,7 @@ import javafx.collections.*;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Window;
+import javafx.stage.*;
 import javafx.util.converter.NumberStringConverter;
 import de.util.CooGuiUtil;
 
@@ -124,5 +125,12 @@ public class CooDialogs
 		dlg.showAndWait();
 
 		return choices.get(dlg.getResult());
+	}
+	
+	public static File showOpenFolderDialog(Stage parent, String title)
+	{
+		DirectoryChooser dlg = new DirectoryChooser();
+		dlg.setTitle(title);
+		return dlg.showDialog(parent);
 	}
 }

@@ -27,7 +27,7 @@
 			<menus>
 				<Menu mnemonicParsing="false" text="Datei">
 					<items>
-						<MenuItem mnemonicParsing="false" text="Neu">
+						<MenuItem mnemonicParsing="false" text="Neu" onAction="#newXMLDB">
 							<graphic>
 								<ImageView pickOnBounds="true" preserveRatio="true">
 									<image>
@@ -36,7 +36,7 @@
 								</ImageView>
 							</graphic>
 						</MenuItem>
-						<MenuItem mnemonicParsing="false" text="Öffnen">
+						<MenuItem mnemonicParsing="false" text="Öffnen" onAction="#openXMLDB">
 							<graphic>
 								<ImageView pickOnBounds="true" preserveRatio="true">
 									<image>
@@ -45,7 +45,7 @@
 								</ImageView>
 							</graphic>
 						</MenuItem>
-						<MenuItem mnemonicParsing="false" text="Beenden">
+						<MenuItem mnemonicParsing="false" text="Beenden" onAction="#exit">
 							<graphic>
 								<ImageView pickOnBounds="true" preserveRatio="true">
 									<image>
