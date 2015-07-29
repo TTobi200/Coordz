@@ -10,12 +10,15 @@ import java.util.*;
 
 import javafx.beans.property.*;
 import javafx.scene.*;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Transform;
 import javafx.stage.Stage;
+
+import com.sun.glass.ui.*;
 
 public class CooTabPaneDetacherUtil
 {
@@ -151,8 +154,9 @@ public class CooTabPaneDetacherUtil
 		stage.setAlwaysOnTop(isAlwaysOnTop());
 		stage.getIcons().add(CooFileUtil.
 			getResourceIcon("Logo.png"));
-		// stage.setX(p.getX());
-		// stage.setY(p.getY());
+		Robot r = Application.GetApplication().createRobot();
+		stage.setX(r.getMouseX());
+		stage.setY(r.getMouseY());
 		stage.setOnCloseRequest(t -> 
 		{
 			stage.close();
