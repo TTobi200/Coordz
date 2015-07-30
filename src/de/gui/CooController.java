@@ -141,6 +141,9 @@ public class CooController implements Initializable
 			List<CooCustomer> customers = CooXMLDBUtil.getAllCustomers(
 				xmlDBFolder);
 			
+//			// FORTEST Save customer as pdf
+//			customers.forEach(c -> CooPdfUtil.crePdfDoc(c));
+			
 			// Add Customers to Tree Root
 			customers.forEach(c ->
 			{
