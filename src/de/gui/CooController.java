@@ -17,6 +17,8 @@ import javafx.scene.control.*;
 import javafx.stage.*;
 import de.coordz.CooSystem;
 import de.coordz.data.CooCustomer;
+import de.coordz.doc.CooDocument.Content;
+import de.coordz.doc.*;
 import de.gui.comp.CooCustomerTreeItem;
 import de.gui.pnl.*;
 import de.util.*;
@@ -142,7 +144,12 @@ public class CooController implements Initializable
 				xmlDBFolder);
 			
 //			// FORTEST Save customer as pdf
-//			customers.forEach(c -> CooPdfUtil.crePdfDoc(c));
+			CooPdfDocument pdf = new CooPdfDocument(customers.get(1));
+			pdf.addContent(
+				Content.CUSTOMER,
+				Content.CONTACTS);
+			
+			pdf.save(new File("./" + customers.get(1).nameProperty().get() + ".pdf"));
 			
 			// Add Customers to Tree Root
 			customers.forEach(c ->
