@@ -8,11 +8,14 @@ package de.util;
 
 import static de.util.CooXmlDomUtil.*;
 
-import java.io.File;
+import java.io.*;
 import java.util.*;
 
 import javafx.beans.property.*;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
 
+import javax.imageio.ImageIO;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
@@ -36,6 +39,11 @@ public class CooXMLDBUtil
 	public static final String DATA_FILE_EXT = ".coordz";
 	/** {@link String} for the xml DB customer file (always the same) */
 	public static final String CUSTOMER_FILE = "customer" + DATA_FILE_EXT;
+
+	/** {@link String} for the ustomer logo file (always the same) */
+	public static final String CUSTOMER_LOGO = "Logo.png";
+	/** {@link String} for the  customer logo picture type (always png)*/
+	public static final String CUSTOMER_LOGO_PIC_TYPE = "png";
 
 	/**
 	 * Method to save {@link CooProject} from given {@link CooCustomer}.
@@ -78,7 +86,26 @@ public class CooXMLDBUtil
 										+ CUSTOMER_FILE);
 		customerFile.getParentFile().mkdirs();
 
+		File customerLogo = new File(xmlDBFolder.get().getAbsolutePath()
+										+ File.separator
+										+ customer.nameProperty().get()
+										+ File.separator
+										+ CUSTOMER_LOGO);
+		
+		System.out.println(customerLogo.getAbsolutePath());
+
 		saveData(customer, customerFile);
+		try
+		{
+			ImageIO.write(
+				SwingFXUtils.fromFXImage(customer.logoProprty().get(), null),
+				CUSTOMER_LOGO_PIC_TYPE, customerLogo);
+		}
+		catch(IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		CooLog.debug("Save Customer: " + customerFile.getAbsolutePath());
 	}
 
@@ -123,8 +150,23 @@ public class CooXMLDBUtil
 				if(f.isDirectory())
 				{
 					File customerXml = new File(f, CUSTOMER_FILE);
+					File customerLogo = new File(f, CUSTOMER_LOGO);
 					CooCustomer customer = new CooCustomer();
 					customers.add(customer);
+
+					if(customerLogo.exists())
+					{
+						try
+						{
+							customer.logoProprty().set(
+								new Image(String.valueOf(
+									customerLogo.toURI().toURL())));
+						}
+						catch(Exception e)
+						{
+							CooLog.error("Could not load customer logo", e);
+						}
+					}
 
 					try
 					{
@@ -141,7 +183,10 @@ public class CooXMLDBUtil
 
 					Arrays.asList(f.listFiles()).forEach(p ->
 					{
-						if(!p.getName().equals(customerXml.getName()))
+						String pFileName = p.getName();
+
+						if(!pFileName.equals(CUSTOMER_FILE) &&
+							pFileName.endsWith(DATA_FILE_EXT))
 						{
 							CooProject project = new CooProject();
 
@@ -171,7 +216,7 @@ public class CooXMLDBUtil
 	{
 		File customerFolder = new File(xmlDBFolder.get().getAbsolutePath()
 										+ File.separator
-										+ customer.nameProperty().get() 
+										+ customer.nameProperty().get()
 										+ File.separator);
 
 		Arrays.asList(customerFolder.listFiles()).forEach(

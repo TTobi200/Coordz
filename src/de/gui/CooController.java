@@ -17,8 +17,6 @@ import javafx.scene.control.*;
 import javafx.stage.*;
 import de.coordz.CooSystem;
 import de.coordz.data.CooCustomer;
-import de.coordz.doc.CooDocument.Content;
-import de.coordz.doc.*;
 import de.gui.comp.CooCustomerTreeItem;
 import de.gui.pnl.*;
 import de.util.*;
@@ -142,30 +140,6 @@ public class CooController implements Initializable
 			// Load all customers from xml DB
 			List<CooCustomer> customers = CooXMLDBUtil.getAllCustomers(
 				xmlDBFolder);
-			
-//			// FORTEST Save customer as pdf
-			CooPdfDocument pdf = new CooPdfDocument(customers.get(1), customers.get(1).getProjects().get(1));
-			pdf.addContent(
-				// Add Customer Details
-				Content.CUSTOMER,
-				Content.CONTACTS,
-				Content.PALETS,
-				// Add Project Details
-				Content.PROJECT,
-				Content.LAP_SOFTWARE,
-					// Add Station Details
-					Content.STATIONS,
-					Content.GATEWAY,
-						// Add Measurement Details
-						Content.MEASUREMENTS,
-						Content.RETICLES,
-						Content.TARGETS,
-						//Add Verify Measurement Details
-						Content.VERIFY_MEASUREMENT,
-						Content.SPECIFICATION,
-						Content.RESULT);
-			
-			pdf.save(new File("./" + customers.get(1).nameProperty().get() + ".pdf"));
 			
 			// Add Customers to Tree Root
 			customers.forEach(c ->

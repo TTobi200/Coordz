@@ -30,7 +30,7 @@
 <fx:root type="BorderPane" xmlns="http://javafx.com/javafx/8"
 	xmlns:fx="http://javafx.com/fxml/1">
 	<center>
-		<TreeView  fx:id="prjTreeView" />
+		<TreeView fx:id="prjTreeView" />
 	</center>
 	<bottom>
 		<ToolBar nodeOrientation="RIGHT_TO_LEFT">
@@ -40,6 +40,15 @@
 						<ImageView pickOnBounds="true" preserveRatio="true">
 							<image>
 								<Image url="@/include/icons/delete.png" />
+							</image>
+						</ImageView>
+					</graphic>
+				</Button>
+				<Button fx:id="btnExport"  disable="true" onAction="#export">
+					<graphic>
+						<ImageView pickOnBounds="true" preserveRatio="true">
+							<image>
+								<Image url="@/include/icons/export.png" />
 							</image>
 						</ImageView>
 					</graphic>

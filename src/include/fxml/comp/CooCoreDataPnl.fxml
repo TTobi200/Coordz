@@ -27,6 +27,9 @@
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import de.gui.comp.CooTextField?>
 <?import de.gui.comp.CooTableView?>
+<?import javafx.scene.layout.Border?>
+<?import de.gui.comp.CooBorderedTitledPane?>
+<?import de.gui.comp.CooImageView?>
 
 <fx:root type="BorderPane" xmlns="http://javafx.com/javafx/8"
 	xmlns:fx="http://javafx.com/fxml/1">
@@ -35,27 +38,39 @@
 			<children>
 				<TitledPane text="Kunde">
 					<content>
-						<GridPane vgap="5" hgap="5">
-							<columnConstraints>
-								<ColumnConstraints hgrow="NEVER" />
-								<ColumnConstraints hgrow="ALWAYS" />
-							</columnConstraints>
-							<rowConstraints>
-							</rowConstraints>
-							<children>
-								<Label text="Firma" />
-								<Label text="Straße" GridPane.rowIndex="1" />
-								<Label text="PLZ" GridPane.rowIndex="2" />
-								<Label text="Ort" GridPane.rowIndex="3" />
-								<CooTextField fx:id="txtCustomer" GridPane.columnIndex="1" />
-								<CooTextField fx:id="txtStreet" GridPane.columnIndex="1"
-									GridPane.rowIndex="1" />
-								<CooTextField fx:id="txtPLZ" GridPane.columnIndex="1"
-									GridPane.rowIndex="2" />
-								<CooTextField fx:id="txtLocation" GridPane.columnIndex="1"
-									GridPane.rowIndex="3" />
-							</children>
-						</GridPane>
+						<BorderPane>
+							<center>
+								<GridPane vgap="5" hgap="5">
+									<columnConstraints>
+										<ColumnConstraints hgrow="NEVER" />
+										<ColumnConstraints hgrow="ALWAYS" />
+									</columnConstraints>
+									<rowConstraints>
+									</rowConstraints>
+									<children>
+										<Label text="Firma" />
+										<Label text="Straße" GridPane.rowIndex="1" />
+										<Label text="PLZ" GridPane.rowIndex="2" />
+										<Label text="Ort" GridPane.rowIndex="3" />
+										<CooTextField fx:id="txtCustomer"
+											GridPane.columnIndex="1" />
+										<CooTextField fx:id="txtStreet"
+											GridPane.columnIndex="1" GridPane.rowIndex="1" />
+										<CooTextField fx:id="txtPLZ"
+											GridPane.columnIndex="1" GridPane.rowIndex="2" />
+										<CooTextField fx:id="txtLocation"
+											GridPane.columnIndex="1" GridPane.rowIndex="3" />
+									</children>
+								</GridPane>
+							</center>
+							<right>
+								<CooBorderedTitledPane title="Logo" onMouseClicked="#changeLogo">
+									<content>
+										<CooImageView fx:id="imgViewLogo" fitHeight="100.0" fitWidth="150.0" />
+									</content>
+								</CooBorderedTitledPane>
+							</right>
+						</BorderPane>
 					</content>
 				</TitledPane>
 				<TitledPane text="Kontakte">

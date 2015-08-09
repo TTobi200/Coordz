@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import de.coordz.data.*;
+import de.coordz.doc.CooPdfDocument;
 import de.gui.*;
 import de.gui.comp.*;
 import de.gui.comp.CooCustomerTreeItem.CooProjectTreeItem;
@@ -27,6 +28,8 @@ public class CooTreeViewPnl extends BorderPane
 
 	@FXML
 	protected Button btnAdd;
+	@FXML
+	protected Button btnExport;
 
 	@FXML
 	protected TreeView<String> prjTreeView;
@@ -87,6 +90,9 @@ public class CooTreeViewPnl extends BorderPane
 						components.forEach(c -> c.projectChanged(
 							new CooProject()));
 					}
+
+					btnExport.setDisable(selectedItem == prjTreeView.getRoot()
+								|| !(selectedItem instanceof CooCustomerTreeItem));
 				}
 			});
 	}
@@ -179,26 +185,42 @@ public class CooTreeViewPnl extends BorderPane
 				if(selItem instanceof CooProjectTreeItem)
 				{
 					CooCustomer customer = ((CooCustomerTreeItem)selItem.getParent())
-									.customerProperty()
-									.get();
+						.customerProperty()
+						.get();
 					CooProject project = ((CooProjectTreeItem)selItem)
-									.projectProperty().get();
-					
-					
+						.projectProperty().get();
+
 					CooXMLDBUtil.deleteProject(customer, project);
 				}
 				else if(selItem instanceof CooCustomerTreeItem)
 				{
 					CooCustomer customer = ((CooCustomerTreeItem)selItem)
-									.customerProperty().get();
-					
+						.customerProperty().get();
+
 					CooXMLDBUtil.deleteCustomer(customer);
 				}
-				
+
 				// Remove the selected item
 				selItem.getParent().getChildren().remove(
 					selItem);
 			}
+		}
+	}
+
+	@FXML
+	public void export()
+	{
+		TreeItem<String> selItem = prjTreeView.getSelectionModel()
+			.getSelectedItem();
+
+		if(selItem != prjTreeView.getRoot()
+			&& selItem instanceof CooCustomerTreeItem)
+		{
+			CooCustomer customer = ((CooCustomerTreeItem)selItem)
+				.customerProperty().get();
+
+			CooDialogs.showToDocDialog(getScene().getWindow(), customer,
+				new CooPdfDocument());
 		}
 	}
 

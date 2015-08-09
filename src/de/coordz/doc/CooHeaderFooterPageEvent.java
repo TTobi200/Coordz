@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 
-public class HeaderFooterPageEvent extends PdfPageEventHelper
+public class CooHeaderFooterPageEvent extends PdfPageEventHelper
 {
 	@Override
 	public void onStartPage(PdfWriter writer, Document document)

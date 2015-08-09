@@ -13,10 +13,17 @@ import javafx.beans.property.*;
 import javafx.collections.*;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
 import javafx.stage.*;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.converter.NumberStringConverter;
-import de.util.CooGuiUtil;
+
+import org.controlsfx.control.*;
+
+import de.coordz.data.*;
+import de.coordz.doc.*;
+import de.coordz.doc.CooDocument.Content;
+import de.util.*;
 
 public class CooDialogs
 {
@@ -78,11 +85,13 @@ public class CooDialogs
 			TextField txt = new TextField();
 			txt.setMinWidth(280);
 
-			Property p = (Property)((TableColumn<?, ?>)tblView.getColumns().get(i))
+			Property p = (Property)((TableColumn<?, ?>)tblView.getColumns()
+				.get(i))
 				.getCellObservableValue(tblView.getSelectionModel()
 					.getSelectedIndex());
-			
-			if(p instanceof IntegerProperty || p instanceof DoubleProperty || p instanceof FloatProperty)
+
+			if(p instanceof IntegerProperty || p instanceof DoubleProperty
+				|| p instanceof FloatProperty)
 			{
 				txt.textProperty().bindBidirectional(
 					p, new NumberStringConverter());
@@ -126,11 +135,113 @@ public class CooDialogs
 
 		return choices.get(dlg.getResult());
 	}
-	
+
 	public static File showOpenFolderDialog(Stage parent, String title)
 	{
 		DirectoryChooser dlg = new DirectoryChooser();
 		dlg.setTitle(title);
 		return dlg.showDialog(parent);
+	}
+
+	public static File showOpenImageDialog(Window parent, String title)
+	{
+		FileChooser dlg = new FileChooser();
+		dlg.setTitle(title);
+		dlg.getExtensionFilters().add(new FileChooser.ExtensionFilter(
+			"Bilddateien", "*." + CooXMLDBUtil.CUSTOMER_LOGO_PIC_TYPE));
+
+		return dlg.showOpenDialog(parent);
+	}
+
+	private static void showSaveFileDialog(Window parent, String title,
+					TextField txtOutFile, ExtensionFilter fileFilter)
+	{
+		FileChooser dlg = new FileChooser();
+		dlg.setTitle(title);
+		dlg.getExtensionFilters().add(fileFilter);
+
+		File file = dlg.showSaveDialog(parent);
+
+		txtOutFile.setText(Objects.nonNull(file) ? file
+			.getAbsolutePath() : "");
+	}
+
+	public static void showSaveFileDialog(Window parent, String title,
+					TextField txtOutFile)
+	{
+		showSaveFileDialog(parent, title, txtOutFile, null);
+	}
+
+	public static void showToDocDialog(Window owner, CooCustomer customer,
+					CooDocument... document)
+	{
+		CheckBoxTreeItem<Content> root = new CheckBoxTreeItem<Content>(
+			Content.CUSTOM.setName("Inhalt"));
+		CheckTreeView<Content> checkTreeView = new CheckTreeView<>(root);
+		BorderPane contentPane = new BorderPane();
+		ComboBox<CooDocument> documents = new ComboBox<CooDocument>();
+		CheckComboBox<CooProject> projects = new CheckComboBox<CooProject>();
+		TextField txtOutFile = new TextField();
+		Button btnBrowse = new Button("Browse");
+
+		btnBrowse.disableProperty().bind(
+			documents.getSelectionModel()
+				.selectedItemProperty().isNull());
+
+		Arrays.asList(CooDocument.Content.values())
+			.stream()
+			.filter(c -> !c.equals(root.getValue()))
+			.forEach(
+				c -> root.getChildren().add(
+					new CheckBoxTreeItem<CooDocument.Content>(c)));
+
+		btnBrowse.setOnAction(e ->
+		{
+			showSaveFileDialog(owner,
+				"Dokument erstellen", txtOutFile, documents.getSelectionModel()
+					.selectedItemProperty().get().getFileFilter());
+		});
+
+		documents.setPromptText("Ausgabeformat wählen...");
+		documents.getItems().addAll(document);
+		projects.getItems().addAll(customer.getProjects());
+		documents.setMaxWidth(Double.POSITIVE_INFINITY);
+		HBox.setHgrow(txtOutFile, Priority.ALWAYS);
+		txtOutFile.setDisable(true);
+		contentPane.setCenter(checkTreeView);
+		
+		contentPane.setBottom(new VBox(projects, documents, new HBox(
+			txtOutFile, btnBrowse)));
+		root.setExpanded(true);
+
+		Alert dlg = new Alert(AlertType.INFORMATION);
+		dlg.setTitle(CooMainFrame.TITLE);
+		CooGuiUtil.grayOutParent(owner,
+			dlg.showingProperty());
+		dlg.initOwner(owner);
+		dlg.setHeaderText("Dokument erstellen");
+		dlg.getDialogPane().setContent(contentPane);
+		checkTreeView.setMaxHeight(150);
+		checkTreeView.setMaxWidth(450);
+		dlg.showAndWait();
+
+		projects.maxWidthProperty().bind(documents.widthProperty());
+
+		CooDocument selItm = documents.getSelectionModel()
+			.selectedItemProperty()
+			.get();
+		ObservableList<CooProject> selPrj = projects.getCheckModel()
+			.getCheckedItems();
+
+		if(!selPrj.isEmpty() && Objects.nonNull(selItm)
+			&& !txtOutFile.getText().isEmpty())
+		{
+			CooPdfDocument pdf = new CooPdfDocument();
+			checkTreeView.getCheckModel().getCheckedItems()
+				.forEach(i -> pdf.addContent(i.getValue()));
+
+			pdf.save(new File(txtOutFile.getText()), customer,
+				selPrj.toArray(new CooProject[0]));
+		}
 	}
 }

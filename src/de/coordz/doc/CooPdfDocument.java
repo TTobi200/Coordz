@@ -10,25 +10,24 @@ import java.io.*;
 import java.util.*;
 
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
+import javafx.stage.*;
+import javafx.stage.FileChooser.ExtensionFilter;
+
+import javax.imageio.ImageIO;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 
 import de.coordz.data.*;
 import de.coordz.data.base.*;
+import de.util.CooXMLDBUtil;
 import de.util.log.CooLog;
 
 public class CooPdfDocument extends CooDocument
 {
 	protected int chapterIdx = 1;
-	protected CooCustomer customer;
-	protected CooProject project;
-
-	public CooPdfDocument(CooCustomer customer, CooProject project)
-	{
-		this.customer = customer;
-		this.project = project;
-	}
 
 	protected void addProject(Document doc, CooProject project)
 		throws DocumentException
@@ -36,9 +35,9 @@ public class CooPdfDocument extends CooDocument
 		addChapter(doc, "Projekt:" + project.nameProperty().get());
 		doc.add(new Paragraph("Name:" + project.nameProperty().get()));
 
-		for(int i = 0; i < getContent().size(); i++)
+		for(Content c : getContent())
 		{
-			switch(getContent().get(i))
+			switch(c)
 			{
 				case LAP_SOFTWARE:
 					addLAPSoftware(doc, project.lapSoftwareProperty().get());
@@ -58,10 +57,9 @@ public class CooPdfDocument extends CooDocument
 	{
 		addCaption(doc, "Stationen");
 
-		for(int i = 0; i < stations.size(); i++)
+		for(CooStation s : stations)
 		{
-			CooStation s = stations.get(i);
-			addSubCaption(doc, "Station");
+			addSubCaption(doc, "Station " + s.nameProperty().get());
 			addField(doc, "Name", s.nameProperty().get());
 			addField(doc, "Datei", s.fileProperty().get());
 			addField(doc, "X-Offset", String.valueOf(s.xOffsetProperty().get()));
@@ -74,6 +72,9 @@ public class CooPdfDocument extends CooDocument
 				{
 					case GATEWAY:
 						addGateway(doc, s.gatewayProperty().get());
+						break;
+					case TOTALSTATION:
+						addTotalStation(doc, s.totalStationProperty().get());
 						break;
 					case MEASUREMENTS:
 						addMeasurements(doc, s.getMeasurements());
@@ -98,9 +99,9 @@ public class CooPdfDocument extends CooDocument
 	{
 		addCaption(doc, "Bereichsaufteilung");
 
-		for(int i = 0; i < getContent().size(); i++)
+		for(Content c : getContent())
 		{
-			switch(getContent().get(i))
+			switch(c)
 			{
 				case LASER:
 					addLaser(doc, regionDividing.getLaser());
@@ -117,10 +118,9 @@ public class CooPdfDocument extends CooDocument
 	{
 		addCaption(doc, "Messungen");
 
-		for(int i = 0; i < measurements.size(); i++)
+		for(CooMeasurement m : measurements)
 		{
-			CooMeasurement m = measurements.get(i);
-			addSubCaption(doc, "Messung");
+			addSubCaption(doc, "Messung " + m.nameProperty().get());
 			addField(doc, "Name", m.nameProperty().get());
 			addField(doc, "Datum", String.valueOf(m.dateProperty().get()));
 			addField(doc, "Von", m.fromProperty().get());
@@ -150,9 +150,9 @@ public class CooPdfDocument extends CooDocument
 	{
 		addCaption(doc, "Kontroll Messung");
 
-		for(int j = 0; j < getContent().size(); j++)
+		for(Content c : getContent())
 		{
-			switch(getContent().get(j))
+			switch(c)
 			{
 				case RESULT:
 					addResut(doc, verifyMeasurement.getResult());
@@ -170,7 +170,7 @@ public class CooPdfDocument extends CooDocument
 					ObservableList<CooRectangle> specification)
 		throws DocumentException
 	{
-		addCaption(doc, "Vorgabe");
+		addSubCaption(doc, "Vorgabe");
 		PdfPTable table = addTable("Vorgabe",
 			"Name", "Länge", "Breite", "Höhe", "X", "Y", "Z", "D1", "D2");
 
@@ -194,7 +194,7 @@ public class CooPdfDocument extends CooDocument
 					ObservableList<CooRectangle> results)
 		throws DocumentException
 	{
-		addCaption(doc, "Ergebnis");
+		addSubCaption(doc, "Ergebnis");
 		PdfPTable table = addTable("Ergebnis",
 			"Name", "Länge", "Breite", "Höhe", "X", "Y", "Z", "D1", "D2");
 
@@ -218,7 +218,7 @@ public class CooPdfDocument extends CooDocument
 					ObservableList<CooReticle> reticles)
 		throws DocumentException
 	{
-		addCaption(doc, "Zielmarken");
+		addSubCaption(doc, "Zielmarken");
 		PdfPTable table = addTable("Zielmarken",
 			"Name", "X", "Y", "Z");
 
@@ -237,7 +237,7 @@ public class CooPdfDocument extends CooDocument
 					ObservableList<CooTarget> targets)
 		throws DocumentException
 	{
-		addCaption(doc, "Targets");
+		addSubCaption(doc, "Targets");
 		PdfPTable table = addTable("Targets",
 			"Name", "X", "Y", "Z");
 
@@ -301,7 +301,7 @@ public class CooPdfDocument extends CooDocument
 					ObservableList<CooLaser> laser)
 		throws DocumentException
 	{
-		addCaption(doc, "Laser");
+		addSubCaption(doc, "Laser");
 		PdfPTable table = addTable("Laser",
 			"Name", "MAC", "Seriennummer", "X", "Y", "Z", "Gesamtabweichung");
 
@@ -323,7 +323,7 @@ public class CooPdfDocument extends CooDocument
 					ObservableList<CooContact> contacts)
 		throws DocumentException
 	{
-		addCaption(doc, "Kontakte");
+		addSubCaption(doc, "Kontakte");
 		PdfPTable table = addTable("Kontakte",
 			"Vorname", "Nachname", "E-Mail", "Telefon");
 
@@ -342,7 +342,7 @@ public class CooPdfDocument extends CooDocument
 					ObservableList<CooPalet> palets)
 		throws DocumentException
 	{
-		addCaption(doc, "Paletten");
+		addSubCaption(doc, "Paletten");
 		PdfPTable table = addTable("Paletten", "Typ", "Länge", "Breite");
 
 		palets.forEach(c ->
@@ -409,19 +409,27 @@ public class CooPdfDocument extends CooDocument
 		return table;
 	}
 
-	private void addTitlePage(Document doc, CooCustomer customer)
+	protected void addTitlePage(Document doc, CooCustomer customer)
 		throws DocumentException
 	{
-		Image img = null;
-		try
+		Image customerLogo = customer.logoProprty().get();
+
+		if(Objects.nonNull(customerLogo))
 		{
-			// TODO store customer logo path in customer
-			img = Image.getInstance("CoordzXML/Mischek_Logo.png");
-			img.setAlignment(Element.ALIGN_CENTER);
-		}
-		catch(IOException e)
-		{
-			CooLog.error("Could not load customer logo", e);
+			try
+			{
+				customer.logoProprty().get();
+				ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+				ImageIO.write(SwingFXUtils.fromFXImage(customerLogo, null),
+					CooXMLDBUtil.CUSTOMER_LOGO_PIC_TYPE, byteOutput);
+				com.itextpdf.text.Image img = com.itextpdf.text.Image.getInstance(byteOutput.toByteArray());
+				img.setAlignment(Element.ALIGN_CENTER);
+				doc.add(img);
+			}
+			catch(IOException e)
+			{
+				CooLog.error("Could not load customer logo", e);
+			}
 		}
 
 		Font titleFont = FontFactory.getFont(
@@ -440,34 +448,33 @@ public class CooPdfDocument extends CooDocument
 							+ customer.locationProperty().get(), subTitleFont);
 		location.setAlignment(Element.ALIGN_CENTER);
 
-		doc.add(img);
 		doc.add(custName);
 		doc.add(street);
 		doc.add(location);
 	}
 
 	@Override
-	public void save(File file)
+	public void save(File file, CooCustomer customer, CooProject... projects)
 	{
 		try
 		{
 			Document doc = new Document(PageSize.A4, 20, 20, 50, 25);
 			OutputStream outStream = new FileOutputStream(file);
 			PdfWriter writer = PdfWriter.getInstance(doc, outStream);
-			HeaderFooterPageEvent event = new HeaderFooterPageEvent();
-			writer.setPageEvent(event);
 			doc.open();
-
-			addTitlePage(doc, customer);
 
 			if(Objects.nonNull(customer))
 			{
-				for(int i = 0; i < getContent().size(); i++)
+				for(Content c : getContent())
 				{
-					Content c = getContent().get(i);
-
 					switch(c)
 					{
+						case TITLE_PAGE:
+							addTitlePage(doc, customer);
+							break;
+						case HEADER_FOOTER:
+							writer.setPageEvent(new CooHeaderFooterPageEvent());
+							break;
 						case CONTACTS:
 							addContacts(doc, customer.getContacts());
 							break;
@@ -480,7 +487,10 @@ public class CooPdfDocument extends CooDocument
 							addPalets(doc, customer.getPalets());
 							break;
 						case PROJECT:
-							addProject(doc, project);
+							for(CooProject prj : projects)
+							{
+								addProject(doc, prj);
+							}
 							break;
 						default:
 							break;
@@ -495,5 +505,11 @@ public class CooPdfDocument extends CooDocument
 		{
 			CooLog.error("Error while saving document", e);
 		}
+	}
+
+	@Override
+	public ExtensionFilter getFileFilter()
+	{
+		return new FileChooser.ExtensionFilter("Adobe PDF", "*.pdf");
 	}
 }

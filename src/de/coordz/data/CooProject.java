@@ -109,4 +109,10 @@ public class CooProject extends CooData
 	{
 		return lapSoftware;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return name.get();
+	}
 }

@@ -12,6 +12,7 @@ import java.util.*;
 
 import javafx.beans.property.*;
 import javafx.collections.*;
+import javafx.scene.image.Image;
 
 import org.w3c.dom.*;
 
@@ -30,6 +31,9 @@ public class CooCustomer extends CooData
 	/** {@link StringProperty} for the customer location */
 	protected StringProperty location;
 	
+	/** {@link ObjectProperty} for the customer logo */
+	protected ObjectProperty<Image> logo;
+	
 	/** {@link List} with all customer {@link CooContact} */
 	protected ObservableList<CooContact> contacts;
 	/** {@link List} with all customer {@link CooPalet} */
@@ -45,6 +49,8 @@ public class CooCustomer extends CooData
 		street = new SimpleStringProperty();
 		plz = new SimpleStringProperty();
 		location = new SimpleStringProperty();
+		
+		logo = new SimpleObjectProperty<Image>();
 		
 		contacts = FXCollections.observableArrayList();
 		palets = FXCollections.observableArrayList();
@@ -178,5 +184,14 @@ public class CooCustomer extends CooData
 	public StringProperty locationProperty()
 	{
 		return location;
+	}
+	
+	/**
+	 * Method to access Property
+	 * @return {@link #logo}
+	 */
+	public ObjectProperty<Image> logoProprty()
+	{
+		return logo;
 	}
 }
