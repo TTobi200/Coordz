@@ -7,7 +7,7 @@
 package de.coordz.doc;
 
 import java.io.File;
-import java.util.Objects;
+import java.util.*;
 
 import javafx.collections.*;
 import javafx.stage.FileChooser;
@@ -58,6 +58,8 @@ public abstract class CooDocument
 	public abstract void save(File file, CooCustomer customer, CooProject... projects);
 	
 	public abstract FileChooser.ExtensionFilter getFileFilter();
+	
+	public abstract List<Content> getAvailableContent();
 
 	public CooDocument()
 	{

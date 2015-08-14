@@ -6,7 +6,7 @@
 	<classpathentry kind="lib" path="src/include/jar/derbyclient.jar"/>
 	<classpathentry kind="lib" path="src/include/jar/derbynet.jar"/>
 	<classpathentry kind="lib" path="src/include/jar/derbytools.jar"/>
-	<classpathentry kind="lib" path="src/include/jar/controlsfx-8.20.8.jar"/>
+	<classpathentry kind="lib" path="src/include/jar/controlsfx-8.20.8.jar" sourcepath="src/include/jar/controlsfx-controlsfx-2ab3fb50690f.zip"/>
 	<classpathentry kind="lib" path="src/include/jar/itextpdf-5.2.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

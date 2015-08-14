@@ -8,6 +8,7 @@ package de.coordz.doc;
 
 import java.io.*;
 import java.util.*;
+import java.util.List;
 
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -28,22 +29,29 @@ import de.util.log.CooLog;
 public class CooPdfDocument extends CooDocument
 {
 	protected int chapterIdx = 1;
+	protected CooHeaderFooterPageEvent pageEvent;
 
-	protected void addProject(Document doc, CooProject project)
+	protected void addCustomer(Document doc, CooCustomer customer)
 		throws DocumentException
 	{
-		addChapter(doc, "Projekt:" + project.nameProperty().get());
-		doc.add(new Paragraph("Name:" + project.nameProperty().get()));
+		Chapter chapter = addChapter(doc, "Kunde "
+					+ customer.nameProperty().get());
+
+		doc.add(new Paragraph("Name:" + customer.nameProperty().get()));
+		doc.add(new Paragraph("Adresse:" + customer.adressProperty().get()));
+		doc.add(new Paragraph("Straﬂe:" + customer.streetProperty().get()));
+		doc.add(new Paragraph("PLZ:" + customer.plzProperty().get()));
+		doc.add(new Paragraph("Ort:" + customer.locationProperty().get()));
 
 		for(Content c : getContent())
 		{
 			switch(c)
 			{
-				case LAP_SOFTWARE:
-					addLAPSoftware(doc, project.lapSoftwareProperty().get());
+				case CONTACTS:
+					addContacts(doc, chapter, customer.getContacts());
 					break;
-				case STATIONS:
-					addStations(doc, project.getStations());
+				case PALETS:
+					addPalets(doc, chapter, customer.getPalets());
 					break;
 				default:
 					break;
@@ -51,40 +59,77 @@ public class CooPdfDocument extends CooDocument
 		}
 	}
 
-	protected void addStations(Document doc,
+	protected void addProject(Document doc, CooProject project)
+		throws DocumentException
+	{
+		Chapter chapter = addChapter(doc, "Projekt "
+											+ project.nameProperty().get());
+		doc.add(new Paragraph("Name:" + project.nameProperty().get()));
+
+		for(Content c : getContent())
+		{
+			switch(c)
+			{
+				case LAP_SOFTWARE:
+					addLAPSoftware(doc, chapter, project.lapSoftwareProperty()
+						.get());
+					break;
+				case STATIONS:
+					addStations(doc, chapter, project.getStations());
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
+	protected void addStations(Document doc, Chapter chapter,
 					ObservableList<CooStation> stations)
 		throws DocumentException
 	{
-		addCaption(doc, "Stationen");
+		// Chapter chapter = addChapter(doc, "Stationen");
+		// Section section = addCaption(doc, chapter, "Stationen");
 
 		for(CooStation s : stations)
 		{
-			addSubCaption(doc, "Station " + s.nameProperty().get());
-			addField(doc, "Name", s.nameProperty().get());
-			addField(doc, "Datei", s.fileProperty().get());
-			addField(doc, "X-Offset", String.valueOf(s.xOffsetProperty().get()));
-			addField(doc, "Y-Offset", String.valueOf(s.yOffsetProperty().get()));
-			addField(doc, "Z-Offset", String.valueOf(s.zOffsetProperty().get()));
+			// addSubCaption(doc, "Station " + s.nameProperty().get());
+			Section sec = addCaption(doc, chapter, "Station "
+													+ s.nameProperty().get());
+			// Section sec = addSubCaption(doc, section, "Station " +
+			// s.nameProperty().get());
+
+			addField(doc, sec, "Name", s.nameProperty().get());
+			addField(doc, sec, "Datei", s.fileProperty().get());
+			addField(doc, sec, "X-Offset",
+				String.valueOf(s.xOffsetProperty().get()));
+			addField(doc, sec, "Y-Offset",
+				String.valueOf(s.yOffsetProperty().get()));
+			addField(doc, sec, "Z-Offset",
+				String.valueOf(s.zOffsetProperty().get()));
+			doc.add(sec);
 
 			for(int j = 0; j < getContent().size(); j++)
 			{
 				switch(getContent().get(j))
 				{
 					case GATEWAY:
-						addGateway(doc, s.gatewayProperty().get());
+						addGateway(doc, sec, s.gatewayProperty().get());
 						break;
 					case TOTALSTATION:
-						addTotalStation(doc, s.totalStationProperty().get());
-						break;
-					case MEASUREMENTS:
-						addMeasurements(doc, s.getMeasurements());
-						break;
-					case VERIFY_MEASUREMENT:
-						addVerifyMeasurement(doc, s.verifyMeasurementProperty()
+						addTotalStation(doc, sec, s.totalStationProperty()
 							.get());
 						break;
+					case MEASUREMENTS:
+						addMeasurements(doc, sec, s.getMeasurements());
+						break;
+					case VERIFY_MEASUREMENT:
+						addVerifyMeasurement(doc, sec,
+							s.verifyMeasurementProperty()
+								.get());
+						break;
 					case REGION_DIVIDING:
-						addRegionDividing(doc, s.regionDevidingProperty().get());
+						addRegionDividing(doc, sec,
+							s.regionDevidingProperty().get());
 						break;
 					default:
 						break;
@@ -93,11 +138,12 @@ public class CooPdfDocument extends CooDocument
 		}
 	}
 
-	protected void addRegionDividing(Document doc,
+	protected void addRegionDividing(Document doc, Section parent,
 					CooRegionDividing regionDividing)
 		throws DocumentException
 	{
-		addCaption(doc, "Bereichsaufteilung");
+		Section section = addSubCaption(doc, parent, "Bereichsaufteilung");
+		doc.add(section);
 
 		for(Content c : getContent())
 		{
@@ -112,20 +158,25 @@ public class CooPdfDocument extends CooDocument
 		}
 	}
 
-	protected void addMeasurements(Document doc,
+	protected void addMeasurements(Document doc, Section parent,
 					ObservableList<CooMeasurement> measurements)
 		throws DocumentException
 	{
-		addCaption(doc, "Messungen");
-
 		for(CooMeasurement m : measurements)
 		{
-			addSubCaption(doc, "Messung " + m.nameProperty().get());
-			addField(doc, "Name", m.nameProperty().get());
-			addField(doc, "Datum", String.valueOf(m.dateProperty().get()));
-			addField(doc, "Von", m.fromProperty().get());
-			addField(doc, "Bis", m.toProperty().get());
-			addField(doc, "Wetter", m.weatherProperty().get());
+			// addSubCaption(doc, "Messung " + m.nameProperty().get());
+			Section sec = addSubCaption(doc, parent, "Messung "
+														+ m.nameProperty()
+															.get());
+			// Section sec = addSubCaption(doc, section, "Messung " +
+			// m.nameProperty().get());
+
+			addField(doc, sec, "Name", m.nameProperty().get());
+			addField(doc, sec, "Datum", String.valueOf(m.dateProperty().get()));
+			addField(doc, sec, "Von", m.fromProperty().get());
+			addField(doc, sec, "Bis", m.toProperty().get());
+			addField(doc, sec, "Wetter", m.weatherProperty().get());
+			doc.add(sec);
 
 			for(int j = 0; j < getContent().size(); j++)
 			{
@@ -141,14 +192,16 @@ public class CooPdfDocument extends CooDocument
 						break;
 				}
 			}
+			
 		}
 	}
 
-	protected void addVerifyMeasurement(Document doc,
+	protected void addVerifyMeasurement(Document doc, Section parent,
 					CooVerifyMeasurement verifyMeasurement)
 		throws DocumentException
 	{
-		addCaption(doc, "Kontroll Messung");
+		Section section = addSubCaption(doc, parent, "Kontroll Messung");
+		doc.add(section);
 
 		for(Content c : getContent())
 		{
@@ -170,8 +223,8 @@ public class CooPdfDocument extends CooDocument
 					ObservableList<CooRectangle> specification)
 		throws DocumentException
 	{
-		addSubCaption(doc, "Vorgabe");
-		PdfPTable table = addTable("Vorgabe",
+		// addSubCaption(doc, "Vorgabe");
+		PdfPTable table = createTable("Vorgabe",
 			"Name", "L‰nge", "Breite", "Hˆhe", "X", "Y", "Z", "D1", "D2");
 
 		specification.forEach(s ->
@@ -187,15 +240,15 @@ public class CooPdfDocument extends CooDocument
 			table.addCell(String.valueOf(s.d2Property().get()));
 		});
 
-		doc.add(table);
+		addTable(doc, table, 90, 70, 70, 70, 40, 40, 40, 40, 40);
 	}
 
 	protected void addResut(Document doc,
 					ObservableList<CooRectangle> results)
 		throws DocumentException
 	{
-		addSubCaption(doc, "Ergebnis");
-		PdfPTable table = addTable("Ergebnis",
+		// addSubCaption(doc, "Ergebnis");
+		PdfPTable table = createTable("Ergebnis",
 			"Name", "L‰nge", "Breite", "Hˆhe", "X", "Y", "Z", "D1", "D2");
 
 		results.forEach(r ->
@@ -211,15 +264,15 @@ public class CooPdfDocument extends CooDocument
 			table.addCell(String.valueOf(r.d2Property().get()));
 		});
 
-		doc.add(table);
+		addTable(doc, table, 90, 70, 70, 70, 40, 40, 40, 40, 40);
 	}
 
 	protected void addReticles(Document doc,
 					ObservableList<CooReticle> reticles)
 		throws DocumentException
 	{
-		addSubCaption(doc, "Zielmarken");
-		PdfPTable table = addTable("Zielmarken",
+		// addSubCaption(doc, "Zielmarken");
+		PdfPTable table = createTable("Zielmarken",
 			"Name", "X", "Y", "Z");
 
 		reticles.forEach(r ->
@@ -229,16 +282,16 @@ public class CooPdfDocument extends CooDocument
 			table.addCell(String.valueOf(r.yProperty().get()));
 			table.addCell(String.valueOf(r.zProperty().get()));
 		});
-
-		doc.add(table);
+		
+		addTable(doc, table, 200, 100, 100, 100);
 	}
 
 	protected void addTargets(Document doc,
 					ObservableList<CooTarget> targets)
 		throws DocumentException
 	{
-		addSubCaption(doc, "Targets");
-		PdfPTable table = addTable("Targets",
+		// addSubCaption(doc, "Targets");
+		PdfPTable table = createTable("Targets",
 			"Name", "X", "Y", "Z");
 
 		targets.forEach(t ->
@@ -249,60 +302,57 @@ public class CooPdfDocument extends CooDocument
 			table.addCell(String.valueOf(t.zProperty().get()));
 		});
 
-		doc.add(table);
+		addTable(doc, table, 200, 100, 100, 100);
 	}
 
-	protected void addGateway(Document doc,
+	protected void addGateway(Document doc, Section parent,
 					CooGateway gateway)
 		throws DocumentException
 	{
-		addCaption(doc, "Gateway");
+		Section section = addSubCaption(doc, parent, "Gateway");
 
-		doc.add(new Paragraph("Ip:" + gateway.ipProperty().get()));
-		doc.add(new Paragraph("X:" + gateway.macProperty().get()));
+		section.add(new Paragraph("Ip:" + gateway.ipProperty().get()));
+		section.add(new Paragraph("MAC:" + gateway.macProperty().get()));
+
+		doc.add(section);
 	}
 
-	protected void addLAPSoftware(Document doc,
+	protected void addLAPSoftware(Document doc, Chapter chapter,
 					CooLAPSoftware lapSoftware)
 		throws DocumentException
 	{
-		addCaption(doc, "LAP-Software");
+		Section section = addCaption(doc, chapter, "LAP-Software");
 
-		doc.add(new Paragraph("Name:" + lapSoftware.nameProperty().get()));
-		doc.add(new Paragraph("Version:" + lapSoftware.versionProperty().get()));
+		section.add(new Paragraph("Name:" + lapSoftware.nameProperty().get()));
+		section.add(new Paragraph("Version:"
+									+ lapSoftware.versionProperty().get()));
+
+		doc.add(section);
 	}
 
-	protected void addTotalStation(Document doc,
+	protected void addTotalStation(Document doc, Section parent,
 					CooTotalstation totalStation)
 		throws DocumentException
 	{
-		addCaption(doc, "Totalstation");
+		Section section = addSubCaption(doc, parent, "Totalstation");
 
-		doc.add(new Paragraph("X:" + totalStation.xProperty().get()));
-		doc.add(new Paragraph("Y:" + totalStation.yProperty().get()));
-		doc.add(new Paragraph("Z:" + totalStation.zProperty().get()));
-		doc.add(new Paragraph("Delta-X:" + totalStation.deltaXProperty().get()));
-		doc.add(new Paragraph("Delta-Y:" + totalStation.deltaYProperty().get()));
-	}
+		section.add(new Paragraph("X:" + totalStation.xProperty().get()));
+		section.add(new Paragraph("Y:" + totalStation.yProperty().get()));
+		section.add(new Paragraph("Z:" + totalStation.zProperty().get()));
+		section.add(new Paragraph("Delta-X:"
+									+ totalStation.deltaXProperty().get()));
+		section.add(new Paragraph("Delta-Y:"
+									+ totalStation.deltaYProperty().get()));
 
-	protected void addCustomer(Document doc, CooCustomer customer)
-		throws DocumentException
-	{
-		addChapter(doc, "Kunde " + customer.nameProperty().get());
-
-		doc.add(new Paragraph("Name:" + customer.nameProperty().get()));
-		doc.add(new Paragraph("Adresse:" + customer.adressProperty().get()));
-		doc.add(new Paragraph("Straﬂe:" + customer.streetProperty().get()));
-		doc.add(new Paragraph("PLZ:" + customer.plzProperty().get()));
-		doc.add(new Paragraph("Ort:" + customer.locationProperty().get()));
+		doc.add(section);
 	}
 
 	protected void addLaser(Document doc,
 					ObservableList<CooLaser> laser)
 		throws DocumentException
 	{
-		addSubCaption(doc, "Laser");
-		PdfPTable table = addTable("Laser",
+		// addSubCaption(doc, "Laser");
+		PdfPTable table = createTable("Laser",
 			"Name", "MAC", "Seriennummer", "X", "Y", "Z", "Gesamtabweichung");
 
 		laser.forEach(l ->
@@ -316,15 +366,16 @@ public class CooPdfDocument extends CooDocument
 			table.addCell(String.valueOf(l.totalDeviationProperty().get()));
 		});
 
-		doc.add(table);
+        addTable(doc, table, new float[]{ 80, 80, 100, 40, 40, 40, 120 });
 	}
 
-	protected void addContacts(Document doc,
+	protected void addContacts(Document doc, Chapter chapter,
 					ObservableList<CooContact> contacts)
 		throws DocumentException
 	{
-		addSubCaption(doc, "Kontakte");
-		PdfPTable table = addTable("Kontakte",
+		Section section = addCaption(doc, chapter, "Kontakte");
+
+		PdfPTable table = createTable("Kontakte",
 			"Vorname", "Nachname", "E-Mail", "Telefon");
 
 		contacts.forEach(c ->
@@ -334,16 +385,17 @@ public class CooPdfDocument extends CooDocument
 			table.addCell(c.mailProperty().get());
 			table.addCell(c.phoneProperty().get());
 		});
-
-		doc.add(table);
+		
+		doc.add(section);
+		addTable(doc, table, 100, 100, 200, 100);
 	}
 
-	protected void addPalets(Document doc,
+	protected void addPalets(Document doc, Chapter chapter,
 					ObservableList<CooPalet> palets)
 		throws DocumentException
 	{
-		addSubCaption(doc, "Paletten");
-		PdfPTable table = addTable("Paletten", "Typ", "L‰nge", "Breite");
+		Section section = addCaption(doc, chapter, "Paletten");
+		PdfPTable table = createTable("Paletten", "Typ", "L‰nge", "Breite");
 
 		palets.forEach(c ->
 		{
@@ -352,25 +404,47 @@ public class CooPdfDocument extends CooDocument
 			table.addCell(String.valueOf(c.widthProperty().get()));
 		});
 
-		doc.add(table);
+		doc.add(section);
+		addTable(doc, table, 100, 200, 200);
 	}
 
-	protected void addField(Document doc, String string,
+	protected void addField(Document doc, Section section, String string,
 					String prop) throws DocumentException
 	{
 		Paragraph field = new Paragraph(string + ": " + prop,
 			FontFactory.getFont(
 				FontFactory.HELVETICA, 12));
-		doc.add(field);
+		section.add(field);
 	}
 
-	protected void addCaption(Document doc, String caption)
+	protected Section addCaption(Document doc, Chapter chapter, String caption)
 		throws DocumentException
 	{
 		Paragraph pCaption = new Paragraph(caption, FontFactory.getFont(
 			FontFactory.HELVETICA, 16, Font.BOLD, BaseColor.DARK_GRAY));
 
-		doc.add(pCaption);
+		Section section = chapter.addSection(pCaption);
+		// section.setBookmarkTitle(caption);
+		// section.setBookmarkOpen(false);
+		section.setIndentation(30);
+		section.setNumberStyle(Section.NUMBERSTYLE_DOTTED_WITHOUT_FINAL_DOT);
+
+		return section;
+	}
+
+	protected Section addSubCaption(Document doc, Section parent, String caption)
+		throws DocumentException
+	{
+		Paragraph pCaption = new Paragraph(caption, FontFactory.getFont(
+			FontFactory.HELVETICA, 14, Font.BOLD, BaseColor.LIGHT_GRAY));
+
+		Section section = parent.addSection(pCaption);
+		// section.setBookmarkTitle(caption);
+		section.setBookmarkOpen(false);
+		section.setIndentation(30);
+		section.setNumberStyle(Section.NUMBERSTYLE_DOTTED_WITHOUT_FINAL_DOT);
+
+		return section;
 	}
 
 	protected void addSubCaption(Document doc, String caption)
@@ -382,23 +456,28 @@ public class CooPdfDocument extends CooDocument
 		doc.add(pCaption);
 	}
 
-	protected void addChapter(Document doc, String chapter)
+	protected Chapter addChapter(Document doc, String chapter)
 		throws DocumentException
 	{
 		Paragraph pChapter = new Paragraph(chapter, FontFactory.getFont(
 			FontFactory.HELVETICA, 18, Font.BOLDITALIC, BaseColor.BLACK));
 		Chapter c = new Chapter(pChapter, chapterIdx++);
 
+		pageEvent.setHeader(chapter);
 		doc.add(c);
+
+		return c;
 	}
 
-	protected PdfPTable addTable(String name, String... columns)
+	protected PdfPTable createTable(String name, String... columns)
 		throws DocumentException
 	{
 		PdfPTable table = new PdfPTable(columns.length);
 		PdfPCell cell = new PdfPCell(new Phrase(name, FontFactory.getFont(
 			FontFactory.HELVETICA, 12, Font.ITALIC)));
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		// cell.setBorder(Rectangle.NO_BORDER);
+		cell.setGrayFill(0.9f);
 		cell.setColspan(columns.length);
 		table.addCell(cell);
 		table.setWidthPercentage(100);
@@ -407,6 +486,18 @@ public class CooPdfDocument extends CooDocument
 			FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD))));
 
 		return table;
+	}
+	
+	protected void addTable(Document doc, PdfPTable table, float... widths) throws DocumentException
+	{
+		if(Objects.nonNull(widths) && widths.length > 0)
+		{
+			table.setTotalWidth(widths);
+	        table.setLockedWidth(true);
+		}
+		
+		doc.add(new Paragraph(" "));
+		doc.add(table);		
 	}
 
 	protected void addTitlePage(Document doc, CooCustomer customer)
@@ -458,11 +549,21 @@ public class CooPdfDocument extends CooDocument
 	{
 		try
 		{
-			Document doc = new Document(PageSize.A4, 20, 20, 50, 25);
+			// Create document
+			Document doc = new Document(PageSize.A4, 40, 20, 63, 35);
 			OutputStream outStream = new FileOutputStream(file);
 			PdfWriter writer = PdfWriter.getInstance(doc, outStream);
-			doc.open();
 
+			// Add Header and footer
+			pageEvent = new CooHeaderFooterPageEvent(
+				getContent().contains(Content.TITLE_PAGE));
+			if(getContent().contains(Content.HEADER_FOOTER))
+			{
+				writer.setPageEvent(pageEvent);
+			}
+
+			// Open document and add necessary content
+			doc.open();
 			if(Objects.nonNull(customer))
 			{
 				for(Content c : getContent())
@@ -472,19 +573,10 @@ public class CooPdfDocument extends CooDocument
 						case TITLE_PAGE:
 							addTitlePage(doc, customer);
 							break;
-						case HEADER_FOOTER:
-							writer.setPageEvent(new CooHeaderFooterPageEvent());
-							break;
-						case CONTACTS:
-							addContacts(doc, customer.getContacts());
-							break;
 						case CUSTOMER:
 							addCustomer(doc, customer);
 							break;
 						case LAP_SOFTWARE:
-							break;
-						case PALETS:
-							addPalets(doc, customer.getPalets());
 							break;
 						case PROJECT:
 							for(CooProject prj : projects)
@@ -498,6 +590,7 @@ public class CooPdfDocument extends CooDocument
 				}
 			}
 
+			// Close the document
 			doc.close();
 			outStream.close();
 		}
@@ -505,6 +598,19 @@ public class CooPdfDocument extends CooDocument
 		{
 			CooLog.error("Error while saving document", e);
 		}
+	}
+
+	@Override
+	public List<Content> getAvailableContent()
+	{
+		return Arrays.asList(Content.CUSTOM, Content.TITLE_PAGE,
+			Content.HEADER_FOOTER, Content.CUSTOMER, Content.CONTACTS,
+			Content.PALETS, Content.PROJECT, Content.LAP_SOFTWARE,
+			Content.STATIONS, Content.TOTALSTATION, Content.REGION_DIVIDING,
+			Content.LASER, Content.MEASUREMENTS, Content.RETICLES,
+			Content.TARGETS,
+			Content.VERIFY_MEASUREMENT, Content.SPECIFICATION, Content.RESULT,
+			Content.GATEWAY);
 	}
 
 	@Override

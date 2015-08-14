@@ -84,17 +84,17 @@ public class CooTabPaneDetacherUtil
 		{
 			tapTransferMap.put(i, tabPane.getTabs().get(i));
 		}
-		tabPane.getTabs().stream().forEach(t -> 
+		tabPane.getTabs().stream().forEach(t ->
 		{
 			t.setClosable(false);
 		});
 		tabPane.setOnDragDetected(
-			(MouseEvent event) -> 
+			(MouseEvent event) ->
 			{
 				if(event.getSource() instanceof TabPane)
 				{
 					Pane rootPane = (Pane)tabPane.getScene().getRoot();
-					rootPane.setOnDragOver((DragEvent event1) -> 
+					rootPane.setOnDragOver((DragEvent event1) ->
 					{
 						event1.acceptTransferModes(TransferMode.ANY);
 						event1.consume();
@@ -113,7 +113,7 @@ public class CooTabPaneDetacherUtil
 				event.consume();
 			});
 		tabPane.setOnDragDone(
-			(DragEvent event) -> 
+			(DragEvent event) ->
 			{
 				openTabInStage(currentTab);
 				tabPane.setCursor(Cursor.DEFAULT);
@@ -142,7 +142,8 @@ public class CooTabPaneDetacherUtil
 		if(content == null)
 		{
 			throw new IllegalArgumentException("Can not detach Tab '"
-					+ tab.getText()	+ "': content is empty (null).");
+												+ tab.getText()
+												+ "': content is empty (null).");
 		}
 		tab.setContent(null);
 		final Scene scene = new Scene(content, content.getPrefWidth(),
@@ -150,6 +151,8 @@ public class CooTabPaneDetacherUtil
 		scene.getStylesheets().addAll(stylesheets);
 		Stage stage = new Stage();
 		stage.setScene(scene);
+		scene.getStylesheets().addAll(
+			tab.getTabPane().getScene().getStylesheets());
 		stage.setTitle(tab.getText());
 		stage.setAlwaysOnTop(isAlwaysOnTop());
 		stage.getIcons().add(CooFileUtil.
@@ -157,7 +160,7 @@ public class CooTabPaneDetacherUtil
 		Robot r = Application.GetApplication().createRobot();
 		stage.setX(r.getMouseX());
 		stage.setY(r.getMouseY());
-		stage.setOnCloseRequest(t -> 
+		stage.setOnCloseRequest(t ->
 		{
 			stage.close();
 			tab.setContent(content);
@@ -176,7 +179,7 @@ public class CooTabPaneDetacherUtil
 			}
 			tabPane.getSelectionModel().select(tab);
 		});
-		stage.setOnShown(t -> 
+		stage.setOnShown(t ->
 		{
 			tab.getTabPane().getTabs().remove(tab);
 		});

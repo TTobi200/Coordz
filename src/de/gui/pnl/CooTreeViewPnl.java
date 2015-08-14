@@ -29,6 +29,8 @@ public class CooTreeViewPnl extends BorderPane
 	@FXML
 	protected Button btnAdd;
 	@FXML
+	protected Button btnDelete;
+	@FXML
 	protected Button btnExport;
 
 	@FXML
@@ -93,6 +95,7 @@ public class CooTreeViewPnl extends BorderPane
 
 					btnExport.setDisable(selectedItem == prjTreeView.getRoot()
 								|| !(selectedItem instanceof CooCustomerTreeItem));
+					btnDelete.setDisable(selectedItem == prjTreeView.getRoot());
 				}
 			});
 	}

@@ -154,7 +154,7 @@ public class CooDialogs
 	}
 
 	private static void showSaveFileDialog(Window parent, String title,
-					TextField txtOutFile, ExtensionFilter fileFilter)
+					StringProperty strProp, ExtensionFilter fileFilter)
 	{
 		FileChooser dlg = new FileChooser();
 		dlg.setTitle(title);
@@ -162,14 +162,14 @@ public class CooDialogs
 
 		File file = dlg.showSaveDialog(parent);
 
-		txtOutFile.setText(Objects.nonNull(file) ? file
+		strProp.set(Objects.nonNull(file) ? file
 			.getAbsolutePath() : "");
 	}
 
 	public static void showSaveFileDialog(Window parent, String title,
-					TextField txtOutFile)
+					StringProperty strProp)
 	{
-		showSaveFileDialog(parent, title, txtOutFile, null);
+		showSaveFileDialog(parent, title, strProp, null);
 	}
 
 	public static void showToDocDialog(Window owner, CooCustomer customer,
@@ -178,39 +178,44 @@ public class CooDialogs
 		CheckBoxTreeItem<Content> root = new CheckBoxTreeItem<Content>(
 			Content.CUSTOM.setName("Inhalt"));
 		CheckTreeView<Content> checkTreeView = new CheckTreeView<>(root);
+		Button btnBrowse = new Button("Browse");
+		TextField txtOutFile = new TextField();
 		BorderPane contentPane = new BorderPane();
 		ComboBox<CooDocument> documents = new ComboBox<CooDocument>();
 		CheckComboBox<CooProject> projects = new CheckComboBox<CooProject>();
-		TextField txtOutFile = new TextField();
-		Button btnBrowse = new Button("Browse");
 
-		btnBrowse.disableProperty().bind(
-			documents.getSelectionModel()
-				.selectedItemProperty().isNull());
-
-		Arrays.asList(CooDocument.Content.values())
+		documents.getSelectionModel().selectedItemProperty().addListener((old, curr, newV) -> 
+		{
+			newV.getAvailableContent()
 			.stream()
 			.filter(c -> !c.equals(root.getValue()))
 			.forEach(
 				c -> root.getChildren().add(
 					new CheckBoxTreeItem<CooDocument.Content>(c)));
+		});
 
 		btnBrowse.setOnAction(e ->
 		{
 			showSaveFileDialog(owner,
-				"Dokument erstellen", txtOutFile, documents.getSelectionModel()
+				"Dokument erstellen", txtOutFile.textProperty(), documents.getSelectionModel()
 					.selectedItemProperty().get().getFileFilter());
 		});
 
+		btnBrowse.disableProperty().bind(
+			documents.getSelectionModel()
+			.selectedItemProperty().isNull());
+
 		documents.setPromptText("Ausgabeformat wählen...");
 		documents.getItems().addAll(document);
-		projects.getItems().addAll(customer.getProjects());
 		documents.setMaxWidth(Double.POSITIVE_INFINITY);
+		projects.getItems().addAll(customer.getProjects());
+		
 		HBox.setHgrow(txtOutFile, Priority.ALWAYS);
 		txtOutFile.setDisable(true);
+
 		contentPane.setCenter(checkTreeView);
-		
-		contentPane.setBottom(new VBox(projects, documents, new HBox(
+		contentPane.setTop(documents);
+		contentPane.setBottom(new VBox(projects, new HBox(
 			txtOutFile, btnBrowse)));
 		root.setExpanded(true);
 
@@ -219,13 +224,12 @@ public class CooDialogs
 		CooGuiUtil.grayOutParent(owner,
 			dlg.showingProperty());
 		dlg.initOwner(owner);
-		dlg.setHeaderText("Dokument erstellen");
+		dlg.setHeaderText("\"" + customer.nameProperty().get() 
+			+"\" exportieren");
 		dlg.getDialogPane().setContent(contentPane);
 		checkTreeView.setMaxHeight(150);
 		checkTreeView.setMaxWidth(450);
 		dlg.showAndWait();
-
-		projects.maxWidthProperty().bind(documents.widthProperty());
 
 		CooDocument selItm = documents.getSelectionModel()
 			.selectedItemProperty()

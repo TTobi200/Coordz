@@ -35,7 +35,10 @@
 	<bottom>
 		<ToolBar nodeOrientation="RIGHT_TO_LEFT">
 			<items>
-				<Button onAction="#delete">
+				<Button fx:id="btnDelete" onAction="#delete" disable="true">
+					<tooltip>
+						<Tooltip text="Datensatz löschen" />
+					</tooltip>
 					<graphic>
 						<ImageView pickOnBounds="true" preserveRatio="true">
 							<image>
@@ -44,7 +47,10 @@
 						</ImageView>
 					</graphic>
 				</Button>
-				<Button fx:id="btnExport"  disable="true" onAction="#export">
+				<Button fx:id="btnExport" disable="true" onAction="#export">
+					<tooltip>
+						<Tooltip text="Datensatz exportieren" />
+					</tooltip>
 					<graphic>
 						<ImageView pickOnBounds="true" preserveRatio="true">
 							<image>
@@ -54,6 +60,9 @@
 					</graphic>
 				</Button>
 				<Button onAction="#save">
+					<tooltip>
+						<Tooltip text="Datensatz speichern" />
+					</tooltip>
 					<graphic>
 						<ImageView pickOnBounds="true" preserveRatio="true">
 							<image>
@@ -63,6 +72,9 @@
 					</graphic>
 				</Button>
 				<Button fx:id="btnAdd" onAction="#add">
+					<tooltip>
+						<Tooltip text="Datensatz hinzufügen" />
+					</tooltip>
 					<graphic>
 						<ImageView pickOnBounds="true" preserveRatio="true">
 							<image>
