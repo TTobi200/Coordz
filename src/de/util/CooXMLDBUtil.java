@@ -92,21 +92,33 @@ public class CooXMLDBUtil
 										+ File.separator
 										+ CUSTOMER_LOGO);
 		
-		System.out.println(customerLogo.getAbsolutePath());
-
 		saveData(customer, customerFile);
+		saveLogo(customer, customerLogo);
+		CooLog.debug("Save Customer: " + customerFile.getAbsolutePath());
+	}
+
+	/**
+	 * Method to save the {@link CooCustomer} logo
+	 * @param customer = the {@link CooCustomer} to save the logo from
+	 * @param customerLogo = the logo
+	 */
+	public static void saveLogo(CooCustomer customer, File customerLogo)
+	{
 		try
 		{
-			ImageIO.write(
-				SwingFXUtils.fromFXImage(customer.logoProprty().get(), null),
-				CUSTOMER_LOGO_PIC_TYPE, customerLogo);
+			Image logo = customer.logoProprty().get();
+			if(Objects.nonNull(logo))
+			{
+				ImageIO.write(
+					SwingFXUtils.fromFXImage(logo, null),
+					CUSTOMER_LOGO_PIC_TYPE, customerLogo);
+				CooLog.debug("Save Customer Logo: " + customerLogo.getAbsolutePath());
+			}
 		}
 		catch(IOException e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			CooLog.error("Error while saving customer logo", e);
 		}
-		CooLog.debug("Save Customer: " + customerFile.getAbsolutePath());
 	}
 
 	/**
