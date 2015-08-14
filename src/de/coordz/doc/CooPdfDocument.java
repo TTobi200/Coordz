@@ -30,12 +30,13 @@ public class CooPdfDocument extends CooDocument
 {
 	protected int chapterIdx = 1;
 	protected CooHeaderFooterPageEvent pageEvent;
+	protected PdfWriter writer;
 
 	protected void addCustomer(Document doc, CooCustomer customer)
 		throws DocumentException
 	{
 		Chapter chapter = addChapter(doc, "Kunde "
-					+ customer.nameProperty().get());
+											+ customer.nameProperty().get());
 
 		doc.add(new Paragraph("Name:" + customer.nameProperty().get()));
 		doc.add(new Paragraph("Straße:" + customer.streetProperty().get()));
@@ -62,7 +63,7 @@ public class CooPdfDocument extends CooDocument
 		throws DocumentException
 	{
 		Chapter chapter = addChapter(doc, "Projekt "
-						+ project.nameProperty().get());
+											+ project.nameProperty().get());
 		doc.add(new Paragraph("Name:" + project.nameProperty().get()));
 
 		for(Content c : getContent())
@@ -142,11 +143,12 @@ public class CooPdfDocument extends CooDocument
 		throws DocumentException
 	{
 		Section section = addSubCaption(doc, parent, "Bereichsaufteilung");
-		section.add(new Paragraph("Die sogennate Bereichsaufteilung wird in der "
-						+ "LAP-Software hinterlegt. Sie gibt an, welcher Laser "
-						+ "bis zu welchen Koordinaten projizieren soll. Somit erhält "
-						+ "jeder Laser im System seinen eigenen Bereich, was zu "
-						+ "einem verbessertem Laserbild führt."));
+		section.add(new Paragraph(
+			"Die sogennate Bereichsaufteilung wird in der "
+							+ "LAP-Software hinterlegt. Sie gibt an, welcher Laser "
+							+ "bis zu welchen Koordinaten projizieren soll. Somit erhält "
+							+ "jeder Laser im System seinen eigenen Bereich, was zu "
+							+ "einem verbessertem Laserbild führt."));
 		doc.add(section);
 
 		for(Content c : getContent())
@@ -170,7 +172,8 @@ public class CooPdfDocument extends CooDocument
 		{
 			// addSubCaption(doc, "Messung " + m.nameProperty().get());
 			Section sec = addSubCaption(doc, parent, "Messung "
-								+ m.nameProperty().get());
+														+ m.nameProperty()
+															.get());
 			// Section sec = addSubCaption(doc, section, "Messung " +
 			// m.nameProperty().get());
 
@@ -195,7 +198,7 @@ public class CooPdfDocument extends CooDocument
 						break;
 				}
 			}
-			
+
 		}
 	}
 
@@ -204,11 +207,13 @@ public class CooPdfDocument extends CooDocument
 		throws DocumentException
 	{
 		Section section = addSubCaption(doc, parent, "Kontroll Messung");
-		section.add(new Paragraph("Die Kontroll Messung dient zur Überprüfung der "
-						+ "korrekten Einmessung des Laser-Systems. Die Vorgabe sind "
-						+ "Daten aus dem CAD-System des Kunden und das Ergebnis "
-						+ "sind die dann tatsächlich gemessenen Werte in der Realität."));
-		section.add(new Paragraph("Hierbei ist eine Abweichung im Milimeterbereich nicht weiter tragisch."));
+		section.add(new Paragraph(
+			"Die Kontroll Messung dient zur Überprüfung der "
+							+ "korrekten Einmessung des Laser-Systems. Die Vorgabe sind "
+							+ "Daten aus dem CAD-System des Kunden und das Ergebnis "
+							+ "sind die dann tatsächlich gemessenen Werte in der Realität."));
+		section.add(new Paragraph(
+			"Hierbei ist eine Abweichung im Milimeterbereich nicht weiter tragisch."));
 		doc.add(section);
 
 		for(Content c : getContent())
@@ -290,7 +295,7 @@ public class CooPdfDocument extends CooDocument
 			table.addCell(String.valueOf(r.yProperty().get()));
 			table.addCell(String.valueOf(r.zProperty().get()));
 		});
-		
+
 		addTable(doc, table, 200, 100, 100, 100);
 	}
 
@@ -374,7 +379,7 @@ public class CooPdfDocument extends CooDocument
 			table.addCell(String.valueOf(l.totalDeviationProperty().get()));
 		});
 
-        addTable(doc, table, new float[]{ 80, 80, 100, 40, 40, 40, 120 });
+		addTable(doc, table, new float[] { 80, 80, 100, 40, 40, 40, 120 });
 	}
 
 	protected void addContacts(Document doc, Chapter chapter,
@@ -384,8 +389,8 @@ public class CooPdfDocument extends CooDocument
 		Section section = addCaption(doc, chapter, "Kontakte");
 		section.add(new Paragraph(
 			String.format(
-			"Kontakte und Ansprechpartner des Kunden %s.",
-			customer.nameProperty().get())));
+				"Kontakte und Ansprechpartner des Kunden %s.",
+				customer.nameProperty().get())));
 
 		PdfPTable table = createTable("Kontakte",
 			"Vorname", "Nachname", "E-Mail", "Telefon");
@@ -397,7 +402,7 @@ public class CooPdfDocument extends CooDocument
 			table.addCell(c.mailProperty().get());
 			table.addCell(c.phoneProperty().get());
 		});
-		
+
 		doc.add(section);
 		addTable(doc, table, 100, 100, 200, 100);
 	}
@@ -409,10 +414,10 @@ public class CooPdfDocument extends CooDocument
 		Section section = addCaption(doc, chapter, "Paletten");
 		section.add(new Paragraph(
 			String.format(
-			"Alle Paletten die beim Kunden %s momentan verwendet werden.",
-			customer.nameProperty().get())));
-		
-		PdfPTable table = createTable("Paletten", 
+				"Alle Paletten die beim Kunden %s momentan verwendet werden.",
+				customer.nameProperty().get())));
+
+		PdfPTable table = createTable("Paletten",
 			"Typ", "Länge", "Breite");
 
 		customer.getPalets().forEach(c ->
@@ -505,17 +510,27 @@ public class CooPdfDocument extends CooDocument
 
 		return table;
 	}
-	
-	protected void addTable(Document doc, PdfPTable table, float... widths) throws DocumentException
+
+	protected void addTable(Document doc, PdfPTable table, float... widths)
+		throws DocumentException
 	{
+		// Set the table widths (Sum 500)
 		if(Objects.nonNull(widths) && widths.length > 0)
 		{
 			table.setTotalWidth(widths);
-	        table.setLockedWidth(true);
+			table.setLockedWidth(true);
 		}
-		
+
+		// Add table to new page if to large for this page
+		if((writer.getVerticalPosition(true) - 
+			(table.getRowHeight(0) * table.getRows()
+			.size())) < doc.bottom())
+		{
+			doc.newPage();
+		}
+
 		doc.add(new Paragraph(" "));
-		doc.add(table);		
+		doc.add(table);
 	}
 
 	protected void addTitlePage(Document doc, CooCustomer customer)
@@ -570,7 +585,7 @@ public class CooPdfDocument extends CooDocument
 			// Create document
 			Document doc = new Document(PageSize.A4, 50, 20, 63, 35);
 			OutputStream outStream = new FileOutputStream(file);
-			PdfWriter writer = PdfWriter.getInstance(doc, outStream);
+			writer = PdfWriter.getInstance(doc, outStream);
 
 			// Add Header and footer
 			pageEvent = new CooHeaderFooterPageEvent(
