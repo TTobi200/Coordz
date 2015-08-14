@@ -38,7 +38,6 @@ public class CooPdfDocument extends CooDocument
 					+ customer.nameProperty().get());
 
 		doc.add(new Paragraph("Name:" + customer.nameProperty().get()));
-		doc.add(new Paragraph("Adresse:" + customer.adressProperty().get()));
 		doc.add(new Paragraph("Straße:" + customer.streetProperty().get()));
 		doc.add(new Paragraph("PLZ:" + customer.plzProperty().get()));
 		doc.add(new Paragraph("Ort:" + customer.locationProperty().get()));
@@ -48,10 +47,10 @@ public class CooPdfDocument extends CooDocument
 			switch(c)
 			{
 				case CONTACTS:
-					addContacts(doc, chapter, customer.getContacts());
+					addContacts(doc, chapter, customer);
 					break;
 				case PALETS:
-					addPalets(doc, chapter, customer.getPalets());
+					addPalets(doc, chapter, customer);
 					break;
 				default:
 					break;
@@ -63,7 +62,7 @@ public class CooPdfDocument extends CooDocument
 		throws DocumentException
 	{
 		Chapter chapter = addChapter(doc, "Projekt "
-											+ project.nameProperty().get());
+						+ project.nameProperty().get());
 		doc.add(new Paragraph("Name:" + project.nameProperty().get()));
 
 		for(Content c : getContent())
@@ -143,6 +142,11 @@ public class CooPdfDocument extends CooDocument
 		throws DocumentException
 	{
 		Section section = addSubCaption(doc, parent, "Bereichsaufteilung");
+		section.add(new Paragraph("Die sogennate Bereichsaufteilung wird in der "
+						+ "LAP-Software hinterlegt. Sie gibt an, welcher Laser "
+						+ "bis zu welchen Koordinaten projizieren soll. Somit erhält "
+						+ "jeder Laser im System seinen eigenen Bereich, was zu "
+						+ "einem verbessertem Laserbild führt."));
 		doc.add(section);
 
 		for(Content c : getContent())
@@ -166,8 +170,7 @@ public class CooPdfDocument extends CooDocument
 		{
 			// addSubCaption(doc, "Messung " + m.nameProperty().get());
 			Section sec = addSubCaption(doc, parent, "Messung "
-														+ m.nameProperty()
-															.get());
+								+ m.nameProperty().get());
 			// Section sec = addSubCaption(doc, section, "Messung " +
 			// m.nameProperty().get());
 
@@ -201,6 +204,11 @@ public class CooPdfDocument extends CooDocument
 		throws DocumentException
 	{
 		Section section = addSubCaption(doc, parent, "Kontroll Messung");
+		section.add(new Paragraph("Die Kontroll Messung dient zur Überprüfung der "
+						+ "korrekten Einmessung des Laser-Systems. Die Vorgabe sind "
+						+ "Daten aus dem CAD-System des Kunden und das Ergebnis "
+						+ "sind die dann tatsächlich gemessenen Werte in der Realität."));
+		section.add(new Paragraph("Hierbei ist eine Abweichung im Milimeterbereich nicht weiter tragisch."));
 		doc.add(section);
 
 		for(Content c : getContent())
@@ -370,15 +378,19 @@ public class CooPdfDocument extends CooDocument
 	}
 
 	protected void addContacts(Document doc, Chapter chapter,
-					ObservableList<CooContact> contacts)
+					CooCustomer customer)
 		throws DocumentException
 	{
 		Section section = addCaption(doc, chapter, "Kontakte");
+		section.add(new Paragraph(
+			String.format(
+			"Kontakte und Ansprechpartner des Kunden %s.",
+			customer.nameProperty().get())));
 
 		PdfPTable table = createTable("Kontakte",
 			"Vorname", "Nachname", "E-Mail", "Telefon");
 
-		contacts.forEach(c ->
+		customer.getContacts().forEach(c ->
 		{
 			table.addCell(c.firstNameProperty().get());
 			table.addCell(c.lastNameProperty().get());
@@ -391,13 +403,19 @@ public class CooPdfDocument extends CooDocument
 	}
 
 	protected void addPalets(Document doc, Chapter chapter,
-					ObservableList<CooPalet> palets)
+					CooCustomer customer)
 		throws DocumentException
 	{
 		Section section = addCaption(doc, chapter, "Paletten");
-		PdfPTable table = createTable("Paletten", "Typ", "Länge", "Breite");
+		section.add(new Paragraph(
+			String.format(
+			"Alle Paletten die beim Kunden %s momentan verwendet werden.",
+			customer.nameProperty().get())));
+		
+		PdfPTable table = createTable("Paletten", 
+			"Typ", "Länge", "Breite");
 
-		palets.forEach(c ->
+		customer.getPalets().forEach(c ->
 		{
 			table.addCell(String.valueOf(c.typeProperty().get()));
 			table.addCell(String.valueOf(c.lengthProperty().get()));
@@ -426,7 +444,7 @@ public class CooPdfDocument extends CooDocument
 		Section section = chapter.addSection(pCaption);
 		// section.setBookmarkTitle(caption);
 		// section.setBookmarkOpen(false);
-		section.setIndentation(30);
+		section.setIndentation(13);
 		section.setNumberStyle(Section.NUMBERSTYLE_DOTTED_WITHOUT_FINAL_DOT);
 
 		return section;
@@ -441,7 +459,7 @@ public class CooPdfDocument extends CooDocument
 		Section section = parent.addSection(pCaption);
 		// section.setBookmarkTitle(caption);
 		section.setBookmarkOpen(false);
-		section.setIndentation(30);
+		section.setIndentation(13);
 		section.setNumberStyle(Section.NUMBERSTYLE_DOTTED_WITHOUT_FINAL_DOT);
 
 		return section;
@@ -550,7 +568,7 @@ public class CooPdfDocument extends CooDocument
 		try
 		{
 			// Create document
-			Document doc = new Document(PageSize.A4, 40, 20, 63, 35);
+			Document doc = new Document(PageSize.A4, 50, 20, 63, 35);
 			OutputStream outStream = new FileOutputStream(file);
 			PdfWriter writer = PdfWriter.getInstance(doc, outStream);
 

@@ -22,8 +22,6 @@ public class CooCustomer extends CooData
 {
 	/** {@link StringProperty} for the customer name */
 	protected StringProperty name;
-	/** {@link StringProperty} for the customer address */
-	protected StringProperty address;
 	/** {@link StringProperty} for the customer street */
 	protected StringProperty street;
 	/** {@link StringProperty} for the customer plz */
@@ -45,7 +43,6 @@ public class CooCustomer extends CooData
 	public CooCustomer()
 	{
 		name = new SimpleStringProperty();
-		address = new SimpleStringProperty();
 		street = new SimpleStringProperty();
 		plz = new SimpleStringProperty();
 		location = new SimpleStringProperty();
@@ -62,7 +59,6 @@ public class CooCustomer extends CooData
 	{
 		Element customer = addElement(doc, root, "Customer");
 		customer.setAttribute("Name", name.get());
-		customer.setAttribute("Adress", address.get());
 		customer.setAttribute("Street", street.get());
 		customer.setAttribute("PLZ", plz.get());
 		customer.setAttribute("Location", location.get());
@@ -82,7 +78,6 @@ public class CooCustomer extends CooData
 		if(Objects.nonNull(customer))
 		{
 			name.set(customer.getAttribute("Name"));
-			address.set(customer.getAttribute("Adress"));
 			street.set(customer.getAttribute("Street"));
 			plz.set(customer.getAttribute("PLZ"));
 			location.set(customer.getAttribute("Location"));
@@ -148,15 +143,6 @@ public class CooCustomer extends CooData
 	public StringProperty nameProperty()
 	{
 		return name;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #address}
-	 */
-	public StringProperty adressProperty()
-	{
-		return address;
 	}
 	
 	/**
