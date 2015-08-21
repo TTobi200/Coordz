@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.TreeItem?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.Blend?>
+<?import javafx.scene.effect.Bloom?>
+<?import javafx.scene.effect.ColorInput?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.web.WebView?>
+<?import javafx.scene.text.Font?>
+
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+	<center>
+		<SplitPane dividerPositions="0.10" BorderPane.alignment="CENTER">
+			<items>
+				<BorderPane minWidth="200" maxWidth="400">
+					<center>
+						<TreeView fx:id="treeView" BorderPane.alignment="CENTER" />
+					</center>
+					<top>
+						<TextField fx:id="txtSearch" promptText="Suchen..." BorderPane.alignment="CENTER" onAction="#search" onKeyReleased="#search" />
+					</top>
+				</BorderPane>
+				<BorderPane>
+					<top>
+						<Label fx:id="lblSettName" BorderPane.alignment="CENTER_LEFT">
+							<font>
+								<Font size="15" />
+							</font>
+							<graphic>
+								<ImageView pickOnBounds="true" preserveRatio="true" />
+							</graphic>
+						</Label>
+					</top>
+					<center>
+						<StackPane fx:id="stackPane" />
+					</center>
+				</BorderPane>
+			</items>
+		</SplitPane>
+	</center>
+	<bottom>
+		<ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="16.0" BorderPane.alignment="CENTER">
+		<effect>
+			<DropShadow />
+		</effect>
+			<items>
+				<Button mnemonicParsing="false" text="Abbrechen" onAction="#cancel"/>
+				<Button mnemonicParsing="false" text="Speichern" onAction="#save"/>
+			</items>
+		</ToolBar>
+	</bottom>
+</BorderPane>

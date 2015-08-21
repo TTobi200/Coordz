@@ -11,6 +11,8 @@ import java.util.*;
 
 import javafx.beans.property.*;
 import javafx.collections.*;
+import javafx.concurrent.Task;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.*;
@@ -68,6 +70,33 @@ public class CooDialogs
 		dlg.setHeaderText(head);
 
 		return dlg.showAndWait();
+	}
+	
+	public static void showProgressDialog(Window owner, String head, Task<Void> task)
+	{
+		Alert dlg = new Alert(AlertType.INFORMATION);
+		dlg.setTitle(CooMainFrame.TITLE);
+		CooGuiUtil.grayOutParent(owner,
+			dlg.showingProperty());
+		dlg.initOwner(owner);
+		dlg.setHeaderText(head);
+		
+		VBox root = new VBox();
+		root.setAlignment(Pos.TOP_CENTER);
+		final ProgressBar progress = new ProgressBar();
+		progress.prefWidthProperty().bind(root.widthProperty());
+		root.getChildren().add(progress);
+		
+		BorderPane pane = new BorderPane();
+		Label lblMsg = new Label();
+		lblMsg.textProperty().bind(task.messageProperty());
+		progress.progressProperty().bind(task.progressProperty());
+		pane.setTop(lblMsg);
+		pane.setCenter(root);
+		
+		dlg.getDialogPane().setContent(pane);
+		dlg.show();
+		task.run();
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -171,6 +200,7 @@ public class CooDialogs
 	{
 		showSaveFileDialog(parent, title, strProp, null);
 	}
+	
 
 	public static void showToDocDialog(Window owner, CooCustomer customer,
 					CooDocument... document)

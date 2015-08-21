@@ -9,7 +9,6 @@ package de.coordz;
 import javafx.application.Platform;
 import de.coordz.data.db.*;
 import de.util.CooPreferencesUtil;
-import de.util.pref.CooSystemPreferences;
 
 public class CooSystem
 {
@@ -37,7 +36,6 @@ public class CooSystem
 	public static void exit(int status)
 	{
 		CooPreferencesUtil.setCoordzRunning(false);
-		CooSystemPreferences.getSystemPreferences().save();
 		Platform.exit();
 		
 		if(status != NORMAL)
