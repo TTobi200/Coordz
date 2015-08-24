@@ -594,6 +594,9 @@ public class CooPdfDocument extends CooDocument
 			{
 				writer.setPageEvent(pageEvent);
 			}
+			
+			PdfAction action = PdfAction.javaScript("app.alert('Welcome at my site');\r", writer);
+			 Paragraph p = new Paragraph(new Chunk("Click to go to a website").setAction(action));
 
 			// Open document and add necessary content
 			doc.open();
