@@ -1,6 +1,6 @@
 /*
  * $Header$
- * 
+ *
  * $Log$
  * Copyright © 2015 T.Ohm . All Rights Reserved.
  */
@@ -16,12 +16,12 @@ public class CooLAPClient extends CooTcpIpClient
 	public static final int LAP_SOFTWARE_PORT = 8000;
 
 	/** ID of the LAP Software */
-	public static final int LAP = 0x0001;
+	public static final short LAP = 0x0001;
 	/** ID of the client Software */
-	public static final int CLIENT = 0x0002;
+	public static final short CLIENT = 0x0002;
 
 	/** 0x0010 Automatic calibration client->LAP */
-	public static final int AUTOMATIC_CALIBRATION = 0x0010;
+	public static final short AUTOMATIC_CALIBRATION = 0x0010;
 	/** 0x0011 Switch Calibration client->LAP */
 	public static final int SWITCH_CALIBRATION = 0x0011;
 	/** 0x0012 Switch Calibration Acknowledge client->LAP */

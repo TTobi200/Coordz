@@ -1,5 +1,7 @@
 package de.coordz.lap;
 
+import static de.coordz.lap.CooByteSwapper.toLE;
+
 import java.io.*;
 
 public final class CooLittleEndianOutputStream extends FilterOutputStream
@@ -14,7 +16,7 @@ public final class CooLittleEndianOutputStream extends FilterOutputStream
 	@Override
 	public void write(int b) throws IOException
 	{
-		out.write(b);
+		super.write(b);
 		written++;
 	}
 
@@ -22,8 +24,14 @@ public final class CooLittleEndianOutputStream extends FilterOutputStream
 	public void write(byte[] data, int offset, int length)
 		throws IOException
 	{
-		out.write(data, offset, length);
+		super.write(data, offset, length);
 		written += length;
+	}
+
+	@Override
+	public void write(byte[] b) throws IOException
+	{
+		super.write(b);
 	}
 
 	public void writeBoolean(boolean b) throws IOException
@@ -40,64 +48,44 @@ public final class CooLittleEndianOutputStream extends FilterOutputStream
 
 	public void writeByte(int b) throws IOException
 	{
-		out.write(b);
+		super.write(b);
 		written++;
 	}
 
-	public void writeShort(int s) throws IOException
+	public void writeShort(short s) throws IOException
 	{
-		out.write(s & 0xFF);
-		out.write((s >>> 8) & 0xFF);
-		written += 2;
+		super.write(toLE(s));
 	}
 
-	public void writeChar(int c) throws IOException
+	public void writeChar(char c) throws IOException
 	{
-		out.write(c & 0xFF);
-		out.write((c >>> 8) & 0xFF);
-		written += 2;
+		super.write(toLE(c));
 	}
 
 	public void writeInt(int i) throws IOException
 	{
-		out.write(i & 0xFF);
-		out.write((i >>> 8) & 0xFF);
-		out.write((i >>> 16) & 0xFF);
-		out.write((i >>> 24) & 0xFF);
-		written += 4;
+		super.write(toLE(i));
 	}
 
 	public void writeLong(long l) throws IOException
 	{
-		out.write((int)l & 0xFF);
-		out.write((int)(l >>> 8) & 0xFF);
-		out.write((int)(l >>> 16) & 0xFF);
-		out.write((int)(l >>> 24) & 0xFF);
-		out.write((int)(l >>> 32) & 0xFF);
-		out.write((int)(l >>> 40) & 0xFF);
-		out.write((int)(l >>> 48) & 0xFF);
-		out.write((int)(l >>> 56) & 0xFF);
-		written += 8;
+		super.write(toLE(l));
 	}
 
 	public final void writeFloat(float f) throws IOException
 	{
-		this.writeInt(Float.floatToIntBits(f));
+		super.write(toLE(f));
 	}
 
 	public final void writeDouble(double d) throws IOException
 	{
-		this.writeLong(Double.doubleToLongBits(d));
+		super.write(toLE(d));
 	}
 
+	@Deprecated
 	public void writeBytes(String s) throws IOException
 	{
-		int length = s.length();
-		for(int i = 0; i < length; i++)
-		{
-			out.write((byte)s.charAt(i));
-		}
-		written += length;
+		super.write(toLE(s));
 	}
 
 	/**
@@ -122,4 +110,4 @@ public final class CooLittleEndianOutputStream extends FilterOutputStream
 	{
 		this.written = count;
 	}
-}// end LittleEndianOutputStream
+}

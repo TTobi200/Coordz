@@ -140,12 +140,11 @@ public class CooLittleEndianInputStream extends FilterInputStream
 	public char readChar() throws IOException
 	{
 		int byte1 = in.read();
-		int byte2 = in.read();
-		if(byte2 == -1)
+		if(byte1 == -1)
 		{
 			throw new EOFException();
 		}
-		return (char)(((byte2 << 24) >>> 16) + ((byte1 << 24) >>> 24));
+		return (char)byte1;
 	}
 
 	/**

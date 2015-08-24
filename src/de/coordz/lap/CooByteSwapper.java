@@ -1,16 +1,16 @@
 /*
  * (C) 2004 - Geotechnical Software Services
- * 
+ *
  * This code is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This code is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
@@ -18,19 +18,81 @@
  */
 package de.coordz.lap;
 
+import java.util.stream.IntStream;
+
 /**
  * Utility class for doing byte swapping (i.e. conversion between
  * little-endian and big-endian representations) of different data types.
  * Byte swapping is typically used when data is read from a stream
  * delivered by a system of different endian type as the present one.
- * 
+ *
  * @author <a href="mailto:jacob.dreyer@geosoft.no">Jacob Dreyer</a>
  */
 public class CooByteSwapper
 {
+	public static byte[] toLE(short value)
+	{
+		return new byte[] {
+				(byte)(value & 0xFF),
+				(byte)((value >>> 8) & 0xFF)
+		};
+	}
+
+	public static byte[] toLE(int value)
+	{
+		return new byte[] {
+				(byte)(value & 0xFF),
+				(byte)((value >>> 8) & 0xFF),
+				(byte)((value >>> 16) & 0xFF),
+				(byte)((value >>> 24) & 0xFF)
+		};
+	}
+
+	public static byte[] toLE(long value)
+	{
+		return new byte[] {
+				(byte)(value & 0xFF),
+				(byte)((value >>> 8) & 0xFF),
+				(byte)((value >>> 16) & 0xFF),
+				(byte)((value >>> 24) & 0xFF),
+				(byte)((value >>> 32) & 0xFF),
+				(byte)((value >>> 40) & 0xFF),
+				(byte)((value >>> 48) & 0xFF),
+				(byte)((value >>> 56) & 0xFF)
+		};
+	}
+
+	public static byte[] toLE(float value)
+	{
+		return toLE(Float.floatToIntBits(value));
+	}
+
+	public static byte[] toLE(double value)
+	{
+		return toLE(Double.doubleToLongBits(value));
+	}
+
+	public static byte[] toLE(char value)
+	{
+		return new byte[] {
+				(byte)value
+		};
+	}
+
+	public static byte[] toLE(String value)
+	{
+		char[] chars = value.toCharArray();
+		byte[] b = new byte[chars.length];
+		IntStream.range(0, chars.length)
+//			.parallel()
+			.forEach(i -> b[i] = (byte)chars[i]);
+
+		return b;
+	}
+
 	/**
 	 * Byte swap a single short value.
-	 * 
+	 *
 	 * @param value Value to byte swap.
 	 * @return Byte swapped representation.
 	 */
@@ -44,7 +106,7 @@ public class CooByteSwapper
 
 	/**
 	 * Byte swap a single int value.
-	 * 
+	 *
 	 * @param value Value to byte swap.
 	 * @return Byte swapped representation.
 	 */
@@ -60,7 +122,7 @@ public class CooByteSwapper
 
 	/**
 	 * Byte swap a single long value.
-	 * 
+	 *
 	 * @param value Value to byte swap.
 	 * @return Byte swapped representation.
 	 */
@@ -81,7 +143,7 @@ public class CooByteSwapper
 
 	/**
 	 * Byte swap a single float value.
-	 * 
+	 *
 	 * @param value Value to byte swap.
 	 * @return Byte swapped representation.
 	 */
@@ -94,7 +156,7 @@ public class CooByteSwapper
 
 	/**
 	 * Byte swap a single double value.
-	 * 
+	 *
 	 * @param value Value to byte swap.
 	 * @return Byte swapped representation.
 	 */
@@ -122,7 +184,7 @@ public class CooByteSwapper
 	/**
 	 * Byte swap an array of ints. The result of the swapping
 	 * is put back into the specified array.
-	 * 
+	 *
 	 * @param array Array of values to swap
 	 */
 	public static void swap(int[] array)
@@ -136,7 +198,7 @@ public class CooByteSwapper
 	/**
 	 * Byte swap an array of longs. The result of the swapping
 	 * is put back into the specified array.
-	 * 
+	 *
 	 * @param array Array of values to swap
 	 */
 	public static void swap(long[] array)
@@ -150,7 +212,7 @@ public class CooByteSwapper
 	/**
 	 * Byte swap an array of floats. The result of the swapping
 	 * is put back into the specified array.
-	 * 
+	 *
 	 * @param array Array of values to swap
 	 */
 	public static void swap(float[] array)
@@ -164,7 +226,7 @@ public class CooByteSwapper
 	/**
 	 * Byte swap an array of doubles. The result of the swapping
 	 * is put back into the specified array.
-	 * 
+	 *
 	 * @param array Array of values to swap
 	 */
 	public static void swap(double[] array)
@@ -173,5 +235,9 @@ public class CooByteSwapper
 		{
 			array[i] = swap(array[i]);
 		}
+	}
+
+	public static void main(String[] args)
+	{
 	}
 }
