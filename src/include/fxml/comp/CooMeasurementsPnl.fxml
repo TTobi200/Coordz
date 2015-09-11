@@ -28,11 +28,11 @@
 <?import de.gui.comp.CooTableView?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.Separator?>
-<?import de.gui.visu.CooMoleculeSampleApp?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.layout.VBox?>
 <?import de.gui.comp.CooTextArea?>
 <?import javafx.scene.control.ScrollPane?>
+<?import de.gui.view3D.CooView3D?>
 
 <fx:root type="BorderPane" xmlns="http://javafx.com/javafx/8"
 	xmlns:fx="http://javafx.com/fxml/1">
@@ -232,7 +232,7 @@
 									<center>
 										<ScrollPane>
 											<content>
-												<CooMoleculeSampleApp fx:id="view3D" />
+												<CooView3D fx:id="view3D" />
 											</content>
 										</ScrollPane>
 									</center>
