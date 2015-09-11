@@ -228,15 +228,7 @@
 								</ImageView>
 							</graphic>
 							<content>
-								<BorderPane>
-									<center>
-										<ScrollPane>
-											<content>
-												<CooView3D fx:id="view3D" />
-											</content>
-										</ScrollPane>
-									</center>
-								</BorderPane>
+								<CooView3D fx:id="view3D" />
 							</content>
 						</Tab>
 						<Tab text="ProSoft">

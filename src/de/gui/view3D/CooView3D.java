@@ -6,13 +6,13 @@ import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.scene.*;
 import javafx.scene.input.*;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.*;
 import javafx.scene.shape.Box;
 import de.coordz.data.base.CooMeasurement;
 import de.util.CooXformUtil;
 
-public class CooView3D extends BorderPane implements CooMeasurementChanged
+public class CooView3D extends StackPane implements CooMeasurementChanged
 {
 	final Group root = new Group();
 	final Group axisGroup = new Group();
@@ -49,14 +49,16 @@ public class CooView3D extends BorderPane implements CooMeasurementChanged
 		buildAxes();
 		buildPalet();
 		
-		SubScene subScene = new SubScene(root, 700, 500);
+		SubScene subScene = new SubScene(root, 780, 280, true, null);
 		subScene.setFill(Color.GREY);
 		handleKeyboard(subScene, world);
 		handleMouse(subScene, world);
 
 		subScene.setCamera(camera);
 		
-		setCenter(subScene);
+		getChildren().add(subScene);
+		subScene.heightProperty().bind(heightProperty());
+		subScene.widthProperty().bind(widthProperty());
 	}
 
 	private void buildScene()
