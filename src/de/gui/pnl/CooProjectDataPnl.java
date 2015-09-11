@@ -58,6 +58,26 @@ public class CooProjectDataPnl extends BorderPane implements CooDataChanged
 
 		tblStations.setClazz(CooStation.class);
 		tblLaser.setClazz(CooLaser.class);
+		
+		cbStation.getSelectionModel().selectedItemProperty().addListener(
+			(old, curr, newV) ->
+			{
+				if(Objects.nonNull(newV))
+				{
+					CooGateway gateway = newV.gatewayProperty().get();
+					tblLaser.setItems(gateway.getLaser());
+					txtGateIp.bindBidirectional(
+						gateway.ipProperty());
+					txtGateMAC.bindBidirectional(
+						gateway.macProperty());
+				}
+				else
+				{
+					txtGateIp.unbindBidirectional();
+					txtGateMAC.unbindBidirectional();
+					tblLaser.setItems(FXCollections.observableArrayList());
+				}
+			});
 	}
 
 	@Override
@@ -80,25 +100,5 @@ public class CooProjectDataPnl extends BorderPane implements CooDataChanged
 
 		// Gateway fields
 		cbStation.setItems(project.getStations());
-		cbStation.getSelectionModel().selectedItemProperty().addListener(
-			(old, curr, newV) ->
-			{
-				if(Objects.nonNull(newV))
-				{
-					CooGateway gateway = newV.gatewayProperty().get();
-					tblLaser.setItems(gateway.getLaser());
-					txtGateIp.bindBidirectional(
-						gateway.ipProperty());
-					txtGateMAC.bindBidirectional(
-						gateway.macProperty());
-				}
-				else
-				{
-					txtGateIp.unbindBidirectional();
-					txtGateMAC.unbindBidirectional();
-					tblLaser.setItems(FXCollections.observableArrayList());
-				}
-			});
 	}
-
 }

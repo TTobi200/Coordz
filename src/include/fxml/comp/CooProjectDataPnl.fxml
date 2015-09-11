@@ -58,6 +58,9 @@
 						<BorderPane>
 							<center>
 								<CooTableView fx:id="tblStations">
+									<placeholder>
+										<Label text="Keine Stationen hinzugefügt" />
+									</placeholder>
 									<columns>
 										<TableColumn text="Name">
 											<cellValueFactory>
@@ -108,7 +111,7 @@
 									<Label text="Ip" GridPane.rowIndex="1" />
 									<Label text="MAC" GridPane.rowIndex="2" />
 									<ComboBox fx:id="cbStation" GridPane.columnIndex="1"
-										maxWidth="Infinity" />
+										promptText="Auswählen..." maxWidth="Infinity" />
 									<CooTextField fx:id="txtGateIp"
 										GridPane.columnIndex="1" GridPane.rowIndex="1" />
 									<CooTextField fx:id="txtGateMAC"
@@ -120,6 +123,9 @@
 									<BorderPane>
 										<center>
 											<CooTableView fx:id="tblLaser">
+												<placeholder>
+													<Label text="Keine Laser hinzugefügt" />
+												</placeholder>
 												<columns>
 													<TableColumn text="Name">
 														<cellValueFactory>

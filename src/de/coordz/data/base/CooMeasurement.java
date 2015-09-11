@@ -31,7 +31,11 @@ public class CooMeasurement extends CooData
 	protected StringProperty to;
 	/** {@link StringProperty} for the measurement weather outside */
 	protected StringProperty weather;
+	/** {@link StringProperty} for the measurement notes */
+	protected StringProperty notes;
 
+	/** {@link ObjectProperty} for the station {@link CooTotalstation} */
+	protected ObjectProperty<CooTotalstation> totalStation;
 	/** {@link ObservableList} with all measurement {@link CooReticle} */
 	protected ObservableList<CooReticle> reticles;
 	/** {@link ObservableList} with all measurement {@link CooTarget} */
@@ -44,6 +48,9 @@ public class CooMeasurement extends CooData
 		from = new SimpleStringProperty();
 		to = new SimpleStringProperty();
 		weather = new SimpleStringProperty();
+		notes = new SimpleStringProperty();
+		totalStation = new SimpleObjectProperty<CooTotalstation>(
+						new CooTotalstation());
 		reticles = FXCollections.observableArrayList();
 		targets = FXCollections.observableArrayList();
 	}
@@ -58,7 +65,9 @@ public class CooMeasurement extends CooData
 		measurement.setAttribute("From", from.get());
 		measurement.setAttribute("To", to.get());
 		measurement.setAttribute("Weather", weather.get());
+		measurement.setAttribute("Notes", notes.get());
 
+		totalStation.get().toXML(doc, measurement);
 		Element reticles = addElement(doc, measurement,
 			"Reticles");
 		this.reticles.forEach(r -> r.toXML(doc, reticles));
@@ -80,7 +89,11 @@ public class CooMeasurement extends CooData
 			from.set(measurement.getAttribute("From"));
 			to.set(measurement.getAttribute("To"));
 			weather.set(measurement.getAttribute("Weather"));
+			notes.set(measurement.getAttribute("Notes"));
 
+			totalStation.get().fromXML(getSingleElement(measurement,
+							"Totalstation"));
+			
 			// Load all reticles
 			Element reticles = getSingleElement(measurement,
 							"Reticles");
@@ -156,5 +169,23 @@ public class CooMeasurement extends CooData
 	public StringProperty weatherProperty()
 	{
 		return weather;
+	}
+	
+	/**
+	 * Method to access Property
+	 * @return {@link #notes}
+	 */
+	public StringProperty notesProperty()
+	{
+		return notes;
+	}
+	
+	/**
+	 * Method to access Property
+	 * @return {@link #totalStation}
+	 */
+	public ObjectProperty<CooTotalstation> totalStationProperty()
+	{
+		return totalStation;
 	}
 }

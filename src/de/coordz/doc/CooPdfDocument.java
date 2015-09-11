@@ -115,10 +115,6 @@ public class CooPdfDocument extends CooDocument
 					case GATEWAY:
 						addGateway(doc, sec, s.gatewayProperty().get());
 						break;
-					case TOTALSTATION:
-						addTotalStation(doc, sec, s.totalStationProperty()
-							.get());
-						break;
 					case MEASUREMENTS:
 						addMeasurements(doc, sec, s.getMeasurements());
 						break;
@@ -188,6 +184,10 @@ public class CooPdfDocument extends CooDocument
 			{
 				switch(getContent().get(j))
 				{
+					case TOTALSTATION:
+						addTotalStation(doc, sec, m.totalStationProperty()
+							.get());
+						break;
 					case RETICLES:
 						addReticles(doc, m.getReticles());
 						break;
@@ -347,17 +347,17 @@ public class CooPdfDocument extends CooDocument
 					CooTotalstation totalStation)
 		throws DocumentException
 	{
-		Section section = addSubCaption(doc, parent, "Totalstation");
+		// addSubCaption(doc, "Totalstation");
+		PdfPTable table = createTable("Totalstation",
+			"X", "Y", "Z", "Delta-X", "Delta-Y");
 
-		section.add(new Paragraph("X:" + totalStation.xProperty().get()));
-		section.add(new Paragraph("Y:" + totalStation.yProperty().get()));
-		section.add(new Paragraph("Z:" + totalStation.zProperty().get()));
-		section.add(new Paragraph("Delta-X:"
-									+ totalStation.deltaXProperty().get()));
-		section.add(new Paragraph("Delta-Y:"
-									+ totalStation.deltaYProperty().get()));
-
-		doc.add(section);
+		table.addCell(String.valueOf(totalStation.xProperty().get()));
+		table.addCell(String.valueOf(totalStation.yProperty().get()));
+		table.addCell(String.valueOf(totalStation.zProperty().get()));
+		table.addCell(String.valueOf(totalStation.deltaXProperty().get()));
+		table.addCell(String.valueOf(totalStation.deltaYProperty().get()));
+			
+		addTable(doc, table, new float[] { 100, 100, 100, 100, 100 });
 	}
 
 	protected void addLaser(Document doc,
@@ -595,9 +595,6 @@ public class CooPdfDocument extends CooDocument
 				writer.setPageEvent(pageEvent);
 			}
 			
-			PdfAction action = PdfAction.javaScript("app.alert('Welcome at my site');\r", writer);
-			 Paragraph p = new Paragraph(new Chunk("Click to go to a website").setAction(action));
-
 			// Open document and add necessary content
 			doc.open();
 			if(Objects.nonNull(customer))

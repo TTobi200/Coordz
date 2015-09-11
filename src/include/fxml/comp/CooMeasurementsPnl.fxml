@@ -26,47 +26,70 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import de.gui.comp.CooTableView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Separator?>
+<?import de.gui.visu.CooMoleculeSampleApp?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.layout.VBox?>
+<?import de.gui.comp.CooTextArea?>
+<?import javafx.scene.control.ScrollPane?>
 
 <fx:root type="BorderPane" xmlns="http://javafx.com/javafx/8"
 	xmlns:fx="http://javafx.com/fxml/1">
 	<center>
-		<SplitPane dividerPositions="0.15" orientation="VERTICAL">
+		<SplitPane dividerPositions="0.10" orientation="VERTICAL">
 			<items>
-				<TitledPane text="Stationen">
+				<TitledPane text="Messungen">
 					<content>
-						<BorderPane>
-							<center>
-								<CooTableView fx:id="tblStations">
+						<VBox spacing="5">
+							<children>
+								<GridPane vgap="5" hgap="5" HBox.hgrow="ALWAYS">
+									<columnConstraints>
+										<ColumnConstraints hgrow="NEVER" />
+										<ColumnConstraints hgrow="ALWAYS" />
+									</columnConstraints>
+									<rowConstraints>
+									</rowConstraints>
+									<children>
+										<Label text="Station" />
+										<ComboBox fx:id="cbStations" GridPane.columnIndex="1"
+											promptText="Auswählen..." maxWidth="Infinity" />
+									</children>
+								</GridPane>
+								<CooTableView fx:id="tblMeasurement">
+									<placeholder>
+										<Label text="Keine Messungen hinzugefügt" />
+									</placeholder>
 									<columns>
-										<TableColumn text="Station">
+										<TableColumn text="Name">
 											<cellValueFactory>
 												<PropertyValueFactory property="name" />
 											</cellValueFactory>
 										</TableColumn>
-										<TableColumn text="X-Offset">
+										<TableColumn text="Datum">
 											<cellValueFactory>
-												<PropertyValueFactory property="xOffset" />
+												<PropertyValueFactory property="date" />
 											</cellValueFactory>
 										</TableColumn>
-										<TableColumn text="Y-Offset">
+										<TableColumn text="Von">
 											<cellValueFactory>
-												<PropertyValueFactory property="yOffset" />
+												<PropertyValueFactory property="from" />
 											</cellValueFactory>
 										</TableColumn>
-										<TableColumn text="Z-Offset">
+										<TableColumn text="Bis">
 											<cellValueFactory>
-												<PropertyValueFactory property="zOffset" />
+												<PropertyValueFactory property="to" />
 											</cellValueFactory>
 										</TableColumn>
-										<TableColumn text="Datei">
+										<TableColumn text="Wetter">
 											<cellValueFactory>
-												<PropertyValueFactory property="file" />
+												<PropertyValueFactory property="weather" />
 											</cellValueFactory>
 										</TableColumn>
 									</columns>
 								</CooTableView>
-							</center>
-						</BorderPane>
+							</children>
+						</VBox>
 					</content>
 				</TitledPane>
 				<TabPane fx:id="tabMeasurements" tabClosingPolicy="UNAVAILABLE">
@@ -80,10 +103,120 @@
 								</ImageView>
 							</graphic>
 							<content>
-								<BorderPane>
-									<center>
-									</center>
-								</BorderPane>
+								<VBox>
+									<children>
+										<TitledPane text="Totalstation">
+											<content>
+												<BorderPane>
+													<center>
+														<CooTableView fx:id="tblTotalStation">
+															<placeholder>
+																<Label text="Keine Totalstation hinzugefügt" />
+															</placeholder>
+															<columns>
+																<TableColumn text="X">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="x" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="Y">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="y" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="Z">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="z" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="Delta-X">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="deltaX" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="Delta-Y">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="deltaY" />
+																	</cellValueFactory>
+																</TableColumn>
+															</columns>
+														</CooTableView>
+													</center>
+												</BorderPane>
+											</content>
+										</TitledPane>
+										<TitledPane text="Zielmarken">
+											<content>
+												<BorderPane>
+													<center>
+														<CooTableView fx:id="tblReticles">
+															<placeholder>
+																<Label text="Keine Zielmarken hinzugefügt" />
+															</placeholder>
+															<columns>
+																<TableColumn text="Name">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="name" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="X">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="x" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="Y">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="y" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="Z">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="z" />
+																	</cellValueFactory>
+																</TableColumn>
+															</columns>
+														</CooTableView>
+													</center>
+												</BorderPane>
+											</content>
+										</TitledPane>
+										<TitledPane text="Targets">
+											<content>
+												<BorderPane>
+													<center>
+														<CooTableView fx:id="tblTargets">
+															<placeholder>
+																<Label text="Keine Targets hinzugefügt" />
+															</placeholder>
+															<columns>
+																<TableColumn text="Name">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="name" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="X">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="x" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="Y">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="y" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="Z">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="z" />
+																	</cellValueFactory>
+																</TableColumn>
+															</columns>
+														</CooTableView>
+													</center>
+												</BorderPane>
+											</content>
+										</TitledPane>
+									</children>
+								</VBox>
 							</content>
 						</Tab>
 						<Tab text="3D-Ansicht">
@@ -97,7 +230,108 @@
 							<content>
 								<BorderPane>
 									<center>
+										<ScrollPane>
+											<content>
+												<CooMoleculeSampleApp fx:id="view3D" />
+											</content>
+										</ScrollPane>
 									</center>
+								</BorderPane>
+							</content>
+						</Tab>
+						<Tab text="ProSoft">
+							<graphic>
+								<ImageView pickOnBounds="true" preserveRatio="true">
+									<image>
+										<Image url="/include/icons/lap.png" />
+									</image>
+								</ImageView>
+							</graphic>
+							<content>
+								<BorderPane>
+									<top>
+										<ToolBar>
+											<items>
+												<Button fx:id="btnConn" onAction="#connect">
+													<graphic>
+														<ImageView pickOnBounds="true" preserveRatio="true">
+															<image>
+																<Image url="/include/icons/connect.png" />
+															</image>
+														</ImageView>
+													</graphic>
+												</Button>
+												<Button disable="${!btnConn.disable}" onAction="#disconnect">
+													<graphic>
+														<ImageView pickOnBounds="true" preserveRatio="true">
+															<image>
+																<Image url="/include/icons/disconnect.png" />
+															</image>
+														</ImageView>
+													</graphic>
+												</Button>
+												<Button disable="${!btnConn.disable}" onAction="#startManualCalibration">
+													<graphic>
+														<ImageView pickOnBounds="true" preserveRatio="true">
+															<image>
+																<Image url="/include/icons/manu_calibration.png" />
+															</image>
+														</ImageView>
+													</graphic>
+												</Button>
+												<Button disable="${!btnConn.disable}" onAction="#startAutoCalibration">
+													<graphic>
+														<ImageView pickOnBounds="true" preserveRatio="true">
+															<image>
+																<Image url="/include/icons/auto_calibration.png" />
+															</image>
+														</ImageView>
+													</graphic>
+												</Button>
+												<Separator />
+												<Button disable="${!btnConn.disable}" onAction="#startProjection">
+													<graphic>
+														<ImageView pickOnBounds="true" preserveRatio="true">
+															<image>
+																<Image url="/include/icons/traffic_light_green.png" />
+															</image>
+														</ImageView>
+													</graphic>
+												</Button>
+												<Button disable="${!btnConn.disable}" onAction="#stopProjection">
+													<graphic>
+														<ImageView pickOnBounds="true" preserveRatio="true">
+															<image>
+																<Image url="/include/icons/traffic_light_red.png" />
+															</image>
+														</ImageView>
+													</graphic>
+												</Button>
+												<Separator />
+												<Button disable="${!btnConn.disable}" onAction="#previousContour">
+													<graphic>
+														<ImageView pickOnBounds="true" preserveRatio="true">
+															<image>
+																<Image url="/include/icons/arrow_left.png" />
+															</image>
+														</ImageView>
+													</graphic>
+												</Button>
+												<Button disable="${!btnConn.disable}" onAction="#nextContour">
+													<graphic>
+														<ImageView pickOnBounds="true" preserveRatio="true">
+															<image>
+																<Image url="/include/icons/arrow_right.png" />
+															</image>
+														</ImageView>
+													</graphic>
+												</Button>
+											</items>
+										</ToolBar>
+									</top>
+									<bottom>
+										<Label fx:id="lblTargetFile" text="Targetdatei: " />
+									</bottom>
 								</BorderPane>
 							</content>
 						</Tab>
@@ -112,8 +346,7 @@
 							<content>
 								<BorderPane>
 									<center>
-										<TextArea>
-										</TextArea>
+										<CooTextArea fx:id="txtNotes" />
 									</center>
 								</BorderPane>
 							</content>

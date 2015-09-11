@@ -32,12 +32,14 @@ public class CooController implements Initializable
 	public static final int DAYS_TO_SAVE_LOGS = 7;
 	public static final String LOGGING_FOLDER = "./logging";
 
+	public static final String DOCUMENT_FOLDER = "./doc";
+
 	protected static CooController instance;
 	protected Stage primaryStage;
 
 	@FXML
 	protected CooCoreDataPnl coreDataPnl;
-	
+
 	@FXML
 	protected CooTreeViewPnl treeViewPnl;
 	@FXML
@@ -46,10 +48,13 @@ public class CooController implements Initializable
 	protected CooMeasurementsPnl measurementsPnl;
 	@FXML
 	protected Label lblPrj;
-	
+
+	@FXML
+	protected Menu menuDocs;
+
 	@FXML
 	protected TabPane tabPane;
-	
+
 	private Property<String> xmlDbPath;
 
 	public static Object getInstance(Stage primaryStage)
@@ -95,23 +100,28 @@ public class CooController implements Initializable
 		treeViewPnl.addDataChangedListener(coreDataPnl);
 		treeViewPnl.addDataChangedListener(projectDataPnl);
 		treeViewPnl.addDataChangedListener(measurementsPnl);
-		
+
+		// Make panes detachable
 		CooTabPaneDetacherUtil.create().makeTabsDetachable(tabPane);
-		
-//		File lastOpened = new File(CooSystemPreferences.getSystemPreferences().getString(
-//			CooSystemPreferences.GENERAL_LAST_OPENED));
-//		if(Objects.nonNull(lastOpened) && lastOpened.exists())
-//		{
-//			openXMLDB(lastOpened);
-//		}
+
+		// Add documents to GUI
+		CooGuiUtil.addDocToMenu(menuDocs, new File(DOCUMENT_FOLDER));
+
+		// File lastOpened = new
+		// File(CooSystemPreferences.getSystemPreferences().getString(
+		// CooSystemPreferences.GENERAL_LAST_OPENED));
+		// if(Objects.nonNull(lastOpened) && lastOpened.exists())
+		// {
+		// openXMLDB(lastOpened);
+		// }
 	}
-	
+
 	@FXML
 	protected void newXMLDB()
 	{
 		File newDBFolder = CooDialogs.showOpenFolderDialog(primaryStage,
 			"Neue Coordz DB");
-		
+
 		if(Objects.nonNull(newDBFolder))
 		{
 			openXMLDB(newDBFolder);
@@ -121,24 +131,25 @@ public class CooController implements Initializable
 	@FXML
 	protected void openXMLDB()
 	{
-		openXMLDB(CooDialogs.showOpenFolderDialog(primaryStage, 
-						"Datenbank öffnen"));
+		openXMLDB(CooDialogs.showOpenFolderDialog(primaryStage,
+			"Datenbank öffnen"));
 	}
-	
+
 	@FXML
 	protected void exit()
 	{
 		CooSystem.exit();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@FXML
 	protected void openSettings()
 	{
 		// FORTEST try out the new settings dialog ^_^
-		
+
 		// Create the dialog
-		CooSettingsDialog dialog = new CooSettingsDialog(primaryStage, "Coordz",
+		CooSettingsDialog dialog = new CooSettingsDialog(primaryStage,
+			"Coordz",
 			CooFileUtil.getResourceIcon("Logo.png"));
 
 		// Add the settings - text, bool, combo
@@ -158,7 +169,7 @@ public class CooController implements Initializable
 			"XML-Datenbank", "Pfad", SettingType.TEXT, xmlDbPath.getValue()));
 		dialog.addSetting("XML-Datenbank", "Automatisch laden",
 			SettingType.BOOLEAN);
-		
+
 		dialog.addSetting("Datenbank", "Name", SettingType.TEXT);
 		dialog.addSetting("Datenbank", "Treiber", SettingType.TEXT);
 		dialog.addSetting("Datenbank", "Benutzer", SettingType.TEXT);
@@ -184,16 +195,16 @@ public class CooController implements Initializable
 			dialog.close();
 		});
 
-		CooGuiUtil.grayOutParent(primaryStage, 
+		CooGuiUtil.grayOutParent(primaryStage,
 			dialog.showingProperty());
 		dialog.showAndWait();
 	}
-	
+
 	protected void openXMLDB(final File xmlDBFolder)
 	{
 		if(Objects.nonNull(xmlDBFolder))
 		{
-			CooDialogs.showProgressDialog(primaryStage, 
+			CooDialogs.showProgressDialog(primaryStage,
 				"Stammdaten aus Datenbank laden", new Task<Void>()
 				{
 					@Override
@@ -201,27 +212,43 @@ public class CooController implements Initializable
 					{
 						// Create Tree Root
 						CooCustomerTreeItem root = new CooCustomerTreeItem(
-							new SimpleStringProperty("Kunden"), new CooCustomer());
+							new SimpleStringProperty("Kunden"),
+							new CooCustomer());
 						// Load all customers from xml DB
-						List<CooCustomer> customers = CooXMLDBUtil.getAllCustomers(
-							xmlDBFolder);
-						
-						// Add Customers to Tree Root
-						for(int i = 0; i < customers.size(); i++)
+						List<CooCustomer> customers = null;
+						try
 						{
-							CooCustomer c = customers.get(i);
-							updateMessage("Lädt " + c.nameProperty().get());
-							CooCustomerTreeItem customer = new CooCustomerTreeItem(
-								c.nameProperty(), c);
-							root.getChildren().add(customer);
-							updateProgress(i + 1, customers.size());
+							customers = CooXMLDBUtil.getAllCustomers(
+								xmlDBFolder);
 						}
-						
-						updateProgress(1, 1);
-						updateMessage("Stammdaten erfolgreich geleaden!");
-						treeViewPnl.getPrjTreeView().setRoot(root);
-						root.setExpanded(true);
-						xmlDbPath.setValue(xmlDBFolder.getAbsolutePath());
+						catch(Exception e)
+						{
+							updateMessage("Fehler beim Laden der XML-DB");
+							CooDialogs.showExceptionDialog(primaryStage, 
+								"Fehler beim Laden der XML-DB", e);
+							updateProgress(0, 0);
+							return null;
+						}
+
+						if(Objects.nonNull(customers))
+						{
+							// Add Customers to Tree Root
+							for(int i = 0; i < customers.size(); i++)
+							{
+								CooCustomer c = customers.get(i);
+								updateMessage("Lädt " + c.nameProperty().get());
+								CooCustomerTreeItem customer = new CooCustomerTreeItem(
+									c.nameProperty(), c);
+								root.getChildren().add(customer);
+								updateProgress(i + 1, customers.size());
+							}
+
+							updateProgress(1, 1);
+							updateMessage("Stammdaten erfolgreich geleaden!");
+							treeViewPnl.getPrjTreeView().setRoot(root);
+							root.setExpanded(true);
+							xmlDbPath.setValue(xmlDBFolder.getAbsolutePath());
+						}
 						return null;
 					}
 				});

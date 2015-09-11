@@ -64,9 +64,11 @@
 								</GridPane>
 							</center>
 							<right>
-								<CooBorderedTitledPane title="Logo" onMouseClicked="#changeLogo">
+								<CooBorderedTitledPane title="Logo"
+									onMouseClicked="#changeLogo">
 									<content>
-										<CooImageView fx:id="imgViewLogo" fitHeight="100.0" fitWidth="150.0" />
+										<CooImageView fx:id="imgViewLogo" fitHeight="100.0"
+											fitWidth="150.0" />
 									</content>
 								</CooBorderedTitledPane>
 							</right>
@@ -78,6 +80,9 @@
 						<BorderPane>
 							<center>
 								<CooTableView fx:id="tblContacts">
+									<placeholder>
+										<Label text="Keine Kontakte hinzugefügt" />
+									</placeholder>
 									<columns>
 										<TableColumn text="Vorname" fx:id="firstNameCol">
 											<cellValueFactory>
@@ -110,6 +115,9 @@
 						<BorderPane>
 							<center>
 								<CooTableView fx:id="tblPalets">
+									<placeholder>
+										<Label text="Keine Paletten hinzugefügt" />
+									</placeholder>
 									<columns>
 										<TableColumn text="Länge">
 											<cellValueFactory>

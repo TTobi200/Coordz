@@ -6,26 +6,30 @@
  */
 package de.gui;
 
-import java.io.File;
+import java.io.*;
+import java.time.LocalDate;
 import java.util.*;
 
 import javafx.beans.property.*;
 import javafx.collections.*;
 import javafx.concurrent.Task;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.util.converter.NumberStringConverter;
+import javafx.util.converter.*;
 
 import org.controlsfx.control.*;
 
 import de.coordz.data.*;
 import de.coordz.doc.*;
 import de.coordz.doc.CooDocument.Content;
+import de.coordz.lap.CooLAPClient;
 import de.util.*;
+import de.util.log.CooLog;
 
 public class CooDialogs
 {
@@ -72,6 +76,54 @@ public class CooDialogs
 		return dlg.showAndWait();
 	}
 	
+	public static void showExceptionDialog(Window owner, String msg, Exception e) 
+	{
+		// First log the exception
+		CooLog.error(msg, e);
+		
+		Alert dlg = new Alert(AlertType.ERROR);
+		dlg.setTitle(CooMainFrame.TITLE);
+		CooGuiUtil.grayOutParent(owner,
+			dlg.showingProperty());
+		dlg.initOwner(owner);
+		dlg.setHeaderText("Exception aufgetreten");
+		
+		BorderPane pane = new BorderPane();
+		BorderPane head = new BorderPane();
+		Button btnShowStack = new Button("V");
+		Label lblExMsg = new Label(msg);
+		TextArea txtStack = new TextArea();
+		txtStack.setEditable(false);
+		txtStack.setVisible(false);
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(baos, true);
+		e.printStackTrace(ps);
+		ps.close();
+		
+		txtStack.appendText(baos.toString());
+		txtStack.selectPositionCaret(0);
+		txtStack.deselect();
+		
+		btnShowStack.setOnAction(hdl -> 
+		{
+			boolean stackVisible = txtStack.isVisible();
+			txtStack.setVisible(!stackVisible);
+			btnShowStack.setText(stackVisible ? "V" : "^");
+			dlg.setHeight(stackVisible ? 150 : 400);
+		});
+		
+		head.setLeft(lblExMsg);
+		head.setRight(btnShowStack);
+		
+		pane.setTop(head);
+		pane.setCenter(txtStack);
+		
+		dlg.getDialogPane().setContent(pane);
+		dlg.show();
+		dlg.setHeight(150);
+	}
+	
 	public static void showProgressDialog(Window owner, String head, Task<Void> task)
 	{
 		Alert dlg = new Alert(AlertType.INFORMATION);
@@ -111,30 +163,51 @@ public class CooDialogs
 		for(int i = 0; i < columns.size(); i++)
 		{
 			Label lbl = new Label(columns.get(i).getText());
-			TextField txt = new TextField();
-			txt.setMinWidth(280);
+			Node n = new TextField();
 
 			Property p = (Property)((TableColumn<?, ?>)tblView.getColumns()
 				.get(i))
 				.getCellObservableValue(tblView.getSelectionModel()
 					.getSelectedIndex());
 
-			if(p instanceof IntegerProperty || p instanceof DoubleProperty
-				|| p instanceof FloatProperty)
+			if(p instanceof IntegerProperty)
 			{
-				txt.textProperty().bindBidirectional(
+				((TextField)n).textProperty().bindBidirectional(
 					p, new NumberStringConverter());
+			}
+			else if(p instanceof DoubleProperty || p instanceof FloatProperty)
+			{
+				((TextField)n).textProperty().bindBidirectional(
+					p, new DoubleStringConverter());
 			}
 			else if(p instanceof StringProperty)
 			{
-				txt.textProperty().bindBidirectional(p);
+				((TextField)n).textProperty().bindBidirectional(p);
+			}
+			else if(p instanceof BooleanProperty)
+			{
+				n = new CheckBox();
+				((CheckBox)n).selectedProperty().bindBidirectional(p);
+			}
+			else if(p instanceof ObjectProperty<?> 
+				&& p.getValue() instanceof LocalDate)
+			{
+				n = new DatePicker((LocalDate)p.getValue());
+				((DatePicker)n).setEditable(false);
+				((DatePicker)n).getEditor().textProperty().bindBidirectional(p, 
+					new LocalDateStringConverter());
+			}
+			
+			if(n instanceof Region)
+			{
+				((Region)n).setMinWidth(280);
 			}
 
 			GridPane.setRowIndex(lbl, i);
 			GridPane.setColumnIndex(lbl, 1);
-			GridPane.setRowIndex(txt, i);
-			GridPane.setColumnIndex(txt, 2);
-			pane.getChildren().addAll(lbl, txt);
+			GridPane.setRowIndex(n, i);
+			GridPane.setColumnIndex(n, 2);
+			pane.getChildren().addAll(lbl, n);
 		}
 
 		Alert dlg = new Alert(AlertType.INFORMATION);
@@ -145,6 +218,59 @@ public class CooDialogs
 		dlg.setHeaderText(head);
 		dlg.getDialogPane().setContent(pane);
 		dlg.showAndWait();
+	}
+	
+	public static CooLAPClient showConnectToLAPSoft(Window owner)
+	{
+		GridPane pane = new GridPane();
+		pane.setHgap(5d);
+		pane.setVgap(5d);
+		Label lblIP = new Label("Ip:");
+		TextField txtIp = new TextField();
+		Label lblPort = new Label("Port:");
+		TextField txtPort = new TextField();
+		txtIp.setMinWidth(280);
+		txtIp.setPromptText(CooLAPClient.DEF_LAP_SOFTWARE_IP);
+		txtPort.setMinWidth(280);
+		txtPort.setPromptText(String.valueOf(CooLAPClient.LAP_SOFTWARE_PORT));
+
+		GridPane.setRowIndex(lblIP, 1);
+		GridPane.setColumnIndex(lblIP, 1);
+		GridPane.setRowIndex(txtIp, 1);
+		GridPane.setColumnIndex(txtIp, 2);
+		
+		GridPane.setRowIndex(lblPort, 2);
+		GridPane.setColumnIndex(lblPort, 1);
+		GridPane.setRowIndex(txtPort, 2);
+		GridPane.setColumnIndex(txtPort, 2);
+		pane.getChildren().addAll(lblIP, txtIp,lblPort, txtPort);
+
+		Alert dlg = new Alert(AlertType.CONFIRMATION);
+		dlg.setTitle(CooMainFrame.TITLE);
+		CooGuiUtil.grayOutParent(owner,
+			dlg.showingProperty());
+		dlg.initOwner(owner);
+		dlg.setHeaderText("LAP ProSoft Server");
+		dlg.getDialogPane().setContent(pane);
+		dlg.showAndWait();
+		
+		CooLAPClient client = null;
+		if(dlg.getResult().equals(ButtonType.OK))
+		{
+			try
+			{
+				client = new CooLAPClient(txtIp.getText(), 
+					Integer.valueOf(txtPort.getText()));
+			}
+			catch(Exception e)
+			{
+				showErrorDialog(owner, "Fehler beim Verbinden",
+					e.getMessage());
+				CooLog.error("Could not connect to LAP-Software", e);
+			}
+		}
+		
+		return client;
 	}
 
 	public static <T> T showChooseDialog(Window owner, String header,

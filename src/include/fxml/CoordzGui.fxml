@@ -45,7 +45,8 @@
 								</ImageView>
 							</graphic>
 						</MenuItem>
-						<MenuItem mnemonicParsing="false" text="Beenden" onAction="#exit">
+						<MenuItem mnemonicParsing="false" text="Beenden"
+							onAction="#exit">
 							<graphic>
 								<ImageView pickOnBounds="true" preserveRatio="true">
 									<image>
@@ -89,7 +90,8 @@
 				</Menu>
 				<Menu mnemonicParsing="false" text="Optionen">
 					<items>
-						<MenuItem mnemonicParsing="false" text="Einstellungen" onAction="#openSettings">
+						<MenuItem mnemonicParsing="false" text="Einstellungen"
+							onAction="#openSettings">
 							<graphic>
 								<ImageView pickOnBounds="true" preserveRatio="true">
 									<image>
@@ -100,6 +102,8 @@
 						</MenuItem>
 					</items>
 				</Menu>
+				<Menu fx:id="menuDocs" mnemonicParsing="false" text="Dokumente"
+					visible="false" />
 				<Menu mnemonicParsing="false" text="Hilfe">
 					<items>
 						<MenuItem mnemonicParsing="false" text="Anleitung">
@@ -126,7 +130,7 @@
 		</MenuBar>
 	</top>
 	<center>
-		<SplitPane dividerPositions="0.18" BorderPane.alignment="CENTER">
+		<SplitPane dividerPositions="0.19" BorderPane.alignment="CENTER">
 			<items>
 				<CooTreeViewPnl fx:id="treeViewPnl" />
 				<BorderPane>

@@ -20,6 +20,7 @@ public class CooSettingsGroup
 	private TreeView<String> tree;
 	private TreeItem<String> treeItm;
 	private Map<String, Node> fields;
+	private Map<String, String> defaultValues;
 	private Map<String, Property<?>> props;
 	private GridPane gridFields;
 	private int row = 1;
@@ -30,6 +31,7 @@ public class CooSettingsGroup
 		this.tree = tree;
 		fields = new HashMap<String, Node>();
 		props = new HashMap<String, Property<?>>();
+		defaultValues = new HashMap<String, String>();
 		gridFields = new GridPane();
 		gridFields.setHgap(5d);
 		gridFields.setVgap(5d);
@@ -39,18 +41,21 @@ public class CooSettingsGroup
 	public void setFieldValue(String field, String value)
 	{
 		Node n = fields.get(field);
+		
+		// Always prefer the default value
+		String defValue = defaultValues.get(field);
 
 		if(n instanceof TextField)
 		{
-			((TextField)n).setText(value);
+			((TextField)n).setText(Objects.nonNull(defValue) ? defValue : value);
 		}
 		else if(n instanceof CheckBox)
 		{
-			((CheckBox)n).setSelected(Boolean.valueOf(value));
+			((CheckBox)n).setSelected(Boolean.valueOf(Objects.nonNull(defValue) ? defValue : value));
 		}
 		else if(n instanceof ComboBox<?>)
 		{
-			((ComboBox)n).getSelectionModel().select(value);
+			((ComboBox)n).getSelectionModel().select(Objects.nonNull(defValue) ? defValue : value);
 		}
 	}
 
@@ -147,8 +152,14 @@ public class CooSettingsGroup
 	{
 		Node sett = null;
 		Property<?> prop = null;
-		String value = values.length > 0 ? values[0] : "";
-
+		String value = "";
+		
+		if(values.length > 0)
+		{
+			value = values[0];
+			defaultValues.put(name, value);
+		}
+		
 		switch(type)
 		{
 			case BOOLEAN:

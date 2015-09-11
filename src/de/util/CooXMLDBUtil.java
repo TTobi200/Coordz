@@ -20,6 +20,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
 import de.coordz.data.*;
 import de.util.log.CooLog;
@@ -147,8 +148,12 @@ public class CooXMLDBUtil
 	 * Method to parse all {@link CooCustomer} from given xml-Databse.
 	 * @param xmlDB = the xml-Database folder
 	 * @return {@link List} with all {@link CooCustomer}
+	 * @throws ParserConfigurationException 
+	 * @throws IOException 
+	 * @throws SAXException 
 	 */
-	public static List<CooCustomer> getAllCustomers(File xmlDB)
+	public static List<CooCustomer> getAllCustomers(File xmlDB) throws SAXException, 
+			IOException, ParserConfigurationException
 	{
 		List<CooCustomer> customers = new ArrayList<CooCustomer>();
 
@@ -156,7 +161,7 @@ public class CooXMLDBUtil
 		{
 			xmlDBFolder.set(xmlDB);
 
-			Arrays.asList(xmlDB.listFiles()).forEach(f ->
+			for(File f : Arrays.asList(xmlDB.listFiles()))			
 			{
 				// Found customer directory
 				if(f.isDirectory())
@@ -168,32 +173,18 @@ public class CooXMLDBUtil
 
 					if(customerLogo.exists())
 					{
-						try
-						{
-							customer.logoProprty().set(
-								new Image(String.valueOf(
-									customerLogo.toURI().toURL())));
-						}
-						catch(Exception e)
-						{
-							CooLog.error("Could not load customer logo", e);
-						}
+						customer.logoProprty().set(
+							new Image(String.valueOf(
+								customerLogo.toURI().toURL())));
 					}
 
-					try
-					{
-						Element customerRot = getDocumentBuilder().parse(
-							customerXml)
-							.getDocumentElement();
-						customer.fromXML(getSingleElement(customerRot,
-							XML_CUSTOMER_ROOT));
-					}
-					catch(Exception e)
-					{
-						CooLog.error("Could not load customer", e);
-					}
+					Element customerRot = getDocumentBuilder().parse(
+						customerXml)
+						.getDocumentElement();
+					customer.fromXML(getSingleElement(customerRot,
+						XML_CUSTOMER_ROOT));
 
-					Arrays.asList(f.listFiles()).forEach(p ->
+					for(File p : Arrays.asList(f.listFiles()))
 					{
 						String pFileName = p.getName();
 
@@ -202,23 +193,16 @@ public class CooXMLDBUtil
 						{
 							CooProject project = new CooProject();
 
-							try
-							{
-								Element root = getDocumentBuilder().parse(p)
-									.getDocumentElement();
-								project.fromXML(getSingleElement(root,
-									XML_PROJECT_ROOT));
+							Element root = getDocumentBuilder().parse(p)
+								.getDocumentElement();
+							project.fromXML(getSingleElement(root,
+								XML_PROJECT_ROOT));
 
-								customer.addProject(project);
-							}
-							catch(Exception e)
-							{
-								CooLog.error("Could not load project", e);
-							}
+							customer.addProject(project);
 						}
-					});
+					}
 				}
-			});
+			}
 		}
 
 		return customers;

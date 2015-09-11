@@ -126,16 +126,17 @@ public class CooSettingsDialog extends Stage
 			.addListener((o, c, n) -> selectionChanged(n));
 		
 		showingProperty().addListener((o, c, n) -> 
-			createTitlePage(name));
-		
-		try
 		{
-			load(Preferences.userRoot().node(name));
-		}
-		catch(BackingStoreException e)
-		{
-			e.printStackTrace();
-		}
+			try
+			{
+				createTitlePage(name);
+				load(Preferences.userRoot().node(name));
+			}
+			catch(BackingStoreException e)
+			{
+				e.printStackTrace();
+			}
+		});
 	}
 
 	protected void createTitlePage(String name)

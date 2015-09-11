@@ -57,11 +57,11 @@ public class CooTreeViewPnl extends BorderPane
 
 				@Override
 				public void changed(
-								ObservableValue<? extends TreeItem<String>> observable,
-								TreeItem<String> old_val,
-								TreeItem<String> new_val)
+								ObservableValue<? extends TreeItem<String>> obs,
+								TreeItem<String> old,
+								TreeItem<String> newV)
 				{
-					TreeItem<String> selectedItem = new_val;
+					TreeItem<String> selectedItem = newV;
 
 					if(selectedItem instanceof CooProjectTreeItem)
 					{

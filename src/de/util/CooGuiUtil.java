@@ -6,15 +6,20 @@
  */
 package de.util;
 
+import java.awt.Desktop;
+import java.io.*;
+import java.util.*;
+
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.value.*;
 import javafx.geometry.*;
 import javafx.scene.*;
-import javafx.scene.control.TextInputControl;
+import javafx.scene.control.*;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.*;
+import de.util.log.CooLog;
 
 public class CooGuiUtil
 {
@@ -121,6 +126,46 @@ public class CooGuiUtil
 		if(focusOwn instanceof TextInputControl)
 		{
 			((TextInputControl)focusOwn).paste();
+		}
+	}
+	
+	public static void addDocToMenu(Menu menu, File folder)
+	{
+		if(Objects.nonNull(folder) && folder.exists())
+		{
+			Arrays.asList(folder.listFiles()).forEach(f ->
+			{
+				String name = f.getName();
+				MenuItem m;
+				
+				if(f.isDirectory())
+				{
+					m = new Menu(name);
+					addDocToMenu((Menu)m, f);
+				}
+				else
+				{
+					m = new MenuItem(name);
+					m.setOnAction(e ->
+					{
+						new Thread(() ->
+						{
+							try
+							{
+								Desktop.getDesktop().open(f);
+							}
+							catch(IOException ex)
+							{
+								CooLog.error("Could not open document", ex);
+							}
+						}).start();
+					});
+				}
+				
+				menu.getItems().add(m);
+			});	
+			
+			menu.setVisible(!menu.getItems().isEmpty());
 		}
 	}
 }

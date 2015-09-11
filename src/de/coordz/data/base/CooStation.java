@@ -30,8 +30,6 @@ public class CooStation extends CooData
 	/** {@link IntegerProperty} for the station z offset */
 	protected IntegerProperty zOffset;
 
-	/** {@link ObjectProperty} for the station {@link CooTotalstation} */
-	protected ObjectProperty<CooTotalstation> totalStation;
 	/** {@link ObjectProperty} for the station {@link CooRegionDividing} */
 	protected ObjectProperty<CooRegionDividing> regionDeviding;
 	/** {@link ObservableList} with all station {@link CooMeasurement} */
@@ -48,8 +46,6 @@ public class CooStation extends CooData
 		xOffset = new SimpleIntegerProperty();
 		yOffset = new SimpleIntegerProperty();
 		zOffset = new SimpleIntegerProperty();
-		totalStation = new SimpleObjectProperty<CooTotalstation>(
-						new CooTotalstation());
 		regionDeviding = new SimpleObjectProperty<CooRegionDividing>(
 						new CooRegionDividing());
 		measurements = FXCollections.observableArrayList();
@@ -69,7 +65,6 @@ public class CooStation extends CooData
 		station.setAttribute("YOffset", String.valueOf(yOffset.get()));
 		station.setAttribute("ZOffset", String.valueOf(zOffset.get()));
 
-		totalStation.get().toXML(doc, station);
 		regionDeviding.get().toXML(doc, station);
 
 		// Add all measurements
@@ -93,8 +88,6 @@ public class CooStation extends CooData
 			yOffset.set(Integer.valueOf(station.getAttribute("YOffset")));
 			zOffset.set(Integer.valueOf(station.getAttribute("ZOffset")));
 			
-			totalStation.get().fromXML(getSingleElement(station,
-				"Totalstation"));
 			regionDeviding.get().fromXML(getSingleElement(station,
 				"RegionDividing"));
 			
@@ -163,15 +156,6 @@ public class CooStation extends CooData
 	public IntegerProperty zOffsetProperty()
 	{
 		return zOffset;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #totalStation}
-	 */
-	public ObjectProperty<CooTotalstation> totalStationProperty()
-	{
-		return totalStation;
 	}
 	
 	/**
