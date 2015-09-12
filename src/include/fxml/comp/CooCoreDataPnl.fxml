@@ -119,6 +119,11 @@
 										<Label text="Keine Paletten hinzugefügt" />
 									</placeholder>
 									<columns>
+										<TableColumn text="Name">
+											<cellValueFactory>
+												<PropertyValueFactory property="name" />
+											</cellValueFactory>
+										</TableColumn>
 										<TableColumn text="Länge">
 											<cellValueFactory>
 												<PropertyValueFactory property="length" />

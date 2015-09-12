@@ -19,6 +19,8 @@ import de.util.CooPaletType;
 
 public class CooPalet extends CooData
 {
+	/** {@link StringProperty} for the palet name */
+	protected StringProperty name;
 	/** {@link ObjectProperty} for the palet {@link CooPaletType} */
 	protected ObjectProperty<CooPaletType> type;
 	/** {@link IntegerProperty} for the palet width */
@@ -28,6 +30,7 @@ public class CooPalet extends CooData
 	
 	public CooPalet()
 	{
+		name = new SimpleStringProperty();
 		type = new SimpleObjectProperty<CooPaletType>();
 		width = new SimpleIntegerProperty();
 		length = new SimpleIntegerProperty();
@@ -37,6 +40,7 @@ public class CooPalet extends CooData
 	public void toXML(Document doc, Element root)
 	{
 		Element palet = addElement(doc, root, "Palet");
+		palet.setAttribute("Name", String.valueOf(name.get()));
 		palet.setAttribute("Type", String.valueOf(type.get()));
 		palet.setAttribute("Width", String.valueOf(width.get()));
 		palet.setAttribute("Length", String.valueOf(length.get()));
@@ -47,10 +51,20 @@ public class CooPalet extends CooData
 	{
 		if(Objects.nonNull(palet))
 		{
+			name.set(palet.getAttribute("Name"));
 			type.set(CooPaletType.parse(palet.getAttribute("Type")));
 			width.set(Integer.valueOf(palet.getAttribute("Width")));
 			length.set(Integer.valueOf(palet.getAttribute("Length")));
 		}
+	}
+	
+	/**
+	 * Method to access Property
+	 * @return {@link #name}
+	 */
+	public StringProperty nameProperty()
+	{
+		return name;
 	}
 	
 	/**
@@ -78,5 +92,11 @@ public class CooPalet extends CooData
 	public IntegerProperty lengthProperty()
 	{
 		return length;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return nameProperty().get();
 	}
 }

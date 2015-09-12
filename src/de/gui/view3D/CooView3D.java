@@ -1,54 +1,69 @@
+/*
+ * $Header$
+ * 
+ * $Log$
+ * Copyright © 2015 T.Ohm . All Rights Reserved.
+ */
 package de.gui.view3D;
 
 import java.util.Objects;
 
 import javafx.animation.Timeline;
+import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.scene.*;
+import javafx.scene.control.*;
 import javafx.scene.input.*;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.*;
-import javafx.scene.shape.Box;
-import de.coordz.data.base.CooMeasurement;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
+
+import org.controlsfx.control.CheckComboBox;
+
+import de.coordz.data.*;
+import de.coordz.data.base.CooPalet;
+import de.gui.CooDataChanged;
+import de.gui.view3D.comp.*;
 import de.util.CooXformUtil;
 
-public class CooView3D extends StackPane implements CooMeasurementChanged
+public class CooView3D extends BorderPane implements CooMeasurementChanged, CooDataChanged
 {
-	final Group root = new Group();
-	final Group axisGroup = new Group();
-	final CooXformUtil world = new CooXformUtil();
-	final PerspectiveCamera camera = new PerspectiveCamera(true);
-	final CooXformUtil cameraXform = new CooXformUtil();
-	final CooXformUtil cameraXform2 = new CooXformUtil();
-	final CooXformUtil cameraXform3 = new CooXformUtil();
-	final double cameraDistance = 450;
-	final CooXformUtil moleculeGroup = new CooXformUtil();
-	private Timeline timeline;
-	boolean timelinePlaying = false;
-	double ONE_FRAME = 1.0 / 24.0;
-	double DELTA_MULTIPLIER = 200.0;
-	double CONTROL_MULTIPLIER = 0.1;
-	double SHIFT_MULTIPLIER = 0.1;
-	double ALT_MULTIPLIER = 0.5;
-	double mousePosX;
-	double mousePosY;
-	double mouseOldX;
-	double mouseOldY;
-	double mouseDeltaX;
-	double mouseDeltaY;
+	protected final Group root = new Group();
+	protected final Group axisGroup = new Group();
+	protected final CooXformUtil world = new CooXformUtil();
+	protected final PerspectiveCamera camera = new PerspectiveCamera(true);
+	protected final CooXformUtil cameraXform = new CooXformUtil();
+	protected final CooXformUtil cameraXform2 = new CooXformUtil();
+	protected final CooXformUtil cameraXform3 = new CooXformUtil();
+	protected final double cameraDistance = 450;
+	protected Timeline timeline;
+	protected boolean timelinePlaying = false;
+	protected double ONE_FRAME = 1.0 / 24.0;
+	protected double DELTA_MULTIPLIER = 200.0;
+	protected double CONTROL_MULTIPLIER = 0.1;
+	protected double SHIFT_MULTIPLIER = 0.1;
+	protected double ALT_MULTIPLIER = 0.5;
+	protected double mousePosX;
+	protected double mousePosY;
+	protected double mouseOldX;
+	protected double mouseOldY;
+	protected double mouseDeltaX;
+	protected double mouseDeltaY;
 	
-	protected CooXformUtil paletXform;
-	protected Box palet;
+	protected CooPalet3D palet;
+	protected CooAxis3D axis;
+	protected ComboBox<CooPalet> cbPalets;
+	protected CheckComboBox<CooData3D<?>> elements;
 	
 	public CooView3D()
 	{
 		System.setProperty("prism.dirtyopts", "false");
+		elements = new CheckComboBox<CooData3D<?>>();
 		
 		buildScene();
 		buildCamera();
 		buildAxes();
-		buildPalet();
-		
+		buildWorld();
+
 		SubScene subScene = new SubScene(root, 780, 280, true, null);
 		subScene.setFill(Color.GREY);
 		handleKeyboard(subScene, world);
@@ -59,6 +74,9 @@ public class CooView3D extends StackPane implements CooMeasurementChanged
 		getChildren().add(subScene);
 		subScene.heightProperty().bind(heightProperty());
 		subScene.widthProperty().bind(widthProperty());
+		
+		setTop(buildToolbar());
+		setPrefSize(700, 500);
 	}
 
 	private void buildScene()
@@ -83,45 +101,50 @@ public class CooView3D extends StackPane implements CooMeasurementChanged
 
 	private void buildAxes()
 	{
-		final PhongMaterial redMaterial = new PhongMaterial();
-		redMaterial.setDiffuseColor(Color.DARKRED);
-		redMaterial.setSpecularColor(Color.RED);
-
-		final PhongMaterial greenMaterial = new PhongMaterial();
-		greenMaterial.setDiffuseColor(Color.DARKGREEN);
-		greenMaterial.setSpecularColor(Color.GREEN);
-
-		final PhongMaterial blueMaterial = new PhongMaterial();
-		blueMaterial.setDiffuseColor(Color.DARKBLUE);
-		blueMaterial.setSpecularColor(Color.BLUE);
-
-		final Box xAxis = new Box(240.0, 1, 1);
-		final Box yAxis = new Box(1, 240.0, 1);
-		final Box zAxis = new Box(1, 1, 240.0);
-
-		xAxis.setMaterial(redMaterial);
-		yAxis.setMaterial(greenMaterial);
-		zAxis.setMaterial(blueMaterial);
-
-		axisGroup.getChildren().addAll(xAxis, yAxis, zAxis);
-		world.getChildren().addAll(axisGroup);
+		axis = new CooAxis3D();
+		addToWorld(axis);
 	}
-
-	private void buildPalet()
+	
+	private void buildWorld()
 	{
-		final PhongMaterial greyMaterial = new PhongMaterial();
-		greyMaterial.setDiffuseColor(Color.DARKGREY);
-		greyMaterial.setSpecularColor(Color.GREY);
-
-		paletXform = new CooXformUtil();
+		palet = new CooPalet3D();
+		addToWorld(palet);
+	}
+	
+	private Node buildToolbar()
+	{
+		ToolBar tools = new ToolBar();
+		cbPalets = new ComboBox<CooPalet>();
 		
-		palet = new Box(70, 10, 100);
-		palet.setMaterial(greyMaterial);
+		cbPalets.setPromptText("Palette auswählen...");
+		cbPalets.getSelectionModel()
+			.selectedItemProperty()
+			.addListener(
+				(obs, old, newV) -> palet.dataChanged(
+					Objects.nonNull(newV) ? newV : new CooPalet()));
 		
-		paletXform.getChildren().add(palet);
-		moleculeGroup.getChildren().add(paletXform);
-
-		world.getChildren().addAll(moleculeGroup);
+		elements.getCheckModel().checkAll();
+		elements.getCheckModel()
+			.getCheckedItems()
+			.addListener(new ListChangeListener<CooData3D<?>>()
+			{
+				@Override
+				public void onChanged(javafx.collections.ListChangeListener.
+						Change<? extends CooData3D<?>> c)
+				{
+					elements.getItems().forEach(el -> el.setVisible(false));
+					c.getList().forEach(el -> el.setVisible(true));
+				}
+			});
+		
+		tools.getItems().addAll(cbPalets, elements);
+		return tools;
+	}
+	
+	private <T extends CooData> void addToWorld(CooData3D<?> n)
+	{
+		world.getChildren().add(n);
+		elements.getItems().add(n);
 	}
 
 	private void handleMouse(SubScene scene, final Node root)
@@ -185,10 +208,11 @@ public class CooView3D extends StackPane implements CooMeasurementChanged
 	}
 
 	@Override
-	public void measurementChanged(CooMeasurement measurement)
+	public void customerChanged(CooCustomer customer)
 	{
-		if(Objects.nonNull(measurement))
+		if(Objects.nonNull(customer))
 		{
+			cbPalets.setItems(customer.getPalets());
 		}
 	}
 	
@@ -226,14 +250,6 @@ public class CooView3D extends StackPane implements CooMeasurementChanged
 					case S:
 						if(event.isControlDown())
 						{
-							if(moleculeGroup.isVisible())
-							{
-								moleculeGroup.setVisible(false);
-							}
-							else
-							{
-								moleculeGroup.setVisible(true);
-							}
 						}
 						break;
 					case SPACE:

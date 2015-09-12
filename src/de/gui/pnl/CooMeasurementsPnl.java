@@ -15,7 +15,7 @@ import javafx.collections.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import de.coordz.data.CooProject;
+import de.coordz.data.*;
 import de.coordz.data.base.*;
 import de.coordz.lap.CooLAPClient;
 import de.gui.*;
@@ -188,11 +188,24 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 						measurement.getTargets() : null);
 		tblTotalStation.getItems().setAll(Objects.nonNull(measurement) ?
 						measurement.totalStationProperty().get() : null);
+		
+		// Inform the 3D View
+		view3D.measurementChanged(measurement);
 	}
 	
 	@Override
 	public void projectChanged(CooProject project)
 	{
 		cbStations.setItems(project.getStations());
+		
+		// Inform the 3D View
+		view3D.projectChanged(project);
+	}
+	
+	@Override
+	public void customerChanged(CooCustomer customer)
+	{
+		// Inform the 3D View
+		view3D.customerChanged(customer);
 	}
 }
