@@ -6,6 +6,7 @@
  */
 package de.gui.view3D.comp;
 
+import javafx.scene.control.Label;
 import javafx.scene.paint.*;
 import javafx.scene.shape.Box;
 import de.coordz.data.CooData;
@@ -19,6 +20,10 @@ public class CooAxis3D extends CooData3D<CooData>
 	protected Box xAxis;
 	protected Box yAxis;
 	protected Box zAxis;
+	
+	protected Label lblXAxis;
+	protected Label lblYAxis;
+	protected Label lblZAxis;
 
 	public CooAxis3D()
 	{
@@ -28,6 +33,9 @@ public class CooAxis3D extends CooData3D<CooData>
 		xAxis = new Box(240.0, 1, 1);
 		yAxis = new Box(1, 240.0, 1);
 		zAxis = new Box(1, 1, 240.0);
+		lblXAxis = new Label("X");
+		lblYAxis = new Label("Y");
+		lblZAxis = new Label("Z");
 		
 		redMaterial.setDiffuseColor(Color.DARKRED);
 		redMaterial.setSpecularColor(Color.RED);

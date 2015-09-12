@@ -264,9 +264,8 @@ public class CooDialogs
 			}
 			catch(Exception e)
 			{
-				showErrorDialog(owner, "Fehler beim Verbinden",
-					e.getMessage());
-				CooLog.error("Could not connect to LAP-Software", e);
+				showExceptionDialog(owner, 
+					"Fehler beim Verbinden", e);
 			}
 		}
 		

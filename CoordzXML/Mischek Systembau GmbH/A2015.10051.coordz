@@ -3,7 +3,7 @@
     <Project Date="2005-01-01" Name="A2015.10051">
         <LAPSoftware Name="ProSoft 2D" Version="3.5.8 beta4"/>
         <Stations>
-            <Station File="D:\Unitechnik\repos\Coordz" Name="U1" XOffset="-17" YOffset="-3" ZOffset="-4">
+            <Station Description="Umlauf Station mit Laser" File="D:\Unitechnik\repos\Coordz" Name="U1" XOffset="-17" YOffset="-3" ZOffset="-4">
                 <RegionDividing>
                     <Laser MAC="sss" Name="Las1" SerialNr="" TotalDeviation="0.0" X="0" Y="0" Z="0"/>
                     <Laser MAC="" Name="Las2" SerialNr="" TotalDeviation="0.0" X="0" Y="0" Z="0"/>

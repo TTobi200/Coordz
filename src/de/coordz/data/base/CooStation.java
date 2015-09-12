@@ -21,6 +21,8 @@ public class CooStation extends CooData
 {
 	/** {@link StringProperty} for the station name */
 	protected StringProperty name;
+	/** {@link StringProperty} for the station description */
+	protected StringProperty description;
 	/** {@link StringProperty} for the station file */
 	protected StringProperty file;
 	/** {@link IntegerProperty} for the station x offset */
@@ -42,6 +44,7 @@ public class CooStation extends CooData
 	public CooStation()
 	{
 		name = new SimpleStringProperty();
+		description = new SimpleStringProperty();
 		file = new SimpleStringProperty();
 		xOffset = new SimpleIntegerProperty();
 		yOffset = new SimpleIntegerProperty();
@@ -60,6 +63,7 @@ public class CooStation extends CooData
 	{
 		Element station = addElement(doc, root, "Station");
 		station.setAttribute("Name", name.get());
+		station.setAttribute("Description", description.get());
 		station.setAttribute("File", file.get());
 		station.setAttribute("XOffset", String.valueOf(xOffset.get()));
 		station.setAttribute("YOffset", String.valueOf(yOffset.get()));
@@ -83,6 +87,7 @@ public class CooStation extends CooData
 		if(Objects.nonNull(station))
 		{
 			name.set(station.getAttribute("Name"));
+			description.set(station.getAttribute("Description"));
 			file.set(station.getAttribute("File"));
 			xOffset.set(Integer.valueOf(station.getAttribute("XOffset")));
 			yOffset.set(Integer.valueOf(station.getAttribute("YOffset")));
@@ -120,6 +125,15 @@ public class CooStation extends CooData
 	public StringProperty nameProperty()
 	{
 		return name;
+	}
+	
+	/**
+	 * Method to access Property
+	 * @return {@link #description}
+	 */
+	public StringProperty descriptionProperty()
+	{
+		return description;
 	}
 	
 	/**

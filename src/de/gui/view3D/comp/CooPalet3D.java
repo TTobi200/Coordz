@@ -12,7 +12,7 @@ import de.coordz.data.base.CooPalet;
 
 public class CooPalet3D extends CooData3D<CooPalet>
 {
-	protected final PhongMaterial greyMaterial;
+	protected PhongMaterial greyMaterial;
 	protected Box palet;
 
 	public CooPalet3D()

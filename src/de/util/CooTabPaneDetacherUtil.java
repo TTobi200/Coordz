@@ -106,7 +106,7 @@ public class CooTabPaneDetacherUtil
 						snapshotParams, null);
 					Dragboard db = tabPane.startDragAndDrop(TransferMode.MOVE);
 					ClipboardContent clipboardContent = new ClipboardContent();
-					clipboardContent.put(DataFormat.PLAIN_TEXT, "detach");
+					clipboardContent.put(DataFormat.PLAIN_TEXT, "");
 					db.setDragView(snapshot, 40, 40);
 					db.setContent(clipboardContent);
 				}
