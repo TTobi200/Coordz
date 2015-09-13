@@ -6,7 +6,7 @@
  */
 package de.gui.view3D;
 
-import java.util.Objects;
+import java.util.*;
 
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
@@ -51,6 +51,8 @@ public class CooView3D extends BorderPane implements CooMeasurementChanged, CooD
 	protected CooAxis3D axis;
 	protected ComboBox<CooPalet> cbPalets;
 	protected CheckComboBox<CooData3D<?>> elements;
+	protected CooLaser3D laser1;
+	protected CooLaser3D laser2;
 	
 	public CooView3D()
 	{
@@ -59,7 +61,6 @@ public class CooView3D extends BorderPane implements CooMeasurementChanged, CooD
 		
 		buildScene();
 		buildCamera();
-		buildAxes();
 		buildWorld();
 
 		SubScene subScene = new SubScene(root, 780, 280, true, null);
@@ -75,6 +76,14 @@ public class CooView3D extends BorderPane implements CooMeasurementChanged, CooD
 		
 		setTop(buildToolbar());
 		setPrefSize(700, 500);
+		
+		subScene.setOnDragDetected(
+		(MouseEvent event) ->
+		{
+			// Consume the drag event here
+			// Only drag on TabPane
+			event.consume();
+		});
 	}
 
 	private void buildScene()
@@ -97,16 +106,19 @@ public class CooView3D extends BorderPane implements CooMeasurementChanged, CooD
 		cameraXform.rx.setAngle(40);
 	}
 
-	private void buildAxes()
-	{
-		axis = new CooAxis3D();
-		addToWorld(axis);
-	}
-	
 	private void buildWorld()
 	{
 		palet = new CooPalet3D();
-		addToWorld(palet);
+		axis = new CooAxis3D();
+		laser1 = new CooLaser3D();
+		laser2 = new CooLaser3D();
+		
+		laser1.setTy(100);
+		laser2.setTy(100);
+		laser1.setTz(-100);
+		laser2.setTz(100);
+		
+		addToWorld(axis, palet, laser1, laser2);
 	}
 	
 	private Node buildToolbar()
@@ -139,10 +151,13 @@ public class CooView3D extends BorderPane implements CooMeasurementChanged, CooD
 		return tools;
 	}
 	
-	private <T extends CooData> void addToWorld(CooData3D<?> n)
+	private <T extends CooData> void addToWorld(CooData3D<?>... n)
 	{
-		world.getChildren().add(n);
-		elements.getItems().add(n);
+		Arrays.asList(n).forEach(el -> 
+		{
+			world.getChildren().add(el);
+			elements.getItems().add(el);
+		});
 	}
 	
 	@Override

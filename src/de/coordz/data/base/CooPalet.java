@@ -31,7 +31,8 @@ public class CooPalet extends CooData
 	public CooPalet()
 	{
 		name = new SimpleStringProperty();
-		type = new SimpleObjectProperty<CooPaletType>();
+		type = new SimpleObjectProperty<CooPaletType>(
+				CooPaletType.U);
 		width = new SimpleIntegerProperty();
 		length = new SimpleIntegerProperty();
 	}

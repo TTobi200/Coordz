@@ -190,12 +190,25 @@ public class CooDialogs
 				((CheckBox)n).selectedProperty().bindBidirectional(p);
 			}
 			else if(p instanceof ObjectProperty<?> 
-				&& p.getValue() instanceof LocalDate)
+				&& p.getValue() instanceof LocalDate | Objects.isNull(p.getValue()))
 			{
 				n = new DatePicker((LocalDate)p.getValue());
 				((DatePicker)n).setEditable(false);
 				((DatePicker)n).getEditor().textProperty().bindBidirectional(p, 
 					new LocalDateStringConverter());
+			}
+			else if(p instanceof ObjectProperty<?> 
+				&& p.getValue() instanceof CooPaletType | Objects.isNull(p.getValue()))
+			{
+				n = new ComboBox<CooPaletType>(FXCollections.observableArrayList(
+					CooPaletType.values()));
+				((ComboBox)n).getSelectionModel().select(p.getValue());
+				((ComboBox)n).getSelectionModel()
+					.selectedItemProperty()
+					.addListener((obs, old, newV) -> 
+					{
+						p.setValue(newV);
+					});
 			}
 			
 			if(n instanceof Region)
