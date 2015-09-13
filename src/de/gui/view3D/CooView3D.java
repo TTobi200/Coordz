@@ -125,7 +125,15 @@ public class CooView3D extends BorderPane implements CooMeasurementChanged, CooD
 	{
 		ToolBar tools = new ToolBar();
 		cbPalets = new ComboBox<CooPalet>();
+		CheckBox cbShowNames = new CheckBox("Namen anzeigen");
 		
+		// Display names
+		elements.getItems()
+			.forEach(
+				el -> el.nameVisibleProperty().bind(
+					cbShowNames.selectedProperty()));
+		
+		// Palet selection
 		cbPalets.setPromptText("Palette auswählen...");
 		cbPalets.getSelectionModel()
 			.selectedItemProperty()
@@ -133,6 +141,7 @@ public class CooView3D extends BorderPane implements CooMeasurementChanged, CooD
 				(obs, old, newV) -> palet.dataChanged(
 					Objects.nonNull(newV) ? newV : new CooPalet()));
 		
+		// Elements visible selection
 		elements.getCheckModel().checkAll();
 		elements.getCheckModel()
 			.getCheckedItems()
@@ -147,7 +156,7 @@ public class CooView3D extends BorderPane implements CooMeasurementChanged, CooD
 				}
 			});
 		
-		tools.getItems().addAll(cbPalets, elements);
+		tools.getItems().addAll(cbPalets, elements, cbShowNames);
 		return tools;
 	}
 	
