@@ -1,26 +1,14 @@
 package de.gui.view3D.ddd;
 
-import java.util.EnumSet;
-import java.util.Objects;
-
 import de.gui.view3D.ddd.Coo3dAxis.CoordSystem;
-import de.gui.view3D.ddd.Coo3dAxis.System;
 import de.gui.view3D.ddd.Coo3dAxis.TransformOrder;
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.PerspectiveCamera;
-import javafx.scene.transform.*;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 
 public class Coo3dDddCamera extends PerspectiveCamera
 {
-	private static final double ROTATE_QUARTER = 90d;
-	private static final double ROTATE_HALF = ROTATE_QUARTER * 2;
-
-	public static final Coo3dAxis FIRST_AXIS = Coo3dAxis.X;
-	public static final Coo3dAxis SECOND_AXIS = Coo3dAxis.Z;
-	public static final Coo3dAxis THIRD_AXIS = Coo3dAxis.Y;
-
-	private static final EnumSet<System> INTUITIVE_ALL_POSITIVE = EnumSet.of(System.X_Y_Z, System.Y_Z_X, System.Z_X_Y);
-
 	private TransformOrder transformOrder;
 	private CoordSystem coordSystem;
 
@@ -50,7 +38,7 @@ public class Coo3dDddCamera extends PerspectiveCamera
 		getTransforms().clear();
 
 		getTransforms().addAll(
-			getTransformFor(coordSystem),
+			CooDddUtil.getTransformFor(coordSystem),
 			getRotateFor(transformOrder.getSystem().getFirstAxis()),
 			getRotateFor(transformOrder.getSystem().getSecondAxis()),
 			getRotateFor(transformOrder.getSystem().getThirdAxis()));
@@ -63,34 +51,6 @@ public class Coo3dDddCamera extends PerspectiveCamera
 		{
 			getTransforms().add(pos);
 		}
-	}
-
-	private static Rotate creRotateForAxis(Coo3dAxis axis)
-	{
-		Objects.requireNonNull(axis);
-
-		Rotate r = new Rotate();
-
-		switch(axis)
-		{
-			case X:
-			{
-				r.setAxis(Rotate.X_AXIS);
-				break;
-			}
-			case Y:
-			{
-				r.setAxis(Rotate.Y_AXIS);
-				break;
-			}
-			case Z:
-			{
-				r.setAxis(Rotate.Z_AXIS);
-				break;
-			}
-		}
-
-		return r;
 	}
 
 	private Rotate getRotateFor(Coo3dAxis axis)
@@ -112,178 +72,6 @@ public class Coo3dDddCamera extends PerspectiveCamera
 		}
 
 		return null;
-	}
-
-	private Transform getTransformFor(System system)
-	{
-		Transform t;
-
-		switch(system)
-		{
-			case X_Y_Z:
-			{
-				Rotate r = new Rotate();
-				r.setAxis(Rotate.X_AXIS);
-				r.setAngle(-ROTATE_QUARTER);
-				t = r;
-				break;
-			}
-			case Y_X_Z:
-			{
-				t = getTransformFor(System.Y_Z_X);
-				Rotate r = new Rotate();
-				r.setAxis(Rotate.X_AXIS);
-				r.setAngle(ROTATE_QUARTER);
-				t = t.createConcatenation(r);
-				break;
-			}
-			case Y_Z_X:
-			{
-				Rotate r = new Rotate();
-				r.setAxis(Rotate.Z_AXIS);
-				r.setAngle(ROTATE_QUARTER);
-				t = r;
-				break;
-			}
-			case Z_Y_X:
-			{
-				t = getTransformFor(System.Z_X_Y);
-				Rotate r = new Rotate();
-				r.setAxis(Rotate.X_AXIS);
-				r.setAngle(ROTATE_QUARTER);
-				t = t.createConcatenation(r);
-				break;
-			}
-			case Z_X_Y:
-			{
-				Rotate r = new Rotate();
-				r.setAxis(Rotate.Y_AXIS);
-				r.setAngle(-ROTATE_QUARTER);
-				t = r;
-				r.setAxis(Rotate.X_AXIS);
-				r.setAngle(180d);
-				t = t.createConcatenation(r);
-				break;
-			}
-			case X_Z_Y:
-			default:
-			{
-				t = new Affine();
-				break;
-			}
-		}
-
-		return t;
-	}
-
-	private Transform getTransformFor(CoordSystem coordSystem)
-	{
-		Transform t = getTransformFor(coordSystem.getSystem());
-
-		int negAxis = 0;
-		if(coordSystem.isFirstNegativ())
-		{
-			negAxis++;
-		}
-		if(coordSystem.isSecondNegativ())
-		{
-			negAxis++;
-		}
-		if(coordSystem.isThirdNegativ())
-		{
-			negAxis++;
-		}
-
-		switch(negAxis)
-		{
-			case 0:
-			{
-				if(INTUITIVE_ALL_POSITIVE.contains(coordSystem.getSystem()))
-				{
-					break;
-				}
-				else
-				{
-					// TODO $Ddd
-					throw new IllegalArgumentException("Coordsystem " + coordSystem + " not supported yet");
-				}
-			}
-			case 1:
-			{
-				if(INTUITIVE_ALL_POSITIVE.contains(coordSystem.getSystem()))
-				{
-					// TODO $Ddd
-					throw new IllegalArgumentException("Coordsystem " + coordSystem + " not supported yet");
-				}
-				else
-				{
-					Rotate r = null;
-					if(coordSystem.isThirdNegativ())
-					{
-						break;
-					}
-					else if(coordSystem.isSecondNegativ())
-					{
-						r = creRotateForAxis(FIRST_AXIS);
-					}
-					else if(coordSystem.isFirstNegativ())
-					{
-						r = creRotateForAxis(SECOND_AXIS);
-					}
-
-					r.setAngle(ROTATE_HALF);
-					t = t.createConcatenation(r);
-				}
-				break;
-			}
-			case 2:
-			{
-				if(INTUITIVE_ALL_POSITIVE.contains(coordSystem.getSystem()))
-				{
-					Rotate r;
-					if(!coordSystem.isFirstNegativ())
-					{
-						r = creRotateForAxis(FIRST_AXIS);
-					}
-					else if(!coordSystem.isSecondNegativ())
-					{
-
-						r = creRotateForAxis(SECOND_AXIS);
-					}
-					else
-					{
-						r = creRotateForAxis(THIRD_AXIS);
-					}
-
-					r.setAngle(ROTATE_HALF);
-					t = t.createConcatenation(r);
-				}
-				else
-				{
-					// TODO $Ddd
-					throw new IllegalArgumentException("Coordsystem " + coordSystem + " not supported yet");
-				}
-				break;
-			}
-			case 3:
-			{
-				if(INTUITIVE_ALL_POSITIVE.contains(coordSystem.getSystem()))
-				{
-					// TODO $Ddd
-					throw new IllegalArgumentException("Coordsystem " + coordSystem + " not supported yet");
-				}
-				else
-				{
-					Rotate r = creRotateForAxis(Coo3dAxis.Y);
-//					Rotate r = creRotateForAxis(coordSystem.getSystem().getThirdAxis());
-					r.setAngle(ROTATE_HALF);
-					t = t.createConcatenation(r);
-				}
-				break;
-			}
-		}
-
-		return t;
 	}
 
 	public DoubleProperty xAngleProperty()

@@ -7,6 +7,7 @@ import com.sun.javafx.scene.control.skin.BehaviorSkinBase;
 import de.coordz.data.base.CooPalet;
 import de.gui.view3D.ddd.Coo3dAxis.CoordSystem;
 import de.gui.view3D.ddd.Coo3dAxis.TransformOrder;
+import de.util.log.CooLog;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -14,11 +15,12 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
-import javafx.scene.text.Text;
-import javafx.scene.transform.Translate;
+import javafx.scene.transform.*;
 
 public class CooView3dDddSkin extends BehaviorSkinBase<CooView3dDdd, CooView3dDddBehavior>
 {
+	private static final CoordSystem VIEW_SYSTEM = CoordSystem.NX_NZ_NY;
+
 	private BorderPane root;
 
 	private SubScene scene2d;
@@ -69,17 +71,14 @@ public class CooView3dDddSkin extends BehaviorSkinBase<CooView3dDdd, CooView3dDd
 		scene2d.widthProperty().bind(stack.widthProperty());
 		scene2d.heightProperty().bind(stack.heightProperty());
 
-		Text text = new Text("lsokdjfk");
-		text.setTranslateX(20);
-		text.setTranslateY(20d);
-		root2d.getChildren().add(text);
+		fixCameraBug();
 
 		getChildren().add(root);
 	}
 
 	private Camera initCamera()
 	{
-		camera = new Coo3dDddCamera(TransformOrder.Y_X_Z_T, CoordSystem.NX_NY_NZ);
+		camera = new Coo3dDddCamera(TransformOrder.Y_X_Z_T, VIEW_SYSTEM);
 
 		// position camera center to the center of the subscene
 		// TODO $Ddd 20.09.15 why do binding of translateproperties does not work?
@@ -172,5 +171,29 @@ public class CooView3dDddSkin extends BehaviorSkinBase<CooView3dDdd, CooView3dDd
 
 		tools.getItems().addAll(cbPalets, elements, cbShowNames);
 		return tools;
+	}
+
+	// TODO $Ddd 23.09.15 try to avoid the need of the fix
+	private void fixCameraBug()
+	{
+		try
+		{
+			// don't use the return of the remove-call as afterwars createInverse() could throw an
+			// exception. This way at least the original transform stays in the camera if an
+			// exception occurs
+			Transform t = CooDddUtil.getTransformFor(VIEW_SYSTEM).createInverse();
+
+			// the coordsystem-transform is the first one added.
+			// as we added the pivot-transform before it is now the second
+			// so remove index 1
+			camera.getTransforms().remove(1);
+			// as the rotation got is from the view of the camera, we have to invert it to get the
+			// same result when adding it to the world
+			root3d.getTransforms().add(t);
+		}
+		catch(NonInvertibleTransformException e)
+		{
+			CooLog.error("Unable to fix-camera-bug, scene may look black now", e);
+		}
 	}
 }
