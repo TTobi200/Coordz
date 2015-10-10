@@ -3,7 +3,6 @@ package de.gui.view3D.ddd.shape;
 import java.util.function.Function;
 
 import de.coordz.data.CooData;
-import javafx.scene.Node;
 
 /**
  * a special function that expects a coodata and creates a node that is a coo3dshape for the given
@@ -15,13 +14,13 @@ import javafx.scene.Node;
  * @param <R> type of the result of the function
  */
 @FunctionalInterface
-public interface Coo3dShapeSupplier<T extends CooData, R extends Node & Coo3dShape<T>>
+public interface Coo3dShapeSupplier<T extends CooData, R extends Coo3dShape<T>>
 extends Function<T, R>
 {
 	/**
-	 * @param cooData the coodata to create a shape for
+	 * @param data the coodata to create a shape for
 	 * @return a coo3dshape for the given coodata
 	 */
 	@Override
-	public R apply(T cooData);
+	public R apply(T data);
 }

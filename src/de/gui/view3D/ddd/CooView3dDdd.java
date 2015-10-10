@@ -1,6 +1,7 @@
 package de.gui.view3D.ddd;
 
-import de.coordz.data.base.CooPalet;
+import de.coordz.data.CooCustomer;
+import de.coordz.data.CooProject;
 import de.gui.CooDataChanged;
 import de.gui.view3D.CooMeasurementChanged;
 import de.gui.view3D.ddd.shape.Coo3dShapeFactory;
@@ -11,31 +12,30 @@ import javafx.scene.control.Skin;
 
 public class CooView3dDdd extends Control implements CooMeasurementChanged, CooDataChanged
 {
-	private ObjectProperty<CooPalet> selPalet;
+	private ObjectProperty<CooCustomer> selCustomer;
+	private ObjectProperty<CooProject> curProject;
+
 	private Coo3dShapeFactory shapeFactory;
 
 	public CooView3dDdd()
 	{
 		// TODO $Ddd 20.09.15 create a way to transport configurations
 		// maybe a map or a new object???
-		selPalet = new SimpleObjectProperty<>();
-
-		shapeFactory = new Coo3dShapeFactory();
+		shapeFactory = Coo3dShapeFactory.creStdFactory();
+		curProject = new SimpleObjectProperty<>(null);
+		selCustomer = new SimpleObjectProperty<>(null);
 	}
 
-	public final ObjectProperty<CooPalet> selPaletProperty()
+	@Override
+	public void customerChanged(CooCustomer customer)
 	{
-		return this.selPalet;
+		selCustomer.set(customer);
 	}
 
-	public final de.coordz.data.base.CooPalet getSelPalet()
+	@Override
+	public void projectChanged(CooProject project)
 	{
-		return this.selPaletProperty().get();
-	}
-
-	public final void setSelPalet(final de.coordz.data.base.CooPalet selPalet)
-	{
-		this.selPaletProperty().set(selPalet);
+		curProject.set(project);
 	}
 
 	public Coo3dShapeFactory getShapeFactory()
@@ -49,4 +49,13 @@ public class CooView3dDdd extends Control implements CooMeasurementChanged, CooD
 		return new CooView3dDddSkin(this);
 	}
 
+	protected final ObjectProperty<CooCustomer> customerProperty()
+	{
+		return selCustomer;
+	}
+
+	protected final ObjectProperty<CooProject> projectProperty()
+	{
+		return curProject;
+	}
 }
