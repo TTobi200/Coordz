@@ -142,8 +142,7 @@ public class CooTabPaneDetacherUtil
 		if(content == null)
 		{
 			throw new IllegalArgumentException("Can not detach Tab '"
-												+ tab.getText()
-												+ "': content is empty (null).");
+					+ tab.getText()	+ "': content is empty (null).");
 		}
 		tab.setContent(null);
 		final Scene scene = new Scene(content, content.getPrefWidth(),

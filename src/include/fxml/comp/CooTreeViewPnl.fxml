@@ -26,9 +26,13 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.control.TreeView?>
+<?import javafx.scene.control.TextField?>
 
 <fx:root type="BorderPane" xmlns="http://javafx.com/javafx/8"
 	xmlns:fx="http://javafx.com/fxml/1">
+	<top>
+		<TextField fx:id="txtSearch" promptText="Auftrag suchen..." focusTraversable="false"/>
+	</top>
 	<center>
 		<TreeView fx:id="prjTreeView" />
 	</center>

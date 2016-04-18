@@ -6,6 +6,8 @@
  */
 package de.gui;
 
+import java.util.*;
+
 import javafx.application.Application;
 import javafx.scene.*;
 import javafx.stage.Stage;
@@ -15,10 +17,17 @@ public class CooMainFrame extends Application
 {
 	public static final String TITLE = "Coordz";
 	private static final String FXML = "CoordzGui.fxml";
+	
+	protected static List<Runnable> onShowing;
+	protected static Stage primaryStage;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception
 	{
+		CooMainFrame.primaryStage = primaryStage;
+		onShowing = new LinkedList<>();
+		addListener(primaryStage);
+		
 		Parent root = CooFileUtil.loadFXML(
 			CooController.getInstance(primaryStage),
 			CooFileUtil.FXML_FOLDER + CooFileUtil.IN_JAR_SEPERATOR + FXML);
@@ -33,5 +42,27 @@ public class CooMainFrame extends Application
 		primaryStage.setWidth(1000);
 		primaryStage.setHeight(600);
 		primaryStage.show();
+	}
+	
+	private void addListener(Stage stage)
+	{
+		stage.showingProperty().addListener((p, o, n) ->
+		{
+			List<Runnable> copy = new ArrayList<>(onShowing);
+			onShowing.clear();
+			copy.forEach(Runnable::run);
+		});
+	}
+
+	public static void doOnShowing(Runnable task)
+	{
+		if(primaryStage != null && primaryStage.isShowing())
+		{
+			task.run();
+		}
+		else if(onShowing != null && !onShowing.contains(task))
+		{
+			onShowing.add(task);
+		}
 	}
 }

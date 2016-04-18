@@ -107,13 +107,8 @@ public class CooController implements Initializable
 		// Add documents to GUI
 		CooGuiUtil.addDocToMenu(menuDocs, new File(DOCUMENT_FOLDER));
 
-		// File lastOpened = new
-		// File(CooSystemPreferences.getSystemPreferences().getString(
-		// CooSystemPreferences.GENERAL_LAST_OPENED));
-		// if(Objects.nonNull(lastOpened) && lastOpened.exists())
-		// {
-		// openXMLDB(lastOpened);
-		// }
+		// FORTEST load the coordz xml database
+//		primaryStage.setOnShowing(e -> openXMLDB(new File("D:/Unitechnik/repos/Coordz/CoordzXML")));
 	}
 
 	@FXML

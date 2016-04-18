@@ -14,7 +14,7 @@ import javafx.beans.property.*;
 import javafx.collections.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.*;
 import de.coordz.data.*;
 import de.coordz.data.base.*;
 import de.coordz.lap.CooLAPClient;
@@ -36,6 +36,10 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	protected CooTableView<CooReticle> tblReticles;
 	@FXML
 	protected CooTableView<CooTarget> tblTargets;
+	@FXML
+	protected TitledPane tpTargtes;
+	@FXML
+	protected HBox hBoxTargets;
 	@FXML
 	protected CooTableView<CooTotalstation> tblTotalStation;
 	@FXML
@@ -97,6 +101,12 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 						newV.notesProperty() : new SimpleStringProperty());
 					components.forEach(c -> c.measurementChanged(newV));
 				});
+		
+		tpTargtes.setContentDisplay(ContentDisplay.RIGHT);
+		CooMainFrame.doOnShowing(()-> 
+		{
+			CooGuiUtil.moveButtonsOnTitlepane(tpTargtes, hBoxTargets);
+		});
 	}
 	
 	@FXML

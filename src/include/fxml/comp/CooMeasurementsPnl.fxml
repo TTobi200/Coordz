@@ -180,7 +180,25 @@
 												</BorderPane>
 											</content>
 										</TitledPane>
-										<TitledPane text="Targets">
+										<TitledPane fx:id="tpTargtes" text="Targets">
+											<graphic>
+												<HBox fx:id="hBoxTargets">
+													<children>
+														<Button fx:id="btnAdd" mnemonicParsing="false">
+															<tooltip>
+																<Tooltip text="*.cal erstellen" />
+															</tooltip>
+															<graphic>
+																<ImageView pickOnBounds="true" preserveRatio="true">
+																	<image>
+																		<Image url="@/include/icons/generate.png" />
+																	</image>
+																</ImageView>
+															</graphic>
+														</Button>
+													</children>
+												</HBox>
+											</graphic>
 											<content>
 												<BorderPane>
 													<center>

@@ -15,7 +15,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import de.coordz.data.*;
-import de.coordz.doc.CooPdfDocument;
+import de.coordz.doc.*;
 import de.gui.*;
 import de.gui.comp.*;
 import de.gui.comp.CooCustomerTreeItem.CooProjectTreeItem;
@@ -26,6 +26,8 @@ public class CooTreeViewPnl extends BorderPane
 {
 	protected ObservableList<CooDataChanged> components;
 
+	@FXML
+	protected TextField txtSearch;
 	@FXML
 	protected Button btnAdd;
 	@FXML
@@ -98,6 +100,14 @@ public class CooTreeViewPnl extends BorderPane
 					btnDelete.setDisable(selectedItem == prjTreeView.getRoot());
 				}
 			});
+		txtSearch.setOnKeyReleased(e->
+		{
+			prjTreeView.getRoot().getChildren().forEach(treeItm -> 
+			{
+				CooGuiUtil.selectMatchingNode(prjTreeView, 
+					treeItm, txtSearch.getText());
+			});
+		});
 	}
 
 	@FXML
@@ -223,7 +233,7 @@ public class CooTreeViewPnl extends BorderPane
 				.customerProperty().get();
 
 			CooDialogs.showToDocDialog(getScene().getWindow(), customer,
-				new CooPdfDocument());
+				new CooPdfDocument(), new CooXlsDocument());
 		}
 	}
 

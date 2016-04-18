@@ -129,6 +129,62 @@ public class CooGuiUtil
 		}
 	}
 	
+	public static void moveButtonsOnTitlepane(TitledPane pane, HBox hBox)
+	{
+		if(pane.isVisible())
+		{
+			// title region
+			Node titleRegion = pane.lookup(".title");
+			if(titleRegion == null)
+			{
+				return;
+			}
+			// padding
+			Insets padding = ((StackPane)titleRegion).getPadding();
+			if(padding == null)
+			{
+				return;
+			}
+			// image width
+			double graphicWidth = hBox.getWidth();
+			// arrow
+			double arrowWidth = titleRegion.lookup(".arrow-button")
+				.getLayoutBounds()
+				.getWidth();
+			// text
+			double labelWidth = titleRegion.lookup(".text")
+				.getLayoutBounds()
+				.getWidth();
+
+			double nodesWidth = graphicWidth + padding.getLeft()
+								+ padding.getRight() + arrowWidth
+								+ labelWidth;
+
+			pane.graphicTextGapProperty().bind(pane.widthProperty().subtract(nodesWidth));
+		}
+	}
+	
+	public static void selectMatchingNode(TreeView<String> treeView, 
+			TreeItem<String> treeItm, String text)
+	{
+		if(Objects.isNull(text) || text.isEmpty())
+		{
+			return;
+		}
+		
+		if(!treeItm.getChildren().isEmpty())
+		{
+			treeItm.getChildren().forEach(i -> 
+			{
+				selectMatchingNode(treeView, i, text);
+			});
+		}
+		else if(treeItm.getValue().matches(text + "/s"))
+		{
+			treeView.getSelectionModel().select(treeItm);
+		}
+	}
+	
 	public static void addDocToMenu(Menu menu, File folder)
 	{
 		if(Objects.nonNull(folder) && folder.exists())

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<CoordzData>
+    <Customer Location="Dornstetten" Name="Kaltenbach GmbH &amp; Co. KG" PLZ="72280" Street="Cresbacher Straße 4">
+        <Contacts>
+            <Contact FirstName="Wolfgang" LastName="Hess" Mail="whess@gebr-kaltenbach.de" Phone="015129255362"/>
+        </Contacts>
+        <Palets>
+            <Palet Length="11000" Name="30" Type="R" Width="3000"/>
+        </Palets>
+    </Customer>
+</CoordzData>

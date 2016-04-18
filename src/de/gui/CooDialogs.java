@@ -354,6 +354,9 @@ public class CooDialogs
 
 		documents.getSelectionModel().selectedItemProperty().addListener((old, curr, newV) -> 
 		{
+			checkTreeView.getCheckModel().getCheckedItems().clear();
+			root.getChildren().clear();
+			root.setSelected(false);
 			newV.getAvailableContent()
 			.stream()
 			.filter(c -> !c.equals(root.getValue()))
@@ -408,11 +411,10 @@ public class CooDialogs
 		if(!selPrj.isEmpty() && Objects.nonNull(selItm)
 			&& !txtOutFile.getText().isEmpty())
 		{
-			CooPdfDocument pdf = new CooPdfDocument();
 			checkTreeView.getCheckModel().getCheckedItems()
-				.forEach(i -> pdf.addContent(i.getValue()));
+				.forEach(i -> selItm.addContent(i.getValue()));
 
-			pdf.save(new File(txtOutFile.getText()), customer,
+			selItm.save(new File(txtOutFile.getText()), customer,
 				selPrj.toArray(new CooProject[0]));
 		}
 	}

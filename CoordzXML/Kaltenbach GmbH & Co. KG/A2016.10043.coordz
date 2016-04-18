@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<CoordzData>
+    <Project Date="2016-02-17" Name="A2016.10043">
+        <LAPSoftware Name="ProSoft 2D" Version="Version 3.6.1"/>
+        <Stations>
+            <Station Description="Station vor Betonverteiler" File="" Name="U09" XOffset="0" YOffset="0" ZOffset="0">
+                <RegionDividing/>
+                <Measurements>
+                    <Measurement Date="2016-02-15" From="15:00 Uhr" Name="Messung U09" Notes="Bei Ankunft wurde festgestellt, dass bei einem Laser die Anschlussplatine defekt ist und der Laser so nicht betriebstüchtig ist. Es muss nun ein Ersatzteil bei LAP erworben werden.&#10;Die Einmessung und Installation der Software wurde durchgeführt kann jedoch nicht durch eine Projektion überprüft werden. Ein Überprüfen der Projektion benötigt eventuell ein erneutes Anreisen eines Unitechnik Mitarbeiters.&#10;" To="20:00 Uhr" Weather="Bewölkt">
+                        <Totalstation DeltaX="0.0" DeltaY="0.0" X="0" Y="0" Z="0"/>
+                        <Reticles>
+                            <Reticle Name="Zielmarke 1" X="1938" Y="31" Z="16"/>
+                            <Reticle Name="Zielmarke 2" X="4899" Y="42" Z="26"/>
+                        </Reticles>
+                        <Targets>
+                            <Target Name="Target 1" X="110" Y="38" Z="-289"/>
+                            <Target Name="Target2" X="6010" Y="43" Z="-292"/>
+                            <Target Name="Target 3" X="11798" Y="47" Z="-294"/>
+                            <Target Name="Target 4" X="11812" Y="2352" Z="-292"/>
+                            <Target Name="Target 5" X="6018" Y="2347" Z="-294"/>
+                            <Target Name="Target 6" X="124" Y="2342" Z="-300"/>
+                        </Targets>
+                    </Measurement>
+                </Measurements>
+                <VerifyMeasurement>
+                    <Specification>
+                        <Rectangle D1="5852" D2="5852" Height="0" Length="5500" Name="R1" Width="2000" X="250" Y="100" Z="0"/>
+                        <Rectangle D1="5852" D2="5852" Height="0" Length="5500" Name="R2" Width="2000" X="250" Y="100" Z="0"/>
+                    </Specification>
+                    <Result>
+                    	<Rectangle D1="5851" D2="5852" Height="0" Length="5500" Name="R1" Width="2000" X="250" Y="101" Z="0"/>
+                    	<Rectangle D1="5851" D2="5852" Height="0" Length="5500" Name="R2" Width="2000" X="250" Y="101" Z="0"/>
+                    </Result>
+                </VerifyMeasurement>
+                <Gateway IP="192.168.100.112" MAC="">
+                    <Laser MAC="" Name="Laser 1" SerialNr="" TotalDeviation="0.0" X="0" Y="0" Z="0"/>
+                    <Laser MAC="" Name="Laser 2" SerialNr="" TotalDeviation="0.0" X="0" Y="0" Z="0"/>
+                </Gateway>
+            </Station>
+        </Stations>
+    </Project>
+</CoordzData>
