@@ -1,8 +1,9 @@
-package de.gui.view3D.ddd;
+package de.gui.view3D.ddd.util;
 
 import java.util.EnumSet;
 import java.util.Objects;
 
+import de.gui.view3D.ddd.Coo3dAxis;
 import de.gui.view3D.ddd.Coo3dAxis.CoordSystem;
 import de.gui.view3D.ddd.Coo3dAxis.System;
 import javafx.scene.transform.*;

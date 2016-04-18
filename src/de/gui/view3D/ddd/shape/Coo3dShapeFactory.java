@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.coordz.data.CooData;
-import javafx.scene.Node;
+import de.coordz.data.base.*;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
@@ -20,17 +20,29 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  * @author ddd
  * @version 1.0
  */
-public class Coo3dShapeFactory
+public class Coo3dShapeFactory implements Coo3dShapeSupplier<CooData, Coo3dShape<CooData>>
 {
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static Coo3dShapeFactory creStdFactory()
+	{
+		Coo3dShapeFactory factory = new Coo3dShapeFactory();
+
+		factory.setSupplierFor(CooPalet.class, CooPaletShape.SUPPLIER);
+		factory.setSupplierFor(CooLaser.class, CooLaserShape.SUPPLIER);
+		factory.setSupplierFor(CooRectangle.class, CooRectangleShape.SUPPLIER);
+		factory.setSupplierFor(CooTarget.class, CooTargetShape.SUPPLIER);
+		factory.setSupplierFor(CooReticle.class, (Coo3dShapeSupplier)CooTargetShape.SUPPLIER);
+		factory.setSupplierFor(CooTotalstation.class, CooTotalStationShape.SUPPLIER);
+
+		return factory;
+	}
+
 	/** mapping to supplier by class-object */
 	private Map<Class<CooData>, Coo3dShapeSupplier<?, ?>> shapeSupplier;
-	/** mapping to supplier by object */
-	private Map<CooData, Coo3dShapeSupplier<?, ?>> specShapeSupplier;
 
 	public Coo3dShapeFactory()
 	{
 		shapeSupplier = new HashMap<>();
-		specShapeSupplier = new HashMap<>();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -39,23 +51,14 @@ public class Coo3dShapeFactory
 		shapeSupplier.put((Class<CooData>)clazz, supplier);
 	}
 
-	public <T extends CooData> void setSupplierFor(T data, Coo3dShapeSupplier<T, ?> supplier)
-	{
-		specShapeSupplier.put(data, supplier);
-	}
-
 	@SuppressWarnings("unchecked")
-	public <T extends CooData, R extends Node & Coo3dShape<T>> R creShapeFor(T data)
+	public <T extends CooData, R extends Coo3dShape<T>> R creShapeFor(T data)
 	{
-		if(specShapeSupplier.containsKey(data))
-		{
-			return ((Coo3dShapeSupplier<T, R>) specShapeSupplier.get(data)).apply(data);
-		}
 		return ((Coo3dShapeSupplier<T, R>) shapeSupplier.get(data.getClass())).apply(data);
 	}
 
 	/**
-	 * <b>Not imploemented yet</b>
+	 * <b>Not implemented yet</b>
 	 *
 	 * @param reader
 	 */
@@ -63,5 +66,11 @@ public class Coo3dShapeFactory
 	{
 		// TODO $Ddd 20.09.15 implement
 		throw new NotImplementedException();
+	}
+
+	@Override
+	public Coo3dShape<CooData> apply(CooData cooData)
+	{
+		return creShapeFor(cooData);
 	}
 }

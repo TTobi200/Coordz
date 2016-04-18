@@ -7,6 +7,7 @@ import com.sun.javafx.scene.control.skin.BehaviorSkinBase;
 import de.coordz.data.base.CooPalet;
 import de.gui.view3D.ddd.Coo3dAxis.CoordSystem;
 import de.gui.view3D.ddd.Coo3dAxis.TransformOrder;
+import de.gui.view3D.ddd.util.CooDddUtil;
 import de.util.log.CooLog;
 import javafx.scene.*;
 import javafx.scene.control.*;
@@ -155,13 +156,6 @@ public class CooView3dDddSkin extends BehaviorSkinBase<CooView3dDdd, CooView3dDd
 		CheckBox cbShowNames = new CheckBox("Namen anzeigen");
 
 		CheckComboBox<?> elements = new CheckComboBox<>();
-
-		cbPalets.getSelectionModel()
-			.selectedItemProperty().addListener(
-				(p, o, n) -> getSkinnable().setSelPalet(n));
-		getSkinnable().selPaletProperty()
-			.addListener((
-				p, o, n) -> cbPalets.getSelectionModel().select(n));
 
 		// TODO $Ddd get the original list
 //		Bindings.bindContent(list1, cbPalets.getItems());
