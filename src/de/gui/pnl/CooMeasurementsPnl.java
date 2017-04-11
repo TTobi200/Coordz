@@ -9,20 +9,21 @@ package de.gui.pnl;
 import java.io.*;
 import java.util.Objects;
 
+import de.coordz.data.*;
+import de.coordz.data.base.*;
+import de.coordz.lap.*;
+import de.gui.*;
+import de.gui.comp.*;
+import de.gui.view3D.*;
+import de.util.*;
+import de.util.log.CooLog;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.collections.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import de.coordz.data.*;
-import de.coordz.data.base.*;
-import de.coordz.lap.CooLAPClient;
-import de.gui.*;
-import de.gui.comp.*;
-import de.gui.view3D.*;
-import de.util.*;
-import de.util.log.CooLog;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, CooMeasurementChanged
 {
@@ -40,6 +41,8 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	protected TitledPane tpTargtes;
 	@FXML
 	protected HBox hBoxTargets;
+	@FXML
+	protected Button btnExport;
 	@FXML
 	protected CooTableView<CooTotalstation> tblTotalStation;
 	@FXML
@@ -186,6 +189,40 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 		if(Objects.nonNull(client))
 		{
 			client.nextContour();
+		}
+	}
+	
+	@FXML
+	protected void importCalFile()
+	{
+		// Show open calibration file dialog
+		File calFile = CooDialogs.showOpenFileDialog(getScene().getWindow(),
+			"CAL Datei importieren", new ExtensionFilter(
+				"Kalibrierdatei *.cal", "*.cal"));
+		
+		// Check if we have an file specified
+		if(Objects.nonNull(calFile))
+		{
+			// Load the targets and display them in table
+			tblTargets.getItems().setAll(
+				CooCalibrationFile.load(calFile));
+		}
+	}
+	
+	@FXML
+	protected void exportCalFile()
+	{
+		// Show save calibration file dialog
+		File calFile = CooDialogs.showSaveFileDialog(getScene().getWindow(),
+			"CAL Datei exportieren", new ExtensionFilter(
+				"Kalibrierdatei *.cal", "*.cal"));
+		
+		// Check if we have an file specified
+		if(Objects.nonNull(calFile))
+		{
+			// Save the file with targets from table
+			CooCalibrationFile.save(calFile,
+				tblTargets.getItems());
 		}
 	}
 	

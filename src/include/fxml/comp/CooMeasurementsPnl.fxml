@@ -184,9 +184,23 @@
 											<graphic>
 												<HBox fx:id="hBoxTargets">
 													<children>
-														<Button fx:id="btnAdd" mnemonicParsing="false">
+														<Button onAction="#importCalFile"
+															mnemonicParsing="false">
 															<tooltip>
-																<Tooltip text="*.cal erstellen" />
+																<Tooltip text="Kalibrierdatei importieren" />
+															</tooltip>
+															<graphic>
+																<ImageView pickOnBounds="true" preserveRatio="true">
+																	<image>
+																		<Image url="@/include/icons/import.png" />
+																	</image>
+																</ImageView>
+															</graphic>
+														</Button>
+														<Button onAction="#exportCalFile"
+															mnemonicParsing="false">
+															<tooltip>
+																<Tooltip text="Kalibrierdatei exportieren" />
 															</tooltip>
 															<graphic>
 																<ImageView pickOnBounds="true" preserveRatio="true">

@@ -10,6 +10,14 @@ import java.io.*;
 import java.time.LocalDate;
 import java.util.*;
 
+import org.controlsfx.control.*;
+
+import de.coordz.data.*;
+import de.coordz.doc.CooDocument;
+import de.coordz.doc.CooDocument.Content;
+import de.coordz.lap.CooLAPClient;
+import de.util.*;
+import de.util.log.CooLog;
 import javafx.beans.property.*;
 import javafx.collections.*;
 import javafx.concurrent.Task;
@@ -21,15 +29,6 @@ import javafx.scene.layout.*;
 import javafx.stage.*;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.converter.*;
-
-import org.controlsfx.control.*;
-
-import de.coordz.data.*;
-import de.coordz.doc.*;
-import de.coordz.doc.CooDocument.Content;
-import de.coordz.lap.CooLAPClient;
-import de.util.*;
-import de.util.log.CooLog;
 
 public class CooDialogs
 {
@@ -200,7 +199,7 @@ public class CooDialogs
 			else if(p instanceof ObjectProperty<?> 
 				&& p.getValue() instanceof CooPaletType | Objects.isNull(p.getValue()))
 			{
-				n = new ComboBox<CooPaletType>(FXCollections.observableArrayList(
+				n = new ComboBox<>(FXCollections.observableArrayList(
 					CooPaletType.values()));
 				((ComboBox)n).getSelectionModel().select(p.getValue());
 				((ComboBox)n).getSelectionModel()
@@ -289,7 +288,7 @@ public class CooDialogs
 					String choiceText,
 					HashMap<String, T> choices)
 	{
-		ChoiceDialog<String> dlg = new ChoiceDialog<String>(null,
+		ChoiceDialog<String> dlg = new ChoiceDialog<>(null,
 			FXCollections.observableArrayList(choices.keySet()));
 
 		dlg.getDialogPane().setContentText(choiceText);
@@ -309,6 +308,20 @@ public class CooDialogs
 		dlg.setTitle(title);
 		return dlg.showDialog(parent);
 	}
+	
+	public static File showOpenFileDialog(Window parent, String title)
+	{
+		return showOpenFileDialog(parent, title, null);
+	}
+	
+	public static File showOpenFileDialog(Window parent, 
+			String title, ExtensionFilter fileFilter)
+	{
+		FileChooser dlg = new FileChooser();
+		dlg.setTitle(title);
+		dlg.getExtensionFilters().add(fileFilter);
+		return dlg.showOpenDialog(parent);
+	}
 
 	public static File showOpenImageDialog(Window parent, String title)
 	{
@@ -320,37 +333,33 @@ public class CooDialogs
 		return dlg.showOpenDialog(parent);
 	}
 
-	private static void showSaveFileDialog(Window parent, String title,
-					StringProperty strProp, ExtensionFilter fileFilter)
+	public static File showSaveFileDialog(Window parent, 
+		String title, ExtensionFilter fileFilter)
 	{
 		FileChooser dlg = new FileChooser();
 		dlg.setTitle(title);
 		dlg.getExtensionFilters().add(fileFilter);
 
-		File file = dlg.showSaveDialog(parent);
-
-		strProp.set(Objects.nonNull(file) ? file
-			.getAbsolutePath() : "");
+		return dlg.showSaveDialog(parent);
 	}
 
-	public static void showSaveFileDialog(Window parent, String title,
-					StringProperty strProp)
+	public static File showSaveFileDialog(Window parent, String title)
 	{
-		showSaveFileDialog(parent, title, strProp, null);
+		return showSaveFileDialog(parent, title, null);
 	}
 	
 
 	public static void showToDocDialog(Window owner, CooCustomer customer,
 					CooDocument... document)
 	{
-		CheckBoxTreeItem<Content> root = new CheckBoxTreeItem<Content>(
+		CheckBoxTreeItem<Content> root = new CheckBoxTreeItem<>(
 			Content.CUSTOM.setName("Inhalt"));
 		CheckTreeView<Content> checkTreeView = new CheckTreeView<>(root);
 		Button btnBrowse = new Button("Browse");
 		TextField txtOutFile = new TextField();
 		BorderPane contentPane = new BorderPane();
-		ComboBox<CooDocument> documents = new ComboBox<CooDocument>();
-		CheckComboBox<CooProject> projects = new CheckComboBox<CooProject>();
+		ComboBox<CooDocument> documents = new ComboBox<>();
+		CheckComboBox<CooProject> projects = new CheckComboBox<>();
 
 		documents.getSelectionModel().selectedItemProperty().addListener((old, curr, newV) -> 
 		{
@@ -362,14 +371,17 @@ public class CooDialogs
 			.filter(c -> !c.equals(root.getValue()))
 			.forEach(
 				c -> root.getChildren().add(
-					new CheckBoxTreeItem<CooDocument.Content>(c)));
+					new CheckBoxTreeItem<>(c)));
 		});
 
 		btnBrowse.setOnAction(e ->
 		{
-			showSaveFileDialog(owner,
-				"Dokument erstellen", txtOutFile.textProperty(), documents.getSelectionModel()
+			File f = showSaveFileDialog(owner,
+				"Dokument erstellen", documents.getSelectionModel()
 					.selectedItemProperty().get().getFileFilter());
+			
+			txtOutFile.textProperty().set(Objects.nonNull(f)
+				? f.getAbsolutePath() : "");
 		});
 
 		btnBrowse.disableProperty().bind(

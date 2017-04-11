@@ -10,6 +10,14 @@ import java.io.*;
 import java.net.URL;
 import java.util.*;
 
+import de.coordz.CooSystem;
+import de.coordz.data.CooCustomer;
+import de.gui.comp.CooCustomerTreeItem;
+import de.gui.pnl.*;
+import de.gui.sett.CooSettingsDialog;
+import de.gui.sett.CooSettingsDialog.SettingType;
+import de.util.*;
+import de.util.log.CooLog;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
@@ -17,14 +25,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.stage.*;
-import de.coordz.CooSystem;
-import de.coordz.data.CooCustomer;
-import de.gui.comp.CooCustomerTreeItem;
-import de.gui.pnl.*;
-import de.gui.sett.*;
-import de.gui.sett.CooSettingsDialog.SettingType;
-import de.util.*;
-import de.util.log.CooLog;
 
 public class CooController implements Initializable
 {
@@ -108,7 +108,7 @@ public class CooController implements Initializable
 		CooGuiUtil.addDocToMenu(menuDocs, new File(DOCUMENT_FOLDER));
 
 		// FORTEST load the coordz xml database
-//		primaryStage.setOnShowing(e -> openXMLDB(new File("D:/Unitechnik/repos/Coordz/CoordzXML")));
+		primaryStage.setOnShowing(e -> openXMLDB(new File("D:/Unitechnik/repos/Coordz/CoordzXML")));
 	}
 
 	@FXML
