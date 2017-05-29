@@ -108,7 +108,7 @@ public class CooController implements Initializable
 		CooGuiUtil.addDocToMenu(menuDocs, new File(DOCUMENT_FOLDER));
 
 		// FORTEST load the coordz xml database
-		primaryStage.setOnShowing(e -> openXMLDB(new File("D:/Unitechnik/repos/Coordz/CoordzXML")));
+//		primaryStage.setOnShowing(e -> openXMLDB(new File("D:/Unitechnik/repos/Coordz/CoordzXML")));
 	}
 
 	@FXML
