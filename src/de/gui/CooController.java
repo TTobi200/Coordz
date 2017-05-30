@@ -159,6 +159,9 @@ public class CooController implements Initializable
 		dialog.addSetting("Anzeige", "Style", SettingType.COMBO,
 			"Style 1", "Style 2");
 
+		dialog.addSetting("LAP Software", "Bereichsaufteilung mit Überlappung", SettingType.BOOLEAN);
+		dialog.addSetting("LAP Software", "Bereichsaufteilung Überlappung", SettingType.TEXT);
+
 		// LOOK HERE - connect user property to setting
 		xmlDbPath.bind((ObservableValue<String>)dialog.addSetting(
 			"XML-Datenbank", "Pfad", SettingType.TEXT, xmlDbPath.getValue()));

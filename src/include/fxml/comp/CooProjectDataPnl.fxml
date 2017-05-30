@@ -29,6 +29,7 @@
 <?import de.gui.pnl.CooCoreDataPnl?>
 <?import javafx.scene.layout.VBox?>
 <?import de.gui.comp.CooTableView?>
+<?import javafx.scene.control.Tooltip?>
 
 <fx:root type="BorderPane" xmlns="http://javafx.com/javafx/8"
 	xmlns:fx="http://javafx.com/fxml/1">
@@ -78,24 +79,6 @@
 						</BorderPane>
 					</content>
 				</TitledPane>
-				<TitledPane text="LAP Software">
-					<GridPane vgap="5" hgap="5">
-						<columnConstraints>
-							<ColumnConstraints hgrow="NEVER" />
-							<ColumnConstraints hgrow="ALWAYS" />
-						</columnConstraints>
-						<rowConstraints>
-						</rowConstraints>
-						<children>
-							<Label text="Name" />
-							<Label text="Version" GridPane.rowIndex="1" />
-							<CooTextField fx:id="txtSoftName"
-								GridPane.columnIndex="1" />
-							<CooTextField fx:id="txtSoftVersion"
-								GridPane.columnIndex="1" GridPane.rowIndex="1" />
-						</children>
-					</GridPane>
-				</TitledPane>
 				<TitledPane text="Gateways">
 					<VBox spacing="5">
 						<children>
@@ -107,11 +90,8 @@
 								<rowConstraints>
 								</rowConstraints>
 								<children>
-									<Label text="Station" />
 									<Label text="Ip" GridPane.rowIndex="1" />
 									<Label text="MAC" GridPane.rowIndex="2" />
-									<ComboBox fx:id="cbStation" GridPane.columnIndex="1"
-										promptText="Auswählen..." maxWidth="Infinity" />
 									<CooTextField fx:id="txtGateIp"
 										GridPane.columnIndex="1" GridPane.rowIndex="1" />
 									<CooTextField fx:id="txtGateMAC"
@@ -140,6 +120,77 @@
 													<TableColumn text="Serial Nr.">
 														<cellValueFactory>
 															<PropertyValueFactory property="serialNr" />
+														</cellValueFactory>
+													</TableColumn>
+												</columns>
+											</CooTableView>
+										</center>
+									</BorderPane>
+								</content>
+							</TitledPane>
+						</children>
+					</VBox>
+				</TitledPane>
+				<TitledPane text="LAP Software">
+					<VBox spacing="5">
+						<children>
+							<GridPane vgap="5" hgap="5">
+								<columnConstraints>
+									<ColumnConstraints hgrow="NEVER" />
+									<ColumnConstraints hgrow="ALWAYS" />
+								</columnConstraints>
+								<rowConstraints>
+								</rowConstraints>
+								<children>
+									<Label text="Name" />
+									<Label text="Version" GridPane.rowIndex="1" />
+									<CooTextField fx:id="txtSoftName"
+										GridPane.columnIndex="1" />
+									<CooTextField fx:id="txtSoftVersion"
+										GridPane.columnIndex="1" GridPane.rowIndex="1" />
+								</children>
+							</GridPane>
+							<TitledPane fx:id="tpRegDividing" text="Bereichsaufteilung"
+								expanded="false">
+								<graphic>
+									<HBox fx:id="hBoxRegDividing">
+										<children>
+											<Button onAction="#calcRegDividing" mnemonicParsing="false">
+												<tooltip>
+													<Tooltip text="Bereichsaufteilung berechnen" />
+												</tooltip>
+												<graphic>
+													<ImageView pickOnBounds="true" preserveRatio="true">
+														<image>
+															<Image url="@/include/icons/calculator.png" />
+														</image>
+													</ImageView>
+												</graphic>
+											</Button>
+										</children>
+									</HBox>
+								</graphic>
+								<content>
+									<BorderPane>
+										<center>
+											<CooTableView fx:id="tblRegDevide">
+												<placeholder>
+													<Label text="Keine Bereichsaufteilung hinzugefügt" />
+												</placeholder>
+												<columns>
+													<TableColumn text="Name">
+														<cellValueFactory>
+															<PropertyValueFactory property="name" />
+														</cellValueFactory>
+													</TableColumn>
+													<TableColumn text="Von">
+														<cellValueFactory>
+															<PropertyValueFactory property="from" />
+														</cellValueFactory>
+													</TableColumn>
+													<TableColumn text="Bis">
+														<cellValueFactory>
+															<PropertyValueFactory property="to" />
 														</cellValueFactory>
 													</TableColumn>
 												</columns>

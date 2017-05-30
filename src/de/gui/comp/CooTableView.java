@@ -6,14 +6,17 @@
  */
 package de.gui.comp;
 
-import javafx.beans.property.*;
-import javafx.collections.ListChangeListener;
-import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
+import java.awt.event.*;
+import java.util.List;
+
 import de.coordz.data.CooData;
 import de.gui.CooDialogs;
 import de.util.CooFileUtil;
 import de.util.log.CooLog;
+import javafx.beans.property.*;
+import javafx.collections.*;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 
 public class CooTableView<T extends CooData> extends TableView<T>
 {
@@ -28,15 +31,24 @@ public class CooTableView<T extends CooData> extends TableView<T>
 		CooFileUtil.getResourceIcon("add.png")));
 	final MenuItem remMenuItm = new MenuItem("Entfernen", new ImageView(
 		CooFileUtil.getResourceIcon("delete.png")));
+	
+	private List<ActionListener> onAddFinished;
+	private List<ActionListener> onEditFinished;
+	private List<ActionListener> onDeleteFinished;
 
 	public CooTableView()
 	{
 		maxRowsProperty = new SimpleIntegerProperty(Integer.MAX_VALUE);
+		onAddFinished = FXCollections.observableArrayList();
+		onEditFinished = FXCollections.observableArrayList();
+		onDeleteFinished = FXCollections.observableArrayList();
 		
 		editMenuItm.setOnAction(event ->
 		{
 			CooDialogs.showEditTable(getScene().getWindow(),
 				this, "Bearbeiten von Eintrag");
+			onEditFinished.forEach(l -> l.actionPerformed(
+				new ActionEvent(addMenuItm, 0, null)));
 		});
 
 		addMenuItm.setOnAction(event ->
@@ -47,6 +59,8 @@ public class CooTableView<T extends CooData> extends TableView<T>
 				getSelectionModel().selectLast();
 				CooDialogs.showEditTable(getScene().getWindow(),
 					this, "Hinzufügen von Eintrag");
+				onAddFinished.forEach(l -> l.actionPerformed(
+					new ActionEvent(addMenuItm, 0, null)));
 			}
 			catch(IllegalAccessException | InstantiationException e)
 			{
@@ -59,6 +73,8 @@ public class CooTableView<T extends CooData> extends TableView<T>
 			getItems().remove(
 				getSelectionModel()
 					.getSelectedItem());
+			onDeleteFinished.forEach(l -> l.actionPerformed(
+				new ActionEvent(addMenuItm, 0, null)));
 		});
 
 		contextMenu.getItems().addAll(addMenuItm,
@@ -99,5 +115,20 @@ public class CooTableView<T extends CooData> extends TableView<T>
 	public IntegerProperty maxRowsProperty()
 	{
 		return maxRowsProperty;
+	}
+	
+	public void addOnAddFinished(ActionListener listener)
+	{
+		this.onAddFinished.add(listener);
+	}
+	
+	public void addOnEditFinished(ActionListener listener)
+	{
+		this.onEditFinished.add(listener);
+	}
+	
+	public void addOnDeleteFinished(ActionListener listener)
+	{
+		this.onDeleteFinished.add(listener);
 	}
 }

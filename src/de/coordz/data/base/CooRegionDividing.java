@@ -10,11 +10,10 @@ import static de.util.CooXmlDomUtil.*;
 
 import java.util.Objects;
 
-import javafx.collections.*;
-
 import org.w3c.dom.*;
 
 import de.coordz.data.CooData;
+import javafx.collections.*;
 
 public class CooRegionDividing extends CooData
 {
@@ -43,6 +42,40 @@ public class CooRegionDividing extends CooData
 			addToList("Laser", regionDividing,
 				CooLaser.class, this.laser);
 		}
+	}
+	
+	public ObservableList<CooLaser> fromLaser(ObservableList<CooPalet> palets, 
+		ObservableList<CooLaser> laser)
+	{
+		// Store the laser from gateway
+		this.laser = laser;
+		
+		if(!palets.isEmpty() && !laser.isEmpty())
+		{
+			// Get the first palet length and number of laser
+			int length = palets.get(0).lengthProperty().get();
+			int numLaser = laser.size();
+			
+			// Define the region per laser 
+			// and the start position
+			int region = length / numLaser;
+			int position = 0;
+			
+			for(int i = 0; i < laser.size(); i++)
+			{
+				CooLaser l = laser.get(i);
+				l.fromProperty().set(position);
+				l.toProperty().set(i + 1 < laser.size() ?
+					position + region : length);
+				
+				// Move to next position
+				position += region;
+				// Overlap each laser region
+				position -= i + 1 < laser.size() ? 100 : 0;
+			}
+		}
+		
+		return laser;
 	}
 	
 	/**

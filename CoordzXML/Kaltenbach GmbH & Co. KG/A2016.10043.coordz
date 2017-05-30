@@ -4,7 +4,10 @@
         <LAPSoftware Name="ProSoft 2D" Version="Version 3.6.1"/>
         <Stations>
             <Station Description="Station vor Betonverteiler" File="" Name="U09" XOffset="0" YOffset="0" ZOffset="0">
-                <RegionDividing/>
+                <RegionDividing>
+                    <Laser MAC="sss" Name="Las1" SerialNr="" TotalDeviation="0.0" X="0" Y="0" Z="0" From="0" To="0"/>
+                    <Laser MAC="" Name="Las2" SerialNr="" TotalDeviation="0.0" X="0" Y="0" Z="0" From="0" To="0"/>
+                </RegionDividing>
                 <Measurements>
                     <Measurement Date="2016-02-15" From="15:00 Uhr" Name="Messung U09" Notes="Bei Ankunft wurde festgestellt, dass bei einem Laser die Anschlussplatine defekt ist und der Laser so nicht betriebstüchtig ist. Es muss nun ein Ersatzteil bei LAP erworben werden.&#10;Die Einmessung und Installation der Software wurde durchgeführt kann jedoch nicht durch eine Projektion überprüft werden. Ein Überprüfen der Projektion benötigt eventuell ein erneutes Anreisen eines Unitechnik Mitarbeiters.&#10;" To="20:00 Uhr" Weather="Bewölkt">
                         <Totalstation DeltaX="0.0" DeltaY="0.0" X="0" Y="0" Z="0"/>
@@ -33,8 +36,8 @@
                     </Result>
                 </VerifyMeasurement>
                 <Gateway IP="192.168.100.112" MAC="">
-                    <Laser MAC="" Name="Laser 1" SerialNr="" TotalDeviation="0.0" X="0" Y="0" Z="0"/>
-                    <Laser MAC="" Name="Laser 2" SerialNr="" TotalDeviation="0.0" X="0" Y="0" Z="0"/>
+                    <Laser MAC="sss" Name="Las1" SerialNr="" TotalDeviation="0.0" X="0" Y="0" Z="0" From="0" To="0"/>
+                    <Laser MAC="" Name="Las2" SerialNr="" TotalDeviation="0.0" X="0" Y="0" Z="0" From="0" To="0"/>
                 </Gateway>
             </Station>
         </Stations>

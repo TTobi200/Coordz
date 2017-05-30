@@ -9,16 +9,16 @@ package de.gui.pnl;
 import java.io.IOException;
 import java.util.Objects;
 
-import javafx.collections.FXCollections;
-import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.layout.BorderPane;
-import de.coordz.data.CooProject;
+import de.coordz.data.*;
 import de.coordz.data.base.*;
-import de.gui.CooDataChanged;
+import de.gui.*;
 import de.gui.comp.*;
-import de.util.CooFileUtil;
+import de.util.*;
 import de.util.log.CooLog;
+import javafx.collections.*;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 
 public class CooProjectDataPnl extends BorderPane implements CooDataChanged
 {
@@ -36,14 +36,22 @@ public class CooProjectDataPnl extends BorderPane implements CooDataChanged
 	protected CooTableView<CooStation> tblStations;
 
 	@FXML
-	protected ComboBox<CooStation> cbStation;
-	@FXML
 	protected CooTextField txtGateIp;
 	@FXML
 	protected CooTextField txtGateMAC;
 	@FXML
 	protected CooTableView<CooLaser> tblLaser;
-
+	
+	@FXML
+	protected TitledPane tpRegDividing;
+	@FXML
+	protected HBox hBoxRegDividing;
+	@FXML
+	protected CooTableView<CooLaser> tblRegDevide;
+	
+	/** The last selected {@link CooCustomer} */
+	private CooCustomer customer;
+	
 	public CooProjectDataPnl()
 	{
 		try
@@ -58,26 +66,21 @@ public class CooProjectDataPnl extends BorderPane implements CooDataChanged
 
 		tblStations.setClazz(CooStation.class);
 		tblLaser.setClazz(CooLaser.class);
+		tblRegDevide.setClazz(CooLaser.class);
 		
-		cbStation.getSelectionModel().selectedItemProperty().addListener(
-			(old, curr, newV) ->
-			{
-				if(Objects.nonNull(newV))
-				{
-					CooGateway gateway = newV.gatewayProperty().get();
-					tblLaser.setItems(gateway.getLaser());
-					txtGateIp.bindBidirectional(
-						gateway.ipProperty());
-					txtGateMAC.bindBidirectional(
-						gateway.macProperty());
-				}
-				else
-				{
-					txtGateIp.unbindBidirectional();
-					txtGateMAC.unbindBidirectional();
-					tblLaser.setItems(FXCollections.observableArrayList());
-				}
-			});
+		// Inform the panels when station changed
+		tblStations.getSelectionModel().selectedItemProperty()
+			.addListener((old, curr, newV) -> stationChanged(newV));
+		// Recalculate the region dividing when laser added or deleted
+//		tblLaser.addOnAddFinished(l -> calculateRegionDividing(tblStations.
+//			getSelectionModel().selectedItemProperty().get()));
+//		tblLaser.addOnDeleteFinished(l -> calculateRegionDividing(tblStations.
+//			getSelectionModel().selectedItemProperty().get()));
+		
+		// Move the calculate buttons to right site
+		tpRegDividing.setContentDisplay(ContentDisplay.RIGHT);
+		CooMainFrame.doOnShowing(()-> CooGuiUtil.
+			moveButtonsOnTitlepane(tpRegDividing, hBoxRegDividing));
 	}
 
 	@Override
@@ -97,8 +100,64 @@ public class CooProjectDataPnl extends BorderPane implements CooDataChanged
 
 		// Station fields
 		tblStations.setItems(project.getStations());
+		
+		// Reset the station bind fields
+		stationChanged(null);
+	}
+	
+	public void stationChanged(CooStation station)
+	{
+		if(Objects.nonNull(station))
+		{
+			// Get the gateway for this station 
+			CooGateway gateway = station.gatewayProperty().get();
+			// And set the fields
+			tblLaser.setItems(gateway.getLaser());
+			txtGateIp.bindBidirectional(
+				gateway.ipProperty());
+			txtGateMAC.bindBidirectional(
+				gateway.macProperty());
 
-		// Gateway fields
-		cbStation.setItems(project.getStations());
+			// Get the region dividing for this station
+			tblRegDevide.setItems(station.regionDevidingProperty()
+				.get().getLaser());
+		}
+		else
+		{
+			// Clear all fields
+			txtGateIp.unbindBidirectional();
+			txtGateMAC.unbindBidirectional();
+			tblLaser.setItems(FXCollections.observableArrayList());
+			tblRegDevide.setItems(FXCollections.observableArrayList());
+		}
+	}
+	
+	@Override
+	public void customerChanged(CooCustomer customer)
+	{
+		// Store the last selected customer
+		this.customer = customer;
+	}
+
+	@FXML
+	private void calcRegDividing()
+	{
+		if(CooDialogs.showConfirmDialog(getScene().getWindow(),
+			"Bereichsaufteilung berechnen", "Soll die "
+			+ "Bereichsufteilung berechnet werden?"))
+		{
+			CooStation station = tblStations.
+				getSelectionModel().getSelectedItem();
+			
+			if(Objects.nonNull(station) && Objects.nonNull(customer))
+			{
+				// Get the region dividing an station laser
+				CooRegionDividing dividing = station.regionDevidingProperty().get();
+				ObservableList<CooLaser> laser = station.gatewayProperty().get().getLaser();
+				
+				// Calculate the region diving and display it
+				tblRegDevide.setItems(dividing.fromLaser(customer.getPalets(), laser));	
+			}
+		}
 	}
 }

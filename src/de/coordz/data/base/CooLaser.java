@@ -10,11 +10,10 @@ import static de.util.CooXmlDomUtil.addElement;
 
 import java.util.Objects;
 
-import javafx.beans.property.*;
-
 import org.w3c.dom.*;
 
 import de.coordz.data.CooData;
+import javafx.beans.property.*;
 
 public class CooLaser extends CooData
 {
@@ -33,6 +32,11 @@ public class CooLaser extends CooData
 	protected IntegerProperty z;
 	/** {@link DoubleProperty} for the laser total deviation */
 	protected DoubleProperty totalDeviation;
+	
+	/** {@link IntegerProperty} for the laser region dividing from value */
+	protected IntegerProperty from;
+	/** {@link IntegerProperty} for the laser region dividing to value */
+	protected IntegerProperty to;
 
 	public CooLaser()
 	{
@@ -43,6 +47,8 @@ public class CooLaser extends CooData
 		y = new SimpleIntegerProperty();
 		z = new SimpleIntegerProperty();
 		totalDeviation = new SimpleDoubleProperty();
+		from = new SimpleIntegerProperty();
+		to = new SimpleIntegerProperty();
 	}
 	
 	@Override
@@ -57,6 +63,8 @@ public class CooLaser extends CooData
 		laser.setAttribute("Z", String.valueOf(z.get()));
 		laser.setAttribute("TotalDeviation", 
 			String.valueOf(totalDeviation.get()));
+		laser.setAttribute("From", String.valueOf(from.get()));
+		laser.setAttribute("To", String.valueOf(to.get()));
 	}
 	
 	@Override
@@ -72,6 +80,8 @@ public class CooLaser extends CooData
 			z.set(Integer.valueOf(laser.getAttribute("Z")));
 			totalDeviation.set(Double.valueOf(laser.getAttribute(
 				"TotalDeviation")));
+			from.set(Integer.valueOf(laser.getAttribute("From")));
+			to.set(Integer.valueOf(laser.getAttribute("To")));
 		}
 	}
 	
@@ -136,5 +146,23 @@ public class CooLaser extends CooData
 	public DoubleProperty totalDeviationProperty()
 	{
 		return totalDeviation;
+	}
+	
+	/**
+	 * Method to access Property
+	 * @return {@link #from}
+	 */
+	public IntegerProperty fromProperty()
+	{
+		return from;
+	}
+	
+	/**
+	 * Method to access Property
+	 * @return {@link #to}
+	 */
+	public IntegerProperty toProperty()
+	{
+		return to;
 	}
 }

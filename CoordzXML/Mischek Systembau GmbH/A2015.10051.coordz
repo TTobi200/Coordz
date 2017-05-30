@@ -5,8 +5,8 @@
         <Stations>
             <Station Description="Umlauf Station mit Laser" File="D:\Unitechnik\repos\Coordz" Name="U1" XOffset="-17" YOffset="-3" ZOffset="-4">
                 <RegionDividing>
-                    <Laser MAC="sss" Name="Las1" SerialNr="" TotalDeviation="0.0" X="0" Y="0" Z="0"/>
-                    <Laser MAC="" Name="Las2" SerialNr="" TotalDeviation="0.0" X="0" Y="0" Z="0"/>
+                    <Laser MAC="sss" Name="Las1" SerialNr="" TotalDeviation="0.0" X="0" Y="0" Z="0" From="0" To="0"/>
+                    <Laser MAC="" Name="Las2" SerialNr="" TotalDeviation="0.0" X="0" Y="0" Z="0" From="0" To="0"/>
                 </RegionDividing>
                 <Measurements>
                     <Measurement Date="2005-01-01" From="10.00Uhr" Name="07.07.15(2)" To="18.00Uhr" Weather="Sonnig" Notes="Klappte Super!">
@@ -36,8 +36,8 @@
                     </Result>
                 </VerifyMeasurement>
                 <Gateway IP="112112" MAC="243243">
-                    <Laser MAC="32424325" Name="Las2" SerialNr="353525" TotalDeviation="0.0" X="0" Y="0" Z="0"/>
-                    <Laser MAC="2243432535" Name="Las2" SerialNr="352523" TotalDeviation="0.0" X="0" Y="0" Z="0"/>
+                    <Laser MAC="sss" Name="Las1" SerialNr="" TotalDeviation="0.0" X="0" Y="0" Z="0" From="0" To="0"/>
+                    <Laser MAC="" Name="Las2" SerialNr="" TotalDeviation="0.0" X="0" Y="0" Z="0" From="0" To="0"/>
                 </Gateway>
             </Station>
         </Stations>
