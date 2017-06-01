@@ -8,6 +8,7 @@ package de.gui;
 
 import java.io.*;
 import java.net.URL;
+import java.nio.channels.FileLock;
 import java.util.*;
 
 import de.coordz.CooSystem;
@@ -56,6 +57,8 @@ public class CooController implements Initializable
 	protected TabPane tabPane;
 
 	private Property<String> xmlDbPath;
+	private RandomAccessFile randomAccessFile;
+	private FileLock fileLock;
 
 	public static Object getInstance(Stage primaryStage)
 	{
@@ -202,6 +205,39 @@ public class CooController implements Initializable
 	{
 		if(Objects.nonNull(xmlDBFolder))
 		{
+			try
+			{
+				// Check if the xml database already opened by other program
+				final File file = new File(xmlDBFolder, "CoordzXMLDatabase");
+				randomAccessFile = new RandomAccessFile(file, "rw");
+				
+				// Check if we have already opened the database
+//				if(!CooSystem.getComputerName()
+//					.equals(randomAccessFile.readLine()))
+//				{
+					// Check if other process has opened the database
+					fileLock = randomAccessFile.getChannel().tryLock();
+					// Check if we have a file lock
+					if(Objects.isNull(fileLock))
+					{
+						CooDialogs.showErrorDialog(primaryStage, 
+							"Datenbank Zugriff felgeschlagen",
+							"Die Datenbank ist bereits in einem "
+							+ "anderen Programm geöffnet.");
+						return;
+					}
+					
+					// We have access to the database
+					// Store our name in file an continue
+//					randomAccessFile.writeUTF(CooSystem.getComputerName());
+//				}
+			}
+			catch(IOException e)
+			{
+				CooDialogs.showExceptionDialog(primaryStage, 
+					"Fehler beim öffnen des DB Locks", e);
+			}
+			
 			CooDialogs.showProgressDialog(primaryStage,
 				"Stammdaten aus Datenbank laden", new Task<Void>()
 				{

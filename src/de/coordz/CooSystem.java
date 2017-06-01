@@ -6,9 +6,11 @@
  */
 package de.coordz;
 
-import javafx.application.Platform;
+import java.util.Map;
+
 import de.coordz.data.db.*;
 import de.util.CooPreferencesUtil;
+import javafx.application.Platform;
 
 public class CooSystem
 {
@@ -53,5 +55,22 @@ public class CooSystem
 	public static CooDB getSystemDatabase()
 	{
 		return systemDatabase;
+	}
+	
+	public static String getComputerName()
+	{
+	    Map<String, String> env = System.getenv();
+	    if (env.containsKey("COMPUTERNAME"))
+		{
+			return env.get("COMPUTERNAME");
+		}
+		else if (env.containsKey("HOSTNAME"))
+		{
+			return env.get("HOSTNAME");
+		}
+		else
+		{
+			return "Unknown Computer";
+		}
 	}
 }
