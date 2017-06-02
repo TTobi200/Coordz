@@ -11,10 +11,6 @@ import static de.util.CooXmlDomUtil.*;
 import java.io.*;
 import java.util.*;
 
-import javafx.beans.property.*;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.image.Image;
-
 import javax.imageio.ImageIO;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -24,10 +20,13 @@ import org.xml.sax.SAXException;
 
 import de.coordz.data.*;
 import de.util.log.CooLog;
+import javafx.beans.property.*;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
 
 public class CooXMLDBUtil
 {
-	protected static ObjectProperty<File> xmlDBFolder = new SimpleObjectProperty<File>();;
+	protected static ObjectProperty<File> xmlDBFolder = new SimpleObjectProperty<>();;
 
 	/** {@link String} for the xml root node */
 	public static final String XML_COORDZ_DATA_ROOT = "CoordzData";
@@ -155,7 +154,7 @@ public class CooXMLDBUtil
 	public static List<CooCustomer> getAllCustomers(File xmlDB) throws SAXException, 
 			IOException, ParserConfigurationException
 	{
-		List<CooCustomer> customers = new ArrayList<CooCustomer>();
+		List<CooCustomer> customers = new ArrayList<>();
 
 		if(Objects.nonNull(xmlDB) && xmlDB.exists() && xmlDB.isDirectory())
 		{
@@ -214,14 +213,16 @@ public class CooXMLDBUtil
 										+ File.separator
 										+ customer.nameProperty().get()
 										+ File.separator);
+		if(customerFolder.exists())
+		{
+			Arrays.asList(customerFolder.listFiles()).forEach(
+				f -> {
+					f.delete();
+				});
+			customerFolder.delete();
 
-		Arrays.asList(customerFolder.listFiles()).forEach(
-			f -> {
-				f.delete();
-			});
-		customerFolder.delete();
-
-		CooLog.debug("Delete Customer: " + customerFolder.getAbsolutePath());
+			CooLog.debug("Delete Customer: " + customerFolder.getAbsolutePath());
+		}
 	}
 
 	public static void deleteProject(CooCustomer customer, CooProject project)

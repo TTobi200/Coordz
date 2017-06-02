@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.MenuItem?>
+
+<SplitPane maxHeight="-Infinity" dividerPositions="0.38"
+	maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+	prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8"
+	xmlns:fx="http://javafx.com/fxml/1">
+	<items>
+		<TreeView SplitPane.resizableWithParent="false" fx:id="treeLog"
+			prefHeight="200.0" prefWidth="200.0">
+			<contextMenu>
+				<ContextMenu>
+					<items>
+						<MenuItem fx:id="menuItmDelete" text="Löschen"
+							onAction="#doDelete" />
+					</items>
+				</ContextMenu>
+			</contextMenu>
+		</TreeView>
+		<TabPane fx:id="tabPaneLog" prefHeight="200.0" prefWidth="200.0"
+			tabClosingPolicy="UNAVAILABLE" />
+	</items>
+</SplitPane>

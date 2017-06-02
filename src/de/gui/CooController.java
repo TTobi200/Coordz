@@ -138,6 +138,13 @@ public class CooController implements Initializable
 	{
 		CooSystem.exit();
 	}
+	
+	@FXML
+	public void openLogging() throws Exception
+	{
+		new CooLogViewer(primaryStage, new File(
+			LOGGING_FOLDER)).show();
+	}
 
 	@SuppressWarnings("unchecked")
 	@FXML
