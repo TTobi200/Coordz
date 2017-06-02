@@ -29,6 +29,9 @@
 				<Menu mnemonicParsing="false" text="Datei">
 					<items>
 						<MenuItem mnemonicParsing="false" text="Neu" onAction="#newXMLDB">
+							<accelerator>
+								<KeyCombination fx:value="Ctrl+N" />
+							</accelerator>
 							<graphic>
 								<ImageView pickOnBounds="true" preserveRatio="true">
 									<image>
@@ -38,6 +41,9 @@
 							</graphic>
 						</MenuItem>
 						<MenuItem mnemonicParsing="false" text="Öffnen" onAction="#openXMLDB">
+							<accelerator>
+								<KeyCombination fx:value="Ctrl+O" />
+							</accelerator>
 							<graphic>
 								<ImageView pickOnBounds="true" preserveRatio="true">
 									<image>
@@ -61,6 +67,9 @@
 				<Menu mnemonicParsing="false" text="Bearbeiten">
 					<items>
 						<MenuItem mnemonicParsing="false" text="Kopieren">
+							<accelerator>
+								<KeyCombination fx:value="Ctrl+C" />
+							</accelerator>
 							<graphic>
 								<ImageView pickOnBounds="true" preserveRatio="true">
 									<image>
@@ -70,6 +79,9 @@
 							</graphic>
 						</MenuItem>
 						<MenuItem mnemonicParsing="false" text="Ausschneiden">
+							<accelerator>
+								<KeyCombination fx:value="Ctrl+X" />
+							</accelerator>
 							<graphic>
 								<ImageView pickOnBounds="true" preserveRatio="true">
 									<image>
@@ -79,6 +91,9 @@
 							</graphic>
 						</MenuItem>
 						<MenuItem mnemonicParsing="false" text="Einfügen">
+							<accelerator>
+								<KeyCombination fx:value="Ctrl+V" />
+							</accelerator>
 							<graphic>
 								<ImageView pickOnBounds="true" preserveRatio="true">
 									<image>
@@ -93,6 +108,9 @@
 					<items>
 						<MenuItem mnemonicParsing="false" text="Einstellungen"
 							onAction="#openSettings">
+							<accelerator>
+								<KeyCombination fx:value="Ctrl+Shift+O" />
+							</accelerator>
 							<graphic>
 								<ImageView pickOnBounds="true" preserveRatio="true">
 									<image>
@@ -121,6 +139,9 @@
 				<Menu mnemonicParsing="false" text="Hilfe">
 					<items>
 						<MenuItem mnemonicParsing="false" text="Anleitung">
+							<accelerator>
+								<KeyCombination fx:value="Ctrl+Shift+M" />
+							</accelerator>
 							<graphic>
 								<ImageView pickOnBounds="true" preserveRatio="true">
 									<image>
@@ -130,6 +151,9 @@
 							</graphic>
 						</MenuItem>
 						<MenuItem mnemonicParsing="false" text="Über">
+							<accelerator>
+								<KeyCombination fx:value="Ctrl+Shift+A" />
+							</accelerator>
 							<graphic>
 								<ImageView pickOnBounds="true" preserveRatio="true">
 									<image>
