@@ -6,9 +6,9 @@
  */
 package de.gui.view3D.comp;
 
+import de.coordz.data.base.CooLaser;
 import javafx.scene.paint.*;
 import javafx.scene.shape.*;
-import de.coordz.data.base.CooLaser;
 
 public class CooLaser3D extends CooData3D<CooLaser>
 {

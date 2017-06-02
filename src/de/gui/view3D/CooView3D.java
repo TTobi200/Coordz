@@ -8,14 +8,6 @@ package de.gui.view3D;
 
 import java.util.*;
 
-import javafx.collections.ListChangeListener;
-import javafx.event.EventHandler;
-import javafx.scene.*;
-import javafx.scene.control.*;
-import javafx.scene.input.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
-
 import org.controlsfx.control.CheckComboBox;
 
 import de.coordz.data.*;
@@ -23,6 +15,13 @@ import de.coordz.data.base.CooPalet;
 import de.gui.CooDataChanged;
 import de.gui.view3D.comp.*;
 import de.util.CooXformUtil;
+import javafx.collections.ListChangeListener;
+import javafx.event.EventHandler;
+import javafx.scene.*;
+import javafx.scene.control.*;
+import javafx.scene.input.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 
 public class CooView3D extends BorderPane implements CooMeasurementChanged, CooDataChanged
 {
@@ -57,7 +56,7 @@ public class CooView3D extends BorderPane implements CooMeasurementChanged, CooD
 	public CooView3D()
 	{
 		System.setProperty("prism.dirtyopts", "false");
-		elements = new CheckComboBox<CooData3D<?>>();
+		elements = new CheckComboBox<>();
 		
 		buildScene();
 		buildCamera();
@@ -113,9 +112,9 @@ public class CooView3D extends BorderPane implements CooMeasurementChanged, CooD
 		laser1 = new CooLaser3D();
 		laser2 = new CooLaser3D();
 		
-		laser1.setTy(100);
-		laser2.setTy(100);
+		laser1.setTy(155);
 		laser1.setTz(-100);
+		laser2.setTy(155);
 		laser2.setTz(100);
 		
 		addToWorld(axis, palet, laser1, laser2);
@@ -124,7 +123,7 @@ public class CooView3D extends BorderPane implements CooMeasurementChanged, CooD
 	private Node buildToolbar()
 	{
 		ToolBar tools = new ToolBar();
-		cbPalets = new ComboBox<CooPalet>();
+		cbPalets = new ComboBox<>();
 		CheckBox cbShowNames = new CheckBox("Namen anzeigen");
 		
 		// Display names

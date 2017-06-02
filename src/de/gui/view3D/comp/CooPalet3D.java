@@ -6,9 +6,9 @@
  */
 package de.gui.view3D.comp;
 
+import de.coordz.data.base.CooPalet;
 import javafx.scene.paint.*;
 import javafx.scene.shape.Box;
-import de.coordz.data.base.CooPalet;
 
 public class CooPalet3D extends CooData3D<CooPalet>
 {
@@ -30,13 +30,14 @@ public class CooPalet3D extends CooData3D<CooPalet>
 	@Override
 	public void dataChanged(CooPalet data)
 	{
+		// XXX $TO: Recalculate mm to cm in complete 3D View
 		palet.widthProperty().bind(
-			data.widthProperty());
+			data.widthProperty().divide(10));
 		// TODO add a height prop to CooPalet
 		// palet.heightProperty().bind(
 		// data.lengthProperty());
 		palet.depthProperty().bind(
-			data.lengthProperty());
+			data.lengthProperty().divide(10));
 	}
 	
 	@Override
