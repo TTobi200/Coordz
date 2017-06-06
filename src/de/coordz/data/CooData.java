@@ -6,8 +6,6 @@
  */
 package de.coordz.data;
 
-import de.coordz.data.xml.CooXML;
-
 /**
  * Base class for all Coordz Data Classes.<br>
  * Currently implements:

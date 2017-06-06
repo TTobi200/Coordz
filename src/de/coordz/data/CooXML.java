@@ -4,7 +4,7 @@
  * $Log$
  * Copyright © 2015 T.Ohm . All Rights Reserved.
  */
-package de.coordz.data.xml;
+package de.coordz.data;
 
 import org.w3c.dom.*;
 
