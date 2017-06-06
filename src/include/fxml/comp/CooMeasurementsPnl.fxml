@@ -355,7 +355,7 @@
 										</ToolBar>
 									</top>
 									<center>
-										<CooView2D />
+										<CooView2D fx:id="view2D"/>
 									</center>
 									<bottom>
 										<Label fx:id="lblTargetFile" text="Targetdatei: " />

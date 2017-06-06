@@ -6,19 +6,32 @@
  */
 package de.gui.view2D;
 
+import java.util.Objects;
+
+import de.coordz.data.*;
+import de.coordz.data.base.*;
+import de.gui.CooDataChanged;
+import de.gui.view2D.comp.CooTarget2D;
+import de.gui.view3D.CooMeasurementChanged;
 import javafx.collections.*;
 import javafx.scene.canvas.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 
-public class CooView2D extends BorderPane 
+public class CooView2D extends BorderPane implements CooDataChanged, CooMeasurementChanged
 {
-	final int cubeSize = 20;
-	final int textSize = 15;
+	/** The offset from border to each target */
+	protected final int OFFSET = 30;
+	
+	/** {@link ObservableList} with {@link CooTarget2D} */
+	protected ObservableList<CooTarget2D> targets;
+	/** The {@link ResizableCanvas} to draw on */
+	private ResizableCanvas canvas;
 	
 	public CooView2D()
 	{
-		ResizableCanvas canvas = new ResizableCanvas();
+		targets = FXCollections.observableArrayList();
+		
+		canvas = new ResizableCanvas();
 		canvas.widthProperty().bind(widthProperty());
 		canvas.heightProperty().bind(heightProperty());
 		
@@ -29,11 +42,6 @@ public class CooView2D extends BorderPane
 	
 	private void drawShapes(GraphicsContext gc) 
 	{
-		// FORTEST $TO: Define a list with targets to display
-		ObservableList<String> targets = FXCollections.observableArrayList(
-			"1", "2", "3", "4", "5", "6");
-
-		double offset = 30;
 		double x = 0;
 		double y = 0;
 		
@@ -45,8 +53,8 @@ public class CooView2D extends BorderPane
 			if(i == targets.size())
 			{
 				// First run, add the normal offset
-				x += offset;
-				y += offset;
+				x += OFFSET;
+				y += OFFSET;
 			}
 			else if(i > targets.size() / 2)
 			{
@@ -56,40 +64,86 @@ public class CooView2D extends BorderPane
 					 // Middle in part of width
 					 (getWidth() / (targets.size() / 2) / 2) -
 					 // Remove cube size, text size and the offset
-					 cubeSize - textSize - offset;
+					 CooTarget2D.CUBE_SIZE - CooTarget2D.TEXT_SIZE - OFFSET;
 			}
 			else if(i == targets.size() / 2)
 			{
 				// We have reached the half of targets
 				// This one now is on the other site
-				y = (int)(getHeight() - offset);
+				y = (int)(getHeight() - OFFSET);
 			}
 			else
 			{
 				// Last targets go back to start position x
-				y = (int)(getHeight() - offset);
+				y = (int)(getHeight() - OFFSET);
 				x -= // Add the part of width 
 					 getWidth() / (targets.size() / 2) + 
 					 // Middle in part of width
 					 (getWidth() / (targets.size() / 2) / 2) -
 					 // Remove cube size, text size and the offset
-					 cubeSize - textSize - offset;
+					 CooTarget2D.CUBE_SIZE - CooTarget2D.TEXT_SIZE - OFFSET;
 			}
 			
-			// Add the target to view
-			addTarget(gc, "T" + i, x, y);
+			// Draw the target on canvas
+			targets.get(i - 1).draw(gc, x, y);
 		}
     }
 	
-	private void addTarget(GraphicsContext gc, String name, double x, double y)
+	@Override
+	public void measurementChanged(CooMeasurement measurement)
 	{
-		Color targetColor = Color.GREEN;
-		gc.setFill(targetColor);
-		gc.fillRect(x, y, cubeSize, cubeSize);
-		gc.setFill(Color.BLACK);
-		gc.fillText(name, x + cubeSize, y + textSize);		
+		// Clear all visible targets
+		targets.clear();
+		
+		if(Objects.nonNull(measurement))
+		{
+			// Display the targets from measurement
+			measurement.getTargets().forEach(t
+				-> targets.add(new CooTarget2D(t)));
+			
+			measurement.getTargets().addListener(
+				new ListChangeListener<CooTarget>()
+			{
+				@Override
+				public void onChanged(Change<? extends CooTarget> c)
+				{
+					while(c.next())
+					{
+						// Someone changed the targets
+						for(CooTarget t : c.getRemoved())
+						{
+							targets.remove(t);
+						}
+						for(CooTarget t : c.getAddedSubList())
+						{
+							targets.add(new CooTarget2D(t));
+						}
+					}
+					
+					// Repaint the canvas
+					canvas.repaint();
+				}
+			});
+		}
+		
+		// Repaint the canvas
+		canvas.repaint();
 	}
-
+	
+	@Override
+	public void customerChanged(CooCustomer customer)
+	{
+		// Call the measurement changed without data
+		measurementChanged(null);
+	}
+	
+	@Override
+	public void projectChanged(CooProject project)
+	{
+		// Call the measurement changed without data
+		measurementChanged(null);
+	}
+	
 	private class ResizableCanvas extends Canvas
 	{
 		public ResizableCanvas()

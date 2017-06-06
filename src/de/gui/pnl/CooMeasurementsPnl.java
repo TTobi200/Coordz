@@ -14,6 +14,7 @@ import de.coordz.data.base.*;
 import de.coordz.lap.*;
 import de.gui.*;
 import de.gui.comp.*;
+import de.gui.view2D.CooView2D;
 import de.gui.view3D.*;
 import de.util.*;
 import de.util.log.CooLog;
@@ -53,6 +54,8 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	protected ComboBox<CooStation> cbStations;
 	@FXML
 	protected CooView3D view3D;
+	@FXML
+	protected CooView2D view2D;
 	@FXML
 	protected CooTextArea txtNotes;
 	
@@ -238,6 +241,8 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 		
 		// Inform the 3D View
 		view3D.measurementChanged(measurement);
+		// Inform the 2D View
+		view2D.measurementChanged(measurement);
 	}
 	
 	@Override
@@ -247,6 +252,8 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 		
 		// Inform the 3D View
 		view3D.projectChanged(project);
+		// Inform the 2D View
+		view2D.projectChanged(project);
 	}
 	
 	@Override
@@ -254,5 +261,7 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	{
 		// Inform the 3D View
 		view3D.customerChanged(customer);
+		// Inform the 2D View
+		view2D.customerChanged(customer);
 	}
 }
