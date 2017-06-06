@@ -66,7 +66,7 @@
 				</Menu>
 				<Menu mnemonicParsing="false" text="Bearbeiten">
 					<items>
-						<MenuItem mnemonicParsing="false" text="Kopieren">
+						<MenuItem mnemonicParsing="false" text="Kopieren" onAction="#copy">
 							<accelerator>
 								<KeyCombination fx:value="Ctrl+C" />
 							</accelerator>
@@ -78,7 +78,7 @@
 								</ImageView>
 							</graphic>
 						</MenuItem>
-						<MenuItem mnemonicParsing="false" text="Ausschneiden">
+						<MenuItem mnemonicParsing="false" text="Ausschneiden" onAction="#cut">
 							<accelerator>
 								<KeyCombination fx:value="Ctrl+X" />
 							</accelerator>
@@ -90,7 +90,7 @@
 								</ImageView>
 							</graphic>
 						</MenuItem>
-						<MenuItem mnemonicParsing="false" text="Einfügen">
+						<MenuItem mnemonicParsing="false" text="Einfügen" onAction="#paste">
 							<accelerator>
 								<KeyCombination fx:value="Ctrl+V" />
 							</accelerator>

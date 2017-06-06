@@ -145,6 +145,24 @@ public class CooController implements Initializable
 		new CooLogViewer(primaryStage, new File(
 			LOGGING_FOLDER)).show();
 	}
+	
+	@FXML
+	protected void cut()
+	{
+		CooGuiUtil.cut(primaryStage.getScene());
+	}
+	
+	@FXML
+	protected void copy()
+	{
+		CooGuiUtil.copy(primaryStage.getScene());
+	}
+	
+	@FXML
+	protected void paste()
+	{
+		CooGuiUtil.paste(primaryStage.getScene());
+	}
 
 	@SuppressWarnings("unchecked")
 	@FXML
