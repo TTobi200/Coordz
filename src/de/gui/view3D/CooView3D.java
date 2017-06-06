@@ -12,7 +12,7 @@ import org.controlsfx.control.CheckComboBox;
 
 import de.coordz.data.*;
 import de.coordz.data.base.CooPalet;
-import de.gui.CooDataChanged;
+import de.gui.*;
 import de.gui.view3D.comp.*;
 import de.util.CooXformUtil;
 import javafx.collections.ListChangeListener;

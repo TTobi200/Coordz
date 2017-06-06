@@ -4,7 +4,7 @@
  * $Log$
  * Copyright © 2015 T.Ohm . All Rights Reserved.
  */
-package de.gui.view3D;
+package de.gui;
 
 import de.coordz.data.base.CooMeasurement;
 

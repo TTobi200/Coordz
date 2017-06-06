@@ -2,8 +2,7 @@ package de.gui.view3D.ddd;
 
 import de.coordz.data.CooCustomer;
 import de.coordz.data.CooProject;
-import de.gui.CooDataChanged;
-import de.gui.view3D.CooMeasurementChanged;
+import de.gui.*;
 import de.gui.view3D.ddd.shape.Coo3dShapeFactory;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;

@@ -10,9 +10,8 @@ import java.util.Objects;
 
 import de.coordz.data.*;
 import de.coordz.data.base.*;
-import de.gui.CooDataChanged;
+import de.gui.*;
 import de.gui.view2D.comp.CooTarget2D;
-import de.gui.view3D.CooMeasurementChanged;
 import javafx.collections.*;
 import javafx.scene.canvas.*;
 import javafx.scene.layout.BorderPane;
