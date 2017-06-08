@@ -365,7 +365,7 @@ public class CooPdfDocument extends CooDocument
 	{
 		// addSubCaption(doc, "Laser");
 		PdfPTable table = createTable("Laser",
-			"Name", "Article Nr.", "Seriennummer", "X", "Y", "Z", "Gesamtabweichung");
+			"Name", "Artikel Nr.", "Seriennummer", "X", "Y", "Z", "Gesamtabweichung");
 
 		laser.forEach(l ->
 		{
