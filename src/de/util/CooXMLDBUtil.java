@@ -39,6 +39,8 @@ public class CooXMLDBUtil
 	public static final String DATA_FILE_EXT = ".coordz";
 	/** {@link String} for the xml DB customer file (always the same) */
 	public static final String CUSTOMER_FILE = "customer" + DATA_FILE_EXT;
+	/** {@link String} for the xml DB image folder */
+	public static final String IMAGE_FOLDER = "images";
 
 	/** {@link String} for the ustomer logo file (always the same) */
 	public static final String CUSTOMER_LOGO = "Logo.png";
@@ -141,6 +143,34 @@ public class CooXMLDBUtil
 		{
 			CooLog.error("Could not save Data", e);
 		}
+	}
+	
+	/**
+	 * Get the image folder from committed {@link CooCustomer}.
+	 * @param customer = the {@link CooCustomer} to get the image folder form
+	 * @return the image folder of committed {@link CooCustomer}
+	 */
+	public static File getImagesFolder(CooCustomer customer)
+	{
+		File imageFolder = null;
+		
+		// Check if we have a customer
+		if(Objects.isNull(customer))
+		{
+			return imageFolder;
+		}
+		// And if the customer has a name
+		else if(Objects.nonNull(customer.nameProperty().get()))
+		{
+			// Construct the image folder
+			imageFolder = new File(xmlDBFolder.get().getAbsolutePath()
+			+ File.separator
+			+ customer.nameProperty().get()
+			+ File.separator
+			+ IMAGE_FOLDER);
+		}
+		
+		return imageFolder;
 	}
 
 	/**

@@ -13,7 +13,7 @@ import java.util.*;
 
 import de.coordz.CooSystem;
 import de.coordz.data.CooCustomer;
-import de.gui.comp.CooCustomerTreeItem;
+import de.gui.comp.*;
 import de.gui.pnl.*;
 import de.gui.sett.CooSettingsDialog;
 import de.gui.sett.CooSettingsDialog.SettingType;
@@ -27,7 +27,7 @@ import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.stage.*;
 
-public class CooController implements Initializable
+public class CooController implements Initializable, CooDataChanged
 {
 	public static final boolean REORG_LOGS = true;
 	public static final int DAYS_TO_SAVE_LOGS = 7;
@@ -55,10 +55,16 @@ public class CooController implements Initializable
 
 	@FXML
 	protected TabPane tabPane;
+	@FXML
+	protected Tab tabGallery;
+	
+	@FXML
+	protected CooImageGallery imageGallery;
 
 	private Property<String> xmlDbPath;
 	private RandomAccessFile randomAccessFile;
 	private FileLock fileLock;
+	private CooCustomer customer;
 
 	public static Object getInstance(Stage primaryStage)
 	{
@@ -92,8 +98,8 @@ public class CooController implements Initializable
 		}
 		catch(IOException e)
 		{
-			CooLog.error("Error while initializing controller.",
-				e);
+			CooLog.error("Error while initializing "
+				+ "controller.", e);
 		}
 	}
 
@@ -103,15 +109,36 @@ public class CooController implements Initializable
 		treeViewPnl.addDataChangedListener(coreDataPnl);
 		treeViewPnl.addDataChangedListener(projectDataPnl);
 		treeViewPnl.addDataChangedListener(measurementsPnl);
+		treeViewPnl.addDataChangedListener(this);
 
 		// Make panes detachable
 		CooTabPaneDetacherUtil.create().makeTabsDetachable(tabPane);
 
 		// Add documents to GUI
 		CooGuiUtil.addDocToMenu(menuDocs, new File(DOCUMENT_FOLDER));
+		
+		// FIXME: $TO: TabPanes loose selection when they where detached
+		// Load the Images when tab selected
+		tabGallery.setOnSelectionChanged(e -> imageGallery.loadImages(
+			CooXMLDBUtil.getImagesFolder(customer), tabGallery.isSelected()));
 
 		// FORTEST load the coordz xml database
 //		primaryStage.setOnShowing(e -> openXMLDB(new File("D:/Unitechnik/repos/Coordz/CoordzXML")));
+	}
+	
+	@Override
+	public void customerChanged(CooCustomer customer)
+	{
+		// Store the last selected customer
+		this.customer = customer;
+		
+		// Refresh the gallery when selected
+		if(tabGallery.isSelected())
+		{
+			// Load the images for selected customer
+			imageGallery.loadImages(CooXMLDBUtil.getImagesFolder(
+				customer), Boolean.TRUE);
+		}
 	}
 
 	@FXML
@@ -265,52 +292,51 @@ public class CooController implements Initializable
 			
 			CooDialogs.showProgressDialog(primaryStage,
 				"Stammdaten aus Datenbank laden", new Task<Void>()
+			{
+				@Override
+				protected Void call() throws Exception
 				{
-					@Override
-					protected Void call() throws Exception
+					// Create Tree Root
+					CooCustomerTreeItem root = new CooCustomerTreeItem(
+						new SimpleStringProperty("Kunden"),
+						new CooCustomer());
+					// Load all customers from xml DB
+					List<CooCustomer> customers = null;
+					try
 					{
-						// Create Tree Root
-						CooCustomerTreeItem root = new CooCustomerTreeItem(
-							new SimpleStringProperty("Kunden"),
-							new CooCustomer());
-						// Load all customers from xml DB
-						List<CooCustomer> customers = null;
-						try
-						{
-							customers = CooXMLDBUtil.getAllCustomers(
-								xmlDBFolder);
-						}
-						catch(Exception e)
-						{
-							updateMessage("Fehler beim Laden der XML-DB");
-							CooDialogs.showExceptionDialog(primaryStage, 
-								"Fehler beim Laden der XML-DB", e);
-							updateProgress(0, 0);
-							return null;
-						}
-
-						if(Objects.nonNull(customers))
-						{
-							// Add Customers to Tree Root
-							for(int i = 0; i < customers.size(); i++)
-							{
-								CooCustomer c = customers.get(i);
-								updateMessage("Lädt " + c.nameProperty().get());
-								CooCustomerTreeItem customer = new CooCustomerTreeItem(
-									c.nameProperty(), c);
-								root.getChildren().add(customer);
-								updateProgress(i + 1, customers.size());
-							}
-
-							updateProgress(1, 1);
-							updateMessage("Stammdaten erfolgreich geleaden!");
-							treeViewPnl.getPrjTreeView().setRoot(root);
-							root.setExpanded(true);
-							xmlDbPath.setValue(xmlDBFolder.getAbsolutePath());
-						}
+						customers = CooXMLDBUtil.getAllCustomers(
+							xmlDBFolder);
+					}
+					catch(Exception e)
+					{
+						updateMessage("Fehler beim Laden der XML-DB");
+						CooDialogs.showExceptionDialog(primaryStage, 
+							"Fehler beim Laden der XML-DB", e);
+						updateProgress(0, 0);
 						return null;
 					}
-				});
+						if(Objects.nonNull(customers))
+					{
+						// Add Customers to Tree Root
+						for(int i = 0; i < customers.size(); i++)
+						{
+							CooCustomer c = customers.get(i);
+							updateMessage("Lädt " + c.nameProperty().get());
+							CooCustomerTreeItem customer = new CooCustomerTreeItem(
+								c.nameProperty(), c);
+							root.getChildren().add(customer);
+							updateProgress(i + 1, customers.size());
+						}
+
+						updateProgress(1, 1);
+						updateMessage("Stammdaten erfolgreich geleaden!");
+						treeViewPnl.getPrjTreeView().setRoot(root);
+						root.setExpanded(true);
+						xmlDbPath.setValue(xmlDBFolder.getAbsolutePath());
+					}
+					return null;
+				}
+			});
 		}
 	}
 }

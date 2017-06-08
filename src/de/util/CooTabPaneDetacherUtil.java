@@ -8,6 +8,8 @@ package de.util;
 
 import java.util.*;
 
+import com.sun.glass.ui.*;
+
 import javafx.beans.property.*;
 import javafx.scene.*;
 import javafx.scene.Cursor;
@@ -17,8 +19,6 @@ import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Transform;
 import javafx.stage.Stage;
-
-import com.sun.glass.ui.*;
 
 public class CooTabPaneDetacherUtil
 {

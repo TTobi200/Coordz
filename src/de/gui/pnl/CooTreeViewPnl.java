@@ -9,18 +9,18 @@ package de.gui.pnl;
 import java.io.IOException;
 import java.util.Objects;
 
+import de.coordz.data.*;
+import de.coordz.doc.*;
+import de.gui.*;
+import de.gui.comp.CooCustomerTreeItem;
+import de.gui.comp.CooCustomerTreeItem.CooProjectTreeItem;
+import de.util.*;
+import de.util.log.CooLog;
 import javafx.beans.value.*;
 import javafx.collections.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import de.coordz.data.*;
-import de.coordz.doc.*;
-import de.gui.*;
-import de.gui.comp.*;
-import de.gui.comp.CooCustomerTreeItem.CooProjectTreeItem;
-import de.util.*;
-import de.util.log.CooLog;
 
 public class CooTreeViewPnl extends BorderPane
 {
@@ -43,8 +43,8 @@ public class CooTreeViewPnl extends BorderPane
 		try
 		{
 			CooFileUtil.loadFXML(this, CooFileUtil.FXML_COMP +
-										CooFileUtil.IN_JAR_SEPERATOR
-										+ "CooTreeViewPnl.fxml", this);
+				CooFileUtil.IN_JAR_SEPERATOR
+					+ "CooTreeViewPnl.fxml", this);
 		}
 		catch(IOException e)
 		{
@@ -87,10 +87,14 @@ public class CooTreeViewPnl extends BorderPane
 					{
 						CooCustomer customer = ((CooCustomerTreeItem)selectedItem)
 							.customerProperty().get();
-						lastSelCustomer = customer;
+						
+						if(customer != lastSelCustomer)
+						{
+							lastSelCustomer = customer;
+							components.forEach(c -> c.customerChanged(
+								customer));
+						}
 
-						components.forEach(c -> c.customerChanged(
-							customer));
 						components.forEach(c -> c.projectChanged(
 							new CooProject()));
 					}
