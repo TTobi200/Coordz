@@ -43,7 +43,7 @@ public class CooLogViewer extends Stage
 		try
 		{
 			Parent root = CooFileUtil.loadFXML(this,
-				CooFileUtil.FXML_FOLDER + File.separator + FXML);
+				CooFileUtil.FXML_FOLDER + CooFileUtil.IN_JAR_SEPERATOR + FXML);
 
 			setScene(new Scene(root));
 			setHeight(DEF_HEIGTH);
