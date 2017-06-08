@@ -19,8 +19,8 @@ public class CooLaser extends CooData
 {
 	/** {@link StringProperty} for the laser name */
 	protected StringProperty name;
-	/** {@link StringProperty} for the laser mac */
-	protected StringProperty mac;
+	/** {@link StringProperty} for the laser article number */
+	protected StringProperty articleNr;
 	/** {@link StringProperty} for the laser serial number */
 	protected StringProperty serialNr;
 
@@ -41,7 +41,7 @@ public class CooLaser extends CooData
 	public CooLaser()
 	{
 		name = new SimpleStringProperty();
-		mac = new SimpleStringProperty();
+		articleNr = new SimpleStringProperty();
 		serialNr = new SimpleStringProperty();
 		x = new SimpleIntegerProperty();
 		y = new SimpleIntegerProperty();
@@ -56,7 +56,7 @@ public class CooLaser extends CooData
 	{
 		Element laser = addElement(doc, root, "Laser");
 		laser.setAttribute("Name", name.get());
-		laser.setAttribute("MAC", mac.get());
+		laser.setAttribute("ArticleNr", articleNr.get());
 		laser.setAttribute("SerialNr", serialNr.get());
 		laser.setAttribute("X", String.valueOf(x.get()));
 		laser.setAttribute("Y", String.valueOf(y.get()));
@@ -73,7 +73,7 @@ public class CooLaser extends CooData
 		if(Objects.nonNull(laser))
 		{
 			name.set(laser.getAttribute("Name"));
-			mac.set(laser.getAttribute("MAC"));
+			articleNr.set(laser.getAttribute("ArticleNr"));
 			serialNr.set(laser.getAttribute("SerialNr"));
 			x.set(Integer.valueOf(laser.getAttribute("X")));
 			y.set(Integer.valueOf(laser.getAttribute("Y")));
@@ -96,11 +96,11 @@ public class CooLaser extends CooData
 	
 	/**
 	 * Method to access Property
-	 * @return {@link #mac}
+	 * @return {@link #articleNr}
 	 */
-	public StringProperty macProperty()
+	public StringProperty articleNrProperty()
 	{
-		return mac;
+		return articleNr;
 	}
 	
 	/**

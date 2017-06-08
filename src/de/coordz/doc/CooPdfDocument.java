@@ -10,12 +10,6 @@ import java.io.*;
 import java.util.*;
 import java.util.List;
 
-import javafx.collections.ObservableList;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.image.Image;
-import javafx.stage.*;
-import javafx.stage.FileChooser.ExtensionFilter;
-
 import javax.imageio.ImageIO;
 
 import com.itextpdf.text.*;
@@ -25,6 +19,11 @@ import de.coordz.data.*;
 import de.coordz.data.base.*;
 import de.util.CooXMLDBUtil;
 import de.util.log.CooLog;
+import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 public class CooPdfDocument extends CooDocument
 {
@@ -366,12 +365,12 @@ public class CooPdfDocument extends CooDocument
 	{
 		// addSubCaption(doc, "Laser");
 		PdfPTable table = createTable("Laser",
-			"Name", "MAC", "Seriennummer", "X", "Y", "Z", "Gesamtabweichung");
+			"Name", "Article Nr.", "Seriennummer", "X", "Y", "Z", "Gesamtabweichung");
 
 		laser.forEach(l ->
 		{
 			table.addCell(l.nameProperty().get());
-			table.addCell(l.macProperty().get());
+			table.addCell(l.articleNrProperty().get());
 			table.addCell(l.serialNrProperty().get());
 			table.addCell(String.valueOf(l.xProperty().get()));
 			table.addCell(String.valueOf(l.yProperty().get()));

@@ -112,9 +112,9 @@
 															<PropertyValueFactory property="name" />
 														</cellValueFactory>
 													</TableColumn>
-													<TableColumn text="MAC">
+													<TableColumn text="Artikel Nr.">
 														<cellValueFactory>
-															<PropertyValueFactory property="mac" />
+															<PropertyValueFactory property="articleNr" />
 														</cellValueFactory>
 													</TableColumn>
 													<TableColumn text="Serial Nr.">

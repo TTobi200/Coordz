@@ -6,8 +6,8 @@
             <Contact FirstName="Max" LastName="Mustermann" Mail="max.mustermann@gmx.de" Phone="0800 456"/>
         </Contacts>
         <Palets>
-            <Palet Name="Palette 1" Length="6000" Type="U" Width="3000"/>
-            <Palet Name="Palette 2" Length="6000" Type="U" Width="3000"/>
+            <Palet Length="6000" Name="Palette 1" Type="U" Width="3000"/>
+            <Palet Length="6000" Name="Palette 2" Type="U" Width="3000"/>
         </Palets>
     </Customer>
 </CoordzData>
