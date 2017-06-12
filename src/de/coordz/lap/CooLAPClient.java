@@ -108,17 +108,21 @@ public class CooLAPClient extends CooTcpIpClient
 
 	private void receiveFromServer() throws IOException
 	{
-		DataInputStream in = new DataInputStream(socket.getInputStream());
-		byte[] messageByte = new byte[1024];
-
-		// FIXME $TO: Find out while the stream only fully read when LAP application closed?
-		while(in.read(messageByte) > 0)
+		// Read data from little endian input stream
+		try(CooLittleEndianInputStream in = new 
+			CooLittleEndianInputStream(socket.getInputStream()))
 		{
+			while(in.available() == 0)
+			{
+			}
+			
+			byte[] messageByte = new byte[in.available()];
+			in.read(messageByte);
+			
+			// Debug the send byte array
+			CooLog.debug("Lap-Software -> Client: " + 
+				Arrays.toString(messageByte));
 		}
-		
-		// Debug the send byte array
-		CooLog.debug("Lap-Software -> Client: " + 
-			Arrays.toString(messageByte));
 	}
 
 	public void startManualCalibration(File file) throws IOException
