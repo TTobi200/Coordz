@@ -84,8 +84,8 @@ public class CooLAPClient extends CooTcpIpClient
 		{
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-			try (CooLittleEndianOutputStream leo = new CooLittleEndianOutputStream(
-				out))
+			try (CooLittleEndianOutputStream leo = 
+				new CooLittleEndianOutputStream(out))
 			{
 				// 2. Source ID of sender UINT2
 				leo.writeShort(CLIENT);
@@ -108,22 +108,23 @@ public class CooLAPClient extends CooTcpIpClient
 
 	private void receiveFromServer() throws IOException
 	{
-		    DataInputStream in = new DataInputStream(socket.getInputStream());
-		    byte[] messageByte = new byte[2];
+		DataInputStream in = new DataInputStream(socket.getInputStream());
+		byte[] messageByte = new byte[1024];
 
-			while(in.read(messageByte) > 0)
-		    {
-		    }
-			// Debug the send byte array
-			CooLog.debug("Lap-Software -> Client: " + 
-					Arrays.toString(messageByte));
+		// FIXME $TO: Find out while the stream only fully read when LAP application closed?
+		while(in.read(messageByte) > 0)
+		{
+		}
+		
+		// Debug the send byte array
+		CooLog.debug("Lap-Software -> Client: " + 
+			Arrays.toString(messageByte));
 	}
 
 	public void startManualCalibration(File file) throws IOException
 	{
-		if(connected.get())
-		{
-		}
+		throw new UnsupportedOperationException("The manual calibration is "
+			+ "not implemented in TCP-IP Interface of LAP");
 	}
 
 	public void startProjection(File projectionFile) throws IOException
@@ -132,8 +133,8 @@ public class CooLAPClient extends CooTcpIpClient
 		{
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-			try (CooLittleEndianOutputStream leo = new CooLittleEndianOutputStream(
-				out))
+			try (CooLittleEndianOutputStream leo = 
+				new CooLittleEndianOutputStream(out))
 			{
 				// 2. Source ID of sender UINT2
 				leo.writeShort(CLIENT);
@@ -159,8 +160,8 @@ public class CooLAPClient extends CooTcpIpClient
 		{
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-			try (CooLittleEndianOutputStream leo = new CooLittleEndianOutputStream(
-				out))
+			try (CooLittleEndianOutputStream leo = 
+					new CooLittleEndianOutputStream(out))
 			{
 				// 2. Source ID of sender UINT2
 				leo.writeShort(CLIENT);
@@ -181,8 +182,8 @@ public class CooLAPClient extends CooTcpIpClient
 		{
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-			try (CooLittleEndianOutputStream leo = new CooLittleEndianOutputStream(
-				out))
+			try (CooLittleEndianOutputStream leo = 
+				new CooLittleEndianOutputStream(out))
 			{
 				// 2. Source ID of sender UINT2
 				leo.writeShort(CLIENT);
@@ -203,8 +204,8 @@ public class CooLAPClient extends CooTcpIpClient
 		{
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-			try (CooLittleEndianOutputStream leo = new CooLittleEndianOutputStream(
-				out))
+			try (CooLittleEndianOutputStream leo = 
+				new CooLittleEndianOutputStream(out))
 			{
 				// 2. Source ID of sender UINT2
 				leo.writeShort(CLIENT);
@@ -230,14 +231,20 @@ public class CooLAPClient extends CooTcpIpClient
 			byte[] b = out.toByteArray();
 			OutputStream oout = socket.getOutputStream();
 			
+			ByteArrayOutputStream collector = new ByteArrayOutputStream();
 			// Message length - Swap to little endian
-			oout.write(CooByteSwapper.swap(((short)b.length + 2)));
+			collector.write(CooByteSwapper.toLE((short)(b.length + 2)));
 			// Write message
-			oout.write(b);
+			collector.write(b);
+			collector.flush();
+			collector.close();
+			
+			oout.write(collector.toByteArray());
 			oout.flush();
 			
 			// Debug the send byte array
-			CooLog.debug("Client -> Lap-Software: " + Arrays.toString(b));
+			CooLog.debug("Client -> Lap-Software: " + 
+				Arrays.toString(collector.toByteArray()));
 		}
 	}
 }
