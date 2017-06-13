@@ -271,8 +271,17 @@ public class CooDialogs
 		{
 			try
 			{
-				client = new CooLAPClient(txtIp.getText(), 
-					Integer.valueOf(txtPort.getText()));
+				String ip = txtIp.getText();
+				String port = txtPort.getText();
+				
+				// Use default ip and port if not set
+				ip = (Objects.nonNull(ip) && !ip.isEmpty()) ? 
+					ip : CooLAPClient.DEF_LAP_SOFTWARE_IP;
+				port = (Objects.nonNull(port) && !port.isEmpty()) ?
+					port : String.valueOf(CooLAPClient.LAP_SOFTWARE_PORT);
+				
+				client = new CooLAPClient(ip, 
+					Integer.valueOf(port));
 			}
 			catch(Exception e)
 			{
