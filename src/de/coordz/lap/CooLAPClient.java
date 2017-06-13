@@ -106,25 +106,6 @@ public class CooLAPClient extends CooTcpIpClient
 		}
 	}
 
-	private void receiveFromServer() throws IOException
-	{
-		// Read data from little endian input stream
-		try(CooLittleEndianInputStream in = new 
-			CooLittleEndianInputStream(socket.getInputStream()))
-		{
-			while(in.available() == 0)
-			{
-			}
-			
-			byte[] messageByte = new byte[in.available()];
-			in.read(messageByte);
-			
-			// Debug the send byte array
-			CooLog.debug("Lap-Software -> Client: " + 
-				Arrays.toString(messageByte));
-		}
-	}
-
 	public void startManualCalibration(File file) throws IOException
 	{
 		throw new UnsupportedOperationException("The manual calibration is "
@@ -154,6 +135,7 @@ public class CooLAPClient extends CooTcpIpClient
 
 				CooLog.debug("Sending <Start Projection> to LAP-Software");
 				sendToServer(out, leo);
+				receiveFromServer();
 			}
 		}
 	}
@@ -176,6 +158,7 @@ public class CooLAPClient extends CooTcpIpClient
 
 				CooLog.debug("Sending <Stop Projection> to LAP-Software");
 				sendToServer(out, leo);
+				receiveFromServer();
 			}
 		}
 	}
@@ -198,6 +181,7 @@ public class CooLAPClient extends CooTcpIpClient
 
 				CooLog.debug("Sending <Previous Contour> to LAP-Software");
 				sendToServer(out, leo);
+				receiveFromServer();
 			}
 		}
 	}
@@ -220,12 +204,33 @@ public class CooLAPClient extends CooTcpIpClient
 
 				CooLog.debug("Sending <Next Contour> to LAP-Software");
 				sendToServer(out, leo);
+				receiveFromServer();
 			}
 		}
 	}
 	
+	private void receiveFromServer() throws IOException
+	{
+		// Read data from little endian input stream
+		try(CooLittleEndianInputStream in = new 
+			CooLittleEndianInputStream(socket.getInputStream()))
+		{
+			CooLog.debug("Waiting on reply from LAP-Software...");
+			
+			// Wait until we have all data
+			while(in.available() == 0){}
+			
+			CooLAPPacket packet = new CooLAPPacket();
+			packet.fromStream(in);
+			
+			// Debug the send byte array
+			CooLog.debug("Lap-Software -> Client: " + 
+				packet.toString());
+		}
+	}
+	
 	protected void sendToServer(ByteArrayOutputStream out,
-					CooLittleEndianOutputStream leo) throws IOException
+			CooLittleEndianOutputStream leo) throws IOException
 	{
 		if(Objects.nonNull(out) && Objects.nonNull(leo))
 		{
