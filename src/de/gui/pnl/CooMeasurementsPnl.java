@@ -38,6 +38,11 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	protected CooTableView<CooReticle> tblReticles;
 	@FXML
 	protected CooTableView<CooTarget> tblTargets;
+	@FXML	
+	protected CooTableView<CooRectangle> tblRefSpec;
+	@FXML
+	protected CooTableView<CooRectangle> tblResult;
+	
 	@FXML
 	protected TitledPane tpTargtes;
 	@FXML
@@ -79,6 +84,8 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 		tblReticles.setClazz(CooReticle.class);
 		tblTargets.setClazz(CooTarget.class);
 		tblTotalStation.setClazz(CooTotalstation.class);
+		tblRefSpec.setClazz(CooRectangle.class);
+		tblResult.setClazz(CooRectangle.class);
 		
 		// There can only be one total station
 		tblTotalStation.maxRowsProperty().setValue(1);
@@ -94,7 +101,7 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 		
 		// Station selection changed
 		cbStations.getSelectionModel().selectedItemProperty().addListener(
-			(old, curr, newV) -> tblMeasurement.setItems(Objects.nonNull(newV) ? newV.getMeasurements() : null));
+			(old, curr, newV) -> stationChanged(newV));
 		
 		// Measurement selection changed
 		components = FXCollections.observableArrayList(this, view3D);
@@ -108,6 +115,14 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 					components.forEach(c -> c.measurementChanged(newV));
 				});
 		
+		// Reference measurement selection changed
+		tblRefSpec.getSelectionModel().selectedItemProperty()
+			.addListener((obs, old, newV) -> 
+				selectEntryByName(tblResult, newV));
+		tblResult.getSelectionModel().selectedItemProperty()
+		.addListener((obs, old, newV) -> 
+			selectEntryByName(tblRefSpec, newV));
+		
 		tpTargtes.setContentDisplay(ContentDisplay.RIGHT);
 		CooMainFrame.doOnShowing(()-> 
 		{
@@ -115,6 +130,23 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 		});
 	}
 	
+	private void  selectEntryByName(CooTableView<CooRectangle> child,
+			CooRectangle value)
+	{
+		if(Objects.nonNull(value))
+		{
+			// Try to select entry in child table
+			child.getItems().filtered(
+				// Check if we have a name from rectangle
+				itm -> Objects.nonNull(itm.nameProperty().get()))
+				// Check if it equals to parent selected value
+				.filtered(itm -> itm.nameProperty()
+					.get().equals(value.nameProperty().get())).forEach(itm ->
+				// Then select this entry
+				child.getSelectionModel().select(itm));
+		}
+	}
+
 	@FXML
 	protected void connect()
 	{
@@ -273,6 +305,21 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 			CooCalibrationFile.save(calFile,
 				tblTargets.getItems());
 		}
+	}
+	
+	private void stationChanged(CooStation station)
+	{
+		// Display all measurements for this station
+		tblMeasurement.setItems(Objects.nonNull(station)
+			? station.getMeasurements() : null);
+		
+		// Display the reference measurement
+		tblRefSpec.setItems(Objects.nonNull(station)
+			? station.verifyMeasurementProperty()
+				.get().getSpecification() : null);
+		tblResult.setItems(Objects.nonNull(station)
+			? station.verifyMeasurementProperty()
+				.get().getResult() : null);
 	}
 	
 	@Override

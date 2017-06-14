@@ -185,8 +185,7 @@
 											<graphic>
 												<HBox fx:id="hBoxTargets">
 													<children>
-														<Button onAction="#importCalFile"
-															mnemonicParsing="false">
+														<Button onAction="#importCalFile" mnemonicParsing="false">
 															<tooltip>
 																<Tooltip text="Kalibrierdatei importieren" />
 															</tooltip>
@@ -198,8 +197,7 @@
 																</ImageView>
 															</graphic>
 														</Button>
-														<Button onAction="#exportCalFile"
-															mnemonicParsing="false">
+														<Button onAction="#exportCalFile" mnemonicParsing="false">
 															<tooltip>
 																<Tooltip text="Kalibrierdatei exportieren" />
 															</tooltip>
@@ -240,6 +238,141 @@
 																<TableColumn text="Z">
 																	<cellValueFactory>
 																		<PropertyValueFactory property="z" />
+																	</cellValueFactory>
+																</TableColumn>
+															</columns>
+														</CooTableView>
+													</center>
+												</BorderPane>
+											</content>
+										</TitledPane>
+									</children>
+								</VBox>
+							</content>
+						</Tab>
+						<Tab text="Referenzmessung">
+							<graphic>
+								<ImageView pickOnBounds="true" preserveRatio="true">
+									<image>
+										<Image url="/include/icons/ruler.png" />
+									</image>
+								</ImageView>
+							</graphic>
+							<content>
+								<VBox>
+									<children>
+										<TitledPane text="Vorgabe">
+											<content>
+												<BorderPane>
+													<center>
+														<CooTableView fx:id="tblRefSpec">
+															<placeholder>
+																<Label text="Keine Referenzgeometrie hinzugefügt" />
+															</placeholder>
+															<columns>
+																<TableColumn text="Name">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="name" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="Länge">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="length" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="Breite">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="width" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="Höhe">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="height" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="X">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="x" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="Y">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="y" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="Z">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="z" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="D1">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="d1" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="D2">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="d1" />
+																	</cellValueFactory>
+																</TableColumn>
+															</columns>
+														</CooTableView>
+													</center>
+												</BorderPane>
+											</content>
+										</TitledPane>
+										<TitledPane text="Gemessen">
+											<content>
+												<BorderPane>
+													<center>
+														<CooTableView fx:id="tblResult">
+															<placeholder>
+																<Label text="Keine Messgeometrie hinzugefügt" />
+															</placeholder>
+															<columns>
+																<TableColumn text="Name">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="name" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="Länge">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="length" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="Breite">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="width" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="Höhe">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="height" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="X">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="x" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="Y">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="y" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="Z">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="z" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="D1">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="d1" />
+																	</cellValueFactory>
+																</TableColumn>
+																<TableColumn text="D2">
+																	<cellValueFactory>
+																		<PropertyValueFactory property="d1" />
 																	</cellValueFactory>
 																</TableColumn>
 															</columns>
@@ -355,7 +488,7 @@
 										</ToolBar>
 									</top>
 									<center>
-										<CooView2D fx:id="view2D"/>
+										<CooView2D fx:id="view2D" />
 									</center>
 									<bottom>
 										<Label fx:id="lblTargetFile" text="Targetdatei: " />
