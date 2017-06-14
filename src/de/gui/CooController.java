@@ -120,7 +120,10 @@ public class CooController implements Initializable, CooDataChanged
 		// FIXME: $TO: TabPanes loose selection when they where detached
 		// Load the Images when tab selected
 		tabGallery.setOnSelectionChanged(e -> imageGallery.loadImages(
-			CooXMLDBUtil.getImagesFolder(customer), tabGallery.isSelected()));
+			// Check if tab is selected 
+			CooXMLDBUtil.getImagesFolder(customer), tabGallery.isSelected() | 
+			// Or if tab is detached from tabpane
+			!tabPane.getTabs().contains(tabGallery)));
 
 		// FORTEST load the coordz xml database
 //		primaryStage.setOnShowing(e -> openXMLDB(new File("D:/Unitechnik/repos/Coordz/CoordzXML")));
