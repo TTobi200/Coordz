@@ -78,162 +78,181 @@ public class CooLAPClient extends CooTcpIpClient
 		super(srvIp, srvPort);
 	}
 
-	public void startAutoCalibration(File calibrationFile) throws IOException
+	public CooLAPPacket startAutoCalibration(File calibrationFile)
+			throws IOException
 	{
-		if(connected.get())
+		// Define a packet for receiving
+		CooLAPPacket packet = new CooLAPPacket();
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+		try (CooLittleEndianOutputStream leo = 
+			new CooLittleEndianOutputStream(out))
 		{
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-			try (CooLittleEndianOutputStream leo = 
-				new CooLittleEndianOutputStream(out))
+			// 2. Source ID of sender UINT2
+			leo.writeShort(CLIENT);
+			// 3. Destination ID of receiver UINT2
+			leo.writeShort(LAP);
+			// 4. Message_ID ID of message UINT2
+			leo.writeShort(AUTOMATIC_CALIBRATION);
+			// 2 CalibPath Path and name of calibration file Char[n]
+			for(char c : calibrationFile.getAbsolutePath().toCharArray())
 			{
-				// 2. Source ID of sender UINT2
-				leo.writeShort(CLIENT);
-				// 3. Destination ID of receiver UINT2
-				leo.writeShort(LAP);
-				// 4. Message_ID ID of message UINT2
-				leo.writeShort(AUTOMATIC_CALIBRATION);
-				// 2 CalibPath Path and name of calibration file Char[n]
-				for(char c : calibrationFile.getAbsolutePath().toCharArray())
-				{
-					leo.writeChar(c);
-				}
-
-				CooLog.debug("Sending <Start Auto Calibration> to LAP-Software");
-				sendToServer(out, leo);
-				receiveFromServer();
+				leo.writeChar(c);
 			}
+			
+			// Send command to lap software
+			sendToServer("Start Auto Calibration", out, leo);
+			// And receive the answer packet
+			packet = receiveFromServer();
 		}
+		
+		return packet;
 	}
 
-	public void startManualCalibration(File file) throws IOException
+	public CooLAPPacket startManualCalibration(File file) 
+			throws IOException
 	{
 		throw new UnsupportedOperationException("The manual calibration is "
 			+ "not implemented in TCP-IP Interface of LAP");
 	}
 
-	public void startProjection(File projectionFile) throws IOException
+	public CooLAPPacket startProjection(File projectionFile) 
+			throws IOException
 	{
-		if(connected.get())
+		// Define a packet for receiving
+		CooLAPPacket packet = new CooLAPPacket();
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+		try (CooLittleEndianOutputStream leo = 
+			new CooLittleEndianOutputStream(out))
 		{
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-			try (CooLittleEndianOutputStream leo = 
-				new CooLittleEndianOutputStream(out))
+			// 2. Source ID of sender UINT2
+			leo.writeShort(CLIENT);
+			// 3. Destination ID of receiver UINT2
+			leo.writeShort(LAP);
+			// 4. Message_ID ID of message UINT2
+			leo.writeShort(START_PROJECTION);
+			// 2 ProjPath Path and name of a projection file Char[n]
+			for(char c : projectionFile.getAbsolutePath().toCharArray())
 			{
-				// 2. Source ID of sender UINT2
-				leo.writeShort(CLIENT);
-				// 3. Destination ID of receiver UINT2
-				leo.writeShort(LAP);
-				// 4. Message_ID ID of message UINT2
-				leo.writeShort(START_PROJECTION);
-				// 2 ProjPath Path and name of a projection file Char[n]
-				for(char c : projectionFile.getAbsolutePath().toCharArray())
-				{
-					leo.writeChar(c);
-				}
-
-				CooLog.debug("Sending <Start Projection> to LAP-Software");
-				sendToServer(out, leo);
-				receiveFromServer();
+				leo.writeChar(c);
 			}
+
+			// Send command to lap software
+			sendToServer("Start Projection", out, leo);
+			// And receive the answer packet
+			packet = receiveFromServer();
 		}
+		
+		return packet;
 	}
 
-	public void stopProjection() throws IOException
+	public CooLAPPacket stopProjection() throws IOException
 	{
-		if(connected.get())
+		// Define a packet for receiving
+		CooLAPPacket packet = new CooLAPPacket();
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+		try (CooLittleEndianOutputStream leo = 
+				new CooLittleEndianOutputStream(out))
 		{
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			// 2. Source ID of sender UINT2
+			leo.writeShort(CLIENT);
+			// 3. Destination ID of receiver UINT2
+			leo.writeShort(LAP);
+			// 4. Message_ID ID of message UINT2
+			leo.writeShort(STOP_PROJECTION);
 
-			try (CooLittleEndianOutputStream leo = 
-					new CooLittleEndianOutputStream(out))
-			{
-				// 2. Source ID of sender UINT2
-				leo.writeShort(CLIENT);
-				// 3. Destination ID of receiver UINT2
-				leo.writeShort(LAP);
-				// 4. Message_ID ID of message UINT2
-				leo.writeShort(STOP_PROJECTION);
-
-				CooLog.debug("Sending <Stop Projection> to LAP-Software");
-				sendToServer(out, leo);
-				receiveFromServer();
-			}
+			// Send command to lap software
+			sendToServer("Stop Projection", out, leo);
+			// And receive the answer packet
+			packet = receiveFromServer();
 		}
+		
+		return packet;
 	}
 
-	public void previousContour() throws IOException
+	public CooLAPPacket previousContour() throws IOException
 	{
-		if(connected.get())
+		// Define a packet for receiving
+		CooLAPPacket packet = new CooLAPPacket();
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+		try (CooLittleEndianOutputStream leo = 
+			new CooLittleEndianOutputStream(out))
 		{
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			// 2. Source ID of sender UINT2
+			leo.writeShort(CLIENT);
+			// 3. Destination ID of receiver UINT2
+			leo.writeShort(LAP);
+			// 4. Message_ID ID of message UINT2
+			leo.writeShort(SHOW_PREVIOUS_CONTOUR);
 
-			try (CooLittleEndianOutputStream leo = 
-				new CooLittleEndianOutputStream(out))
-			{
-				// 2. Source ID of sender UINT2
-				leo.writeShort(CLIENT);
-				// 3. Destination ID of receiver UINT2
-				leo.writeShort(LAP);
-				// 4. Message_ID ID of message UINT2
-				leo.writeShort(SHOW_PREVIOUS_CONTOUR);
-
-				CooLog.debug("Sending <Previous Contour> to LAP-Software");
-				sendToServer(out, leo);
-				receiveFromServer();
-			}
+			// Send command to lap software
+			sendToServer("Previous Contour", out, leo);
+			// And receive the answer packet
+			packet = receiveFromServer();
 		}
+				
+		return packet;
 	}
 
-	public void nextContour() throws IOException
+	public CooLAPPacket nextContour() throws IOException
 	{
-		if(connected.get())
+		// Define a packet for receiving
+		CooLAPPacket packet = new CooLAPPacket();
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+		try (CooLittleEndianOutputStream leo = 
+			new CooLittleEndianOutputStream(out))
 		{
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			// 2. Source ID of sender UINT2
+			leo.writeShort(CLIENT);
+			// 3. Destination ID of receiver UINT2
+			leo.writeShort(LAP);
+			// 4. Message_ID ID of message UINT2
+			leo.writeShort(SHOW_NEXT_CONTOUR);
 
-			try (CooLittleEndianOutputStream leo = 
-				new CooLittleEndianOutputStream(out))
-			{
-				// 2. Source ID of sender UINT2
-				leo.writeShort(CLIENT);
-				// 3. Destination ID of receiver UINT2
-				leo.writeShort(LAP);
-				// 4. Message_ID ID of message UINT2
-				leo.writeShort(SHOW_NEXT_CONTOUR);
-
-				CooLog.debug("Sending <Next Contour> to LAP-Software");
-				sendToServer(out, leo);
-				receiveFromServer();
-			}
+			// Send command to lap software
+			sendToServer("Next Contour", out, leo);
+			// And receive the answer packet
+			packet = receiveFromServer();
 		}
+		
+		return packet;
 	}
 	
-	private void receiveFromServer() throws IOException
+	private CooLAPPacket receiveFromServer() throws IOException
 	{
+		// Define a packet for receiving
+		CooLAPPacket packet = new CooLAPPacket();
+
 		// Read data from little endian input stream
-		try(CooLittleEndianInputStream in = new 
-			CooLittleEndianInputStream(socket.getInputStream()))
-		{
-			CooLog.debug("Waiting on reply from LAP-Software...");
+		CooLittleEndianInputStream in = new 
+			CooLittleEndianInputStream(socket.getInputStream());
+		
+		CooLog.debug("Waiting on reply from LAP-Software...");
 			
-			// Wait until we have all data
-			while(in.available() == 0){}
+		// Wait until we have all data
+		while(in.available() == 0){}
+		
+		// We have a comple packet received
+		packet.fromStream(in);
 			
-			CooLAPPacket packet = new CooLAPPacket();
-			packet.fromStream(in);
-			
-			// Debug the send byte array
-			CooLog.debug("Lap-Software -> Client: " + 
-				packet.toString());
-		}
+		// Debug the send byte array
+		CooLog.debug("Lap-Software -> Client: " + 
+			packet.toString());
+		
+		return packet;
 	}
 	
-	protected void sendToServer(ByteArrayOutputStream out,
+	protected void sendToServer(String command, ByteArrayOutputStream out,
 			CooLittleEndianOutputStream leo) throws IOException
 	{
 		if(Objects.nonNull(out) && Objects.nonNull(leo))
 		{
+			CooLog.debug("Sending <" + command + "> to LAP-Software");
+			
 			leo.flush();
 			leo.close();
 			

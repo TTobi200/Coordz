@@ -9,8 +9,8 @@ package de.coordz.lap;
 import java.io.IOException;
 import java.net.*;
 
-import javafx.beans.property.*;
 import de.util.log.CooLog;
+import javafx.beans.property.*;
 
 public class CooTcpIpClient
 {

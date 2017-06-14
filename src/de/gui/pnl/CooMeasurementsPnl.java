@@ -15,7 +15,7 @@ import de.coordz.lap.*;
 import de.gui.*;
 import de.gui.comp.*;
 import de.gui.view2D.CooView2D;
-import de.gui.view3D.*;
+import de.gui.view3D.CooView3D;
 import de.util.*;
 import de.util.log.CooLog;
 import javafx.beans.binding.Bindings;
@@ -123,8 +123,10 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 		
 		if(Objects.nonNull(client))
 		{
-			btnConn.setDisable(true);
+			btnConn.setDisable(Boolean.TRUE);
 			connectionStringProperty.setValue("Verbunden (IP: " + client.getSrvIp() 
+				+ " Port: " + client.getSrvPort() + ")");
+			CooLog.debug("Connected to LAP Software (IP: " + client.getSrvIp() 
 				+ " Port: " + client.getSrvPort() + ")");
 		}
 	}
@@ -132,17 +134,18 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	@FXML
 	protected void disconnect()
 	{
-		if(Objects.nonNull(client))
+		if(Objects.nonNull(client) && client.isConnected())
 		{
 			btnConn.setDisable(!client.disconnect());
 			connectionStringProperty.setValue("Nicht verbunden");
+			CooLog.debug("Disconnected from LAP Software");
 		}
 	}
 	
 	@FXML
 	protected void startManualCalibration() throws IOException
 	{
-		if(Objects.nonNull(client))
+		if(Objects.nonNull(client) && client.isConnected())
 		{
 			// TODO commit the file
 			client.startManualCalibration(new File(""));
@@ -152,17 +155,54 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	@FXML
 	protected void startAutoCalibration() throws IOException
 	{
-		if(Objects.nonNull(client))
+		if(Objects.nonNull(client) && client.isConnected())
 		{
-			// TODO commit the file
-			client.startAutoCalibration(new File(""));
+			// Receive the result packet 
+			// TODO Generate a temp file and commit it here
+			CooLAPPacket packet = client.startAutoCalibration(
+				new File("doc/LAP Software/Calibration.cal"));
+			
+			short result = packet.containsValue("Result")
+				? (short)packet.getValue("Result") : 1;
+			String message = "";
+			
+			switch(result)
+			{
+				case 0:
+					// 0: successful
+					message = "Die Automatische Kalibrierung"
+						+ " wurde erfolgreich durchgeführt";
+					break;
+				default:
+				case 1:
+					// 1: faulty
+					message = "Die Automatische Kalibrierung konnte"
+						+ " nich durchgeführt werden";
+				case 2:
+					// 2: file not found
+					message = "Die Kalibrierungsdatei konnte nicht "
+						+ "gefunden werden";
+					break;
+				case 3:
+					// 3: file not readable
+					message = "Die Kalibrierungsdatei konnte nicht "
+						+ "gelesen werden";
+					break;
+				case 4:
+					// 4: manual calibration required
+					message = "Eine Grundkalibrierung ist erforderlich";
+					break;
+			}
+			
+			// Show user inromation
+			showInfoDialog("Automatische Kalibrierung", message);
 		}
 	}
 	
 	@FXML
 	protected void startProjection() throws IOException
 	{
-		if(Objects.nonNull(client))
+		if(Objects.nonNull(client) && client.isConnected())
 		{
 			client.startProjection(new File(""));
 		}
@@ -171,7 +211,7 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	@FXML
 	protected void stopProjection() throws IOException
 	{
-		if(Objects.nonNull(client))
+		if(Objects.nonNull(client) && client.isConnected())
 		{
 			client.stopProjection();
 		}
@@ -180,7 +220,7 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	@FXML
 	protected void previousContour() throws IOException
 	{
-		if(Objects.nonNull(client))
+		if(Objects.nonNull(client) && client.isConnected())
 		{
 			client.previousContour();
 		}
@@ -189,10 +229,16 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	@FXML
 	protected void nextContour() throws IOException
 	{
-		if(Objects.nonNull(client))
+		if(Objects.nonNull(client) && client.isConnected())
 		{
 			client.nextContour();
 		}
+	}
+	
+	private void showInfoDialog(String header, String message)
+	{
+		CooDialogs.showInfoDialog(getScene().getWindow(),
+			header, message);		
 	}
 	
 	@FXML

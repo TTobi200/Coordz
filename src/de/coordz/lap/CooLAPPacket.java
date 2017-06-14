@@ -141,6 +141,16 @@ public class CooLAPPacket
 
 		values.put("Result", result);
 	}
+	
+	public Object getValue(String key)
+	{
+		return values.get(key);
+	}
+	
+	public boolean containsValue(String key)
+	{
+		return values.containsKey(key);
+	}
 
 	@Override
 	public String toString()
