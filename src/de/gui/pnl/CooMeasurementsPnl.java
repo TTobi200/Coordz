@@ -282,6 +282,18 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	}
 	
 	@FXML
+	protected void startAndAdjustProjection() throws IOException
+	{
+		if(Objects.nonNull(client) && client.isConnected())
+		{
+			// FORTEST $TO: Use the projection file on test pc
+			CooLAPPacket packet = client.startAndAdjustProjection(
+				new File("C:\\Users\\User\\Desktop\\Lasertest"
+				+ "\\01_Einmessungen\\02_Messmatrix\\LaserData.ply"));
+		}
+	}
+	
+	@FXML
 	protected void stopProjection() throws IOException
 	{
 		if(Objects.nonNull(client) && client.isConnected())

@@ -212,11 +212,22 @@ public class CooLAPClient extends CooTcpIpClient
 			// 3. Destination ID of receiver UINT2
 			leo.writeShort(LAP);
 			// 4. Message_ID ID of message UINT2
-			leo.writeShort(START_PROJECTION);
+			leo.writeShort(START_AND_ADJUST_PROJECTION);
 
+			// TODO $TO: Commit an vector rotation object with necessary parameter
+			// FORTEST $TO: Rotate the element 90 degrees
 			// 2 Height Height of object / shift in z-Coo. INT4 [1/100 mm]
-			
-			
+			leo.writeInt(0);
+			// 3 Shift_x Shift vector x-Coo. INT4 [1/100 mm]
+			leo.writeInt(-50000);
+			// 4 Shift_y Shift vector y-Coo. INT4 [1/100 mm]
+			leo.writeInt(0);
+			// 5 RotAngle Rotation angle (clockwise) INT4 [1/100 deg]
+			leo.writeInt(9000);
+			// 6 RotCentre_x Rotation centre x-Coo. INT4 [1/100 mm]
+			leo.writeInt(0);
+			// 7 RotCentre_y Rotation centre y-Coo. INT4 [1/100 mm]
+			leo.writeInt(0);
 			
 			// 8 ProjPath Path and name of a projection file Char[n]
 			for(char c : projectionFile.getAbsolutePath().toCharArray())
@@ -326,7 +337,7 @@ public class CooLAPClient extends CooTcpIpClient
 		packet.fromStream(in);
 			
 		// Debug the send byte array
-		CooLog.debug("Lap-Software -> Client: " + 
+		CooLog.debug("LAP-Software -> Client: " + 
 			packet.toString());
 		
 		return packet;
@@ -357,7 +368,7 @@ public class CooLAPClient extends CooTcpIpClient
 			oout.flush();
 			
 			// Debug the send byte array
-			CooLog.debug("Client -> Lap-Software: " + 
+			CooLog.debug("Client -> LAP-Software: " + 
 				Arrays.toString(collector.toByteArray()));
 		}
 	}

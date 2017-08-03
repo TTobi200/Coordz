@@ -485,6 +485,18 @@
 														</ImageView>
 													</graphic>
 												</Button>
+												<Button disable="${!btnConn.disable}" onAction="#startAndAdjustProjection">
+													<tooltip>
+														<Tooltip text="Projektion adjustiert starten" />
+													</tooltip>
+													<graphic>
+														<ImageView pickOnBounds="true" preserveRatio="true">
+															<image>
+																<Image url="/include/icons/traffic_light_green_adjust.png" />
+															</image>
+														</ImageView>
+													</graphic>
+												</Button>
 												<Button disable="${!btnConn.disable}" onAction="#stopProjection">
 													<tooltip>
 														<Tooltip text="Projektion stoppen" />

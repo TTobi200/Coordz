@@ -53,6 +53,12 @@ public class CooLAPPacket
 					readStartProjResult(in);
 					values.put("Name", "START_PROJECTION");
 					break;
+					
+				case CooLAPClient.START_AND_ADJUST_PROJECTION:
+				case CooLAPClient.RESULT_OF_START_AND_ADJUST_PROJECTION:
+					readStartAndAdjustProjResult(in);
+					values.put("Name", "START_AND_ADJUST_PROJECTION");
+					break;
 				
 				case CooLAPClient.SHOW_NEXT_CONTOUR:
 				case CooLAPClient.RESULT_OF_SHOW_NEXT_CONTOUR:
@@ -124,6 +130,20 @@ public class CooLAPPacket
 	}
 	
 	private void readStartProjResult(CooLittleEndianInputStream in)
+		throws IOException
+	{
+		// Result
+		// 0: successful
+		// 1: file not found
+		// 2: file not readable
+		// 3: system not calibrated
+		// 4: projection out of range
+		short result = in.readShort();
+
+		values.put("Result", result);
+	}
+	
+	private void readStartAndAdjustProjResult(CooLittleEndianInputStream in)
 		throws IOException
 	{
 		// Result
