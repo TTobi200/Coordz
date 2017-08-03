@@ -15,7 +15,9 @@ import de.util.log.CooLog;
 public class CooLAPClient extends CooTcpIpClient
 {
 	/** Default ip from LAP Software (localhost) */
-	public static final String DEF_LAP_SOFTWARE_IP = "127.0.0.1";
+//	public static final String DEF_LAP_SOFTWARE_IP = "127.0.0.1";
+	// FORTEST Add the laser test ip address
+	public static final String DEF_LAP_SOFTWARE_IP = "10.221.46.207";
 	/** Default port where LAP Software listen */
 	public static final int LAP_SOFTWARE_PORT = 8000;
 
@@ -188,6 +190,42 @@ public class CooLAPClient extends CooTcpIpClient
 
 			// Send command to lap software
 			sendToServer("Start Projection", out, leo);
+			// And receive the answer packet
+			packet = receiveFromServer();
+		}
+		
+		return packet;
+	}
+	
+	public CooLAPPacket startAndAdjustProjection(File projectionFile) 
+			throws IOException
+	{
+		// Define a packet for receiving
+		CooLAPPacket packet = new CooLAPPacket();
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+		try (CooLittleEndianOutputStream leo = 
+			new CooLittleEndianOutputStream(out))
+		{
+			// 2. Source ID of sender UINT2
+			leo.writeShort(CLIENT);
+			// 3. Destination ID of receiver UINT2
+			leo.writeShort(LAP);
+			// 4. Message_ID ID of message UINT2
+			leo.writeShort(START_PROJECTION);
+
+			// 2 Height Height of object / shift in z-Coo. INT4 [1/100 mm]
+			
+			
+			
+			// 8 ProjPath Path and name of a projection file Char[n]
+			for(char c : projectionFile.getAbsolutePath().toCharArray())
+			{
+				leo.writeChar(c);
+			}
+
+			// Send command to lap software
+			sendToServer("Start and adjust projection", out, leo);
 			// And receive the answer packet
 			packet = receiveFromServer();
 		}
