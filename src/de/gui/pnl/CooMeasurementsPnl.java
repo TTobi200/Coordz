@@ -264,7 +264,8 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	{
 		if(Objects.nonNull(client) && client.isConnected())
 		{
-			client.startProjection(new File(""));
+			client.startProjection(new File(
+				"doc/LAP Software/LaserData.ply"));
 		}
 	}
 	
