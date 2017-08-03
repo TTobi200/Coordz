@@ -61,6 +61,15 @@ public class CooLAPClient extends CooTcpIpClient
 	public static final short RESULT_OF_STOP_PROJECTION = 0x0130;
 	/** 0x0140 Result of “ Get Shift- / Rotation Info“ LAP->client */
 	public static final short RESULT_OF_GET_SHIFT_ROTATION_INFO = 0x0140;
+	
+	/** 1 Switch Calibration Automatic calibration */
+	public static final int AUTOMATIC_CALIBRATION_MODE = 1;
+	/** 2 Switch Calibration No calibration */
+	public static final int NO_CALIBRATION_MODE = 2;
+	/** 3 Switch Calibration Position check of target film */
+	public static final int POSITION_CHECK_OF_TARGET_FILM_MODE = 3;
+	/** 4 Switch Calibration Position check of target hole */
+	public static final int POSITION_CHECK_OF_TARGET_HOLE_MODE = 4;
 
 	public CooLAPClient() throws UnknownHostException, IOException
 	{
@@ -106,6 +115,45 @@ public class CooLAPClient extends CooTcpIpClient
 			packet = receiveFromServer();
 		}
 		
+		return packet;
+	}
+	
+	public CooLAPPacket switchCalibrationMode(Integer mode, File calibrationFile)
+		throws IOException
+	{
+		// Define a packet for receiving
+		CooLAPPacket packet = new CooLAPPacket();
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		
+		try (CooLittleEndianOutputStream leo = 
+			new CooLittleEndianOutputStream(out))
+		{
+			// 2. Source ID of sender UINT2
+			leo.writeShort(CLIENT);
+			// 3. Destination ID of receiver UINT2
+			leo.writeShort(LAP);
+			// 4. Message_ID ID of message UINT2
+			leo.writeShort(SWITCH_CALIBRATION);
+			
+			// 2 Calibration Mode INT2
+			// Automatic calibration = 1
+			// No calibration Position = 2
+			// check of target film = 3
+			// Position check of target hole = 4
+			leo.writeInt(mode);
+			
+			// 3 CalibPath Path and name of calibration file Char[n]
+			for(char c : calibrationFile.getAbsolutePath().toCharArray())
+			{
+				leo.writeChar(c);
+			}
+					
+			// Send command to lap software
+			sendToServer("Switch Calibration", out, leo);
+			// And receive the answer packet
+			packet = receiveFromServer();
+		}
+				
 		return packet;
 	}
 

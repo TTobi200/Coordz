@@ -34,6 +34,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import de.gui.view3D.CooView3D?>
 <?import de.gui.view2D.CooView2D?>
+<?import javafx.scene.control.Tooltip?>
 
 <fx:root type="BorderPane" xmlns="http://javafx.com/javafx/8"
 	xmlns:fx="http://javafx.com/fxml/1">
@@ -411,6 +412,9 @@
 										<ToolBar>
 											<items>
 												<Button fx:id="btnConn" onAction="#connect">
+													<tooltip>
+														<Tooltip text="Verbindung zu ProSoft aufbauen" />
+													</tooltip>
 													<graphic>
 														<ImageView pickOnBounds="true" preserveRatio="true">
 															<image>
@@ -420,6 +424,9 @@
 													</graphic>
 												</Button>
 												<Button disable="${!btnConn.disable}" onAction="#disconnect">
+													<tooltip>
+														<Tooltip text="Verbindung zu ProSoft trennen" />
+													</tooltip>
 													<graphic>
 														<ImageView pickOnBounds="true" preserveRatio="true">
 															<image>
@@ -428,7 +435,23 @@
 														</ImageView>
 													</graphic>
 												</Button>
+												<Separator />
+												<Button disable="${!btnConn.disable}" onAction="#switchCalibrationMode">
+													<tooltip>
+														<Tooltip text="Kalibriermodus ändern" />
+													</tooltip>
+													<graphic>
+														<ImageView pickOnBounds="true" preserveRatio="true">
+															<image>
+																<Image url="/include/icons/laser.png" />
+															</image>
+														</ImageView>
+													</graphic>
+												</Button>
 												<Button disable="${!btnConn.disable}" onAction="#startManualCalibration">
+													<tooltip>
+														<Tooltip text="Manuell kalibrieren" />
+													</tooltip>
 													<graphic>
 														<ImageView pickOnBounds="true" preserveRatio="true">
 															<image>
@@ -438,6 +461,9 @@
 													</graphic>
 												</Button>
 												<Button disable="${!btnConn.disable}" onAction="#startAutoCalibration">
+													<tooltip>
+														<Tooltip text="Automatisch kalibrieren" />
+													</tooltip>
 													<graphic>
 														<ImageView pickOnBounds="true" preserveRatio="true">
 															<image>
@@ -448,6 +474,9 @@
 												</Button>
 												<Separator />
 												<Button disable="${!btnConn.disable}" onAction="#startProjection">
+													<tooltip>
+														<Tooltip text="Projektion starten" />
+													</tooltip>
 													<graphic>
 														<ImageView pickOnBounds="true" preserveRatio="true">
 															<image>
@@ -457,6 +486,9 @@
 													</graphic>
 												</Button>
 												<Button disable="${!btnConn.disable}" onAction="#stopProjection">
+													<tooltip>
+														<Tooltip text="Projektion stoppen" />
+													</tooltip>
 													<graphic>
 														<ImageView pickOnBounds="true" preserveRatio="true">
 															<image>
@@ -467,6 +499,9 @@
 												</Button>
 												<Separator />
 												<Button disable="${!btnConn.disable}" onAction="#previousContour">
+													<tooltip>
+														<Tooltip text="Vorherige Kontur" />
+													</tooltip>
 													<graphic>
 														<ImageView pickOnBounds="true" preserveRatio="true">
 															<image>
@@ -476,6 +511,9 @@
 													</graphic>
 												</Button>
 												<Button disable="${!btnConn.disable}" onAction="#nextContour">
+													<tooltip>
+														<Tooltip text="Nächste Kontur" />
+													</tooltip>
 													<graphic>
 														<ImageView pickOnBounds="true" preserveRatio="true">
 															<image>

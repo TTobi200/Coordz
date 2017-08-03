@@ -42,6 +42,12 @@ public class CooLAPPacket
 					values.put("Name", "AUTOMATIC_CALIBRATION");
 					break;
 					
+				case CooLAPClient.SWITCH_CALIBRATION:
+				case CooLAPClient.RESULT_OF_SWITCH_CALIBRATION:
+					readSwitchCalibResult(in, msgLength - HEADER_LENGTH);
+					values.put("Name", "SWITCH_CALIBRATION");
+					break;
+					
 				case CooLAPClient.START_PROJECTION:
 				case CooLAPClient.RESULT_OF_START_PROJECTION:
 					readStartProjResult(in);
@@ -96,6 +102,23 @@ public class CooLAPPacket
 		// Number of calibrated projectors
 		short projCount = in.readShort();
 			
+		values.put("Result", result);
+		values.put("ProjCount", projCount);
+	}
+	
+	private void readSwitchCalibResult(CooLittleEndianInputStream in,
+		int dataLength) throws IOException
+	{
+		// Status of the whole calibration
+		// 0: successful
+		// 1: faulty
+		// 2: file not found
+		// 3: file not readable
+		// 4: manual calibration required
+		short result = in.readShort();
+		// Number of calibrated projectors
+		short projCount = in.readShort();
+
 		values.put("Result", result);
 		values.put("ProjCount", projCount);
 	}

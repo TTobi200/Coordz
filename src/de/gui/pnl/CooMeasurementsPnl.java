@@ -7,7 +7,7 @@
 package de.gui.pnl;
 
 import java.io.*;
-import java.util.Objects;
+import java.util.*;
 
 import de.coordz.data.*;
 import de.coordz.data.base.*;
@@ -228,6 +228,34 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 			
 			// Show user inromation
 			showInfoDialog("Automatische Kalibrierung", message);
+		}
+	}
+	
+	@FXML
+	protected void switchCalibrationMode() throws IOException
+	{
+		// Get all choices for calibration mode
+		HashMap<String, Integer> calibModes = new HashMap<>();
+		calibModes.put("Kalibrierung erforderlich", 
+			CooLAPClient.AUTOMATIC_CALIBRATION_MODE);
+		calibModes.put("Kalibrierung nicht erforderlich", 
+			CooLAPClient.NO_CALIBRATION_MODE);
+		calibModes.put("Positionsüberprüfung der targets",
+			CooLAPClient.POSITION_CHECK_OF_TARGET_FILM_MODE);
+		calibModes.put("Positionsüberprüfung auf Bohrlochhöhe",
+			CooLAPClient.POSITION_CHECK_OF_TARGET_HOLE_MODE);
+		
+		// Ask user to choose a calibration mode
+		Integer result = CooDialogs.showChooseDialog(getScene().getWindow(),
+			"Kalibriermodus ändern", "Kalibriermodus auswählen:", calibModes);
+		
+		if(Objects.nonNull(result) && Objects.nonNull(
+			client) && client.isConnected())
+		{
+			// Receive the result packet 
+			// TODO Generate a temp file and commit it here
+			CooLAPPacket packet = client.switchCalibrationMode(
+				result, new File("doc/LAP Software/Calibration.cal"));
 		}
 	}
 	
