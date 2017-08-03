@@ -158,6 +158,37 @@ public class CooLAPClient extends CooTcpIpClient
 				
 		return packet;
 	}
+	
+	public CooLAPPacket switchCalibrationAcknowledge(short state)
+		throws IOException
+	{
+		// Define a packet for receiving
+		CooLAPPacket packet = new CooLAPPacket();
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		
+		try (CooLittleEndianOutputStream leo = 
+			new CooLittleEndianOutputStream(out))
+		{
+			// 2. Source ID of sender UINT2
+			leo.writeShort(CLIENT);
+			// 3. Destination ID of receiver UINT2
+			leo.writeShort(LAP);
+			// 4. Message_ID ID of message UINT2
+			leo.writeShort(SWITCH_CALIBRATION_ACKNOWLEDGE);
+			
+			// 2 Status of position check
+			// 0: check Ok
+			// 1: check refused
+			leo.writeShort(state);
+					
+			// Send command to lap software
+			sendToServer("Switch Calibration Acknowledge", out, leo);
+			// And receive the answer packet
+			packet = receiveFromServer();
+		}
+				
+		return packet;
+	}
 
 	public CooLAPPacket startManualCalibration(File file) 
 			throws IOException
@@ -312,6 +343,31 @@ public class CooLAPClient extends CooTcpIpClient
 
 			// Send command to lap software
 			sendToServer("Next Contour", out, leo);
+			// And receive the answer packet
+			packet = receiveFromServer();
+		}
+		
+		return packet;
+	}
+	
+	public CooLAPPacket getShiftRotationInfo() throws IOException
+	{
+		// Define a packet for receiving
+		CooLAPPacket packet = new CooLAPPacket();
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+		try (CooLittleEndianOutputStream leo = 
+				new CooLittleEndianOutputStream(out))
+		{
+			// 2. Source ID of sender UINT2
+			leo.writeShort(CLIENT);
+			// 3. Destination ID of receiver UINT2
+			leo.writeShort(LAP);
+			// 4. Message_ID ID of message UINT2
+			leo.writeShort(GET_SHIFT_ROTATION_INFO);
+
+			// Send command to lap software
+			sendToServer("Get Shift- / Rotation Info", out, leo);
 			// And receive the answer packet
 			packet = receiveFromServer();
 		}
