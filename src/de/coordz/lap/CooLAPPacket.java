@@ -14,7 +14,7 @@ import javafx.collections.FXCollections;
 public class CooLAPPacket
 {
 	/** Default packet header length */
-	private static final int HEADER_LENGTH = 4;
+	public static final int HEADER_LENGTH = 4;
 	
 	/** {@link Map} with all packet keys to values */
 	private Map<String, Object> values;

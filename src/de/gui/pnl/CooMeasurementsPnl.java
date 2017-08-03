@@ -258,10 +258,8 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 		{
 			// Receive the result packet 
 			// TODO Generate a temp file and commit it here
-//			CooLAPPacket packet = client.switchCalibrationMode(
-//				result, new File("doc/LAP Software/Calibration.cal"));
 			// FORTEST $TO: Use the calibration file on test pc
-			CooLAPPacket packet = client.switchCalibrationMode(result,
+			client.switchCalibrationMode(result,
 				new File("C:\\Users\\User\\Desktop\\Lasertest"
 				+ "\\01_Einmessungen\\01_Kalibrierdateien\\CheckPlate.cal"));
 		}
@@ -272,10 +270,9 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	{
 		if(Objects.nonNull(client) && client.isConnected())
 		{
-//			client.startProjection(new File(
-//				"doc/LAP Software/LaserData.ply"));
 			// FORTEST $TO: Use the projection file on test pc
-			CooLAPPacket packet = client.startProjection(
+			// TODO Generate a temp file and commit it here
+			client.startProjection(
 				new File("C:\\Users\\User\\Desktop\\Lasertest"
 				+ "\\01_Einmessungen\\02_Messmatrix\\LaserData.ply"));
 		}
@@ -287,7 +284,8 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 		if(Objects.nonNull(client) && client.isConnected())
 		{
 			// FORTEST $TO: Use the projection file on test pc
-			CooLAPPacket packet = client.startAndAdjustProjection(
+			// TODO Generate a temp file and commit it here
+			client.startAndAdjustProjection(
 				new File("C:\\Users\\User\\Desktop\\Lasertest"
 				+ "\\01_Einmessungen\\02_Messmatrix\\LaserData.ply"));
 		}
