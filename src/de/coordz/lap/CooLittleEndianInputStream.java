@@ -8,11 +8,6 @@ import java.io.*;
  * and returns them as Java primitive types.
  * The standard java.io.DataInputStream class
  * which this class imitates reads big-endian quantities.
- *
- * @author Elliotte Rusty Harold
- * @version 1.0.3, 28 December 2002
- * @see com.CooLittleEndianOutputStream.io.LittleEndianOutputStream
- * @see java.io.DataInputStream
  */
 public class CooLittleEndianInputStream extends FilterInputStream
 {

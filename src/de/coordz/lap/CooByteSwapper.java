@@ -25,8 +25,6 @@ import java.util.stream.IntStream;
  * little-endian and big-endian representations) of different data types.
  * Byte swapping is typically used when data is read from a stream
  * delivered by a system of different endian type as the present one.
- *
- * @author <a href="mailto:jacob.dreyer@geosoft.no">Jacob Dreyer</a>
  */
 public class CooByteSwapper
 {

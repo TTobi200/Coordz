@@ -14,22 +14,32 @@ import javafx.beans.property.*;
 
 public class CooTcpIpClient
 {
+	/** The connected {@link Socket} */
 	protected Socket socket;
-	protected BooleanProperty connected;
+	/** The server ip address or host name */
 	protected String srvIp;
+	/** The server port */
 	protected int srvPort;
+	/** Boolean Flag if client is connected */
+	protected BooleanProperty connected;
 
 	public CooTcpIpClient(String srvIp, int srvPort) throws UnknownHostException,
 		IOException
 	{
-		connected = new SimpleBooleanProperty(false);
+		// Try to establish connection to server peer
+		connected = new SimpleBooleanProperty(Boolean.FALSE);
 		socket = new Socket(srvIp, srvPort);
 		
+		// We are connected successfully
 		this.srvIp = srvIp;
 		this.srvPort = srvPort;
-		connected.setValue(true);
+		connected.setValue(Boolean.TRUE);
 	}
 	
+	/**
+	 * Method to disconnect from peer.
+	 * @return flag if disconnected.
+	 */
 	public boolean disconnect()
 	{
 		if(isConnected())
@@ -41,23 +51,35 @@ public class CooTcpIpClient
 			catch(IOException e)
 			{
 				CooLog.error("Could not close socket", e);
-				return false;
+				return Boolean.FALSE;
 			}
-			connected.setValue(false);
+			connected.setValue(Boolean.FALSE);
 		}
-		return true;
+		return Boolean.TRUE;
 	}
 	
+	/**
+	 * Method to check if client is {@link #connected} to peer.
+	 * @return flag if client is {@link #connected} to peer
+	 */
 	public boolean isConnected()
 	{
 		return connected.get();
 	}
 	
+	/**
+	 * Get the server ip address or host name.
+	 * @return the server ip address or host name
+	 */
 	public String getSrvIp()
 	{
 		return srvIp;
 	}
 	
+	/**
+	 * Get the connection port.
+	 * @return the connection port
+	 */
 	public int getSrvPort()
 	{
 		return srvPort;

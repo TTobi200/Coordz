@@ -89,6 +89,12 @@ public class CooLAPClient extends CooTcpIpClient
 		super(srvIp, srvPort);
 	}
 
+	/**
+	 * Method to send {@link #AUTOMATIC_CALIBRATION} to LAP ProSoft Server.
+	 * @param calibrationFile = the calibration file
+	 * @return the received {@link CooLAPPacket} from server
+	 * @throws IOException when something went wrong
+	 */
 	public CooLAPPacket startAutoCalibration(File calibrationFile)
 			throws IOException
 	{
@@ -120,6 +126,13 @@ public class CooLAPClient extends CooTcpIpClient
 		return packet;
 	}
 	
+	/**
+	 * Method to send {@link #SWITCH_CALIBRATION} to LAP ProSoft Server.
+	 * @param mode = the calibration mode
+	 * @param calibrationFile = the calibration file
+	 * @return the received {@link CooLAPPacket} from server
+	 * @throws IOException when something went wrong
+	 */
 	public CooLAPPacket switchCalibrationMode(Integer mode, File calibrationFile)
 		throws IOException
 	{
@@ -159,6 +172,12 @@ public class CooLAPClient extends CooTcpIpClient
 		return packet;
 	}
 	
+	/**
+	 * Method to send {@link #SWITCH_CALIBRATION_ACKNOWLEDGE} to LAP ProSoft Server.
+	 * @param state = the calibration state
+	 * @return the received {@link CooLAPPacket} from server
+	 * @throws IOException when something went wrong
+	 */
 	public CooLAPPacket switchCalibrationAcknowledge(short state)
 		throws IOException
 	{
@@ -190,6 +209,12 @@ public class CooLAPClient extends CooTcpIpClient
 		return packet;
 	}
 
+	/**
+	 * Manual Calibration not supported from LAP Server.
+	 * @param file = the calibration file
+	 * @return the received {@link CooLAPPacket} from server
+	 * @throws IOException when something went wrong
+	 */
 	public CooLAPPacket startManualCalibration(File file) 
 			throws IOException
 	{
@@ -197,6 +222,12 @@ public class CooLAPClient extends CooTcpIpClient
 			+ "not implemented in TCP-IP Interface of LAP");
 	}
 
+	/**
+	 * Method to send {@link #START_PROJECTION} to LAP ProSoft Server.
+	 * @param projectionFile = the projection file to display
+	 * @return the received {@link CooLAPPacket} from server
+	 * @throws IOException when something went wrong
+	 */
 	public CooLAPPacket startProjection(File projectionFile) 
 			throws IOException
 	{
@@ -228,6 +259,12 @@ public class CooLAPClient extends CooTcpIpClient
 		return packet;
 	}
 	
+	/**
+	 * Method to send {@link #START_AND_ADJUST_PROJECTION} to LAP ProSoft Server.
+	 * @param projectionFile = the projection file to display
+	 * @return the received {@link CooLAPPacket} from server
+	 * @throws IOException when something went wrong
+	 */
 	public CooLAPPacket startAndAdjustProjection(File projectionFile) 
 			throws IOException
 	{
@@ -275,6 +312,11 @@ public class CooLAPClient extends CooTcpIpClient
 		return packet;
 	}
 
+	/**
+	 * Method to send {@link #STOP_PROJECTION} to LAP ProSoft Server.
+	 * @return the received {@link CooLAPPacket} from server
+	 * @throws IOException when something went wrong
+	 */
 	public CooLAPPacket stopProjection() throws IOException
 	{
 		// Define a packet for receiving
@@ -300,6 +342,11 @@ public class CooLAPClient extends CooTcpIpClient
 		return packet;
 	}
 
+	/**
+	 * Method to send {@link #SHOW_PREVIOUS_CONTOUR} to LAP ProSoft Server.
+	 * @return the received {@link CooLAPPacket} from server
+	 * @throws IOException when something went wrong
+	 */
 	public CooLAPPacket previousContour() throws IOException
 	{
 		// Define a packet for receiving
@@ -325,6 +372,11 @@ public class CooLAPClient extends CooTcpIpClient
 		return packet;
 	}
 
+	/**
+	 * Method to send {@link #SHOW_NEXT_CONTOUR} to LAP ProSoft Server.
+	 * @return the received {@link CooLAPPacket} from server
+	 * @throws IOException when something went wrong
+	 */
 	public CooLAPPacket nextContour() throws IOException
 	{
 		// Define a packet for receiving
@@ -350,6 +402,11 @@ public class CooLAPClient extends CooTcpIpClient
 		return packet;
 	}
 	
+	/**
+	 * Method to send {@link #GET_SHIFT_ROTATION_INFO} to LAP ProSoft Server.
+	 * @return the received {@link CooLAPPacket} from server
+	 * @throws IOException when something went wrong
+	 */
 	public CooLAPPacket getShiftRotationInfo() throws IOException
 	{
 		// Define a packet for receiving
@@ -375,6 +432,11 @@ public class CooLAPClient extends CooTcpIpClient
 		return packet;
 	}
 	
+	/**
+	 * Method to start receiving an {@link CooLAPPacket} from the LAP ProSoft Server.
+	 * @return the received {@link CooLAPPacket} from server
+	 * @throws IOException when receiving went wrong
+	 */
 	private CooLAPPacket receiveFromServer() throws IOException
 	{
 		// Define a packet for receiving
@@ -399,6 +461,13 @@ public class CooLAPClient extends CooTcpIpClient
 		return packet;
 	}
 	
+	/**
+	 * Method to start sending an {@link CooLAPPacket} to LAp ProSoft Server.
+	 * @param command = the command name to send
+	 * @param out = the {@link ByteArrayOutputStream} to send on
+	 * @param leo = the {@link CooLittleEndianOutputStream} with data
+	 * @throws IOException when sending went wrong
+	 */
 	protected void sendToServer(String command, ByteArrayOutputStream out,
 			CooLittleEndianOutputStream leo) throws IOException
 	{

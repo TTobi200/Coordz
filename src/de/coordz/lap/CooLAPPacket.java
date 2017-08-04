@@ -13,9 +13,6 @@ import javafx.collections.FXCollections;
 
 public class CooLAPPacket
 {
-	/** Default packet header length */
-	public static final int HEADER_LENGTH = 4;
-	
 	/** {@link Map} with all packet keys to values */
 	private Map<String, Object> values;
 	
@@ -24,6 +21,12 @@ public class CooLAPPacket
 		values = FXCollections.observableHashMap();
 	}
 	
+	/**
+	 * Method to fill this {@link CooLAPPacket} from the committed
+	 * {@link CooLittleEndianInputStream}. Data stored in {@link #values}.
+	 * @param in = the {@link CooLittleEndianInputStream} to read from
+	 * @throws IOException when filling this {@link CooLAPPacket} went wrong
+	 */
 	public void fromStream(CooLittleEndianInputStream in)
 			throws IOException
 	{
@@ -93,6 +96,12 @@ public class CooLAPPacket
 		}
 	}
 	
+	/**
+	 * Method to read header bytes from this {@link CooLAPPacket}.
+	 * @param in = the {@link CooLittleEndianInputStream} to read from 
+	 * @return the header length as short
+	 * @throws IOException when header reading went wrong
+	 */
 	private short readHeader(CooLittleEndianInputStream in)
 			throws IOException
 	{
@@ -113,6 +122,11 @@ public class CooLAPPacket
 		return msgLength;
 	}
 
+	/**
+	 * Method to read calibration results from this {@link CooLAPPacket}.
+	 * @param in = the {@link CooLittleEndianInputStream} to read from 
+	 * @throws IOException when reading of calibration results went wrong
+	 */
 	private void readCalibResult(CooLittleEndianInputStream in)
 		throws IOException
 	{
@@ -171,6 +185,11 @@ public class CooLAPPacket
 		values.put("ProjCount", projCount);
 	}
 	
+	/**
+	 * Method to read switch calibration results from this {@link CooLAPPacket}.
+	 * @param in = the {@link CooLittleEndianInputStream} to read from 
+	 * @throws IOException when reading of switch calibration results went wrong
+	 */
 	private void readSwitchCalibResult(CooLittleEndianInputStream in)
 		throws IOException
 	{
@@ -178,6 +197,11 @@ public class CooLAPPacket
 		readCalibResult(in);
 	}
 	
+	/**
+	 * Method to read switch calibration acknowledge results from this {@link CooLAPPacket}.
+	 * @param in = the {@link CooLittleEndianInputStream} to read from 
+	 * @throws IOException when reading of switch calibration acknowledge results went wrong
+	 */
 	private void readSwitchCalibAckResult(CooLittleEndianInputStream in)
 		throws IOException
 	{
@@ -187,6 +211,11 @@ public class CooLAPPacket
 		readResultOnly(in);
 	}
 	
+	/**
+	 * Method to read start projection results from this {@link CooLAPPacket}.
+	 * @param in = the {@link CooLittleEndianInputStream} to read from 
+	 * @throws IOException when reading of start projection went wrong
+	 */
 	private void readStartProjResult(CooLittleEndianInputStream in)
 		throws IOException
 	{
@@ -194,6 +223,11 @@ public class CooLAPPacket
 		readResultOnly(in);
 	}
 	
+	/**
+	 * Method to read start and adjust projection results from this {@link CooLAPPacket}.
+	 * @param in = the {@link CooLittleEndianInputStream} to read from 
+	 * @throws IOException when reading of start and adjust projection went wrong
+	 */
 	private void readStartAndAdjustProjResult(CooLittleEndianInputStream in)
 		throws IOException
 	{
@@ -201,6 +235,11 @@ public class CooLAPPacket
 		readResultOnly(in);
 	}
 	
+	/**
+	 * Method to read show next contour results from this {@link CooLAPPacket}.
+	 * @param in = the {@link CooLittleEndianInputStream} to read from 
+	 * @throws IOException when reading of show next contour went wrong
+	 */
 	private void readShowNextContourResult(CooLittleEndianInputStream in)
 		throws IOException
 	{
@@ -208,6 +247,11 @@ public class CooLAPPacket
 		readResultOnly(in);
 	}
 	
+	/**
+	 * Method to read show previous contour results from this {@link CooLAPPacket}.
+	 * @param in = the {@link CooLittleEndianInputStream} to read from 
+	 * @throws IOException when reading of show previous contour went wrong
+	 */
 	private void readShowPrevContourResult(CooLittleEndianInputStream in)
 		throws IOException
 	{
@@ -215,6 +259,11 @@ public class CooLAPPacket
 		readResultOnly(in);
 	}
 	
+	/**
+	 * Method to read stop projection results from this {@link CooLAPPacket}.
+	 * @param in = the {@link CooLittleEndianInputStream} to read from 
+	 * @throws IOException when reading of stop projection went wrong
+	 */
 	private void readStopProjResult(CooLittleEndianInputStream in)
 		throws IOException
 	{
@@ -222,6 +271,11 @@ public class CooLAPPacket
 		readResultOnly(in);
 	}
 	
+	/**
+	 * Method to read get shift rotation info results from this {@link CooLAPPacket}.
+	 * @param in = the {@link CooLittleEndianInputStream} to read from 
+	 * @throws IOException when reading of get shift rotation info went wrong
+	 */
 	private void readGetShiftRotationInfoResult(CooLittleEndianInputStream in)
 		throws IOException
 	{
@@ -243,6 +297,11 @@ public class CooLAPPacket
 		values.put("RotCentre_y", rotCentreY);
 	}
 	
+	/**
+	 * Method to read only results from this {@link CooLAPPacket}.
+	 * @param in = the {@link CooLittleEndianInputStream} to read from 
+	 * @throws IOException when reading of results went wrong
+	 */
 	private void readResultOnly(CooLittleEndianInputStream in)
 		throws IOException
 	{
@@ -257,11 +316,21 @@ public class CooLAPPacket
 		values.put("Result", result);
 	}
 	
+	/**
+	 * Method to get the {@link Object} from this {@link CooLAPPacket}.
+	 * @param key = the key to get {@link Object} from
+	 * @return the {@link Object} or null
+	 */
 	public Object getValue(String key)
 	{
 		return values.get(key);
 	}
 	
+	/**
+	 * Check if this {@link CooLAPPacket} contains committed key.
+	 * @param key = the key to search for
+	 * @return flag if this {@link CooLAPPacket} contains the key
+	 */
 	public boolean containsValue(String key)
 	{
 		return values.containsKey(key);
