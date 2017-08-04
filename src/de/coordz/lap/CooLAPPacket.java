@@ -49,55 +49,55 @@ public class CooLAPPacket
 				case CooLAPClient.AUTOMATIC_CALIBRATION:
 				case CooLAPClient.RESULT_OF_AUTOMATIC_CALIBRATION:
 					readCalibResult(in);
-					values.put("Name", "AUTOMATIC_CALIBRATION");
+					putValue("Name", "AUTOMATIC_CALIBRATION");
 					break;
 					
 				case CooLAPClient.SWITCH_CALIBRATION:
 				case CooLAPClient.RESULT_OF_SWITCH_CALIBRATION:
 					readSwitchCalibResult(in);
-					values.put("Name", "SWITCH_CALIBRATION");
+					putValue("Name", "SWITCH_CALIBRATION");
 					break;
 					
 				case CooLAPClient.SWITCH_CALIBRATION_ACKNOWLEDGE:
 				case CooLAPClient.RESULT_OF_SWITCH_CALIBRATION_ACKNOWLEDGE:
 					readSwitchCalibAckResult(in);
-					values.put("Name", "SWITCH_CALIBRATION_ACKNOWLEDGE");
+					putValue("Name", "SWITCH_CALIBRATION_ACKNOWLEDGE");
 					break;
 					
 				case CooLAPClient.START_PROJECTION:
 				case CooLAPClient.RESULT_OF_START_PROJECTION:
 					readStartProjResult(in);
-					values.put("Name", "START_PROJECTION");
+					putValue("Name", "START_PROJECTION");
 					break;
 					
 				case CooLAPClient.START_AND_ADJUST_PROJECTION:
 				case CooLAPClient.RESULT_OF_START_AND_ADJUST_PROJECTION:
 					readStartAndAdjustProjResult(in);
-					values.put("Name", "START_AND_ADJUST_PROJECTION");
+					putValue("Name", "START_AND_ADJUST_PROJECTION");
 					break;
 				
 				case CooLAPClient.SHOW_NEXT_CONTOUR:
 				case CooLAPClient.RESULT_OF_SHOW_NEXT_CONTOUR:
 					readShowNextContourResult(in);
-					values.put("Name", "SHOW_NEXT_CONTOUR");
+					putValue("Name", "SHOW_NEXT_CONTOUR");
 					break;
 					
 				case CooLAPClient.SHOW_PREVIOUS_CONTOUR:
 				case CooLAPClient.RESULT_OF_SHOW_PREVIOUS_CONTOUR:
 					readShowPrevContourResult(in);
-					values.put("Name", "SHOW_PREVIOUS_CONTOUR");
+					putValue("Name", "SHOW_PREVIOUS_CONTOUR");
 					break;
 					
 				case CooLAPClient.STOP_PROJECTION:
 				case CooLAPClient.RESULT_OF_STOP_PROJECTION:
 					readStopProjResult(in);
-					values.put("Name", "STOP_PROJECTION");
+					putValue("Name", "STOP_PROJECTION");
 					break;
 					
 				case CooLAPClient.GET_SHIFT_ROTATION_INFO:
 				case CooLAPClient.RESULT_OF_GET_SHIFT_ROTATION_INFO:
 					readGetShiftRotationInfoResult(in);
-					values.put("Name", "GET_SHIFT_ROTATION_INFO");
+					putValue("Name", "GET_SHIFT_ROTATION_INFO");
 					break;
 			}
 		}
@@ -121,10 +121,10 @@ public class CooLAPPacket
 		// ID of message
 		short msgID = in.readShort();
 		
-		values.put("Message_Length", msgLength);
-		values.put("Source", source);
-		values.put("Destination", destination);
-		values.put("Message_ID", msgID);
+		putValue("Message_Length", msgLength);
+		putValue("Source", source);
+		putValue("Destination", destination);
+		putValue("Message_ID", msgID);
 		
 		headerInitialized = Boolean.TRUE;
 		return msgLength;
@@ -177,20 +177,20 @@ public class CooLAPPacket
 				// Deviation of the first target
 				float tgtDeviation = in.readFloat(); 
 				
-				values.put("TgtNumber_" + proj + "_" + tgt, tgtNumber);
-				values.put("TgtRes_" + proj + "_" + tgt, tgtResult);
-				values.put("TgtDev_" + proj + "_" + tgt, tgtDeviation);
+				putValue("TgtNumber_" + proj + "_" + tgt, tgtNumber);
+				putValue("TgtRes_" + proj + "_" + tgt, tgtResult);
+				putValue("TgtDev_" + proj + "_" + tgt, tgtDeviation);
 			}
 
-			values.put("ProjName_" + proj, projName);
-			values.put("ProjAddr_" + proj, projAdress);
-			values.put("ProjRes_" + proj, projResult);
-			values.put("ProjRMS_" + proj, projRMS);
-			values.put("TgtCount_" + proj, tgtCount);
+			putValue("ProjName_" + proj, projName);
+			putValue("ProjAddr_" + proj, projAdress);
+			putValue("ProjRes_" + proj, projResult);
+			putValue("ProjRMS_" + proj, projRMS);
+			putValue("TgtCount_" + proj, tgtCount);
 		}
 			
-		values.put("Result", result);
-		values.put("ProjCount", projCount);
+		putValue("Result", result);
+		putValue("ProjCount", projCount);
 	}
 	
 	/**
@@ -298,11 +298,11 @@ public class CooLAPPacket
 		// Rotation centre y-Coo. [1/100 mm]
 		float rotCentreY = in.readFloat();
 		
-		values.put("Shift_x", shiftX);
-		values.put("Shift_y", shiftY);
-		values.put("RotAngle", rotAngle);
-		values.put("RotCentre_x", rotCentreX);
-		values.put("RotCentre_y", rotCentreY);
+		putValue("Shift_x", shiftX);
+		putValue("Shift_y", shiftY);
+		putValue("RotAngle", rotAngle);
+		putValue("RotCentre_x", rotCentreX);
+		putValue("RotCentre_y", rotCentreY);
 	}
 	
 	/**
@@ -321,7 +321,7 @@ public class CooLAPPacket
 		// 4: projection out of range
 		short result = in.readShort();
 
-		values.put("Result", result);
+		putValue("Result", result);
 	}
 	
 	/**
@@ -344,9 +344,9 @@ public class CooLAPPacket
 		// 4. Message_ID ID of message UINT2
 		leo.writeShort(messageId);		
 		
-		values.put("Source", source);
-		values.put("Destination", destination);
-		values.put("Message_ID", messageId);
+		putValue("Source", source);
+		putValue("Destination", destination);
+		putValue("Message_ID", messageId);
 		
 		headerInitialized = Boolean.TRUE;
 	}
@@ -481,8 +481,12 @@ public class CooLAPPacket
 		leo.flush();
 		leo.close();
 		
+		// Convert stream to byte array
+		byte[] bytes = out.toByteArray();
+		// Add the key an value to packet data
+		putValue("Message_Length", bytes.length);
 		// And return the byte stream
-		return out.toByteArray();
+		return bytes;
 	}
 	
 	@Override

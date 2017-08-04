@@ -105,7 +105,7 @@ public class CooLAPClient extends CooTcpIpClient
 		packet.initHeader(CLIENT, LAP, AUTOMATIC_CALIBRATION);
 			
 		// 2 CalibPath Path and name of calibration file Char[n]
-		packet.writeString(calibrationFile.getAbsolutePath());
+		packet.writeString("CalibPath", calibrationFile.getAbsolutePath());
 			
 		// Send command to lap software
 		sendToServer("Start Auto Calibration", packet);
@@ -134,9 +134,9 @@ public class CooLAPClient extends CooTcpIpClient
 		// No calibration Position = 2
 		// check of target film = 3
 		// Position check of target hole = 4
-		packet.writeInt(mode);
+		packet.writeInt("Mode", mode);
 		// 3 CalibPath Path and name of calibration file Char[n]
-		packet.writeString(calibrationFile.getAbsolutePath());
+		packet.writeString("CalibPath", calibrationFile.getAbsolutePath());
 			
 		// Send command to lap software
 		sendToServer("Switch Calibration", packet);
@@ -162,7 +162,7 @@ public class CooLAPClient extends CooTcpIpClient
 		// 2 Status of position check
 		// 0: check Ok
 		// 1: check refused
-		packet.writeShort(state);
+		packet.writeShort("Status", state);
 					
 		// Send command to lap software
 		sendToServer("Switch Calibration Acknowledge", packet);
@@ -199,7 +199,7 @@ public class CooLAPClient extends CooTcpIpClient
 		packet.initHeader(CLIENT, LAP, START_PROJECTION);
 			
 		// 2 ProjPath Path and name of a projection file Char[n]
-		packet.writeString(projectionFile.getAbsolutePath());
+		packet.writeString("ProjPath", projectionFile.getAbsolutePath());
 
 		// Send command to lap software
 		sendToServer("Start Projection", packet);
@@ -225,20 +225,20 @@ public class CooLAPClient extends CooTcpIpClient
 		// TODO $TO: Commit an vector rotation object with necessary parameter
 		// FORTEST $TO: Rotate the element 90 degrees
 		// 2 Height Height of object / shift in z-Coo. INT4 [1/100 mm]
-		packet.writeInt(0);
+		packet.writeInt("Height", 0);
 		// 3 Shift_x Shift vector x-Coo. INT4 [1/100 mm]
-		packet.writeInt(-50000);
+		packet.writeInt("Shift_x", -50000);
 		// 4 Shift_y Shift vector y-Coo. INT4 [1/100 mm]
-		packet.writeInt(0);
+		packet.writeInt("Shift_y", 0);
 		// 5 RotAngle Rotation angle (clockwise) INT4 [1/100 deg]
-		packet.writeInt(9000);
+		packet.writeInt("RotAngle", 9000);
 		// 6 RotCentre_x Rotation centre x-Coo. INT4 [1/100 mm]
-		packet.writeInt(0);
+		packet.writeInt("RotCentre_x", 0);
 		// 7 RotCentre_y Rotation centre y-Coo. INT4 [1/100 mm]
-		packet.writeInt(0);
+		packet.writeInt("RotCentre_y", 0);
 			
 		// 8 ProjPath Path and name of a projection file Char[n]
-		packet.writeString(projectionFile.getAbsolutePath());
+		packet.writeString("ProjPath", projectionFile.getAbsolutePath());
 
 		// Send command to lap software
 		sendToServer("Start and adjust projection", packet);
@@ -336,8 +336,6 @@ public class CooLAPClient extends CooTcpIpClient
 		CooLittleEndianInputStream in = new 
 			CooLittleEndianInputStream(socket.getInputStream());
 		
-		CooLog.debug("Waiting on reply from LAP-Software...");
-			
 		// Wait until we have all data
 		while(in.available() == 0){}
 		
@@ -345,7 +343,7 @@ public class CooLAPClient extends CooTcpIpClient
 		packet.fromStream(in);
 			
 		// Debug the send byte array
-		CooLog.debug("LAP-Software -> Client: " + 
+		CooLog.debug("Server -> Client: " + 
 			packet.toString());
 		
 		return packet;
@@ -361,8 +359,6 @@ public class CooLAPClient extends CooTcpIpClient
 	{
 		if(Objects.nonNull(packet) && packet.hasHeader())
 		{
-			CooLog.debug("Sending <" + command + "> to LAP-Software");
-			
 			byte[] b = packet.toByteArray();
 			OutputStream oout = socket.getOutputStream();
 			
@@ -378,7 +374,7 @@ public class CooLAPClient extends CooTcpIpClient
 			oout.flush();
 			
 			// Debug the send byte array
-			CooLog.debug("LAP-Software -> Client: " + 
+			CooLog.debug("Client -> Server: " + 
 				packet.toString());
 		}
 	}
