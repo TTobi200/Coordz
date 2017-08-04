@@ -8,7 +8,7 @@ package de.coordz.lap;
 
 import java.io.*;
 import java.net.UnknownHostException;
-import java.util.*;
+import java.util.Objects;
 
 import de.util.log.CooLog;
 
@@ -100,30 +100,17 @@ public class CooLAPClient extends CooTcpIpClient
 	{
 		// Define a packet for receiving
 		CooLAPPacket packet = new CooLAPPacket();
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-		try (CooLittleEndianOutputStream leo = 
-			new CooLittleEndianOutputStream(out))
-		{
-			// 2. Source ID of sender UINT2
-			leo.writeShort(CLIENT);
-			// 3. Destination ID of receiver UINT2
-			leo.writeShort(LAP);
-			// 4. Message_ID ID of message UINT2
-			leo.writeShort(AUTOMATIC_CALIBRATION);
-			// 2 CalibPath Path and name of calibration file Char[n]
-			for(char c : calibrationFile.getAbsolutePath().toCharArray())
-			{
-				leo.writeChar(c);
-			}
+		// Initializes the header values
+		packet.initHeader(CLIENT, LAP, AUTOMATIC_CALIBRATION);
 			
-			// Send command to lap software
-			sendToServer("Start Auto Calibration", out, leo);
-			// And receive the answer packet
-			packet = receiveFromServer();
-		}
-		
-		return packet;
+		// 2 CalibPath Path and name of calibration file Char[n]
+		packet.writeString(calibrationFile.getAbsolutePath());
+			
+		// Send command to lap software
+		sendToServer("Start Auto Calibration", packet);
+		// And receive the answer packet
+		return receiveFromServer();
 	}
 	
 	/**
@@ -138,38 +125,23 @@ public class CooLAPClient extends CooTcpIpClient
 	{
 		// Define a packet for receiving
 		CooLAPPacket packet = new CooLAPPacket();
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		
-		try (CooLittleEndianOutputStream leo = 
-			new CooLittleEndianOutputStream(out))
-		{
-			// 2. Source ID of sender UINT2
-			leo.writeShort(CLIENT);
-			// 3. Destination ID of receiver UINT2
-			leo.writeShort(LAP);
-			// 4. Message_ID ID of message UINT2
-			leo.writeShort(SWITCH_CALIBRATION);
+		// Initializes the header values
+		packet.initHeader(CLIENT, LAP, SWITCH_CALIBRATION);
 			
-			// 2 Calibration Mode INT2
-			// Automatic calibration = 1
-			// No calibration Position = 2
-			// check of target film = 3
-			// Position check of target hole = 4
-			leo.writeInt(mode);
+		// 2 Calibration Mode INT2
+		// Automatic calibration = 1
+		// No calibration Position = 2
+		// check of target film = 3
+		// Position check of target hole = 4
+		packet.writeInt(mode);
+		// 3 CalibPath Path and name of calibration file Char[n]
+		packet.writeString(calibrationFile.getAbsolutePath());
 			
-			// 3 CalibPath Path and name of calibration file Char[n]
-			for(char c : calibrationFile.getAbsolutePath().toCharArray())
-			{
-				leo.writeChar(c);
-			}
-					
-			// Send command to lap software
-			sendToServer("Switch Calibration", out, leo);
-			// And receive the answer packet
-			packet = receiveFromServer();
-		}
-				
-		return packet;
+		// Send command to lap software
+		sendToServer("Switch Calibration", packet);
+		// And receive the answer packet
+		return receiveFromServer();
 	}
 	
 	/**
@@ -183,30 +155,19 @@ public class CooLAPClient extends CooTcpIpClient
 	{
 		// Define a packet for receiving
 		CooLAPPacket packet = new CooLAPPacket();
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		
-		try (CooLittleEndianOutputStream leo = 
-			new CooLittleEndianOutputStream(out))
-		{
-			// 2. Source ID of sender UINT2
-			leo.writeShort(CLIENT);
-			// 3. Destination ID of receiver UINT2
-			leo.writeShort(LAP);
-			// 4. Message_ID ID of message UINT2
-			leo.writeShort(SWITCH_CALIBRATION_ACKNOWLEDGE);
+		// Initializes the header values
+		packet.initHeader(CLIENT, LAP, SWITCH_CALIBRATION_ACKNOWLEDGE);
 			
-			// 2 Status of position check
-			// 0: check Ok
-			// 1: check refused
-			leo.writeShort(state);
+		// 2 Status of position check
+		// 0: check Ok
+		// 1: check refused
+		packet.writeShort(state);
 					
-			// Send command to lap software
-			sendToServer("Switch Calibration Acknowledge", out, leo);
-			// And receive the answer packet
-			packet = receiveFromServer();
-		}
-				
-		return packet;
+		// Send command to lap software
+		sendToServer("Switch Calibration Acknowledge", packet);
+		// And receive the answer packet
+		return receiveFromServer();
 	}
 
 	/**
@@ -233,30 +194,17 @@ public class CooLAPClient extends CooTcpIpClient
 	{
 		// Define a packet for receiving
 		CooLAPPacket packet = new CooLAPPacket();
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-		try (CooLittleEndianOutputStream leo = 
-			new CooLittleEndianOutputStream(out))
-		{
-			// 2. Source ID of sender UINT2
-			leo.writeShort(CLIENT);
-			// 3. Destination ID of receiver UINT2
-			leo.writeShort(LAP);
-			// 4. Message_ID ID of message UINT2
-			leo.writeShort(START_PROJECTION);
-			// 2 ProjPath Path and name of a projection file Char[n]
-			for(char c : projectionFile.getAbsolutePath().toCharArray())
-			{
-				leo.writeChar(c);
-			}
+		// Initializes the header values
+		packet.initHeader(CLIENT, LAP, START_PROJECTION);
+			
+		// 2 ProjPath Path and name of a projection file Char[n]
+		packet.writeString(projectionFile.getAbsolutePath());
 
-			// Send command to lap software
-			sendToServer("Start Projection", out, leo);
-			// And receive the answer packet
-			packet = receiveFromServer();
-		}
-		
-		return packet;
+		// Send command to lap software
+		sendToServer("Start Projection", packet);
+		// And receive the answer packet
+		return receiveFromServer();
 	}
 	
 	/**
@@ -270,46 +218,32 @@ public class CooLAPClient extends CooTcpIpClient
 	{
 		// Define a packet for receiving
 		CooLAPPacket packet = new CooLAPPacket();
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-		try (CooLittleEndianOutputStream leo = 
-			new CooLittleEndianOutputStream(out))
-		{
-			// 2. Source ID of sender UINT2
-			leo.writeShort(CLIENT);
-			// 3. Destination ID of receiver UINT2
-			leo.writeShort(LAP);
-			// 4. Message_ID ID of message UINT2
-			leo.writeShort(START_AND_ADJUST_PROJECTION);
-
-			// TODO $TO: Commit an vector rotation object with necessary parameter
-			// FORTEST $TO: Rotate the element 90 degrees
-			// 2 Height Height of object / shift in z-Coo. INT4 [1/100 mm]
-			leo.writeInt(0);
-			// 3 Shift_x Shift vector x-Coo. INT4 [1/100 mm]
-			leo.writeInt(-50000);
-			// 4 Shift_y Shift vector y-Coo. INT4 [1/100 mm]
-			leo.writeInt(0);
-			// 5 RotAngle Rotation angle (clockwise) INT4 [1/100 deg]
-			leo.writeInt(9000);
-			// 6 RotCentre_x Rotation centre x-Coo. INT4 [1/100 mm]
-			leo.writeInt(0);
-			// 7 RotCentre_y Rotation centre y-Coo. INT4 [1/100 mm]
-			leo.writeInt(0);
+		// Initializes the header values
+		packet.initHeader(CLIENT, LAP, START_AND_ADJUST_PROJECTION);
 			
-			// 8 ProjPath Path and name of a projection file Char[n]
-			for(char c : projectionFile.getAbsolutePath().toCharArray())
-			{
-				leo.writeChar(c);
-			}
+		// TODO $TO: Commit an vector rotation object with necessary parameter
+		// FORTEST $TO: Rotate the element 90 degrees
+		// 2 Height Height of object / shift in z-Coo. INT4 [1/100 mm]
+		packet.writeInt(0);
+		// 3 Shift_x Shift vector x-Coo. INT4 [1/100 mm]
+		packet.writeInt(-50000);
+		// 4 Shift_y Shift vector y-Coo. INT4 [1/100 mm]
+		packet.writeInt(0);
+		// 5 RotAngle Rotation angle (clockwise) INT4 [1/100 deg]
+		packet.writeInt(9000);
+		// 6 RotCentre_x Rotation centre x-Coo. INT4 [1/100 mm]
+		packet.writeInt(0);
+		// 7 RotCentre_y Rotation centre y-Coo. INT4 [1/100 mm]
+		packet.writeInt(0);
+			
+		// 8 ProjPath Path and name of a projection file Char[n]
+		packet.writeString(projectionFile.getAbsolutePath());
 
-			// Send command to lap software
-			sendToServer("Start and adjust projection", out, leo);
-			// And receive the answer packet
-			packet = receiveFromServer();
-		}
-		
-		return packet;
+		// Send command to lap software
+		sendToServer("Start and adjust projection", packet);
+		// And receive the answer packet
+		return receiveFromServer();
 	}
 
 	/**
@@ -321,25 +255,14 @@ public class CooLAPClient extends CooTcpIpClient
 	{
 		// Define a packet for receiving
 		CooLAPPacket packet = new CooLAPPacket();
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-		try (CooLittleEndianOutputStream leo = 
-				new CooLittleEndianOutputStream(out))
-		{
-			// 2. Source ID of sender UINT2
-			leo.writeShort(CLIENT);
-			// 3. Destination ID of receiver UINT2
-			leo.writeShort(LAP);
-			// 4. Message_ID ID of message UINT2
-			leo.writeShort(STOP_PROJECTION);
-
-			// Send command to lap software
-			sendToServer("Stop Projection", out, leo);
-			// And receive the answer packet
-			packet = receiveFromServer();
-		}
-		
-		return packet;
+		// Initializes the header values
+		packet.initHeader(CLIENT, LAP, STOP_PROJECTION);
+			
+		// Send command to lap software
+		sendToServer("Stop Projection", packet);
+		// And receive the answer packet
+		return receiveFromServer();
 	}
 
 	/**
@@ -351,25 +274,14 @@ public class CooLAPClient extends CooTcpIpClient
 	{
 		// Define a packet for receiving
 		CooLAPPacket packet = new CooLAPPacket();
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-		try (CooLittleEndianOutputStream leo = 
-			new CooLittleEndianOutputStream(out))
-		{
-			// 2. Source ID of sender UINT2
-			leo.writeShort(CLIENT);
-			// 3. Destination ID of receiver UINT2
-			leo.writeShort(LAP);
-			// 4. Message_ID ID of message UINT2
-			leo.writeShort(SHOW_PREVIOUS_CONTOUR);
-
-			// Send command to lap software
-			sendToServer("Previous Contour", out, leo);
-			// And receive the answer packet
-			packet = receiveFromServer();
-		}
-				
-		return packet;
+		// Initializes the header values
+		packet.initHeader(CLIENT, LAP, SHOW_PREVIOUS_CONTOUR);
+			
+		// Send command to lap software
+		sendToServer("Previous Contour", packet);
+		// And receive the answer packet
+		return receiveFromServer();
 	}
 
 	/**
@@ -381,25 +293,14 @@ public class CooLAPClient extends CooTcpIpClient
 	{
 		// Define a packet for receiving
 		CooLAPPacket packet = new CooLAPPacket();
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-		try (CooLittleEndianOutputStream leo = 
-			new CooLittleEndianOutputStream(out))
-		{
-			// 2. Source ID of sender UINT2
-			leo.writeShort(CLIENT);
-			// 3. Destination ID of receiver UINT2
-			leo.writeShort(LAP);
-			// 4. Message_ID ID of message UINT2
-			leo.writeShort(SHOW_NEXT_CONTOUR);
-
-			// Send command to lap software
-			sendToServer("Next Contour", out, leo);
-			// And receive the answer packet
-			packet = receiveFromServer();
-		}
-		
-		return packet;
+		// Initializes the header values
+		packet.initHeader(CLIENT, LAP, SHOW_NEXT_CONTOUR);
+			
+		// Send command to lap software
+		sendToServer("Next Contour", packet);
+		// And receive the answer packet
+		return receiveFromServer();
 	}
 	
 	/**
@@ -411,25 +312,14 @@ public class CooLAPClient extends CooTcpIpClient
 	{
 		// Define a packet for receiving
 		CooLAPPacket packet = new CooLAPPacket();
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-		try (CooLittleEndianOutputStream leo = 
-				new CooLittleEndianOutputStream(out))
-		{
-			// 2. Source ID of sender UINT2
-			leo.writeShort(CLIENT);
-			// 3. Destination ID of receiver UINT2
-			leo.writeShort(LAP);
-			// 4. Message_ID ID of message UINT2
-			leo.writeShort(GET_SHIFT_ROTATION_INFO);
-
-			// Send command to lap software
-			sendToServer("Get Shift- / Rotation Info", out, leo);
-			// And receive the answer packet
-			packet = receiveFromServer();
-		}
-		
-		return packet;
+		// Initializes the header values
+		packet.initHeader(CLIENT, LAP, GET_SHIFT_ROTATION_INFO);
+			
+		// Send command to lap software
+		sendToServer("Get Shift- / Rotation Info", packet);
+		// And receive the answer packet
+		return receiveFromServer();
 	}
 	
 	/**
@@ -462,23 +352,18 @@ public class CooLAPClient extends CooTcpIpClient
 	}
 	
 	/**
-	 * Method to start sending an {@link CooLAPPacket} to LAp ProSoft Server.
+	 * Method to start sending an {@link CooLAPPacket} to LAP ProSoft Server.
 	 * @param command = the command name to send
-	 * @param out = the {@link ByteArrayOutputStream} to send on
-	 * @param leo = the {@link CooLittleEndianOutputStream} with data
+	 * @param packet = the {@link CooLAPPacket} to send
 	 * @throws IOException when sending went wrong
 	 */
-	protected void sendToServer(String command, ByteArrayOutputStream out,
-			CooLittleEndianOutputStream leo) throws IOException
+	protected void sendToServer(String command, CooLAPPacket packet) throws IOException
 	{
-		if(Objects.nonNull(out) && Objects.nonNull(leo))
+		if(Objects.nonNull(packet) && packet.hasHeader())
 		{
 			CooLog.debug("Sending <" + command + "> to LAP-Software");
 			
-			leo.flush();
-			leo.close();
-			
-			byte[] b = out.toByteArray();
+			byte[] b = packet.toByteArray();
 			OutputStream oout = socket.getOutputStream();
 			
 			ByteArrayOutputStream collector = new ByteArrayOutputStream();
@@ -493,8 +378,8 @@ public class CooLAPClient extends CooTcpIpClient
 			oout.flush();
 			
 			// Debug the send byte array
-			CooLog.debug("Client -> LAP-Software: " + 
-				Arrays.toString(collector.toByteArray()));
+			CooLog.debug("LAP-Software -> Client: " + 
+				packet.toString());
 		}
 	}
 }

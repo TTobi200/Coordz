@@ -6,7 +6,7 @@
  */
 package de.coordz.lap;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 import javafx.collections.FXCollections;
@@ -15,6 +15,13 @@ public class CooLAPPacket
 {
 	/** {@link Map} with all packet keys to values */
 	private Map<String, Object> values;
+	
+	/** {@link CooLittleEndianOutputStream} to collect data */
+	private CooLittleEndianOutputStream leo;
+	/** {@link ByteArrayOutputStream} to transform endian to byte array */
+	private ByteArrayOutputStream out;
+	/** Flag if packet header has been initialized */
+	private Boolean headerInitialized;
 	
 	public CooLAPPacket()
 	{
@@ -119,6 +126,7 @@ public class CooLAPPacket
 		values.put("Destination", destination);
 		values.put("Message_ID", msgID);
 		
+		headerInitialized = Boolean.TRUE;
 		return msgLength;
 	}
 
@@ -317,6 +325,121 @@ public class CooLAPPacket
 	}
 	
 	/**
+	 * Method to initialize the {@link CooLAPPacket} header.
+	 * @param source = the source id 
+	 * @param destination = the destination id
+	 * @param messageId = the message id
+	 * @throws IOException when initializing went wrong
+	 */
+	public void initHeader(short source, short destination,
+		short messageId) throws IOException
+	{
+		// We have a new header - open up empty stream
+		leo = new CooLittleEndianOutputStream(out = new ByteArrayOutputStream());
+		
+		// 2. Source ID of sender UINT2
+		leo.writeShort(source);
+		// 3. Destination ID of receiver UINT2
+		leo.writeShort(destination);
+		// 4. Message_ID ID of message UINT2
+		leo.writeShort(messageId);		
+		
+		values.put("Source", source);
+		values.put("Destination", destination);
+		values.put("Message_ID", messageId);
+		
+		headerInitialized = Boolean.TRUE;
+	}
+
+	/**
+	 * Method to write an {@link String} to this {@link CooLAPPacket}.
+	 * @param string = the {@link String} to write 
+	 * @throws IOException when writing went wrong
+	 */
+	public void writeString(String string) throws IOException
+	{
+		writeString(null, string);
+	}
+	
+	/**
+	 * Method to write an {@link String} to this {@link CooLAPPacket}.
+	 * @param key = the key for this {@link CooLAPPacket} value
+	 * @param string = the {@link String} to write 
+	 * @throws IOException when writing went wrong
+	 */
+	public void writeString(String key, String string) throws IOException
+	{
+		// Add the key an value to packet data
+		putValue(key, string);
+		
+		for(char c : string.toCharArray())
+		{
+			leo.writeChar(c);
+		}
+	}
+	
+	/**
+	 * Method to write an {@link Integer} to this {@link CooLAPPacket}.
+	 * @param integer = the {@link Integer} to write 
+	 * @throws IOException when writing went wrong
+	 */
+	public void writeInt(Integer integer) throws IOException
+	{
+		writeInt(null, integer);
+	}
+	
+	/**
+	 * Method to write an {@link Integer} to this {@link CooLAPPacket}.
+	 * @param key = the key for this {@link CooLAPPacket} value 
+	 * @param integer = the {@link Integer} to write 
+	 * @throws IOException when writing went wrong
+	 */
+	public void writeInt(String key, Integer integer) throws IOException
+	{
+		// Add the key an value to packet data
+		putValue(key, integer);
+		
+		leo.writeInt(integer);
+	}
+
+	/**
+	 * Method to write an {@link Short} to this {@link CooLAPPacket}.
+	 * @param shortValue = the {@link Short} to write 
+	 * @throws IOException when writing went wrong
+	 */
+	public void writeShort(Short shortValue) throws IOException
+	{
+		writeShort(null, shortValue);
+	}
+	
+	/**
+	 * Method to write an {@link Short} to this {@link CooLAPPacket}.
+	 * @param key = the key for this {@link CooLAPPacket} value 
+	 * @param shortValue = the {@link Short} to write 
+	 * @throws IOException when writing went wrong
+	 */
+	public void writeShort(String key, Short shortValue) throws IOException
+	{
+		// Add the key an value to packet data
+		putValue(key, shortValue);
+		
+		leo.writeShort(shortValue);
+	}
+	
+	/**
+	 * Method to put {@link Object} to this {@link CooLAPPacket}.
+	 * @param key = the key for the {@link Object}
+	 * @param value = the {@link Object} to put
+	 */
+	private void putValue(String key, Object value)
+	{
+		if(Objects.nonNull(key))
+		{
+			values.put(key, value);
+		}
+	}
+
+	/**
 	 * Method to get the {@link Object} from this {@link CooLAPPacket}.
 	 * @param key = the key to get {@link Object} from
 	 * @return the {@link Object} or null
@@ -334,6 +457,32 @@ public class CooLAPPacket
 	public boolean containsValue(String key)
 	{
 		return values.containsKey(key);
+	}
+	
+	/**
+	 * Method to check if this {@link CooLAPPacket} has his
+	 * header data initialized before.
+	 * @return flag if {@link #headerInitialized}
+	 */
+	public boolean hasHeader()
+	{
+		return headerInitialized;
+	}
+	
+	/**
+	 * Method to convert this {@link CooLAPPacket} to an
+	 * simple byte array with packet data.
+	 * @return this {@link CooLAPPacket} as byte array
+	 * @throws IOException when converting went wrong
+	 */
+	public byte[] toByteArray() throws IOException
+	{
+		// Flush the title endian stream 
+		leo.flush();
+		leo.close();
+		
+		// And return the byte stream
+		return out.toByteArray();
 	}
 	
 	@Override
