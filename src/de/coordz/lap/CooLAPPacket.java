@@ -130,7 +130,7 @@ public class CooLAPPacket
 		for(int proj = 1; proj <= projCount; proj++)
 		{
 			// Name of projector
-			String projName = readString(in, 32);
+			String projName = in.readString(32);
 			// Address of projector
 			short  projAdress = in.readShort();
 			// Status of the calibration of projector
@@ -267,15 +267,6 @@ public class CooLAPPacket
 		return values.containsKey(key);
 	}
 	
-	public static String readString(CooLittleEndianInputStream in,
-		int data) throws IOException
-	{
-		// TODO $TO: Move this method to CooLittleEndianInputStream
-		byte[] bytes = new byte[data];
-		in.read(bytes);
-		return new String(bytes);
-	}
-
 	@Override
 	public String toString()
 	{

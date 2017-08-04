@@ -314,6 +314,19 @@ public class CooLittleEndianInputStream extends FilterInputStream
 	{
 		return Float.intBitsToFloat(this.readInt());
 	}
+	
+	/**
+	 * Method to read specified string length from this stream.
+	 * @param length = the length of the string
+	 * @return the read {@link String}
+	 * @throws IOException if an I/O error occurs.
+	 */
+	public final String readString(int length) throws IOException
+	{
+		byte[] bytes = new byte[length];
+		in.read(bytes);
+		return new String(bytes);
+	}
 
 	/**
 	 * Skip exactly <code>n</code> bytes of input in the underlying
