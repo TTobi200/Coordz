@@ -10,8 +10,25 @@ import java.io.*;
 import java.net.UnknownHostException;
 import java.util.Objects;
 
+import de.coordz.lap.stream.*;
 import de.util.log.CooLog;
 
+/**
+ * Class that extends a {@link CooTcpIpClient} to provide
+ * following methods use to communicate with LAP Pro Soft Server:
+ * <li> {@link #startAutoCalibration(File)}
+ * {@link #switchCalibrationMode(Integer, File)}
+ * {@link #switchCalibrationAcknowledge(short)}
+ * {@link #startProjection(File)}
+ * {@link #startAndAdjustProjection(File)}
+ * {@link #stopProjection()}
+ * {@link #previousContour()}
+ * {@link #nextContour()}
+ * {@link #getShiftRotationInfo()}
+ * 
+ * @author tobias.ohm
+ * @version 1.0
+ */
 public class CooLAPClient extends CooTcpIpClient
 {
 	/** Default ip from LAP Software (localhost) */
@@ -73,16 +90,34 @@ public class CooLAPClient extends CooTcpIpClient
 	/** 4 Switch Calibration Position check of target hole */
 	public static final int POSITION_CHECK_OF_TARGET_HOLE_MODE = 4;
 
+	/**
+	 * Constructor to create an {@link CooLAPClient}.
+	 * @throws UnknownHostException when peer is unknown
+	 * @throws IOException when connection failed
+	 */
 	public CooLAPClient() throws UnknownHostException, IOException
 	{
 		this(DEF_LAP_SOFTWARE_IP);
 	}
 
+	/**
+	 * Constructor to create an {@link CooLAPClient}.
+	 * @param srvIp = the server address
+	 * @throws UnknownHostException when peer is unknown
+	 * @throws IOException when connection failed
+	 */
 	public CooLAPClient(String srvIp) throws UnknownHostException, IOException
 	{
 		this(srvIp, LAP_SOFTWARE_PORT);
 	}
 
+	/**
+	 * Constructor to create an {@link CooLAPClient}.
+	 * @param srvIp = the server address
+	 * @param srvPort = the server port
+	 * @throws UnknownHostException when peer is unknown
+	 * @throws IOException when connection failed
+	 */
 	public CooLAPClient(String srvIp, int srvPort) throws UnknownHostException,
 		IOException
 	{
@@ -92,14 +127,14 @@ public class CooLAPClient extends CooTcpIpClient
 	/**
 	 * Method to send {@link #AUTOMATIC_CALIBRATION} to LAP ProSoft Server.
 	 * @param calibrationFile = the calibration file
-	 * @return the received {@link CooLAPPacket} from server
+	 * @return the received {@link CooLAPPacketImpl} from server
 	 * @throws IOException when something went wrong
 	 */
-	public CooLAPPacket startAutoCalibration(File calibrationFile)
+	public CooLAPPacketImpl startAutoCalibration(File calibrationFile)
 			throws IOException
 	{
 		// Define a packet for receiving
-		CooLAPPacket packet = new CooLAPPacket();
+		CooLAPPacketImpl packet = new CooLAPPacketImpl();
 
 		// Initializes the header values
 		packet.initHeader(CLIENT, LAP, AUTOMATIC_CALIBRATION);
@@ -117,14 +152,14 @@ public class CooLAPClient extends CooTcpIpClient
 	 * Method to send {@link #SWITCH_CALIBRATION} to LAP ProSoft Server.
 	 * @param mode = the calibration mode
 	 * @param calibrationFile = the calibration file
-	 * @return the received {@link CooLAPPacket} from server
+	 * @return the received {@link CooLAPPacketImpl} from server
 	 * @throws IOException when something went wrong
 	 */
-	public CooLAPPacket switchCalibrationMode(Integer mode, File calibrationFile)
+	public CooLAPPacketImpl switchCalibrationMode(Integer mode, File calibrationFile)
 		throws IOException
 	{
 		// Define a packet for receiving
-		CooLAPPacket packet = new CooLAPPacket();
+		CooLAPPacketImpl packet = new CooLAPPacketImpl();
 		
 		// Initializes the header values
 		packet.initHeader(CLIENT, LAP, SWITCH_CALIBRATION);
@@ -147,14 +182,14 @@ public class CooLAPClient extends CooTcpIpClient
 	/**
 	 * Method to send {@link #SWITCH_CALIBRATION_ACKNOWLEDGE} to LAP ProSoft Server.
 	 * @param state = the calibration state
-	 * @return the received {@link CooLAPPacket} from server
+	 * @return the received {@link CooLAPPacketImpl} from server
 	 * @throws IOException when something went wrong
 	 */
-	public CooLAPPacket switchCalibrationAcknowledge(short state)
+	public CooLAPPacketImpl switchCalibrationAcknowledge(short state)
 		throws IOException
 	{
 		// Define a packet for receiving
-		CooLAPPacket packet = new CooLAPPacket();
+		CooLAPPacketImpl packet = new CooLAPPacketImpl();
 		
 		// Initializes the header values
 		packet.initHeader(CLIENT, LAP, SWITCH_CALIBRATION_ACKNOWLEDGE);
@@ -173,10 +208,10 @@ public class CooLAPClient extends CooTcpIpClient
 	/**
 	 * Manual Calibration not supported from LAP Server.
 	 * @param file = the calibration file
-	 * @return the received {@link CooLAPPacket} from server
+	 * @return the received {@link CooLAPPacketImpl} from server
 	 * @throws IOException when something went wrong
 	 */
-	public CooLAPPacket startManualCalibration(File file) 
+	public CooLAPPacketImpl startManualCalibration(File file) 
 			throws IOException
 	{
 		throw new UnsupportedOperationException("The manual calibration is "
@@ -186,14 +221,14 @@ public class CooLAPClient extends CooTcpIpClient
 	/**
 	 * Method to send {@link #START_PROJECTION} to LAP ProSoft Server.
 	 * @param projectionFile = the projection file to display
-	 * @return the received {@link CooLAPPacket} from server
+	 * @return the received {@link CooLAPPacketImpl} from server
 	 * @throws IOException when something went wrong
 	 */
-	public CooLAPPacket startProjection(File projectionFile) 
+	public CooLAPPacketImpl startProjection(File projectionFile) 
 			throws IOException
 	{
 		// Define a packet for receiving
-		CooLAPPacket packet = new CooLAPPacket();
+		CooLAPPacketImpl packet = new CooLAPPacketImpl();
 
 		// Initializes the header values
 		packet.initHeader(CLIENT, LAP, START_PROJECTION);
@@ -210,14 +245,14 @@ public class CooLAPClient extends CooTcpIpClient
 	/**
 	 * Method to send {@link #START_AND_ADJUST_PROJECTION} to LAP ProSoft Server.
 	 * @param projectionFile = the projection file to display
-	 * @return the received {@link CooLAPPacket} from server
+	 * @return the received {@link CooLAPPacketImpl} from server
 	 * @throws IOException when something went wrong
 	 */
-	public CooLAPPacket startAndAdjustProjection(File projectionFile) 
+	public CooLAPPacketImpl startAndAdjustProjection(File projectionFile) 
 			throws IOException
 	{
 		// Define a packet for receiving
-		CooLAPPacket packet = new CooLAPPacket();
+		CooLAPPacketImpl packet = new CooLAPPacketImpl();
 
 		// Initializes the header values
 		packet.initHeader(CLIENT, LAP, START_AND_ADJUST_PROJECTION);
@@ -248,13 +283,13 @@ public class CooLAPClient extends CooTcpIpClient
 
 	/**
 	 * Method to send {@link #STOP_PROJECTION} to LAP ProSoft Server.
-	 * @return the received {@link CooLAPPacket} from server
+	 * @return the received {@link CooLAPPacketImpl} from server
 	 * @throws IOException when something went wrong
 	 */
-	public CooLAPPacket stopProjection() throws IOException
+	public CooLAPPacketImpl stopProjection() throws IOException
 	{
 		// Define a packet for receiving
-		CooLAPPacket packet = new CooLAPPacket();
+		CooLAPPacketImpl packet = new CooLAPPacketImpl();
 
 		// Initializes the header values
 		packet.initHeader(CLIENT, LAP, STOP_PROJECTION);
@@ -267,13 +302,13 @@ public class CooLAPClient extends CooTcpIpClient
 
 	/**
 	 * Method to send {@link #SHOW_PREVIOUS_CONTOUR} to LAP ProSoft Server.
-	 * @return the received {@link CooLAPPacket} from server
+	 * @return the received {@link CooLAPPacketImpl} from server
 	 * @throws IOException when something went wrong
 	 */
-	public CooLAPPacket previousContour() throws IOException
+	public CooLAPPacketImpl previousContour() throws IOException
 	{
 		// Define a packet for receiving
-		CooLAPPacket packet = new CooLAPPacket();
+		CooLAPPacketImpl packet = new CooLAPPacketImpl();
 
 		// Initializes the header values
 		packet.initHeader(CLIENT, LAP, SHOW_PREVIOUS_CONTOUR);
@@ -286,13 +321,13 @@ public class CooLAPClient extends CooTcpIpClient
 
 	/**
 	 * Method to send {@link #SHOW_NEXT_CONTOUR} to LAP ProSoft Server.
-	 * @return the received {@link CooLAPPacket} from server
+	 * @return the received {@link CooLAPPacketImpl} from server
 	 * @throws IOException when something went wrong
 	 */
-	public CooLAPPacket nextContour() throws IOException
+	public CooLAPPacketImpl nextContour() throws IOException
 	{
 		// Define a packet for receiving
-		CooLAPPacket packet = new CooLAPPacket();
+		CooLAPPacketImpl packet = new CooLAPPacketImpl();
 
 		// Initializes the header values
 		packet.initHeader(CLIENT, LAP, SHOW_NEXT_CONTOUR);
@@ -305,13 +340,13 @@ public class CooLAPClient extends CooTcpIpClient
 	
 	/**
 	 * Method to send {@link #GET_SHIFT_ROTATION_INFO} to LAP ProSoft Server.
-	 * @return the received {@link CooLAPPacket} from server
+	 * @return the received {@link CooLAPPacketImpl} from server
 	 * @throws IOException when something went wrong
 	 */
-	public CooLAPPacket getShiftRotationInfo() throws IOException
+	public CooLAPPacketImpl getShiftRotationInfo() throws IOException
 	{
 		// Define a packet for receiving
-		CooLAPPacket packet = new CooLAPPacket();
+		CooLAPPacketImpl packet = new CooLAPPacketImpl();
 
 		// Initializes the header values
 		packet.initHeader(CLIENT, LAP, GET_SHIFT_ROTATION_INFO);
@@ -323,14 +358,14 @@ public class CooLAPClient extends CooTcpIpClient
 	}
 	
 	/**
-	 * Method to start receiving an {@link CooLAPPacket} from the LAP ProSoft Server.
-	 * @return the received {@link CooLAPPacket} from server
+	 * Method to start receiving an {@link CooLAPPacketImpl} from the LAP ProSoft Server.
+	 * @return the received {@link CooLAPPacketImpl} from server
 	 * @throws IOException when receiving went wrong
 	 */
-	private CooLAPPacket receiveFromServer() throws IOException
+	private CooLAPPacketImpl receiveFromServer() throws IOException
 	{
 		// Define a packet for receiving
-		CooLAPPacket packet = new CooLAPPacket();
+		CooLAPPacketImpl packet = new CooLAPPacketImpl();
 
 		// Read data from little endian input stream
 		CooLittleEndianInputStream in = new 
@@ -350,12 +385,12 @@ public class CooLAPClient extends CooTcpIpClient
 	}
 	
 	/**
-	 * Method to start sending an {@link CooLAPPacket} to LAP ProSoft Server.
+	 * Method to start sending an {@link CooLAPPacketImpl} to LAP ProSoft Server.
 	 * @param command = the command name to send
-	 * @param packet = the {@link CooLAPPacket} to send
+	 * @param packet = the {@link CooLAPPacketImpl} to send
 	 * @throws IOException when sending went wrong
 	 */
-	protected void sendToServer(String command, CooLAPPacket packet) throws IOException
+	protected void sendToServer(String command, CooLAPPacketImpl packet) throws IOException
 	{
 		if(Objects.nonNull(packet) && packet.hasHeader())
 		{

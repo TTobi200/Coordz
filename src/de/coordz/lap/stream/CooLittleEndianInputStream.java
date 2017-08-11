@@ -1,4 +1,4 @@
-package de.coordz.lap;
+package de.coordz.lap.stream;
 
 import java.io.*;
 

@@ -6,35 +6,63 @@
  */
 package de.coordz.lap;
 
-import java.io.*;
-
 public class TestLAPClient
 {
 	public static void main(String[] args)
 	{
-		try
+		try(CooLAPClient client = new CooLAPClient("10.221.46.207"))
 		{
-			CooLAPClient client = new CooLAPClient(
-				"127.0.0.1");
-			
 			// FORTEST $TO: Start an automatic calibration
-			client.startAutoCalibration(new File(
-				"doc/LAP Software/Calibration.cal"));
+//			CooLAPPacketImpl packet = client.startAutoCalibration(
+//				new File("C:\\Users\\User\\Desktop\\Lasertest"
+//				+ "\\01_Einmessungen\\01_Kalibrierdateien\\CheckPlate.cal"));
+			
+			// FORTEST $TO: Switch an calibration mode
+//			CooLAPPacketImpl packet = client.switchCalibrationMode(CooLAPClient.AUTOMATIC_CALIBRATION_MODE,
+//				new File("C:\\Users\\User\\Desktop\\Lasertest"
+//				+ "\\01_Einmessungen\\01_Kalibrierdateien\\CheckPlate.cal"));
 			
 			// FORTEST $TO: Start an projection
-//			client.startProjection(new File(
-//				"doc/LAP Software/LaserData.ply"));
+//			CooLAPPacketImpl packet = client.startProjection(
+//				new File("C:\\Users\\User\\Desktop\\Lasertest"
+//				+ "\\01_Einmessungen\\02_Messmatrix\\LaserData.ply"));
 			
-			// FORTEST $TO: Show next contour
-//			client.nextContour();
+			// FORTEST $TO: Start an adjusted projection
+//			CooLAPPacketImpl packet = client.startAndAdjustProjection(
+//				new File("C:\\Users\\User\\Desktop\\Lasertest"
+//				+ "\\01_Einmessungen\\02_Messmatrix\\LaserData.ply"));
+			
+			// FORTEST $TO: Stop an projection
+//			CooLAPPacketImpl packet = client.stopProjection();
 			
 			// FORTEST $TO: Show previous contour
-//			client.previousContour();
+//			CooLAPPacketImpl packet = client.previousContour();
+			
+//			System.out.println(packet.getResult());
+			
+//			CooLAPPacketImpl packet = client.getShiftRotationInfo();
+//			System.out.println(packet.getShiftRotationInfo());
+			
+//			for(CooLAPProjector p : packet.getProjectors())
+//			{
+//				System.out.println(p);
+//				
+//				for(CooLAPTarget t : p.getTargets())
+//				{
+//					System.out.println(t.toString());
+//				}
+//			}
+			
+			// FORTEST $TO Stress test on LAP server
+//			for(int i = 0; i < 200; i++)
+//			{
+//				// FORTEST $TO: Show previous contour
+//				CooLAPPacketImpl packet = client.previousContour();
+//			}
 		}
-		catch(IOException e)
+		catch(Exception e1)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
 		}
 	}
 }

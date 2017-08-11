@@ -9,9 +9,20 @@ package de.coordz.lap;
 import java.io.*;
 import java.util.*;
 
+import de.coordz.lap.stream.*;
 import javafx.collections.FXCollections;
 
-public class CooLAPPacket
+/**
+ * Abstract class that defines an LAP packet send and
+ * received from the LAP ProSoft TCP IP interface.
+ * 
+ * All send/read data where stored in the {@link #values} map
+ * with the original key as described in the interface documentation.
+ * 
+ * @author tobias.ohm
+ * @version 1.0
+ */
+public abstract class CooLAPPacket
 {
 	/** {@link Map} with all packet keys to values */
 	private Map<String, Object> values;
@@ -114,17 +125,13 @@ public class CooLAPPacket
 	{
 		// Message length, whole length of the message incl. header
 		short msgLength = in.readShort();
-		// ID of sender
-		short source = in.readShort();
-		// ID of receiver
-		short destination = in.readShort();
-		// ID of message
-		short msgID = in.readShort();
-		
 		putValue("Message_Length", msgLength);
-		putValue("Source", source);
-		putValue("Destination", destination);
-		putValue("Message_ID", msgID);
+		// ID of sender
+		putValue("Source", in.readShort());
+		// ID of receiver
+		putValue("Destination", in.readShort());
+		// ID of message
+		putValue("Message_ID", in.readShort());
 		
 		headerInitialized = Boolean.TRUE;
 		return msgLength;
@@ -144,53 +151,42 @@ public class CooLAPPacket
 		// 2: file not found
 		// 3: file not readable
 		// 4: manual calibration required
-		short result = in.readShort();
+		putValue("Result", in.readShort());
 		// Number of calibrated projectors
 		short projCount = in.readShort();
+		putValue("ProjCount", projCount);
 		
 		// Loop through all projectors
 		for(int proj = 1; proj <= projCount; proj++)
 		{
 			// Name of projector
-			String projName = in.readString(32);
+			putValue("ProjName_" + proj, in.readString(32));
 			// Address of projector
-			short  projAdress = in.readShort();
+			putValue("ProjAddr_" + proj, in.readShort());
 			// Status of the calibration of projector
 			// 0: successful
 			// 1: calibration result exceeds limit
 			// 2: at least one target not found
-			short projResult = in.readShort();
+			putValue("ProjRes_" + proj, in.readShort());
 			// Root mean square of first projector [1/100mm]
-			float projRMS = in.readFloat();
+			putValue("ProjRMS_" + proj, in.readFloat());
 			// Number of targets for first projector
 			short tgtCount = in.readShort();
+			putValue("TgtCount_" + proj, tgtCount);
 			
 			// Loop through all targets of projector
 			for(int tgt = 1; tgt <= tgtCount; tgt++)
 			{
 				// Number of target of projector
-				short tgtNumber = in.readShort();
+				putValue("TgtNumber_" + proj + "_" + tgt, in.readShort());
 				// Status of the target
 				// 0: Target found
 				// 1: Target not found
-				short tgtResult = in.readShort();
+				putValue("TgtRes_" + proj + "_" + tgt, in.readShort());
 				// Deviation of the first target
-				float tgtDeviation = in.readFloat(); 
-				
-				putValue("TgtNumber_" + proj + "_" + tgt, tgtNumber);
-				putValue("TgtRes_" + proj + "_" + tgt, tgtResult);
-				putValue("TgtDev_" + proj + "_" + tgt, tgtDeviation);
+				putValue("TgtDev_" + proj + "_" + tgt, in.readFloat());
 			}
-
-			putValue("ProjName_" + proj, projName);
-			putValue("ProjAddr_" + proj, projAdress);
-			putValue("ProjRes_" + proj, projResult);
-			putValue("ProjRMS_" + proj, projRMS);
-			putValue("TgtCount_" + proj, tgtCount);
 		}
-			
-		putValue("Result", result);
-		putValue("ProjCount", projCount);
 	}
 	
 	/**
@@ -288,21 +284,15 @@ public class CooLAPPacket
 		throws IOException
 	{
 		// Shift vector x-Coo. [1/100 mm]
-		float shiftX = in.readFloat();
+		putValue("Shift_x", in.readFloat());
 		// Shift vector y-Coo. [1/100 mm]
-		float shiftY = in.readFloat();
+		putValue("Shift_y", in.readFloat());
 		// Rotation angle (clockwise) [1/100 deg]
-		float rotAngle = in.readFloat();
+		putValue("RotAngle", in.readFloat());
 		// Rotation centre x-Coo. [1/100 mm] 
-		float rotCentreX = in.readFloat();
+		putValue("RotCentre_x", in.readFloat());
 		// Rotation centre y-Coo. [1/100 mm]
-		float rotCentreY = in.readFloat();
-		
-		putValue("Shift_x", shiftX);
-		putValue("Shift_y", shiftY);
-		putValue("RotAngle", rotAngle);
-		putValue("RotCentre_x", rotCentreX);
-		putValue("RotCentre_y", rotCentreY);
+		putValue("RotCentre_y", in.readFloat());
 	}
 	
 	/**
@@ -319,9 +309,7 @@ public class CooLAPPacket
 		// 2: no open file
 		// 3: no valid calibration
 		// 4: projection out of range
-		short result = in.readShort();
-
-		putValue("Result", result);
+		putValue("Result", in.readShort());
 	}
 	
 	/**
@@ -339,13 +327,12 @@ public class CooLAPPacket
 		
 		// 2. Source ID of sender UINT2
 		leo.writeShort(source);
+		putValue("Source", source);
 		// 3. Destination ID of receiver UINT2
 		leo.writeShort(destination);
+		putValue("Destination", destination);
 		// 4. Message_ID ID of message UINT2
 		leo.writeShort(messageId);		
-		
-		putValue("Source", source);
-		putValue("Destination", destination);
 		putValue("Message_ID", messageId);
 		
 		headerInitialized = Boolean.TRUE;

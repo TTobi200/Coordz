@@ -12,7 +12,14 @@ import java.net.*;
 import de.util.log.CooLog;
 import javafx.beans.property.*;
 
-public class CooTcpIpClient
+/**
+ * Class that creates an tcp ip client. Implements {@link AutoCloseable}
+ * to automatically {@link #disconnect()} from peer.
+ * 
+ * @author tobias.ohm
+ * @version 1.0
+ */
+public class CooTcpIpClient implements AutoCloseable
 {
 	/** The connected {@link Socket} */
 	protected Socket socket;
@@ -23,8 +30,15 @@ public class CooTcpIpClient
 	/** Boolean Flag if client is connected */
 	protected BooleanProperty connected;
 
-	public CooTcpIpClient(String srvIp, int srvPort) throws UnknownHostException,
-		IOException
+	/**
+	 * Constructor to create an {@link CooTcpIpClient}.
+	 * @param srvIp = the server address
+	 * @param srvPort = the server port
+	 * @throws UnknownHostException when peer is unknown
+	 * @throws IOException when connection failed
+	 */
+	public CooTcpIpClient(String srvIp, int srvPort) 
+		throws UnknownHostException, IOException
 	{
 		// Try to establish connection to server peer
 		connected = new SimpleBooleanProperty(Boolean.FALSE);
@@ -56,6 +70,13 @@ public class CooTcpIpClient
 			connected.setValue(Boolean.FALSE);
 		}
 		return Boolean.TRUE;
+	}
+	
+	@Override
+	public void close() throws Exception
+	{
+		// Disconnect from peer
+		disconnect();
 	}
 	
 	/**

@@ -1,6 +1,6 @@
-package de.coordz.lap;
+package de.coordz.lap.stream;
 
-import static de.coordz.lap.CooByteSwapper.toLE;
+import static de.coordz.lap.stream.CooByteSwapper.toLE;
 
 import java.io.*;
 
