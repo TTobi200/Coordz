@@ -175,16 +175,6 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	}
 	
 	@FXML
-	protected void startManualCalibration() throws IOException
-	{
-		if(Objects.nonNull(client) && client.isConnected())
-		{
-			// TODO commit the file
-			client.startManualCalibration(new File(""));
-		}
-	}
-	
-	@FXML
 	protected void startAutoCalibration() throws IOException
 	{
 		if(Objects.nonNull(client) && client.isConnected())
@@ -194,43 +184,41 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 //			CooLAPPacket packet = client.startAutoCalibration(
 //				new File("doc/LAP Software/Calibration.cal"));
 			// FORTEST Use the file on laser test pc
-			CooLAPPacket packet = client.startAutoCalibration(
-				new File("C:\\Users\\User\\Desktop\\Lasertest"
-				+ "\\01_Einmessungen\\01_Kalibrierdateien\\CheckPlate.cal"));
+			File targetFile = new File("C:\\Users\\User\\Desktop\\Lasertest"
+				+ "\\01_Einmessungen\\01_Kalibrierdateien\\CheckPlate.cal");
+			CooLAPPacketImpl packet = client.startAutoCalibration(targetFile);
 			
-			short result = packet.containsValue("Result")
-				? (short)packet.getValue("Result") : 1;
+			// Reset message and file property
 			String message = "";
+			fileStringProperty.set("-");
 			
-			switch(result)
+			switch(packet.getResult())
 			{
-				case 0:
-					// 0: successful
+				case SUCCESSFUL:
 					message = "Die Automatische Kalibrierung"
 						+ " wurde erfolgreich durchgeführt";
+					fileStringProperty.set(targetFile.getName());
 					break;
 				default:
-				case 1:
-					// 1: faulty
+				case UNKNOWN:
+				case FAULTY:
 					message = "Die Automatische Kalibrierung konnte"
 						+ " nich durchgeführt werden";
-				case 2:
-					// 2: file not found
+					break;
+				case FILE_NOT_FOUND:
 					message = "Die Kalibrierungsdatei konnte nicht "
 						+ "gefunden werden";
 					break;
-				case 3:
-					// 3: file not readable
+				case FILE_NOT_READABLE:
 					message = "Die Kalibrierungsdatei konnte nicht "
 						+ "gelesen werden";
 					break;
-				case 4:
-					// 4: manual calibration required
+				case MANUAL_CALIBRATION_REQUIRED:
 					message = "Eine Grundkalibrierung ist erforderlich";
 					break;
 			}
 			
-			// Show user inromation
+			// Show user information
 			showInfoDialog("Automatische Kalibrierung", message);
 		}
 	}
@@ -259,9 +247,42 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 			// Receive the result packet 
 			// TODO Generate a temp file and commit it here
 			// FORTEST $TO: Use the calibration file on test pc
-			client.switchCalibrationMode(result,
-				new File("C:\\Users\\User\\Desktop\\Lasertest"
-				+ "\\01_Einmessungen\\01_Kalibrierdateien\\CheckPlate.cal"));
+			File targetFile = new File("C:\\Users\\User\\Desktop\\Lasertest"
+					+ "\\01_Einmessungen\\01_Kalibrierdateien\\CheckPlate.cal");
+			CooLAPPacketImpl packet = client.switchCalibrationMode(result, targetFile);
+			
+			// Reset message and file property
+			String message = "";
+			fileStringProperty.set("-");
+			
+			switch(packet.getResult())
+			{
+				case SUCCESSFUL:
+					message = "Kalibriermodus wurde auf " 
+						+ calibModes.get(result) + " geändert.";
+					fileStringProperty.set(targetFile.getName());
+					break;
+				default:
+				case UNKNOWN:
+				case FAULTY:
+					message = "Der Kalibriermodus konnte "
+						+ "nicht geändert werden.";
+					break;
+				case FILE_NOT_FOUND:
+					message = "Die Kalibrierungsdatei konnte nicht "
+							+ "gefunden werden";
+					break;
+				case FILE_NOT_READABLE:
+					message = "Die Kalibrierungsdatei konnte nicht "
+							+ "gelesen werden";
+					break;
+				case MANUAL_CALIBRATION_REQUIRED:
+					message = "Eine Grundkalibrierung ist erforderlich";
+					break;
+			}
+			
+			// Show user information
+			showInfoDialog("Kalibriermodus ändern", message);
 		}
 	}
 	
@@ -272,9 +293,12 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 		{
 			// FORTEST $TO: Use the projection file on test pc
 			// TODO Generate a temp file and commit it here
-			client.startProjection(
+			CooLAPPacketImpl packet = client.startProjection(
 				new File("C:\\Users\\User\\Desktop\\Lasertest"
 				+ "\\01_Einmessungen\\02_Messmatrix\\LaserData.ply"));
+			
+			// Show user information
+			showStartProjectionInfo(packet);
 		}
 	}
 	
@@ -285,9 +309,12 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 		{
 			// FORTEST $TO: Use the projection file on test pc
 			// TODO Generate a temp file and commit it here
-			client.startAndAdjustProjection(
+			CooLAPPacketImpl packet = client.startAndAdjustProjection(
 				new File("C:\\Users\\User\\Desktop\\Lasertest"
 				+ "\\01_Einmessungen\\02_Messmatrix\\LaserData.ply"));
+			
+			// Show user information
+			showStartProjectionInfo(packet);
 		}
 	}
 	
@@ -356,6 +383,43 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 			CooCalibrationFile.save(calFile,
 				tblTargets.getItems());
 		}
+	}
+	
+	/**
+	 * Method to show start projection result info to user.
+	 * @param packet = the {@link CooLAPPacketImpl} with data
+	 */
+	private void showStartProjectionInfo(CooLAPPacketImpl packet)
+	{
+		String message = "";
+		
+		switch(packet.getResult())
+		{
+			case SUCCESSFUL:
+				message = "Die Projektion wurde "
+					+ "erfolgreich gestartet";
+				break;
+			case FILE_NOT_FOUND:
+				message = "Die Datei konnte nicht "
+					+ "gefunden werden";
+				break;
+			case FILE_NOT_READABLE:
+				message = "Die Datei konnte nicht "
+					+ "gelesen werden";
+				break;
+			case SYSTEM_NOT_CALIBRATED:
+				message = "Das System ist nich kalibriert.";
+				break;
+			default:
+			case UNKNOWN:
+			case PROJECTION_OU_OF_RANGE:
+				message = "Die Projektion is "
+					+ "außerhalb der Reichweite.";
+				break;
+		}
+		
+		// Show user information
+		showInfoDialog("Projektion starten", message);		
 	}
 	
 	private void stationChanged(CooStation station)

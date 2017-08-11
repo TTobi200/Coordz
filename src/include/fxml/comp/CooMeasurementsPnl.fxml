@@ -448,18 +448,6 @@
 														</ImageView>
 													</graphic>
 												</Button>
-												<Button disable="${!btnConn.disable}" onAction="#startManualCalibration">
-													<tooltip>
-														<Tooltip text="Manuell kalibrieren" />
-													</tooltip>
-													<graphic>
-														<ImageView pickOnBounds="true" preserveRatio="true">
-															<image>
-																<Image url="/include/icons/manu_calibration.png" />
-															</image>
-														</ImageView>
-													</graphic>
-												</Button>
 												<Button disable="${!btnConn.disable}" onAction="#startAutoCalibration">
 													<tooltip>
 														<Tooltip text="Automatisch kalibrieren" />
