@@ -151,7 +151,7 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	protected void connect()
 	{
 		client = CooDialogs.showConnectToLAPSoft(
-			getScene().getWindow());
+			btnConn.getScene().getWindow());
 		
 		if(Objects.nonNull(client))
 		{
@@ -238,7 +238,7 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 			CooLAPClient.POSITION_CHECK_OF_TARGET_HOLE_MODE);
 		
 		// Ask user to choose a calibration mode
-		Integer result = CooDialogs.showChooseDialog(getScene().getWindow(),
+		Integer result = CooDialogs.showChooseDialog(btnConn.getScene().getWindow(),
 			"Kalibriermodus ändern", "Kalibriermodus auswählen:", calibModes);
 		
 		if(Objects.nonNull(result) && Objects.nonNull(
@@ -347,7 +347,7 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	
 	private void showInfoDialog(String header, String message)
 	{
-		CooDialogs.showInfoDialog(getScene().getWindow(),
+		CooDialogs.showInfoDialog(btnConn.getScene().getWindow(),
 			header, message);		
 	}
 	
@@ -355,7 +355,7 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	protected void importCalFile()
 	{
 		// Show open calibration file dialog
-		File calFile = CooDialogs.showOpenFileDialog(getScene().getWindow(),
+		File calFile = CooDialogs.showOpenFileDialog(btnExport.getScene().getWindow(),
 			"CAL Datei importieren", new ExtensionFilter(
 				"Kalibrierdatei *.cal", "*.cal"));
 		
@@ -372,7 +372,7 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	protected void exportCalFile()
 	{
 		// Show save calibration file dialog
-		File calFile = CooDialogs.showSaveFileDialog(getScene().getWindow(),
+		File calFile = CooDialogs.showSaveFileDialog(btnExport.getScene().getWindow(),
 			"CAL Datei exportieren", new ExtensionFilter(
 				"Kalibrierdatei *.cal", "*.cal"));
 		
