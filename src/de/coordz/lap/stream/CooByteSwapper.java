@@ -25,9 +25,17 @@ import java.util.stream.IntStream;
  * little-endian and big-endian representations) of different data types.
  * Byte swapping is typically used when data is read from a stream
  * delivered by a system of different endian type as the present one.
+ * 
+ * @author tobias.ohm
+ * @version 1.0
  */
 public class CooByteSwapper
 {
+	/**
+	 * Static method to convert short to little endian byte array.
+	 * @param value = the short to convert
+	 * @return the short as little endian
+	 */
 	public static byte[] toLE(short value)
 	{
 		return new byte[] {
@@ -36,6 +44,11 @@ public class CooByteSwapper
 		};
 	}
 
+	/**
+	 * Static method to convert int to little endian byte array.
+	 * @param value = the int to convert
+	 * @return the int as little endian
+	 */
 	public static byte[] toLE(int value)
 	{
 		return new byte[] {
@@ -46,6 +59,11 @@ public class CooByteSwapper
 		};
 	}
 
+	/**
+	 * Static method to convert long to little endian byte array.
+	 * @param value = the long to convert
+	 * @return the long as little endian
+	 */
 	public static byte[] toLE(long value)
 	{
 		return new byte[] {
@@ -60,16 +78,31 @@ public class CooByteSwapper
 		};
 	}
 
+	/**
+	 * Static method to convert float to little endian byte array.
+	 * @param value = the float to convert
+	 * @return the float as little endian
+	 */
 	public static byte[] toLE(float value)
 	{
 		return toLE(Float.floatToIntBits(value));
 	}
 
+	/**
+	 * Static method to convert double to little endian byte array.
+	 * @param value = the double to convert
+	 * @return the double as little endian
+	 */
 	public static byte[] toLE(double value)
 	{
 		return toLE(Double.doubleToLongBits(value));
 	}
 
+	/**
+	 * Static method to convert char to little endian byte array.
+	 * @param value = the char to convert
+	 * @return the char as little endian
+	 */
 	public static byte[] toLE(char value)
 	{
 		return new byte[] {
@@ -77,6 +110,11 @@ public class CooByteSwapper
 		};
 	}
 
+	/**
+	 * Static method to convert {@link String} to little endian byte array.
+	 * @param value = the String to convert
+	 * @return the byte array as little endian
+	 */
 	public static byte[] toLE(String value)
 	{
 		char[] chars = value.toCharArray();
@@ -89,8 +127,7 @@ public class CooByteSwapper
 	}
 
 	/**
-	 * Byte swap a single short value.
-	 *
+	 * Static method to byte swap a single short value.
 	 * @param value Value to byte swap.
 	 * @return Byte swapped representation.
 	 */
@@ -103,8 +140,7 @@ public class CooByteSwapper
 	}
 
 	/**
-	 * Byte swap a single int value.
-	 *
+	 * Static method to byte swap a single int value.
 	 * @param value Value to byte swap.
 	 * @return Byte swapped representation.
 	 */
@@ -119,8 +155,7 @@ public class CooByteSwapper
 	}
 
 	/**
-	 * Byte swap a single long value.
-	 *
+	 * Static method to byte swap a single long value.
 	 * @param value Value to byte swap.
 	 * @return Byte swapped representation.
 	 */
@@ -140,8 +175,7 @@ public class CooByteSwapper
 	}
 
 	/**
-	 * Byte swap a single float value.
-	 *
+	 * Static method to byte swap a single float value.
 	 * @param value Value to byte swap.
 	 * @return Byte swapped representation.
 	 */
@@ -153,8 +187,7 @@ public class CooByteSwapper
 	}
 
 	/**
-	 * Byte swap a single double value.
-	 *
+	 * Static method to byte swap a single double value.
 	 * @param value Value to byte swap.
 	 * @return Byte swapped representation.
 	 */
@@ -166,9 +199,8 @@ public class CooByteSwapper
 	}
 
 	/**
-	 * Byte swap an array of shorts. The result of the swapping
-	 * is put back into the specified array.
-	 *
+	 * Static method to byte swap an array of shorts. The result 
+	 * of the swapping is put back into the specified array.
 	 * @param array Array of values to swap
 	 */
 	public static void swap(short[] array)
@@ -180,9 +212,8 @@ public class CooByteSwapper
 	}
 
 	/**
-	 * Byte swap an array of ints. The result of the swapping
-	 * is put back into the specified array.
-	 *
+	 * Static method to byte swap an array of ints. The result 
+	 * of the swapping is put back into the specified array.
 	 * @param array Array of values to swap
 	 */
 	public static void swap(int[] array)
@@ -194,9 +225,8 @@ public class CooByteSwapper
 	}
 
 	/**
-	 * Byte swap an array of longs. The result of the swapping
-	 * is put back into the specified array.
-	 *
+	 * Static method to byte swap an array of longs. The result 
+	 * of the swapping is put back into the specified array.
 	 * @param array Array of values to swap
 	 */
 	public static void swap(long[] array)
@@ -208,9 +238,8 @@ public class CooByteSwapper
 	}
 
 	/**
-	 * Byte swap an array of floats. The result of the swapping
-	 * is put back into the specified array.
-	 *
+	 * Static method to byte swap an array of floats. The result 
+	 * of the swapping is put back into the specified array.
 	 * @param array Array of values to swap
 	 */
 	public static void swap(float[] array)
@@ -222,9 +251,8 @@ public class CooByteSwapper
 	}
 
 	/**
-	 * Byte swap an array of doubles. The result of the swapping
-	 * is put back into the specified array.
-	 *
+	 * Static method to byte swap an array of doubles. The result
+	 * of the swapping is put back into the specified array.
 	 * @param array Array of values to swap
 	 */
 	public static void swap(double[] array)
@@ -233,9 +261,5 @@ public class CooByteSwapper
 		{
 			array[i] = swap(array[i]);
 		}
-	}
-
-	public static void main(String[] args)
-	{
 	}
 }
