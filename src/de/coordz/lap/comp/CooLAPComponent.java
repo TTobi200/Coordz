@@ -6,21 +6,21 @@
  */
 package de.coordz.lap.comp;
 
-import de.coordz.lap.CooLAPPacket;
+import de.coordz.lap.*;
 
 /**
  * Interface that describes a {@link CooLAPComponent} send
- * by an {@link CooLAPPacket} and read {@link #fromPacket(CooLAPPacket)}.
+ * by an {@link CooLAPPacket} and read {@link #fromPacket(CooLAPPacketImpl)}.
  * 
  * @author tobias.ohm
- * @version 1.0
+ * @version 1.1
  */
 public interface CooLAPComponent
 {
 	/**
 	 * Method to construct this {@link CooLAPComponent} from
-	 * committed {@link CooLAPPacket}.
-	 * @param packet = the {@link CooLAPPacket} to get data from
+	 * committed {@link CooLAPPacketImpl}.
+	 * @param packet = the {@link CooLAPPacketImpl} to get data from
 	 */
-	public void fromPacket(CooLAPPacket packet);
+	public void fromPacket(CooLAPPacketImpl packet);
 }

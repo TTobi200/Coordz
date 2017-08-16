@@ -17,7 +17,7 @@ import javafx.collections.*;
  * <li> {@link #getShiftRotationInfo()}
  * 
  * @author tobias.ohm
- * @version 1.0
+ * @version 1.1
  */
 public class CooLAPPacketImpl extends CooLAPPacket
 {
@@ -45,9 +45,9 @@ public class CooLAPPacketImpl extends CooLAPPacket
 		if(containsValue("Result"))
 		{
 			// Get the read message id
-			short msgID = (short)getValue("Message_ID");
+			short msgID = getShort("Message_ID");
 			// Get the read result value
-			short result = (short)getValue("Result");
+			short result = getShort("Result");
 	
 			switch(msgID)
 			{
@@ -117,7 +117,7 @@ public class CooLAPPacketImpl extends CooLAPPacket
 		if(containsValue("ProjCount"))
 		{
 			// Number of calibrated projectors
-			short projCount = (short)getValue("ProjCount");
+			short projCount = getShort("ProjCount");
 			
 			// Loop through all projectors
 			for(int proj = 1; proj <= projCount; proj++)
@@ -140,5 +140,55 @@ public class CooLAPPacketImpl extends CooLAPPacket
 		CooLAPShiftRotationInfo info = new CooLAPShiftRotationInfo();
 		info.fromPacket(this);
 		return info;
+	}
+	
+	/**
+	 * Method to get short value from this packet.
+	 * @param key = the key of short value to get
+	 * @return the short value or zero
+	 */
+	public short getShort(String key)
+	{
+		return containsValue(key) ? (short)getValue(key) : 0;
+	}
+	
+	/**
+	 * Method to get integer value from this packet.
+	 * @param key = the key of integer value to get
+	 * @return the integer value or zero
+	 */
+	public int getInteger(String key)
+	{
+		return containsValue(key) ? (int)getValue(key) : 0;
+	}
+	
+	/**
+	 * Method to get double value from this packet.
+	 * @param key = the key of double value to get
+	 * @return the double value or zero
+	 */
+	public double getDouble(String key)
+	{
+		return containsValue(key) ? (double)getValue(key) : 0d;
+	}
+	
+	/**
+	 * Method to get float value from this packet.
+	 * @param key = the key of float value to get
+	 * @return the float value or zero
+	 */
+	public float getFloat(String key)
+	{
+		return containsValue(key) ? (float)getValue(key) : 0f;
+	}
+	
+	/**
+	 * Method to get {@link String} value from this packet.
+	 * @param key = the key of {@link String} value to get
+	 * @return the {@link String} value or an empty {@link String}
+	 */
+	public String getString(String key)
+	{
+		return containsValue(key) ? String.valueOf(getValue(key)) : "";
 	}
 }

@@ -3,14 +3,14 @@
  */
 package de.coordz.lap.comp;
 
-import de.coordz.lap.CooLAPPacket;
+import de.coordz.lap.CooLAPPacketImpl;
 
 /**
  * Class that implements an {@link CooLAPComponent} for
- * {@link CooLAPPacket} shift and rotation info.
+ * {@link CooLAPPacketImpl} shift and rotation info.
  * 
  * @author tobias.ohm
- * @version 1.0
+ * @version 1.1
  */
 public class CooLAPShiftRotationInfo implements CooLAPComponent
 {
@@ -26,16 +26,13 @@ public class CooLAPShiftRotationInfo implements CooLAPComponent
 	private float rotCenterY;
 	
 	@Override
-	public void fromPacket(CooLAPPacket packet)
+	public void fromPacket(CooLAPPacketImpl packet)
 	{
-		if(packet.containsValue("Shift_x"))
-		{
-			shiftX = (float)packet.getValue("Shift_x");
-			shiftY = (float)packet.getValue("Shift_y");
-			rotAngle = (float)packet.getValue("RotAngle");
-			rotCenterX = (float)packet.getValue("RotCentre_x");
-			rotCenterY = (float)packet.getValue("RotCentre_y");
-		}
+		shiftX = packet.getFloat("Shift_x");
+		shiftY = packet.getFloat("Shift_y");
+		rotAngle = packet.getFloat("RotAngle");
+		rotCenterX = packet.getFloat("RotCentre_x");
+		rotCenterY = packet.getFloat("RotCentre_y");
 	}
 	
 	@Override

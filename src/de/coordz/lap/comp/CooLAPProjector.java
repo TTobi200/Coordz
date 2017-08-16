@@ -6,15 +6,15 @@
  */
 package de.coordz.lap.comp;
 
-import de.coordz.lap.CooLAPPacket;
+import de.coordz.lap.CooLAPPacketImpl;
 import javafx.collections.*;
 
 /**
  * Class that implements an {@link CooLAPComponent} for
- * {@link CooLAPPacket} projector data.
+ * {@link CooLAPPacketImpl} projector data.
  * 
  * @author tobias.ohm
- * @version 1.0
+ * @version 1.1
  */
 public class CooLAPProjector implements CooLAPComponent
 {
@@ -67,7 +67,7 @@ public class CooLAPProjector implements CooLAPComponent
 	}
 	
 	@Override
-	public void fromPacket(CooLAPPacket packet)
+	public void fromPacket(CooLAPPacketImpl packet)
 	{
 		// Create list with all targets
 		targets = FXCollections.observableArrayList();
@@ -75,13 +75,13 @@ public class CooLAPProjector implements CooLAPComponent
 		// First check if we have specified projector set
 		if(packet.containsValue("ProjName_" + proj))
 		{
-			name = String.valueOf(packet.getValue("ProjName_" + proj));
-			address = (short)packet.getValue("ProjAddr_" + proj);
-			result = ProjectorResult.valueOf((short)packet.getValue("ProjRes_" + proj));
-			rms = (float)packet.getValue("ProjRMS_" + proj);
+			name = packet.getString("ProjName_" + proj);
+			address = packet.getShort("ProjAddr_" + proj);
+			result = ProjectorResult.valueOf(packet.getShort("ProjRes_" + proj));
+			rms = packet.getFloat("ProjRMS_" + proj);
 			
 			// Number of targets for first projector
-			short tgtCount = (short)packet.getValue("TgtCount_" + proj);
+			short tgtCount = packet.getShort("TgtCount_" + proj);
 			
 			// Loop through all targets of projector
 			for(int tgt = 1; tgt <= tgtCount; tgt++)

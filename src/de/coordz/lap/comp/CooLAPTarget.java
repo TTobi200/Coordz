@@ -3,14 +3,14 @@
  */
 package de.coordz.lap.comp;
 
-import de.coordz.lap.CooLAPPacket;
+import de.coordz.lap.CooLAPPacketImpl;
 
 /**
  * Class that implements an {@link CooLAPComponent} for
- * {@link CooLAPPacket} target data.
+ * {@link CooLAPPacketImpl} target data.
  * 
  * @author tobias.ohm
- * @version 1.0
+ * @version 1.1
  */
 public class CooLAPTarget implements CooLAPComponent
 {
@@ -60,15 +60,11 @@ public class CooLAPTarget implements CooLAPComponent
 	}
 	
 	@Override
-	public void fromPacket(CooLAPPacket packet)
+	public void fromPacket(CooLAPPacketImpl packet)
 	{
-		// Check if packet contains target
-		if(packet.containsValue("TgtNumber_" + proj + "_" + tgt))
-		{
-			this.number = (short)packet.getValue("TgtNumber_" + proj + "_" + tgt);
-			result = TargetResult.valueOf((short)packet.getValue("TgtRes_" + proj + "_" + tgt));
-			deviation = (float)packet.getValue("TgtDev_" + proj + "_" + tgt);
-		}
+		number = packet.getShort("TgtNumber_" + proj + "_" + tgt);
+		result = TargetResult.valueOf(packet.getShort("TgtRes_" + proj + "_" + tgt));
+		deviation = packet.getFloat("TgtDev_" + proj + "_" + tgt);
 	}
 	
 	@Override
