@@ -12,7 +12,7 @@
             <zipfileset excludes="META-INF/*.SF" src="./src/include/jar/derbyclient.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="./src/include/jar/derbynet.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="./src/include/jar/derbytools.jar"/>
-            <zipfileset excludes="META-INF/*.SF" src="./src/include/jar/controlsfx-8.20.8.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="./src/include/jar/controlsfx-8.40.12.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="./src/include/jar/itextpdf-5.2.1.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="./src/include/jar/jim3dsModelImporterJFX.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="./src/include/jar/poi-scratchpad-3.13-20150929.jar"/>
