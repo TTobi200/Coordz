@@ -227,7 +227,7 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	protected void switchCalibrationMode() throws IOException
 	{
 		// Get all choices for calibration mode
-		HashMap<String, Integer> calibModes = new HashMap<>();
+		HashMap<String, Short> calibModes = new HashMap<>();
 		calibModes.put("Kalibrierung erforderlich", 
 			CooLAPClient.AUTOMATIC_CALIBRATION_MODE);
 		calibModes.put("Kalibrierung nicht erforderlich", 
@@ -238,7 +238,7 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 			CooLAPClient.POSITION_CHECK_OF_TARGET_HOLE_MODE);
 		
 		// Ask user to choose a calibration mode
-		Integer result = CooDialogs.showChooseDialog(btnConn.getScene().getWindow(),
+		Short result = CooDialogs.showChooseDialog(btnConn.getScene().getWindow(),
 			"Kalibriermodus ändern", "Kalibriermodus auswählen:", calibModes);
 		
 		if(Objects.nonNull(result) && Objects.nonNull(
@@ -255,11 +255,15 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 			String message = "";
 			fileStringProperty.set("-");
 			
+			// Get the calibration mode
+			String calibMode = calibModes.keySet().stream().filter(
+				k -> calibModes.get(k).equals(result)).findFirst().get();
+			
 			switch(packet.getResult())
 			{
 				case SUCCESSFUL:
 					message = "Kalibriermodus wurde auf " 
-						+ calibModes.get(result) + " geändert.";
+						+ calibMode + " geändert.";
 					fileStringProperty.set(targetFile.getName());
 					break;
 				default:

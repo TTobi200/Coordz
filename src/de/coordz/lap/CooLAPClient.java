@@ -82,13 +82,13 @@ public class CooLAPClient extends CooTcpIpClient
 	public static final short RESULT_OF_GET_SHIFT_ROTATION_INFO = 0x0140;
 	
 	/** 1 Switch Calibration Automatic calibration */
-	public static final int AUTOMATIC_CALIBRATION_MODE = 1;
+	public static final short AUTOMATIC_CALIBRATION_MODE = 1;
 	/** 2 Switch Calibration No calibration */
-	public static final int NO_CALIBRATION_MODE = 2;
+	public static final short NO_CALIBRATION_MODE = 2;
 	/** 3 Switch Calibration Position check of target film */
-	public static final int POSITION_CHECK_OF_TARGET_FILM_MODE = 3;
+	public static final short POSITION_CHECK_OF_TARGET_FILM_MODE = 3;
 	/** 4 Switch Calibration Position check of target hole */
-	public static final int POSITION_CHECK_OF_TARGET_HOLE_MODE = 4;
+	public static final short POSITION_CHECK_OF_TARGET_HOLE_MODE = 4;
 
 	/**
 	 * Constructor to create an {@link CooLAPClient}.
@@ -155,7 +155,7 @@ public class CooLAPClient extends CooTcpIpClient
 	 * @return the received {@link CooLAPPacketImpl} from server
 	 * @throws IOException when something went wrong
 	 */
-	public CooLAPPacketImpl switchCalibrationMode(Integer mode, File calibrationFile)
+	public CooLAPPacketImpl switchCalibrationMode(short mode, File calibrationFile)
 		throws IOException
 	{
 		// Define a packet for receiving
@@ -169,7 +169,7 @@ public class CooLAPClient extends CooTcpIpClient
 		// No calibration Position = 2
 		// check of target film = 3
 		// Position check of target hole = 4
-		packet.writeInt("Mode", mode);
+		packet.writeShort("Mode", mode);
 		// 3 CalibPath Path and name of calibration file Char[n]
 		packet.writeString("CalibPath", calibrationFile.getAbsolutePath());
 			
