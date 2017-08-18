@@ -29,7 +29,7 @@ public class CooLAPPacketImpl extends CooLAPPacket
 		SUCCESSFUL, FAULTY,
 		FILE_NOT_FOUND, FILE_NOT_READABLE, NO_OPEN_FILE,
 		MANUAL_CALIBRATION_REQUIRED, SYSTEM_NOT_CALIBRATED,
-		PROJECTION_OU_OF_RANGE, NO_VALID_CALIBRATION,
+		PROJECTION_OUT_OF_RANGE, NO_VALID_CALIBRATION,
 		UNKNOWN
 	}
 	
@@ -77,7 +77,7 @@ public class CooLAPPacketImpl extends CooLAPPacket
 						result == 1 ? Result.FILE_NOT_FOUND : 
 						result == 2 ? Result.FILE_NOT_READABLE : 
 						result == 3 ? Result.SYSTEM_NOT_CALIBRATED : 
-						result == 4 ? Result.PROJECTION_OU_OF_RANGE : 
+						result == 4 ? Result.PROJECTION_OUT_OF_RANGE : 
 						Result.UNKNOWN;
 					break;
 	
@@ -90,7 +90,7 @@ public class CooLAPPacketImpl extends CooLAPPacket
 						result == 1 ? Result.FILE_NOT_FOUND : 
 						result == 2 ? Result.NO_OPEN_FILE : 
 						result == 3 ? Result.NO_VALID_CALIBRATION : 
-						result == 4 ? Result.PROJECTION_OU_OF_RANGE : 
+						result == 4 ? Result.PROJECTION_OUT_OF_RANGE : 
 						Result.UNKNOWN;
 					break;
 	

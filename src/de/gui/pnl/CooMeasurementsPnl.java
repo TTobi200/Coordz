@@ -416,7 +416,7 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 				break;
 			default:
 			case UNKNOWN:
-			case PROJECTION_OU_OF_RANGE:
+			case PROJECTION_OUT_OF_RANGE:
 				message = "Die Projektion is "
 					+ "auﬂerhalb der Reichweite.";
 				break;
