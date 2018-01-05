@@ -8,7 +8,6 @@
                 <attribute name="Class-Path" value="."/>
             </manifest>
             <fileset dir="./bin"/>
-            <zipfileset excludes="META-INF/*.SF" src="./src/include/jar/mail.jar"/>
         	<!-- Only include the java.sql.Driver file from derby.jar -->
         	<!-- Contains the org.apache.derby.jdbc.AutoloadedDriver -->
             <zipfileset excludes="META-INF/*.SF" src="./src/include/jar/derby.jar"/>
