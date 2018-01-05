@@ -175,6 +175,13 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	}
 	
 	@FXML
+	protected void openAutomatedCalibration() throws IOException
+	{
+		new CooAutoCalDialog(getScene()
+			.getWindow(), client).show();
+	}
+	
+	@FXML
 	protected void startAutoCalibration() throws IOException
 	{
 		if(Objects.nonNull(client) && client.isConnected())

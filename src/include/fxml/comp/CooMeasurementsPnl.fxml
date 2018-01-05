@@ -460,6 +460,18 @@
 														</ImageView>
 													</graphic>
 												</Button>
+												<Button disable="${!btnConn.disable}" onAction="#openAutomatedCalibration">
+													<tooltip>
+														<Tooltip text="Automatisiert Kalibrieren Dialog" />
+													</tooltip>
+													<graphic>
+														<ImageView pickOnBounds="true" preserveRatio="true">
+															<image>
+																<Image url="/include/icons/automation.png" />
+															</image>
+														</ImageView>
+													</graphic>
+												</Button>
 												<Separator />
 												<Button disable="${!btnConn.disable}" onAction="#startProjection">
 													<tooltip>

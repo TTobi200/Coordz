@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.MenuItem?>
+<?import de.gui.comp.CooTableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.ProgressBar?>
+
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+	<top>
+		<CooTableView prefHeight="150" fx:id="tblTargets">
+			<placeholder>
+				<Label text="Keine Targets hinzugefügt" />
+			</placeholder>
+			<columns>
+				<TableColumn text="Name">
+					<cellValueFactory>
+						<PropertyValueFactory property="name" />
+					</cellValueFactory>
+				</TableColumn>
+				<TableColumn text="X">
+					<cellValueFactory>
+						<PropertyValueFactory property="x" />
+					</cellValueFactory>
+				</TableColumn>
+				<TableColumn text="Y">
+					<cellValueFactory>
+						<PropertyValueFactory property="y" />
+					</cellValueFactory>
+				</TableColumn>
+				<TableColumn text="Z">
+					<cellValueFactory>
+						<PropertyValueFactory property="z" />
+					</cellValueFactory>
+				</TableColumn>
+			</columns>
+		</CooTableView>
+	</top>
+	<center>
+		<BorderPane>
+			<top>
+				<HBox spacing="5" alignment="CENTER">
+					<children>
+						<Label text="Range"/>
+						<Spinner fx:id="spinRange">
+							<valueFactory>
+								<SpinnerValueFactory.IntegerSpinnerValueFactory
+									min="1" max="20" initialValue="5" />
+							</valueFactory>
+						</Spinner>
+						<Label text="Anpassen von" />
+						<HBox spacing="5" alignment="CENTER">
+							<children>
+								<CheckBox text="X-Wert" fx:id="cbAdjustX" selected="true" />
+								<CheckBox text="Y-Wert" fx:id="cbAdjustY" selected="true" />
+								<CheckBox text="Z-Wert" fx:id="cbAdjustZ" selected="true" />
+							</children>
+						</HBox>
+					</children>
+				</HBox>
+			</top>
+			<center>
+				<TextArea fx:id="txtLog" editable="false"
+					BorderPane.alignment="CENTER" />
+			</center>
+		</BorderPane>
+	</center>
+	<bottom>
+		<BorderPane>
+			<left>
+				<Label fx:id="progress" visible="false" BorderPane.alignment="CENTER" />
+			</left>
+			<right>
+				<HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
+					<children>
+						<Button mnemonicParsing="false" text="Starten" onAction="#start" />
+						<Button mnemonicParsing="false" text="Abbrechen" onAction="#cancel" />
+					</children>
+				</HBox>
+			</right>
+		</BorderPane>
+	</bottom>
+</BorderPane>

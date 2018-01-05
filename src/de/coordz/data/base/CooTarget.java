@@ -10,11 +10,10 @@ import static de.util.CooXmlDomUtil.addElement;
 
 import java.util.Objects;
 
-import javafx.beans.property.*;
-
 import org.w3c.dom.*;
 
 import de.coordz.data.CooData;
+import javafx.beans.property.*;
 
 public class CooTarget extends CooData
 {
@@ -91,5 +90,19 @@ public class CooTarget extends CooData
 	public IntegerProperty zProperty()
 	{
 		return z;
+	}
+	
+	@Override
+	public String toString()
+	{
+		// Build a string describing this target
+		StringBuilder target = new StringBuilder("Target");
+		target.append(" [")
+		.append("Name=" + nameProperty().get()).append("; ")
+		.append("X=" + xProperty().get()).append("; ")
+		.append("Y=" + yProperty().get()).append("; ")
+		.append("Z=" + zProperty().get()).append("]");
+		
+		return target.toString();
 	}
 }

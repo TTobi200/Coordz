@@ -32,9 +32,9 @@ import de.util.log.CooLog;
 public class CooLAPClient extends CooTcpIpClient
 {
 	/** Default ip from LAP Software (localhost) */
-//	public static final String DEF_LAP_SOFTWARE_IP = "127.0.0.1";
+	public static final String DEF_LAP_SOFTWARE_IP = "127.0.0.1";
 	// FORTEST Add the laser test ip address
-	public static final String DEF_LAP_SOFTWARE_IP = "10.221.46.207";
+//	public static final String DEF_LAP_SOFTWARE_IP = "10.221.46.207";
 	/** Default port where LAP Software listen */
 	public static final int LAP_SOFTWARE_PORT = 8000;
 
