@@ -12,10 +12,10 @@ import java.util.Objects;
 
 import org.w3c.dom.*;
 
-import de.coordz.data.CooData;
+import de.coordz.db.xml.CooDBXML;
 import javafx.collections.*;
 
-public class CooRegionDividing extends CooData
+public class CooRegionDividing implements CooDBXML
 {
 	/** {@link ObservableList} with all region dividing {@link CooLaser} */
 	protected ObservableList<CooLaser> laser;

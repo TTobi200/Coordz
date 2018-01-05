@@ -25,6 +25,7 @@ public class CooFileUtil
 												+ "fxml";
 	public static final String ICON_FOLDER = INCLUDE_FOLDER + IN_JAR_SEPERATOR
 												+ "icons";
+	public static final String DB_FOLDER = INCLUDE_FOLDER + IN_JAR_SEPERATOR + "db";
 	public static final String ICON_OUT_FOLDER = "." + File.separator +
 													"icons";
 

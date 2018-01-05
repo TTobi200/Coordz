@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project Coordz" basedir="..">
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar">
+        <jar destfile="./build/Coordz.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="de.CooStartup"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="./bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="./src/include/jar/mail.jar"/>
+        	<!-- Only include the java.sql.Driver file from derby.jar -->
+        	<!-- Contains the org.apache.derby.jdbc.AutoloadedDriver -->
+            <zipfileset excludes="META-INF/*.SF" src="./src/include/jar/derby.jar"/>
+        	<zipfileset excludes="META-INF/services/*" src="./src/include/jar/derbyclient.jar"/>
+            <zipfileset excludes="META-INF/services/*" src="./src/include/jar/derbynet.jar"/>
+            <zipfileset excludes="META-INF/services/*" src="./src/include/jar/derbytools.jar"/>
+        	<zipfileset excludes="META-INF/services/*" src="./src/include/jar/derbyrun.jar"/>
+            <zipfileset excludes="META-INF/services/*" src="./src/include/jar/ojdbc7.jar"/>
+        	<zipfileset excludes="META-INF/services/*" src="./src/include/jar/mysql5.1.44.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="./src/include/jar/controlsfx-8.40.12.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="./src/include/jar/itextpdf-5.2.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="./src/include/jar/jim3dsModelImporterJFX.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="./src/include/jar/poi-scratchpad-3.13-20150929.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="./src/include/jar/poi-ooxml-3.13-20150929.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="./src/include/jar/xmlbeans-2.6.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="./src/include/jar/poi-ooxml-schemas-3.13-20150929.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="./src/include/jar/poi-3.13-20150929.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="./src/include/jar/commons-codec-1.9.jar"/>
+        </jar>
+    </target>
+</project>

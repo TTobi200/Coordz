@@ -1,10 +1,8 @@
 package de.gui.view3D.ddd.shape;
 
-import de.coordz.data.CooData;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.scene.Group;
-import javafx.scene.Node;
+import de.coordz.db.xml.CooDBXML;
+import javafx.beans.property.*;
+import javafx.scene.*;
 
 /**
  * base class for {@link Coo3dShape} that are based on a group
@@ -13,7 +11,7 @@ import javafx.scene.Node;
  *
  * @param <T>
  */
-public abstract class CooGroupShape<T extends CooData> extends Group implements Coo3dShape<T>
+public abstract class CooGroupShape<T extends CooDBXML> extends Group implements Coo3dShape<T>
 {
 	private final T DATA;
 

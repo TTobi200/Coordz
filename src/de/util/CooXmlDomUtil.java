@@ -16,7 +16,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.*;
 
-import de.coordz.data.CooData;
+import de.coordz.db.xml.CooDBXML;
 
 public class CooXmlDomUtil
 {
@@ -151,7 +151,7 @@ public class CooXmlDomUtil
 
 			for(int i = 0; i < xmlNode.getLength(); i++)
 			{
-				CooData data = (CooData)clazz.newInstance();
+				CooDBXML data = (CooDBXML)clazz.newInstance();
 				data.fromXML((Element)xmlNode.item(i));
 				listToAdd.add(data);
 			}

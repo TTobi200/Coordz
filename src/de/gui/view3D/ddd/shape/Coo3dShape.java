@@ -1,8 +1,7 @@
 package de.gui.view3D.ddd.shape;
 
-import de.coordz.data.CooData;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.StringProperty;
+import de.coordz.db.xml.CooDBXML;
+import javafx.beans.property.*;
 import javafx.scene.Node;
 
 /**
@@ -12,7 +11,7 @@ import javafx.scene.Node;
  *
  * @param <T>
  */
-public interface Coo3dShape<T extends CooData>
+public interface Coo3dShape<T extends CooDBXML>
 {
 	/**
 	 * @return a property holding the name of the coodata

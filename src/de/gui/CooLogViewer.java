@@ -10,6 +10,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.util.*;
 
+import de.coordz.CooSystem;
 import de.util.*;
 import de.util.log.CooLog;
 import javafx.beans.value.ChangeListener;
@@ -67,7 +68,7 @@ public class CooLogViewer extends Stage
 	private void initTree(File logFold)
 	{
 		TreeItem<String> rootItem = new TreeItem<>(
-			CooController.LOGGING_FOLDER,
+			CooSystem.LOGGING_FOLDER,
 			new ImageView(CooFileUtil.getResourceIcon("logging.png")));
 		Map<String, List<File>> dateToFiles = CooLoggerUtil.mapLogs(logFold);
 

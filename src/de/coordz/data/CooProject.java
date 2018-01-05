@@ -11,15 +11,15 @@ import static de.util.CooXmlDomUtil.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import javafx.beans.property.*;
-import javafx.collections.*;
-
 import org.w3c.dom.*;
 
 import de.coordz.data.base.*;
+import de.coordz.db.xml.CooDBXML;
 import de.util.CooTimeUtil;
+import javafx.beans.property.*;
+import javafx.collections.*;
 
-public class CooProject extends CooData
+public class CooProject implements CooDBXML
 {
 	/** {@link StringProperty} for the project name */
 	protected StringProperty name;
@@ -34,8 +34,8 @@ public class CooProject extends CooData
 	public CooProject()
 	{
 		name = new SimpleStringProperty();
-		date = new SimpleObjectProperty<LocalDate>();
-		lapSoftware = new SimpleObjectProperty<CooLAPSoftware>(
+		date = new SimpleObjectProperty<>();
+		lapSoftware = new SimpleObjectProperty<>(
 						new CooLAPSoftware());
 		stations = FXCollections.observableArrayList();
 	}

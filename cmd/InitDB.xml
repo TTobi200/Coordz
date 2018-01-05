@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="Coordz" default="run" basedir="..">
+	<!-- Create target to run Startup with INITDB argument -->
+	<target name="run" description="Runs startup with INITDB argument">
+		<java classname="de.CooStartup"  fork="true" dir=".">
+		    <arg value="INITDB"/>
+			<arg value="ANT"/>
+		    <classpath>
+				<!-- Add .class files -->
+		        <pathelement path="./bin"/>
+				<!-- Add all external libs from java class path -->
+				<pathelement path="${java.class.path}/lib/ext/*"/>
+				<!-- Add all external libs from project -->
+				<pathelement location="./src/include/jar/*"/>
+		    </classpath>
+		</java>
+	</target>
+</project>

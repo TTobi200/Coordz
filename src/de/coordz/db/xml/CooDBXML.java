@@ -2,9 +2,9 @@
  * $Header$
  * 
  * $Log$
- * Copyright © 2015 T.Ohm . All Rights Reserved.
+ * Copyright © 2017 T.Ohm . All Rights Reserved.
  */
-package de.coordz.data;
+package de.coordz.db.xml;
 
 import org.w3c.dom.*;
 
@@ -12,7 +12,7 @@ import org.w3c.dom.*;
  * Interface for xml functions.
  * @author tobias.ohm
  */
-public interface CooXML
+public interface CooDBXML
 {
 	/**
 	 * Method to format Class into xml-Tag.

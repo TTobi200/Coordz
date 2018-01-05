@@ -168,7 +168,7 @@ public class CooTreeViewPnl extends BorderPane
 				.customerProperty().get();
 
 			customer.getProjects().forEach(prj ->
-				CooXMLDBUtil.saveProject(customer, prj));
+			CooXMLDBUtil.saveProject(customer, prj));
 			CooXMLDBUtil.saveCustomer(customer);
 
 		} // Only save selected project

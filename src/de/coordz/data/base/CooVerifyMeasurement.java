@@ -10,13 +10,12 @@ import static de.util.CooXmlDomUtil.*;
 
 import java.util.Objects;
 
-import javafx.collections.*;
-
 import org.w3c.dom.*;
 
-import de.coordz.data.CooData;
+import de.coordz.db.xml.CooDBXML;
+import javafx.collections.*;
 
-public class CooVerifyMeasurement extends CooData
+public class CooVerifyMeasurement implements CooDBXML
 {
 	/** {@link ObservableList} with all verify measurement specification {@link CooRectangle} */
 	protected ObservableList<CooRectangle> specification;

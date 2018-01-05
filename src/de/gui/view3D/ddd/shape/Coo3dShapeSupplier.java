@@ -2,7 +2,7 @@ package de.gui.view3D.ddd.shape;
 
 import java.util.function.Function;
 
-import de.coordz.data.CooData;
+import de.coordz.db.xml.CooDBXML;
 
 /**
  * a special function that expects a coodata and creates a node that is a coo3dshape for the given
@@ -14,7 +14,7 @@ import de.coordz.data.CooData;
  * @param <R> type of the result of the function
  */
 @FunctionalInterface
-public interface Coo3dShapeSupplier<T extends CooData, R extends Coo3dShape<T>>
+public interface Coo3dShapeSupplier<T extends CooDBXML, R extends Coo3dShape<T>>
 extends Function<T, R>
 {
 	/**

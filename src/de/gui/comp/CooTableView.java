@@ -9,7 +9,7 @@ package de.gui.comp;
 import java.awt.event.*;
 import java.util.List;
 
-import de.coordz.data.CooData;
+import de.coordz.db.xml.CooDBXML;
 import de.gui.CooDialogs;
 import de.util.CooFileUtil;
 import de.util.log.CooLog;
@@ -18,7 +18,7 @@ import javafx.collections.*;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 
-public class CooTableView<T extends CooData> extends TableView<T>
+public class CooTableView<T extends CooDBXML> extends TableView<T>
 {
 	protected Class<T> clazz;
 	protected IntegerProperty maxRowsProperty;

@@ -10,14 +10,13 @@ import static de.util.CooXmlDomUtil.addElement;
 
 import java.util.Objects;
 
-import javafx.beans.property.*;
-
 import org.w3c.dom.*;
 
-import de.coordz.data.CooData;
+import de.coordz.db.xml.CooDBXML;
 import de.util.CooPaletType;
+import javafx.beans.property.*;
 
-public class CooPalet extends CooData
+public class CooPalet implements CooDBXML
 {
 	/** {@link StringProperty} for the palet name */
 	protected StringProperty name;
@@ -31,7 +30,7 @@ public class CooPalet extends CooData
 	public CooPalet()
 	{
 		name = new SimpleStringProperty();
-		type = new SimpleObjectProperty<CooPaletType>(
+		type = new SimpleObjectProperty<>(
 				CooPaletType.U);
 		width = new SimpleIntegerProperty();
 		length = new SimpleIntegerProperty();

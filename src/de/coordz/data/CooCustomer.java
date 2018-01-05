@@ -10,15 +10,15 @@ import static de.util.CooXmlDomUtil.*;
 
 import java.util.*;
 
+import org.w3c.dom.*;
+
+import de.coordz.data.base.*;
+import de.coordz.db.xml.CooDBXML;
 import javafx.beans.property.*;
 import javafx.collections.*;
 import javafx.scene.image.Image;
 
-import org.w3c.dom.*;
-
-import de.coordz.data.base.*;
-
-public class CooCustomer extends CooData
+public class CooCustomer implements CooDBXML
 {
 	/** {@link StringProperty} for the customer name */
 	protected StringProperty name;
@@ -47,7 +47,7 @@ public class CooCustomer extends CooData
 		plz = new SimpleStringProperty();
 		location = new SimpleStringProperty();
 		
-		logo = new SimpleObjectProperty<Image>();
+		logo = new SimpleObjectProperty<>();
 		
 		contacts = FXCollections.observableArrayList();
 		palets = FXCollections.observableArrayList();

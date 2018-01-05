@@ -10,14 +10,13 @@ import static de.util.CooXmlDomUtil.*;
 
 import java.util.*;
 
+import org.w3c.dom.*;
+
+import de.coordz.db.xml.CooDBXML;
 import javafx.beans.property.*;
 import javafx.collections.*;
 
-import org.w3c.dom.*;
-
-import de.coordz.data.CooData;
-
-public class CooGateway extends CooData
+public class CooGateway implements CooDBXML
 {
 	/** {@link StringProperty} for the gateway ip */
 	protected StringProperty ip;

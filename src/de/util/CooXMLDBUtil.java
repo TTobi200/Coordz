@@ -19,6 +19,7 @@ import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 import de.coordz.data.*;
+import de.coordz.db.xml.CooDBXML;
 import de.util.log.CooLog;
 import javafx.beans.property.*;
 import javafx.embed.swing.SwingFXUtils;
@@ -124,11 +125,11 @@ public class CooXMLDBUtil
 	}
 
 	/**
-	 * Method to save {@link CooData} to given {@link File}.
-	 * @param data = the {@link CooData} to save
+	 * Method to save {@link CooDBXML} to given {@link File}.
+	 * @param data = the {@link CooDBXML} to save
 	 * @param file = the {@link File} to store data in
 	 */
-	public static void saveData(CooData data, File file)
+	public static void saveData(CooDBXML data, File file)
 	{
 		Document doc;
 		try

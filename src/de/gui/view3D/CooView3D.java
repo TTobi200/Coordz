@@ -10,8 +10,9 @@ import java.util.*;
 
 import org.controlsfx.control.CheckComboBox;
 
-import de.coordz.data.*;
+import de.coordz.data.CooCustomer;
 import de.coordz.data.base.CooPalet;
+import de.coordz.db.xml.CooDBXML;
 import de.gui.*;
 import de.gui.view3D.comp.*;
 import de.util.CooXformUtil;
@@ -159,7 +160,7 @@ public class CooView3D extends BorderPane implements CooMeasurementChanged, CooD
 		return tools;
 	}
 	
-	private <T extends CooData> void addToWorld(CooData3D<?>... n)
+	private <T extends CooDBXML> void addToWorld(CooData3D<?>... n)
 	{
 		Arrays.asList(n).forEach(el -> 
 		{

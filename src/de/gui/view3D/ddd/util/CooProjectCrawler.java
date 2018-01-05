@@ -5,14 +5,15 @@ import java.util.function.Consumer;
 
 import de.coordz.data.*;
 import de.coordz.data.base.*;
+import de.coordz.db.xml.CooDBXML;
 
 public class CooProjectCrawler
 {
-	private CooData ROOT;
+	private CooDBXML ROOT;
 
-	private Map<Class<CooData>, List<Consumer<CooData>>> mapClassToActions;
+	private Map<Class<CooDBXML>, List<Consumer<CooDBXML>>> mapClassToActions;
 
-	private CooProjectCrawler(CooData data)
+	private CooProjectCrawler(CooDBXML data)
 	{
 		ROOT = data;
 		mapClassToActions = new HashMap<>();
@@ -20,24 +21,24 @@ public class CooProjectCrawler
 
 	public CooProjectCrawler(CooProject project)
 	{
-		this((CooData)project);
+		this((CooDBXML)project);
 	}
 
 	public CooProjectCrawler(CooCustomer customer)
 	{
-		this((CooData)customer);
+		this((CooDBXML)customer);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public <T extends CooData> CooProjectCrawler doForClass(Class<T> clazz, Consumer<T> action)
+	public <T extends CooDBXML> CooProjectCrawler doForClass(Class<T> clazz, Consumer<T> action)
 	{
-		List<Consumer<CooData>> list = mapClassToActions.get(clazz);
+		List<Consumer<CooDBXML>> list = mapClassToActions.get(clazz);
 		if(list == null)
 		{
 			list = new ArrayList<>();
 			mapClassToActions.put((Class)clazz, list);
 		}
-		list.add((Consumer<CooData>)action);
+		list.add((Consumer<CooDBXML>)action);
 		return this;
 	}
 
@@ -109,9 +110,9 @@ public class CooProjectCrawler
 		}
 	}
 
-	private void doActionFor(CooData object)
+	private void doActionFor(CooDBXML object)
 	{
-		List<Consumer<CooData>> list = mapClassToActions.get(object.getClass());
+		List<Consumer<CooDBXML>> list = mapClassToActions.get(object.getClass());
 
 		if(list != null)
 		{

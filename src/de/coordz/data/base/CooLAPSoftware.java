@@ -10,13 +10,12 @@ import static de.util.CooXmlDomUtil.addElement;
 
 import java.util.Objects;
 
-import javafx.beans.property.*;
-
 import org.w3c.dom.*;
 
-import de.coordz.data.CooData;
+import de.coordz.db.xml.CooDBXML;
+import javafx.beans.property.*;
 
-public class CooLAPSoftware	extends CooData
+public class CooLAPSoftware	implements CooDBXML
 {
 	/** {@link StringProperty} for the lap software name */
 	protected StringProperty name;

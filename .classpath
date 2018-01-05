@@ -15,5 +15,8 @@
 	<classpathentry kind="lib" path="src/include/jar/poi-ooxml-schemas-3.13-20150929.jar"/>
 	<classpathentry kind="lib" path="src/include/jar/poi-3.13-20150929.jar" sourcepath="src/include/jar/poi-src-3.13-20150929.zip"/>
 	<classpathentry kind="lib" path="src/include/jar/commons-codec-1.9.jar"/>
+	<classpathentry kind="lib" path="src/include/jar/mariadb_2.2.0.jar"/>
+	<classpathentry kind="lib" path="src/include/jar/mysql5.1.44.jar"/>
+	<classpathentry kind="lib" path="src/include/jar/ojdbc7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

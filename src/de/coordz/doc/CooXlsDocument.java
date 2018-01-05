@@ -10,12 +10,6 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
 
-import javafx.application.Platform;
-import javafx.embed.swing.*;
-import javafx.scene.image.Image;
-import javafx.stage.*;
-import javafx.stage.FileChooser.ExtensionFilter;
-
 import javax.imageio.ImageIO;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -28,6 +22,11 @@ import de.coordz.data.*;
 import de.coordz.data.base.*;
 import de.util.*;
 import de.util.log.CooLog;
+import javafx.application.Platform;
+import javafx.embed.swing.*;
+import javafx.scene.image.Image;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 public class CooXlsDocument extends CooDocument
 {

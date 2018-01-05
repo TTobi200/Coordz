@@ -11,15 +11,14 @@ import static de.util.CooXmlDomUtil.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import org.w3c.dom.*;
+
+import de.coordz.db.xml.CooDBXML;
+import de.util.CooTimeUtil;
 import javafx.beans.property.*;
 import javafx.collections.*;
 
-import org.w3c.dom.*;
-
-import de.coordz.data.CooData;
-import de.util.CooTimeUtil;
-
-public class CooMeasurement extends CooData
+public class CooMeasurement implements CooDBXML
 {
 	/** {@link StringProperty} for the measurement name */
 	protected StringProperty name;
@@ -44,12 +43,12 @@ public class CooMeasurement extends CooData
 	public CooMeasurement()
 	{
 		name = new SimpleStringProperty();
-		date = new SimpleObjectProperty<LocalDate>();
+		date = new SimpleObjectProperty<>();
 		from = new SimpleStringProperty();
 		to = new SimpleStringProperty();
 		weather = new SimpleStringProperty();
 		notes = new SimpleStringProperty();
-		totalStation = new SimpleObjectProperty<CooTotalstation>(
+		totalStation = new SimpleObjectProperty<>(
 						new CooTotalstation());
 		reticles = FXCollections.observableArrayList();
 		targets = FXCollections.observableArrayList();

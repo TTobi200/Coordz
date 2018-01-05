@@ -10,13 +10,12 @@ import static de.util.CooXmlDomUtil.addElement;
 
 import java.util.Objects;
 
-import javafx.beans.property.*;
-
 import org.w3c.dom.*;
 
-import de.coordz.data.CooData;
+import de.coordz.db.xml.CooDBXML;
+import javafx.beans.property.*;
 
-public class CooContact extends CooData
+public class CooContact implements CooDBXML
 {
 	/** {@link StringProperty} for the contact first name */
 	protected StringProperty firstName;

@@ -12,10 +12,10 @@ import java.util.Objects;
 
 import org.w3c.dom.*;
 
-import de.coordz.data.CooData;
+import de.coordz.db.xml.CooDBXML;
 import javafx.beans.property.*;
 
-public class CooLaser extends CooData
+public class CooLaser implements CooDBXML
 {
 	/** {@link StringProperty} for the laser name */
 	protected StringProperty name;

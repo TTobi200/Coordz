@@ -6,12 +6,12 @@
  */
 package de.gui.view3D.comp;
 
+import de.coordz.db.xml.CooDBXML;
 import javafx.scene.control.Label;
 import javafx.scene.paint.*;
 import javafx.scene.shape.Box;
-import de.coordz.data.CooData;
 
-public class CooAxis3D extends CooData3D<CooData>
+public class CooAxis3D extends CooData3D<CooDBXML>
 {
 	protected PhongMaterial redMaterial;
 	protected PhongMaterial greenMaterial;
@@ -51,7 +51,7 @@ public class CooAxis3D extends CooData3D<CooData>
 	}
 
 	@Override
-	public void dataChanged(CooData data)
+	public void dataChanged(CooDBXML data)
 	{
 	}
 	

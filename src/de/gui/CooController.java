@@ -18,21 +18,15 @@ import de.gui.pnl.*;
 import de.gui.sett.CooSettingsDialog;
 import de.gui.sett.CooSettingsDialog.SettingType;
 import de.util.*;
-import de.util.log.CooLog;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
-import javafx.event.EventHandler;
 import javafx.fxml.*;
 import javafx.scene.control.*;
-import javafx.stage.*;
+import javafx.stage.Stage;
 
 public class CooController implements Initializable, CooDataChanged
 {
-	public static final boolean REORG_LOGS = true;
-	public static final int DAYS_TO_SAVE_LOGS = 7;
-	public static final String LOGGING_FOLDER = "./logging";
-
 	public static final String DOCUMENT_FOLDER = "./doc";
 
 	protected static CooController instance;
@@ -77,30 +71,15 @@ public class CooController implements Initializable, CooDataChanged
 
 	public CooController(Stage primaryStage)
 	{
-		try
+		this.primaryStage = primaryStage;
+		xmlDbPath = new SimpleStringProperty();
+		
+		// Exit System on close requested
+		primaryStage.setOnCloseRequest(e -> 
 		{
-			this.primaryStage = primaryStage;
-			xmlDbPath = new SimpleStringProperty();
-			CooLoggerUtil.initLogging(LOGGING_FOLDER, DAYS_TO_SAVE_LOGS,
-				REORG_LOGS);
-
-			// Exit System on close requested
-			primaryStage.setOnCloseRequest(
-				new EventHandler<WindowEvent>()
-				{
-					@Override
-					public void handle(final WindowEvent event)
-					{
-						event.consume();
-						CooSystem.exit();
-					}
-				});
-		}
-		catch(IOException e)
-		{
-			CooLog.error("Error while initializing "
-				+ "controller.", e);
-		}
+			e.consume();
+			CooSystem.exit();
+		});
 	}
 
 	@Override
@@ -173,7 +152,7 @@ public class CooController implements Initializable, CooDataChanged
 	public void openLogging() throws Exception
 	{
 		new CooLogViewer(primaryStage, new File(
-			LOGGING_FOLDER)).show();
+			CooSystem.LOGGING_FOLDER)).show();
 	}
 	
 	@FXML

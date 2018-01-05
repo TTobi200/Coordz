@@ -6,12 +6,12 @@
  */
 package de.gui.view3D.comp;
 
+import de.coordz.db.xml.CooDBXML;
+import de.util.CooXformUtil;
 import javafx.beans.property.*;
 import javafx.scene.control.Label;
-import de.coordz.data.CooData;
-import de.util.CooXformUtil;
 
-public abstract class CooData3D <T extends CooData> extends CooXformUtil
+public abstract class CooData3D <T extends CooDBXML> extends CooXformUtil
 {
 	protected Label lblName;
 	

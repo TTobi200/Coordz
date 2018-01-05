@@ -10,14 +10,13 @@ import static de.util.CooXmlDomUtil.*;
 
 import java.util.Objects;
 
+import org.w3c.dom.*;
+
+import de.coordz.db.xml.CooDBXML;
 import javafx.beans.property.*;
 import javafx.collections.*;
 
-import org.w3c.dom.*;
-
-import de.coordz.data.CooData;
-
-public class CooStation extends CooData
+public class CooStation implements CooDBXML
 {
 	/** {@link StringProperty} for the station name */
 	protected StringProperty name;
@@ -49,12 +48,12 @@ public class CooStation extends CooData
 		xOffset = new SimpleIntegerProperty();
 		yOffset = new SimpleIntegerProperty();
 		zOffset = new SimpleIntegerProperty();
-		regionDeviding = new SimpleObjectProperty<CooRegionDividing>(
+		regionDeviding = new SimpleObjectProperty<>(
 						new CooRegionDividing());
 		measurements = FXCollections.observableArrayList();
-		verifyMeasurement = new SimpleObjectProperty<CooVerifyMeasurement>(
+		verifyMeasurement = new SimpleObjectProperty<>(
 						new CooVerifyMeasurement());
-		gateway = new SimpleObjectProperty<CooGateway>(
+		gateway = new SimpleObjectProperty<>(
 						new CooGateway());
 	}
 

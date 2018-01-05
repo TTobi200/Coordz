@@ -10,13 +10,12 @@ import static de.util.CooXmlDomUtil.addElement;
 
 import java.util.Objects;
 
-import javafx.beans.property.*;
-
 import org.w3c.dom.*;
 
-import de.coordz.data.CooData;
+import de.coordz.db.xml.CooDBXML;
+import javafx.beans.property.*;
 
-public class CooTotalstation extends CooData
+public class CooTotalstation implements CooDBXML
 {
 	/** {@link IntegerProperty} for the totalstation x coordinate */
 	protected IntegerProperty x;

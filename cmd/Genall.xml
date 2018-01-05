@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="Coordz" default="run" basedir="..">
+	<description>
+		- Generates all needed java classes
+		- Refresh the project in eclipse
+			- Ant has to be "Run in same JRE as the workspace"
+	 </description>	
+	<!-- Create target to run Startup with GENALL argument -->
+	<target name="run" description="Runs startup with GENALL argument">
+		<java classname="de.CooStartup"  fork="true" dir=".">
+		    <arg value="GENALL"/>
+		    <classpath>
+				<!-- Add .class files -->
+		        <pathelement path="./bin"/>
+				<!-- Add all external libs from java class path -->
+				<pathelement path="${java.class.path}/lib/ext/*"/>
+				<!-- Add all external libs from project -->
+				<pathelement location="./src/include/jar/*"/>
+		    </classpath>
+		</java>
+	</target>
+	<!-- Create target to refresh Project in eclipse -->
+	<target name="refresh eclipse">
+		<echo>refreshing eclipse workspace</echo>
+		<eclipse.refreshLocal resource="Coordz/src" depth="infinite" />
+	</target>
+</project>
