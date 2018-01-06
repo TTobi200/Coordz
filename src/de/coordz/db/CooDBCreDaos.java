@@ -52,16 +52,16 @@ public class CooDBCreDaos
 				
 				// Define the used imports
 				out.println("import javafx.beans.property.*;");
-				out.println("import java.sql.Timestamp;");
+				// Check if time stamp import used
+				addTimestampImport(out, table);
 				out.println("import " + CooDBDao.class.getPackage().getName() + ".gen.inf.*;");
 				out.println();
 				
-				out.println("@SuppressWarnings(\"unused\")");
 				out.println("public class " + daoName + " extends " + CooDBDao.class.getName());
 				out.println("{");
 				
 					// Add the column variables
-					addColumnVariables(out, table.getColumns());
+					addColumnVariables(out, daoName, table.getColumns());
 					
 					// Add the default constructor
 					out.println();
@@ -80,6 +80,19 @@ public class CooDBCreDaos
 				CooLog.error("Error while creating DAO", e);
 			}
 		}
+	}
+
+	private void addTimestampImport(PrintWriter out, CooDBTable table)
+	{
+		// Check if time stamp used in this dao
+		boolean timestampUsed = table.getColumns().stream().filter(
+			c -> c.typeProperty().get()	== CooDBValTypes.TIMESTAMP)
+				.findAny().isPresent();
+		
+		if(timestampUsed)
+		{
+			out.println("import java.sql.Timestamp;");
+		}		
 	}
 
 	private void addConstructor(PrintWriter out, String daoName, CooDBTable table)
@@ -120,10 +133,14 @@ public class CooDBCreDaos
 	}
 
 	private void addColumnVariables(PrintWriter out,
-					List<CooDBColumn> columns)
+		String daoName, List<CooDBColumn> columns)
 	{
 		for(CooDBColumn col : columns)
 		{
+			// Print the description
+			out.println("\t/** {@link " + col.typeProperty().get().getProperty() +
+				" } for {@link " + daoName + "} " + col.nameProperty().get() + " */");
+			// Print the property variable
 			out.print("\tprivate ");
 			out.print(col.typeProperty().get().getProperty() + " ");
 			out.print(col.nameProperty().get() + "Property;");
