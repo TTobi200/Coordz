@@ -75,7 +75,9 @@ public class CooDBTable implements CooDBXML, CooDBSQL
 			CooDBColumn column  = columns.get(i);
 			CooDBValTypes type = column.typeProperty().get();
 			
-			stmt.append(column.nameProperty().get())
+			// Escape the column name - DB specified
+			stmt.append(CooSystem.getDatabase().escapeColumn(
+				column.nameProperty().get().toUpperCase()))
 				.append(" ")
 				// Get the specified type for actual used database
 				.append(CooSystem.getDatabase().getDataType(type, column.nameProperty().get()))

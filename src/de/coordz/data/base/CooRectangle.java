@@ -12,56 +12,24 @@ import java.util.Objects;
 
 import org.w3c.dom.*;
 
+import de.coordz.db.gen.dao.DaoRectangle;
 import de.coordz.db.xml.CooDBXML;
-import javafx.beans.property.*;
 
-public class CooRectangle implements CooDBXML
+public class CooRectangle extends DaoRectangle implements CooDBXML
 {
-	/** {@link StringProperty} for the rectangle name */
-	protected StringProperty name;
-	/** {@link IntegerProperty} for the rectangle width */
-	protected IntegerProperty width;
-	/** {@link IntegerProperty} for the rectangle height */
-	protected IntegerProperty height;
-	/** {@link IntegerProperty} for the rectangle length */
-	protected IntegerProperty length;
-	/** {@link IntegerProperty} for the rectangle x coordinate */
-	protected IntegerProperty x;
-	/** {@link IntegerProperty} for the rectangle y coordinate */
-	protected IntegerProperty y;
-	/** {@link IntegerProperty} for the rectangle z coordinate */
-	protected IntegerProperty z;
-	/** {@link IntegerProperty} for the rectangle diagonal 1 */
-	protected IntegerProperty d1;
-	/** {@link IntegerProperty} for the rectangle diagonal 2 */
-	protected IntegerProperty d2;
-	
-	public CooRectangle()
-	{
-		name = new SimpleStringProperty();
-		width = new SimpleIntegerProperty();
-		height = new SimpleIntegerProperty();
-		length = new SimpleIntegerProperty();
-		x = new SimpleIntegerProperty();
-		y = new SimpleIntegerProperty();
-		z = new SimpleIntegerProperty();
-		d1 = new SimpleIntegerProperty();
-		d2 = new SimpleIntegerProperty();
-	}
-	
 	@Override
 	public void toXML(Document doc, Element root)
 	{
 		Element rectangle = addElement(doc, root, "Rectangle");
-		rectangle.setAttribute("Name", name.get());
-		rectangle.setAttribute("Width", String.valueOf(width.get()));
-		rectangle.setAttribute("Height", String.valueOf(height.get()));
-		rectangle.setAttribute("Length", String.valueOf(length.get()));
-		rectangle.setAttribute("X", String.valueOf(x.get()));
-		rectangle.setAttribute("Y", String.valueOf(y.get()));
-		rectangle.setAttribute("Z", String.valueOf(z.get()));
-		rectangle.setAttribute("D1", String.valueOf(d1.get()));
-		rectangle.setAttribute("D2", String.valueOf(d2.get()));
+		rectangle.setAttribute("Name", nameProperty().get());
+		rectangle.setAttribute("Width", String.valueOf(widthProperty().get()));
+		rectangle.setAttribute("Height", String.valueOf(heightProperty().get()));
+		rectangle.setAttribute("Length", String.valueOf(lengthProperty().get()));
+		rectangle.setAttribute("X", String.valueOf(xProperty().get()));
+		rectangle.setAttribute("Y", String.valueOf(yProperty().get()));
+		rectangle.setAttribute("Z", String.valueOf(zProperty().get()));
+		rectangle.setAttribute("D1", String.valueOf(d1Property().get()));
+		rectangle.setAttribute("D2", String.valueOf(d2Property().get()));
 	}
 	
 	@Override
@@ -69,96 +37,15 @@ public class CooRectangle implements CooDBXML
 	{
 		if(Objects.nonNull(rectangle))
 		{
-			name.set(rectangle.getAttribute("Name"));
-			width.set(Integer.valueOf(rectangle.getAttribute("Width")));
-			height.set(Integer.valueOf(rectangle.getAttribute("Height")));
-			length.set(Integer.valueOf(rectangle.getAttribute("Length")));
-			x.set(Integer.valueOf(rectangle.getAttribute("X")));
-			y.set(Integer.valueOf(rectangle.getAttribute("Y")));
-			z.set(Integer.valueOf(rectangle.getAttribute("Z")));
-			d1.set(Integer.valueOf(rectangle.getAttribute("D1")));
-			d2.set(Integer.valueOf(rectangle.getAttribute("D2")));
+			nameProperty().set(rectangle.getAttribute("Name"));
+			widthProperty().set(Integer.valueOf(rectangle.getAttribute("Width")));
+			heightProperty().set(Integer.valueOf(rectangle.getAttribute("Height")));
+			lengthProperty().set(Integer.valueOf(rectangle.getAttribute("Length")));
+			xProperty().set(Integer.valueOf(rectangle.getAttribute("X")));
+			yProperty().set(Integer.valueOf(rectangle.getAttribute("Y")));
+			zProperty().set(Integer.valueOf(rectangle.getAttribute("Z")));
+			d1Property().set(Integer.valueOf(rectangle.getAttribute("D1")));
+			d2Property().set(Integer.valueOf(rectangle.getAttribute("D2")));
 		}
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #name}
-	 */
-	public StringProperty nameProperty()
-	{
-		return name;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #width}
-	 */
-	public IntegerProperty widthProperty()
-	{
-		return width;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #height}
-	 */
-	public IntegerProperty heightProperty()
-	{
-		return height;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #length}
-	 */
-	public IntegerProperty lengthProperty()
-	{
-		return length;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #x}
-	 */
-	public IntegerProperty xProperty()
-	{
-		return x;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #y}
-	 */
-	public IntegerProperty yProperty()
-	{
-		return y;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #z}
-	 */
-	public IntegerProperty zProperty()
-	{
-		return z;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #d1}
-	 */
-	public IntegerProperty d1Property()
-	{
-		return d1;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #d2}
-	 */
-	public IntegerProperty d2Property()
-	{
-		return d2;
 	}
 }

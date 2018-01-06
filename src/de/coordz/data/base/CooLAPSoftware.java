@@ -12,28 +12,17 @@ import java.util.Objects;
 
 import org.w3c.dom.*;
 
+import de.coordz.db.gen.dao.DaoLAPSoftware;
 import de.coordz.db.xml.CooDBXML;
-import javafx.beans.property.*;
 
-public class CooLAPSoftware	implements CooDBXML
+public class CooLAPSoftware	extends DaoLAPSoftware implements CooDBXML
 {
-	/** {@link StringProperty} for the lap software name */
-	protected StringProperty name;
-	/** {@link StringProperty} for the lap software version */
-	protected StringProperty version;
-	
-	public CooLAPSoftware()
-	{
-		name = new SimpleStringProperty();
-		version = new SimpleStringProperty();
-	}
-	
 	@Override
 	public void toXML(Document doc, Element root)
 	{
 		Element lapSoftware = addElement(doc, root, "LAPSoftware");
-		lapSoftware.setAttribute("Name", name.get());
-		lapSoftware.setAttribute("Version", version.get());
+		lapSoftware.setAttribute("Name", nameProperty().get());
+		lapSoftware.setAttribute("Version", versionProperty().get());
 	}	
 	
 	@Override
@@ -41,26 +30,8 @@ public class CooLAPSoftware	implements CooDBXML
 	{
 		if(Objects.nonNull(lapSoftware))
 		{
-			name.set(lapSoftware.getAttribute("Name"));
-			version.set(lapSoftware.getAttribute("Version"));
+			nameProperty().set(lapSoftware.getAttribute("Name"));
+			versionProperty().set(lapSoftware.getAttribute("Version"));
 		}
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #name}
-	 */
-	public StringProperty nameProperty()
-	{
-		return name;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #version}
-	 */
-	public StringProperty versionProperty()
-	{
-		return version;
 	}
 }

@@ -48,8 +48,6 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	@FXML
 	protected HBox hBoxTargets;
 	@FXML
-	protected Button btnExport;
-	@FXML
 	protected CooTableView<CooTotalstation> tblTotalStation;
 	@FXML
 	protected Label lblTargetFile;
@@ -366,7 +364,7 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	protected void importCalFile()
 	{
 		// Show open calibration file dialog
-		File calFile = CooDialogs.showOpenFileDialog(btnExport.getScene().getWindow(),
+		File calFile = CooDialogs.showOpenFileDialog(getScene().getWindow(),
 			"CAL Datei importieren", new ExtensionFilter(
 				"Kalibrierdatei *.cal", "*.cal"));
 		
@@ -383,7 +381,7 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	protected void exportCalFile()
 	{
 		// Show save calibration file dialog
-		File calFile = CooDialogs.showSaveFileDialog(btnExport.getScene().getWindow(),
+		File calFile = CooDialogs.showSaveFileDialog(getScene().getWindow(),
 			"CAL Datei exportieren", new ExtensionFilter(
 				"Kalibrierdatei *.cal", "*.cal"));
 		

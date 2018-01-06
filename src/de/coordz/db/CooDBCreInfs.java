@@ -74,7 +74,7 @@ public class CooDBCreInfs
 	{
 		// Add constant for table name
 		out.println("\t/** {@link String} constant for table name */");
-		out.println("\tpublic static final String NAME = \""+ tableName +"\";");
+		out.println("\tpublic static final String TABLE_NAME = \""+ tableName +"\";");
 
 		// Loop through all table columns
 		for(CooDBColumn col : columns)
@@ -87,7 +87,7 @@ public class CooDBCreInfs
 			
 			// Add the constant for table column
 			out.println("\t/** {@link String} constant for table column " + colName + " */");
-			out.println("\tpublic static final String T_" + colName.toUpperCase() + " = NAME + \"." + colName + "\";");
+			out.println("\tpublic static final String T_" + colName.toUpperCase() + " = TABLE_NAME + \"." + colName + "\";");
 		}
 	}
 	

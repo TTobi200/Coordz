@@ -72,4 +72,10 @@ public abstract class CooDBSimple extends CooDB
 		CooLog.debug("Execute SQL Update: \"" + sql + "\"");
 		return stmt.executeUpdate(sql);
 	}
+	
+	@Override
+	public String escapeColumn(String column)
+	{
+		return "\"" + column + "\"";
+	}
 }

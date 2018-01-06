@@ -16,6 +16,6 @@ public class CooInitTblRegionDividing extends InitTblRegionDividing
 	public void init() throws SQLException
 	{
 		// Add initial default region dividing entry
-		put(1, 1, 0, 0);
+		put(1, 1);
 	}
 }

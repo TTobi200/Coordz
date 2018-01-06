@@ -12,25 +12,14 @@ import java.util.Objects;
 
 import org.w3c.dom.*;
 
+import de.coordz.db.gen.dao.DaoStation;
 import de.coordz.db.xml.CooDBXML;
 import javafx.beans.property.*;
 import javafx.collections.*;
 
-public class CooStation implements CooDBXML
+public class CooStation extends DaoStation implements CooDBXML
 {
-	/** {@link StringProperty} for the station name */
-	protected StringProperty name;
-	/** {@link StringProperty} for the station description */
-	protected StringProperty description;
-	/** {@link StringProperty} for the station file */
-	protected StringProperty file;
-	/** {@link IntegerProperty} for the station x offset */
-	protected IntegerProperty xOffset;
-	/** {@link IntegerProperty} for the station y offset */
-	protected IntegerProperty yOffset;
-	/** {@link IntegerProperty} for the station z offset */
-	protected IntegerProperty zOffset;
-
+	// FIXME $TO: Link this with database fields
 	/** {@link ObjectProperty} for the station {@link CooRegionDividing} */
 	protected ObjectProperty<CooRegionDividing> regionDeviding;
 	/** {@link ObservableList} with all station {@link CooMeasurement} */
@@ -42,12 +31,6 @@ public class CooStation implements CooDBXML
 	
 	public CooStation()
 	{
-		name = new SimpleStringProperty();
-		description = new SimpleStringProperty();
-		file = new SimpleStringProperty();
-		xOffset = new SimpleIntegerProperty();
-		yOffset = new SimpleIntegerProperty();
-		zOffset = new SimpleIntegerProperty();
 		regionDeviding = new SimpleObjectProperty<>(
 						new CooRegionDividing());
 		measurements = FXCollections.observableArrayList();
@@ -61,12 +44,12 @@ public class CooStation implements CooDBXML
 	public void toXML(Document doc, Element root)
 	{
 		Element station = addElement(doc, root, "Station");
-		station.setAttribute("Name", name.get());
-		station.setAttribute("Description", description.get());
-		station.setAttribute("File", file.get());
-		station.setAttribute("XOffset", String.valueOf(xOffset.get()));
-		station.setAttribute("YOffset", String.valueOf(yOffset.get()));
-		station.setAttribute("ZOffset", String.valueOf(zOffset.get()));
+		station.setAttribute("Name", nameProperty().get());
+		station.setAttribute("Description", descriptionProperty().get());
+		station.setAttribute("File", fileProperty().get());
+		station.setAttribute("XOffset", String.valueOf(xOffsetProperty().get()));
+		station.setAttribute("YOffset", String.valueOf(yOffsetProperty().get()));
+		station.setAttribute("ZOffset", String.valueOf(zOffsetProperty().get()));
 
 		regionDeviding.get().toXML(doc, station);
 
@@ -85,12 +68,12 @@ public class CooStation implements CooDBXML
 	{
 		if(Objects.nonNull(station))
 		{
-			name.set(station.getAttribute("Name"));
-			description.set(station.getAttribute("Description"));
-			file.set(station.getAttribute("File"));
-			xOffset.set(Integer.valueOf(station.getAttribute("XOffset")));
-			yOffset.set(Integer.valueOf(station.getAttribute("YOffset")));
-			zOffset.set(Integer.valueOf(station.getAttribute("ZOffset")));
+			nameProperty().set(station.getAttribute("Name"));
+			descriptionProperty().set(station.getAttribute("Description"));
+			fileProperty().set(station.getAttribute("File"));
+			xOffsetProperty().set(Integer.valueOf(station.getAttribute("XOffset")));
+			yOffsetProperty().set(Integer.valueOf(station.getAttribute("YOffset")));
+			zOffsetProperty().set(Integer.valueOf(station.getAttribute("ZOffset")));
 			
 			regionDeviding.get().fromXML(getSingleElement(station,
 				"RegionDividing"));
@@ -115,60 +98,6 @@ public class CooStation implements CooDBXML
 	public ObservableList<CooMeasurement> getMeasurements()
 	{
 		return measurements;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #name}
-	 */
-	public StringProperty nameProperty()
-	{
-		return name;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #description}
-	 */
-	public StringProperty descriptionProperty()
-	{
-		return description;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #file}
-	 */
-	public StringProperty fileProperty()
-	{
-		return file;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #xOffset}
-	 */
-	public IntegerProperty xOffsetProperty()
-	{
-		return xOffset;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #yOffset}
-	 */
-	public IntegerProperty yOffsetProperty()
-	{
-		return yOffset;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #zOffset}
-	 */
-	public IntegerProperty zOffsetProperty()
-	{
-		return zOffset;
 	}
 	
 	/**

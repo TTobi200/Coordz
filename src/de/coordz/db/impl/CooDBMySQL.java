@@ -111,4 +111,10 @@ public class CooDBMySQL extends CooDBSimple
 		}
 		return retType;
 	}
+	
+	@Override
+	public String escapeColumn(String column)
+	{
+		return "'" + column + "'";
+	}
 }

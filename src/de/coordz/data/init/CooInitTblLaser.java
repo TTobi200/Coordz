@@ -17,6 +17,6 @@ public class CooInitTblLaser extends InitTblLaser
 	{
 		// Add initial default laser entry
 		put("Laser 1", "AT123456", "SN123456",
-			0, 0, 0, 0d);
+			0, 0, 0, 0d, 0, 0);
 	}
 }

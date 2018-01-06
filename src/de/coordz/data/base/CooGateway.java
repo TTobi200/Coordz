@@ -12,24 +12,17 @@ import java.util.*;
 
 import org.w3c.dom.*;
 
+import de.coordz.db.gen.dao.DaoGateway;
 import de.coordz.db.xml.CooDBXML;
-import javafx.beans.property.*;
 import javafx.collections.*;
 
-public class CooGateway implements CooDBXML
+public class CooGateway extends DaoGateway implements CooDBXML
 {
-	/** {@link StringProperty} for the gateway ip */
-	protected StringProperty ip;
-	/** {@link StringProperty} for the gateway mac */
-	protected StringProperty mac;
-	
 	/** {@link List} with all gateway {@link CooLaser} */
 	protected ObservableList<CooLaser> laser;
 	
 	public CooGateway()
 	{
-		ip = new SimpleStringProperty();
-		mac = new SimpleStringProperty();
 		laser = FXCollections.observableArrayList();
 	}
 	
@@ -38,8 +31,8 @@ public class CooGateway implements CooDBXML
 	{
 		Element gateway = addElement(doc, root,
 			"Gateway");
-		gateway.setAttribute("IP", ip.get());
-		gateway.setAttribute("MAC", mac.get());
+		gateway.setAttribute("IP", ipProperty().get());
+		gateway.setAttribute("MAC", macProperty().get());
 		
 		laser.forEach(l -> l.toXML(doc, gateway));
 	}
@@ -49,8 +42,8 @@ public class CooGateway implements CooDBXML
 	{
 		if(Objects.nonNull(gateway))
 		{
-			ip.set(gateway.getAttribute("IP"));
-			mac.set(gateway.getAttribute("MAC"));
+			ipProperty().set(gateway.getAttribute("IP"));
+			macProperty().set(gateway.getAttribute("MAC"));
 			
 			// Load all laser
 			addToList("Laser", gateway,
@@ -65,23 +58,5 @@ public class CooGateway implements CooDBXML
 	public ObservableList<CooLaser> getLaser()
 	{
 		return laser;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #ip}
-	 */
-	public StringProperty ipProperty()
-	{
-		return ip;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #mac}
-	 */
-	public StringProperty macProperty()
-	{
-		return mac;
 	}
 }

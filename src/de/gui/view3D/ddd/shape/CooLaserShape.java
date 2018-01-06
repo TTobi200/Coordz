@@ -3,8 +3,7 @@ package de.gui.view3D.ddd.shape;
 import de.coordz.data.base.CooLaser;
 import de.gui.view3D.ddd.util.CooDistance;
 import javafx.beans.property.StringProperty;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.PhongMaterial;
+import javafx.scene.paint.*;
 import javafx.scene.shape.Box;
 
 public class CooLaserShape extends CooGroupShape<CooLaser>

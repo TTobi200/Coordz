@@ -74,4 +74,11 @@ public abstract class CooDB
 	 * @return a {@link String} containing the data type
 	 */
 	public abstract String getDataType(CooDBValTypes type, String column);
+	
+	/**
+	 * Method to get escape committed column for this specified {@link CooDB}.
+	 * @param column = the column name
+	 * @return a {@link String} containing the escaped column
+	 */
+	public abstract String escapeColumn(String column);
 }

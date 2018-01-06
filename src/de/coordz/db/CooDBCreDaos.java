@@ -87,7 +87,7 @@ public class CooDBCreDaos
 		out.println("\tpublic " + daoName + "()");
 		out.println("\t{");
 			
-			out.println("\t\ttableName = " + CooDBCreInfs.getColConst(table, "NAME") +";");
+			out.println("\t\ttableName = " + CooDBCreInfs.getColConst(table, "TABLE_NAME") +";");
 			out.println("\t\ttablePKey = " + CooDBCreInfs.getColConst(table, 
 				table.pKeyProperty().get()) + ";");
 			out.println();

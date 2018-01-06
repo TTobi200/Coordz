@@ -12,11 +12,13 @@ import java.util.Objects;
 
 import org.w3c.dom.*;
 
+import de.coordz.db.gen.dao.DaoVerifyMeasurement;
 import de.coordz.db.xml.CooDBXML;
 import javafx.collections.*;
 
-public class CooVerifyMeasurement implements CooDBXML
+public class CooVerifyMeasurement extends DaoVerifyMeasurement implements CooDBXML
 {
+	// FIXME $TO: Implement the db fields
 	/** {@link ObservableList} with all verify measurement specification {@link CooRectangle} */
 	protected ObservableList<CooRectangle> specification;
 	/** {@link ObservableList} with all verify measurement result {@link CooRectangle} */

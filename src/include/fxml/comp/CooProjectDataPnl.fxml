@@ -114,12 +114,12 @@
 													</TableColumn>
 													<TableColumn text="Artikel Nr.">
 														<cellValueFactory>
-															<PropertyValueFactory property="articleNr" />
+															<PropertyValueFactory property="articleNo" />
 														</cellValueFactory>
 													</TableColumn>
 													<TableColumn text="Serial Nr.">
 														<cellValueFactory>
-															<PropertyValueFactory property="serialNr" />
+															<PropertyValueFactory property="serialNo" />
 														</cellValueFactory>
 													</TableColumn>
 												</columns>

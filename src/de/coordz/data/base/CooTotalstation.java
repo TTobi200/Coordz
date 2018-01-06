@@ -12,40 +12,20 @@ import java.util.Objects;
 
 import org.w3c.dom.*;
 
+import de.coordz.db.gen.dao.DaoTotalstation;
 import de.coordz.db.xml.CooDBXML;
-import javafx.beans.property.*;
 
-public class CooTotalstation implements CooDBXML
+public class CooTotalstation extends DaoTotalstation implements CooDBXML
 {
-	/** {@link IntegerProperty} for the totalstation x coordinate */
-	protected IntegerProperty x;
-	/** {@link IntegerProperty} for the totalstation y coordinate */
-	protected IntegerProperty y;
-	/** {@link IntegerProperty} for the totalstation z coordinate */
-	protected IntegerProperty z;
-	/** {@link IntegerProperty} for the totalstation delta x */
-	protected DoubleProperty deltaX;
-	/** {@link IntegerProperty} for the totalstation delta y */
-	protected DoubleProperty deltaY;
-	
-	public CooTotalstation()
-	{
-		x = new SimpleIntegerProperty();
-		y = new SimpleIntegerProperty();
-		z = new SimpleIntegerProperty();
-		deltaX = new SimpleDoubleProperty();
-		deltaY = new SimpleDoubleProperty();
-	}
-	
 	@Override
 	public void toXML(Document doc, Element root)
 	{
 		Element totalstation = addElement(doc, root, "Totalstation");
-		totalstation.setAttribute("X", String.valueOf(x.get()));
-		totalstation.setAttribute("Y", String.valueOf(y.get()));
-		totalstation.setAttribute("Z", String.valueOf(z.get()));
-		totalstation.setAttribute("DeltaX", String.valueOf(deltaX.get()));
-		totalstation.setAttribute("DeltaY", String.valueOf(deltaY.get()));
+		totalstation.setAttribute("X", String.valueOf(xProperty().get()));
+		totalstation.setAttribute("Y", String.valueOf(yProperty().get()));
+		totalstation.setAttribute("Z", String.valueOf(zProperty().get()));
+		totalstation.setAttribute("DeltaX", String.valueOf(deltaXProperty().get()));
+		totalstation.setAttribute("DeltaY", String.valueOf(deltaYProperty().get()));
 	}
 	
 	@Override
@@ -53,56 +33,11 @@ public class CooTotalstation implements CooDBXML
 	{
 		if(Objects.nonNull(totalstation))
 		{
-			x.set(Integer.valueOf(totalstation.getAttribute("X")));
-			y.set(Integer.valueOf(totalstation.getAttribute("Y")));
-			z.set(Integer.valueOf(totalstation.getAttribute("Z")));
-			deltaX.set(Double.valueOf(totalstation.getAttribute("DeltaX")));
-			deltaY.set(Double.valueOf(totalstation.getAttribute("DeltaY")));
+			xProperty().set(Integer.valueOf(totalstation.getAttribute("X")));
+			yProperty().set(Integer.valueOf(totalstation.getAttribute("Y")));
+			zProperty().set(Integer.valueOf(totalstation.getAttribute("Z")));
+			deltaXProperty().set(Double.valueOf(totalstation.getAttribute("DeltaX")));
+			deltaYProperty().set(Double.valueOf(totalstation.getAttribute("DeltaY")));
 		}
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #x}
-	 */
-	public IntegerProperty xProperty()
-	{
-		return x;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #y}
-	 */
-	public IntegerProperty yProperty()
-	{
-		return y;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #z}
-	 */
-	public IntegerProperty zProperty()
-	{
-		return z;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #deltaX}
-	 */
-	public DoubleProperty deltaXProperty()
-	{
-		return deltaX;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #deltaY}
-	 */
-	public DoubleProperty deltaYProperty()
-	{
-		return deltaY;
 	}
 }

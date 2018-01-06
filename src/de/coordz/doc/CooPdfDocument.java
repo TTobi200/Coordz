@@ -93,7 +93,7 @@ public class CooPdfDocument extends CooDocument
 		{
 			// addSubCaption(doc, "Station " + s.nameProperty().get());
 			Section sec = addCaption(doc, chapter, "Station "
-													+ s.nameProperty().get());
+				+ s.nameProperty().get());
 			// Section sec = addSubCaption(doc, section, "Station " +
 			// s.nameProperty().get());
 
@@ -167,8 +167,7 @@ public class CooPdfDocument extends CooDocument
 		{
 			// addSubCaption(doc, "Messung " + m.nameProperty().get());
 			Section sec = addSubCaption(doc, parent, "Messung "
-														+ m.nameProperty()
-															.get());
+				+ m.nameProperty().get());
 			// Section sec = addSubCaption(doc, section, "Messung " +
 			// m.nameProperty().get());
 
@@ -370,8 +369,8 @@ public class CooPdfDocument extends CooDocument
 		laser.forEach(l ->
 		{
 			table.addCell(l.nameProperty().get());
-			table.addCell(l.articleNrProperty().get());
-			table.addCell(l.serialNrProperty().get());
+			table.addCell(l.articleNoProperty().get());
+			table.addCell(l.serialNoProperty().get());
 			table.addCell(String.valueOf(l.xProperty().get()));
 			table.addCell(String.valueOf(l.yProperty().get()));
 			table.addCell(String.valueOf(l.zProperty().get()));

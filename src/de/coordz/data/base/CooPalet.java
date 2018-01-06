@@ -12,38 +12,19 @@ import java.util.Objects;
 
 import org.w3c.dom.*;
 
+import de.coordz.db.gen.dao.DaoPalet;
 import de.coordz.db.xml.CooDBXML;
-import de.util.CooPaletType;
-import javafx.beans.property.*;
 
-public class CooPalet implements CooDBXML
+public class CooPalet extends DaoPalet implements CooDBXML
 {
-	/** {@link StringProperty} for the palet name */
-	protected StringProperty name;
-	/** {@link ObjectProperty} for the palet {@link CooPaletType} */
-	protected ObjectProperty<CooPaletType> type;
-	/** {@link IntegerProperty} for the palet width */
-	protected IntegerProperty width;
-	/** {@link IntegerProperty} for the palet width */
-	protected IntegerProperty length;
-	
-	public CooPalet()
-	{
-		name = new SimpleStringProperty();
-		type = new SimpleObjectProperty<>(
-				CooPaletType.U);
-		width = new SimpleIntegerProperty();
-		length = new SimpleIntegerProperty();
-	}
-	
 	@Override
 	public void toXML(Document doc, Element root)
 	{
 		Element palet = addElement(doc, root, "Palet");
-		palet.setAttribute("Name", String.valueOf(name.get()));
-		palet.setAttribute("Type", String.valueOf(type.get()));
-		palet.setAttribute("Width", String.valueOf(width.get()));
-		palet.setAttribute("Length", String.valueOf(length.get()));
+		palet.setAttribute("Name", String.valueOf(nameProperty().get()));
+		palet.setAttribute("Type", String.valueOf(typeProperty().get()));
+		palet.setAttribute("Width", String.valueOf(widthProperty().get()));
+		palet.setAttribute("Length", String.valueOf(lengthProperty().get()));
 	}
 	
 	@Override
@@ -51,47 +32,12 @@ public class CooPalet implements CooDBXML
 	{
 		if(Objects.nonNull(palet))
 		{
-			name.set(palet.getAttribute("Name"));
-			type.set(CooPaletType.parse(palet.getAttribute("Type")));
-			width.set(Integer.valueOf(palet.getAttribute("Width")));
-			length.set(Integer.valueOf(palet.getAttribute("Length")));
+			nameProperty().set(palet.getAttribute("Name"));
+			// FIXME $TO: Convert to palet type
+//			typeProperty().set(CooPaletType.parse(palet.getAttribute("Type")));
+			widthProperty().set(Integer.valueOf(palet.getAttribute("Width")));
+			lengthProperty().set(Integer.valueOf(palet.getAttribute("Length")));
 		}
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #name}
-	 */
-	public StringProperty nameProperty()
-	{
-		return name;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #type}
-	 */
-	public ObjectProperty<CooPaletType> typeProperty()
-	{
-		return type;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #width}
-	 */
-	public IntegerProperty widthProperty()
-	{
-		return width;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #length}
-	 */
-	public IntegerProperty lengthProperty()
-	{
-		return length;
 	}
 	
 	@Override

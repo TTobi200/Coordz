@@ -12,59 +12,25 @@ import java.util.Objects;
 
 import org.w3c.dom.*;
 
+import de.coordz.db.gen.dao.DaoLaser;
 import de.coordz.db.xml.CooDBXML;
-import javafx.beans.property.*;
 
-public class CooLaser implements CooDBXML
+public class CooLaser extends DaoLaser implements CooDBXML
 {
-	/** {@link StringProperty} for the laser name */
-	protected StringProperty name;
-	/** {@link StringProperty} for the laser article number */
-	protected StringProperty articleNr;
-	/** {@link StringProperty} for the laser serial number */
-	protected StringProperty serialNr;
-
-	/** {@link IntegerProperty} for the laser x value */
-	protected IntegerProperty x;
-	/** {@link IntegerProperty} for the laser y value */
-	protected IntegerProperty y;
-	/** {@link IntegerProperty} for the laser z value */
-	protected IntegerProperty z;
-	/** {@link DoubleProperty} for the laser total deviation */
-	protected DoubleProperty totalDeviation;
-	
-	/** {@link IntegerProperty} for the laser region dividing from value */
-	protected IntegerProperty from;
-	/** {@link IntegerProperty} for the laser region dividing to value */
-	protected IntegerProperty to;
-
-	public CooLaser()
-	{
-		name = new SimpleStringProperty();
-		articleNr = new SimpleStringProperty();
-		serialNr = new SimpleStringProperty();
-		x = new SimpleIntegerProperty();
-		y = new SimpleIntegerProperty();
-		z = new SimpleIntegerProperty();
-		totalDeviation = new SimpleDoubleProperty();
-		from = new SimpleIntegerProperty();
-		to = new SimpleIntegerProperty();
-	}
-	
 	@Override
 	public void toXML(Document doc, Element root)
 	{
 		Element laser = addElement(doc, root, "Laser");
-		laser.setAttribute("Name", name.get());
-		laser.setAttribute("ArticleNr", articleNr.get());
-		laser.setAttribute("SerialNr", serialNr.get());
-		laser.setAttribute("X", String.valueOf(x.get()));
-		laser.setAttribute("Y", String.valueOf(y.get()));
-		laser.setAttribute("Z", String.valueOf(z.get()));
+		laser.setAttribute("Name", nameProperty().get());
+		laser.setAttribute("ArticleNr", articleNoProperty().get());
+		laser.setAttribute("SerialNr", serialNoProperty().get());
+		laser.setAttribute("X", String.valueOf(xProperty().get()));
+		laser.setAttribute("Y", String.valueOf(yProperty().get()));
+		laser.setAttribute("Z", String.valueOf(zProperty().get()));
 		laser.setAttribute("TotalDeviation", 
-			String.valueOf(totalDeviation.get()));
-		laser.setAttribute("From", String.valueOf(from.get()));
-		laser.setAttribute("To", String.valueOf(to.get()));
+			String.valueOf(totalDeviationProperty().get()));
+		laser.setAttribute("From", String.valueOf(fromProperty().get()));
+		laser.setAttribute("To", String.valueOf(toProperty().get()));
 	}
 	
 	@Override
@@ -72,97 +38,16 @@ public class CooLaser implements CooDBXML
 	{
 		if(Objects.nonNull(laser))
 		{
-			name.set(laser.getAttribute("Name"));
-			articleNr.set(laser.getAttribute("ArticleNr"));
-			serialNr.set(laser.getAttribute("SerialNr"));
-			x.set(Integer.valueOf(laser.getAttribute("X")));
-			y.set(Integer.valueOf(laser.getAttribute("Y")));
-			z.set(Integer.valueOf(laser.getAttribute("Z")));
-			totalDeviation.set(Double.valueOf(laser.getAttribute(
+			nameProperty().set(laser.getAttribute("Name"));
+			articleNoProperty().set(laser.getAttribute("ArticleNr"));
+			serialNoProperty().set(laser.getAttribute("SerialNr"));
+			xProperty().set(Integer.valueOf(laser.getAttribute("X")));
+			yProperty().set(Integer.valueOf(laser.getAttribute("Y")));
+			zProperty().set(Integer.valueOf(laser.getAttribute("Z")));
+			totalDeviationProperty().set(Double.valueOf(laser.getAttribute(
 				"TotalDeviation")));
-			from.set(Integer.valueOf(laser.getAttribute("From")));
-			to.set(Integer.valueOf(laser.getAttribute("To")));
+			fromProperty().set(Integer.valueOf(laser.getAttribute("From")));
+			toProperty().set(Integer.valueOf(laser.getAttribute("To")));
 		}
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #name}
-	 */
-	public StringProperty nameProperty()
-	{
-		return name;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #articleNr}
-	 */
-	public StringProperty articleNrProperty()
-	{
-		return articleNr;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #serialNr}
-	 */
-	public StringProperty serialNrProperty()
-	{
-		return serialNr;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #x}
-	 */
-	public IntegerProperty xProperty()
-	{
-		return x;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #y}
-	 */
-	public IntegerProperty yProperty()
-	{
-		return y;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #z}
-	 */
-	public IntegerProperty zProperty()
-	{
-		return z;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #totalDeviation}
-	 */
-	public DoubleProperty totalDeviationProperty()
-	{
-		return totalDeviation;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #from}
-	 */
-	public IntegerProperty fromProperty()
-	{
-		return from;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #to}
-	 */
-	public IntegerProperty toProperty()
-	{
-		return to;
 	}
 }
