@@ -31,7 +31,7 @@ public class CooSystem
 	public static final int FATAL = 0x1;
 	public static final int SERVER_ERROR = 0x10;
 	
-	public static final boolean REORG_LOGS = true;
+	public static final boolean REORG_LOGS = Boolean.TRUE;
 	public static final int DAYS_TO_SAVE_LOGS = 7;
 	public static final String LOGGING_FOLDER = "./logging";
 

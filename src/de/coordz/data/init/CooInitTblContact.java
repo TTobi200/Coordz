@@ -8,12 +8,14 @@ package de.coordz.data.init;
 
 import java.sql.SQLException;
 
-import de.coordz.db.gen.init.InitTblSettings;
+import de.coordz.db.gen.init.InitTblContact;
 
-public class CooInitTblSettings extends InitTblSettings
+public class CooInitTblContact extends InitTblContact
 {
 	@Override
 	public void init() throws SQLException
 	{
+		// Add initial default contact entry
+		put(1, "Max", "Mustermann", "01244 - 123", "max@mustermann.com");
 	}
 }

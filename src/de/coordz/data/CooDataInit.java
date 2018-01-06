@@ -23,9 +23,21 @@ public class CooDataInit extends CooDBInit
 		createDBTables(CooSystem.getModel());
 		
 		// Initializes database tables
-		new CooInitTblUsers().init();
-		new CooInitTblStatistic().init();
-		new CooInitTblSettings().init();
+		new CooInitTblContact().init();
+		new CooInitTblCustomer().init();
+		new CooInitTblGateway().init();
+		new CooInitTblLAPSoftware().init();
+		new CooInitTblLaser().init();
+		new CooInitTblMeasurement().init();
+		new CooInitTblPalet().init();
+		new CooInitTblProject().init();
+		new CooInitTblRectangle().init();
+		new CooInitTblRegionDividing().init();
+		new CooInitTblReticle().init();
+		new CooInitTblStation().init();
+		new CooInitTblTarget().init();
+		new CooInitTblTotalstation().init();
+		new CooInitTblVerifyMeasurement().init();
 	}
 	
 	private void createDBTables(CooDBModel model) throws SQLException

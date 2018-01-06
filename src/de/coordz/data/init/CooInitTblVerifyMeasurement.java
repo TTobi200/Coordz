@@ -8,14 +8,14 @@ package de.coordz.data.init;
 
 import java.sql.SQLException;
 
-import de.coordz.db.gen.init.InitTblStatistic;
+import de.coordz.db.gen.init.InitTblVerifyMeasurement;
 
-public class CooInitTblStatistic extends InitTblStatistic
+public class CooInitTblVerifyMeasurement extends InitTblVerifyMeasurement
 {
 	@Override
 	public void init() throws SQLException
 	{
-		// Add initial default statistic entry
-		put(1, "JANUARY", "2017", 10);
+		// Add initial default verify measurement entry
+		put(1, 1, 1);
 	}
 }
