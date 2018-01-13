@@ -17,6 +17,7 @@ import de.gui.comp.CooTableView;
 import de.util.*;
 import de.util.log.CooLog;
 import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
 import javafx.collections.*;
 import javafx.fxml.FXML;
 import javafx.scene.*;
@@ -28,6 +29,7 @@ public class CooAutoCalDialog extends Stage
 	public static final String FXML = "CooAutoCalDialog.fxml";
 
 	public static final String TAB = "\t";
+	public static final int DEF_TARGET_COUNT = 4;
 	public static final double DEF_HEIGTH = 400;
 	public static final double DEF_WIDTH = 600;
 	
@@ -35,6 +37,8 @@ public class CooAutoCalDialog extends Stage
 	private CooTableView<CooTarget> tblTargets;
 	@FXML
 	private Label progress;
+	@FXML
+	private CheckBox cbOnlySelected;
 	@FXML
 	private Spinner<Integer> spinRange;
 	@FXML
@@ -47,9 +51,9 @@ public class CooAutoCalDialog extends Stage
 	private TextArea txtLog;
 
 	/** {@link Map} with all target results */
-	private Map<Integer, Double> targetResults;
+	private Map<Short, Float> targetResults;
 	/** {@link Map} with the best targets */
-	private Map<Integer, CooTarget> bestTargets;
+	private Map<Short, CooTarget> bestTargets;
 	
 	private CooLAPClient client;
 	private boolean running;
@@ -59,10 +63,17 @@ public class CooAutoCalDialog extends Stage
 
 	public CooAutoCalDialog(Window parent, CooLAPClient client)
 	{
-		init(parent, client);
+		this(parent, client, FXCollections.observableArrayList());
+	}
+	
+	public CooAutoCalDialog(Window parent, CooLAPClient client,
+			ObservableList<CooTarget> targets)
+	{
+		init(parent, client, targets);
 	}
 
-	private void init(Window parent, CooLAPClient client)
+	private void init(Window parent, CooLAPClient client,
+			ObservableList<CooTarget> targets)
 	{
 		try
 		{
@@ -81,17 +92,21 @@ public class CooAutoCalDialog extends Stage
 			
 			this.client = client;
 			tblTargets.setClazz(CooTarget.class);
+			tblTargets.getSelectionModel().setSelectionMode(
+				SelectionMode.MULTIPLE);
+
+			// Check if no targets committed
+			if(Objects.isNull(targets) | targets.isEmpty())
+			{
+				// Generate some default targets
+				targets = createDefaultTargets(DEF_TARGET_COUNT);
+			}
+			// Add a copy of committed target
+			targets.forEach(t -> tblTargets.getItems().add(copyTarget(t)));
+			
 			log("Automated calibration opened...");
 			log("Connected to LAP Pro Soft " + client.getSrvIp() +
-				" on Port " + client.getSrvPort());
-			
-			// FORTEST Add some test targets
-			for(int i = 1; i < 5; i++)
-			{
-				CooTarget t = new CooTarget();
-				t.nameProperty().set("T " + i);
-				tblTargets.getItems().add(t);
-			}
+				" on Port " + client.getSrvPort());			
 		}
 		catch(IOException e)
 		{
@@ -113,12 +128,18 @@ public class CooAutoCalDialog extends Stage
 		bestTargets = new HashMap<>(targetCount);
 		progress.setVisible(Boolean.TRUE);
 		progress.setText("Process started...");
+		running = Boolean.TRUE;
 		run = 1;
 		
+		ObservableList<CooTarget> targetsToAdjust = cbOnlySelected.isSelected()
+			? tblTargets.getSelectionModel().getSelectedItems() : tblTargets.getItems();
 		ObservableList<CooTarget> targets = tblTargets.getItems();
-		File tempFile = File.createTempFile("tempCalibFile", ".cal");
-		tempFile.deleteOnExit();
-		running = Boolean.TRUE;
+		// TODO $TO: Check why temp file not working?
+//		File tempFile = File.createTempFile("tempCalibFile", ".cal");
+//		tempFile.deleteOnExit();
+		
+		File tempFile = new File("D:\\Desktop\\UNITECHNIK\\Projekte\\Beton\\Leitrechner"
+			+ "\\A2017.10305 Mischek Gerasdorf\\01_Inbetriebnahme\\Coordz Test\\Mischek_Laser_U1.cal");
 			
 		// Create own worker thread
 		Thread worker = new Thread(() -> 
@@ -128,16 +149,39 @@ public class CooAutoCalDialog extends Stage
 				log("Automated calibration started...");
 				log("Using range " + spinRange.getValue() + "...");
 				
-				for(CooTarget t : targets)
+				// Test the committed targets
+				initialTest(targets, tempFile);
+				
+				for(short targetNo = 0; targetNo < targets.size(); targetNo++)
 				{
+					// Get the target
+					CooTarget t = targets.get(targetNo);
 					// Get the target name
 					String targetName = t.nameProperty().get();
 					
-					if(cbAdjustX.isSelected())
+					// Check if target should be adjusted
+					if(targetsToAdjust.contains(t))
 					{
-						// Start adjusting targets x coordinates
-						log("Adjust X coord of target " + targetName);
-						adjustXCoord(targets, tempFile, t, spinRange.getValue());
+						if(cbAdjustX.isSelected())
+						{
+							// Start adjusting targets x coordinates
+							log("Adjust X coord of target " + targetName);
+							adjustXCoord(targets, tempFile, targetNo, spinRange.getValue());
+						}
+						
+						if(cbAdjustY.isSelected())
+						{
+							// Start adjusting targets y coordinates
+							log("Adjust Y coord of target " + targetName);
+							adjustYCoord(targets, tempFile, targetNo, spinRange.getValue());
+						}
+						
+						if(cbAdjustZ.isSelected())
+						{
+							// Start adjusting targets z coordinates
+							log("Adjust Z coord of target " + targetName);
+							adjustZCoord(targets, tempFile, targetNo, spinRange.getValue());
+						}
 					}
 					
 					// Check if user canceled
@@ -147,12 +191,18 @@ public class CooAutoCalDialog extends Stage
 					}
 				}
 				
+				// Print out the best target combination
+				log("Best target combination was:");
+				bestTargets.values().forEach(t -> log(TAB + t.toString()));
+				
 				// Inform user that process finished
 				log("Automated calibration finished!");
 				progress("Process finished");
 				running = Boolean.FALSE;
+				
+				// FORTEST $TO: Dont delete the calibration file
 				// Delete the calibration file
-				tempFile.delete();
+//				tempFile.delete();
 			}
 			catch (Exception e) 
 			{
@@ -164,50 +214,107 @@ public class CooAutoCalDialog extends Stage
 		worker.start();
 	}
 	
-	private void adjustXCoord(ObservableList<CooTarget> targets, 
-		File calFile, CooTarget t, int range) throws IOException
+	private void initialTest(ObservableList<CooTarget> targets,
+		File calFile) throws IOException
 	{
-		// Store the x coordinate to rest
-		int x = t.xProperty().get();
+		log("Initial calibration started...");
+		
+		// Write the new values into calibration file
+		CooCalibrationFile.save(calFile, targets);
+		
+		// Start auto calibration and check result
+		CooLAPPacketImpl result = client.startAutoCalibration(calFile);	
+		
+		if(result.getResult() == Result.SUCCESSFUL)
+		{
+			// Add the lap target results
+			ObservableList<CooLAPTarget> lapTargets = FXCollections.observableArrayList();
+				result.getProjectors().forEach(p -> lapTargets.addAll(p.getTargets()));
+			lapTargets.forEach(lapT -> targetResults.put(lapT.getNumber(), lapT.getDeviation()));
+			// Add the initial targets
+			for(short i = 0; i < targets.size(); i++)
+			{
+				bestTargets.put(i, copyTarget(targets.get(i)));
+			}
+			
+			log(TAB + "Initial results: " + targetResults.toString());
+		}
+	}
+
+	private void adjustXCoord(ObservableList<CooTarget> targets, 
+		File calFile, short targetNo, int range) throws IOException
+	{
+		// Get the target to adjust
+		CooTarget t = targets.get(targetNo);
+		// Adjust the x coordinate
+		adjustCoord(targets, calFile, targetNo, t.xProperty(), range);
+	}
+	
+	private void adjustYCoord(ObservableList<CooTarget> targets, 
+		File calFile, short targetNo, int range) throws IOException
+	{
+		// Get the target to adjust
+		CooTarget t = targets.get(targetNo);
+		// Adjust the y coordinate
+		adjustCoord(targets, calFile, targetNo, t.yProperty(), range);
+	}
+	
+	private void adjustZCoord(ObservableList<CooTarget> targets, 
+		File calFile, short targetNo, int range) throws IOException
+	{
+		// Get the target to adjust
+		CooTarget t = targets.get(targetNo);
+		// Adjust the z coordinate
+		adjustCoord(targets, calFile, targetNo, t.zProperty(), range);
+	}
+	
+	private void adjustCoord(ObservableList<CooTarget> targets, File calFile,
+		short targetNo, IntegerProperty coord, int range) throws IOException
+	{
+		// Store the coordinate value to rest
+		int startValue = coord.get();
 		
 		// Test the negative range
 		for(int i = 0; i < range; i++)
 		{
-			t.xProperty().set(t.xProperty().get() - 1);
-			adjustCoord(targets, calFile, t);
+			coord.set(coord.get() - 1);
+			adjustCoord(targets, calFile, targetNo);
 			
 			// Check if user canceled
 			if(!running)
 			{
-				// Reset the x coordinate
-				t.xProperty().set(x);
+				// Reset the coordinate value
+				coord.set(startValue);
 				return;
 			}
 		}
-		// Reset the x coordinate
-		t.xProperty().set(x);
+		// Reset the coordinate value
+		coord.set(startValue);
 		
 		// Test the positive range
 		for(int i = 0; i < range; i++)
 		{
-			t.xProperty().set(t.xProperty().get() + 1);
-			adjustCoord(targets, calFile, t);
+			coord.set(coord.get() + 1);
+			adjustCoord(targets, calFile, targetNo);
 			
 			// Check if user canceled
 			if(!running)
 			{
-				// Reset the x coordinate
-				t.xProperty().set(x);
+				// Reset the coordinate value
+				coord.set(startValue);
 				return;
 			}
 		}
-		// Reset the x coordinate
-		t.xProperty().set(x);
+		// Reset the coordinate value
+		coord.set(startValue);
 	}
 	
 	private void adjustCoord(ObservableList<CooTarget> targets, 
-		File calFile, CooTarget t) throws IOException
+		File calFile, short targetNo) throws IOException
 	{
+		// Get the target by number
+		CooTarget t = targets.get(targetNo);
+		
 		// Update the progress indicator
 		log(TAB + "Testing " + t.toString() + "...");
 		progress("Running test " + run++ + " of " + maxProgress);
@@ -220,29 +327,30 @@ public class CooAutoCalDialog extends Stage
 		
 		if(result.getResult() == Result.SUCCESSFUL)
 		{
+			// Define the lapTargetNo
+			short lapTargetNo = (short)(targetNo + 1);
 			// Get all available targets
 			ObservableList<CooLAPTarget> lapTargets = FXCollections.observableArrayList();
 			result.getProjectors().forEach(p -> lapTargets.addAll(p.getTargets()));
-			
-			int number = targets.indexOf(t) + 1;
+			// Find the current target in lap return package
 			Optional<CooLAPTarget> target = lapTargets.filtered(lapTarget ->
-				lapTarget.getNumber() == number).stream().findFirst();
+				lapTarget.getNumber() == lapTargetNo).stream().findFirst();
 			
 			if(target.isPresent())
 			{
 				// Get the last target deviation
-				double deviation = targetResults.get(number);
-				deviation = Objects.isNull(deviation) ? Double.MAX_VALUE : deviation;
+				Float deviation = targetResults.get(lapTargetNo);
+				deviation = Objects.isNull(deviation) ? Float.MAX_VALUE : deviation;
 				// And compare it with actual
 				if(target.get().getDeviation() < deviation)
 				{
-					log(TAB + "Target deviation: " + t.toString());
-					log(TAB + "Deviation changed from " + deviation +
+					log(TAB + TAB + "Deviation changed from " + deviation +
 						" to " + target.get().getDeviation());
 					
 					// Copy the target and add it to best targets
 					CooTarget targetCopy = copyTarget(t);
-					bestTargets.put(number, targetCopy);
+					bestTargets.put(targetNo, targetCopy);
+					targetResults.put(lapTargetNo, deviation);
 				}
 			}
 		}
@@ -256,6 +364,19 @@ public class CooAutoCalDialog extends Stage
 		copy.yProperty().set(target.yProperty().get());
 		copy.zProperty().set(target.zProperty().get());
 		return copy;
+	}
+	
+	private static ObservableList<CooTarget> createDefaultTargets(int count)
+	{
+		ObservableList<CooTarget> targets = FXCollections.observableArrayList();
+		
+		for(int i = 1; i <= count; i++)
+		{
+			CooTarget t = new CooTarget();
+			t.nameProperty().set("T " + i);
+			targets.add(t);
+		}
+		return targets;
 	}
 
 	@FXML

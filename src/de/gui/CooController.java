@@ -105,7 +105,8 @@ public class CooController implements Initializable, CooDataChanged
 			!tabPane.getTabs().contains(tabGallery)));
 
 		// FORTEST load the coordz xml database
-//		primaryStage.setOnShowing(e -> openXMLDB(new File("D:/Unitechnik/repos/Coordz/CoordzXML")));
+//		primaryStage.setOnShowing(e -> openXMLDB(new File("D:\\Desktop\\Unitechnik\\"
+//			+ "Projekte\\Beton\\Laser\\_CoordzXML")));
 	}
 	
 	@Override

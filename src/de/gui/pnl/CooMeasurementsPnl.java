@@ -175,8 +175,8 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	@FXML
 	protected void openAutomatedCalibration() throws IOException
 	{
-		new CooAutoCalDialog(getScene()
-			.getWindow(), client).show();
+		new CooAutoCalDialog(getScene().getWindow(), 
+			client, tblTargets.getItems()).show();
 	}
 	
 	@FXML
@@ -189,8 +189,8 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 //			CooLAPPacket packet = client.startAutoCalibration(
 //				new File("doc/LAP Software/Calibration.cal"));
 			// FORTEST Use the file on laser test pc
-			File targetFile = new File("C:\\Users\\User\\Desktop\\Lasertest"
-				+ "\\01_Einmessungen\\01_Kalibrierdateien\\CheckPlate.cal");
+			File targetFile = new File("D:\\Desktop\\UNITECHNIK\\Projekte\\Beton\\Leitrechner"
+				+ "\\A2017.10305 Mischek Gerasdorf\\01_Inbetriebnahme\\Coordz Test\\Mischek_Laser_U1.cal");
 			CooLAPPacketImpl packet = client.startAutoCalibration(targetFile);
 			
 			// Reset message and file property

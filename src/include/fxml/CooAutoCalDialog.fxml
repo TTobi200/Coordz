@@ -66,6 +66,7 @@
 								<CheckBox text="X-Wert" fx:id="cbAdjustX" selected="true" />
 								<CheckBox text="Y-Wert" fx:id="cbAdjustY" selected="true" />
 								<CheckBox text="Z-Wert" fx:id="cbAdjustZ" selected="true" />
+								<CheckBox text="Ausgewählten" fx:id="cbOnlySelected" selected="false" />
 							</children>
 						</HBox>
 					</children>
