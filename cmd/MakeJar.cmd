@@ -4,7 +4,7 @@ REM Change directory to binary files
 CD %PRJ_HOME%\bin
 
 REM Unzip all external libs
-for /f %%f in ('dir /b .\include\jar') do (
+for /f %%f in ('dir /b .\include\jar\*.jar') do (
 	ECHO Unzipping %%f...
 	jar xf ".\include\jar\%%f"
 )
