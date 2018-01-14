@@ -6,16 +6,21 @@
  */
 package de.coordz.data.base;
 
+import static de.util.CooSQLUtil.loadList;
 import static de.util.CooXmlDomUtil.*;
 
+import java.sql.SQLException;
 import java.util.Objects;
 
 import org.w3c.dom.*;
 
-import de.coordz.db.xml.CooDBXML;
+import de.coordz.db.CooDB;
+import de.coordz.db.gen.dao.DaoRegionDividing;
+import de.coordz.db.gen.inf.InfLaser;
+import de.coordz.db.xml.*;
 import javafx.collections.*;
 
-public class CooRegionDividing implements CooDBXML
+public class CooRegionDividing extends DaoRegionDividing implements CooDBXML, CooDBLoad
 {
 	/** {@link ObservableList} with all region dividing {@link CooLaser} */
 	protected ObservableList<CooLaser> laser;
@@ -76,6 +81,16 @@ public class CooRegionDividing implements CooDBXML
 		}
 		
 		return laser;
+	}
+	
+	@Override
+	public void fromDB(CooDB database) throws SQLException
+	{
+		// FORTEST select the laser
+		// TODO $TO: Fix to support more than one laser - split the idProperty
+		laser.setAll(loadList(database, InfLaser.TABLE_NAME, 
+			InfLaser.LASERID, CooLaser.class, 
+			laserIdProperty().get()));
 	}
 	
 	/**

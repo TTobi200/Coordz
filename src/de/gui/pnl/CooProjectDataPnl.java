@@ -7,8 +7,10 @@
 package de.gui.pnl;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Objects;
 
+import de.coordz.CooSystem;
 import de.coordz.data.*;
 import de.coordz.data.base.*;
 import de.gui.*;
@@ -86,6 +88,21 @@ public class CooProjectDataPnl extends BorderPane implements CooDataChanged
 	@Override
 	public void projectChanged(CooProject project)
 	{
+		// FORTEST $TO: Load the project from database
+		// TODO: $TO: Move this to loading method
+		if(CooSystem.USE_DB)
+		{
+			try
+			{
+				project.fromDB(CooSystem.getDatabase());
+			}
+			catch(SQLException e)
+			{
+				CooLog.error("Error while loading "
+					+ "project from db", e);
+			}
+		}
+		
 		txtPrjName.bindBidirectional(project.nameProperty());
 		// TODO Bind ObjectProperty to an textfield?
 		// txtPrjDate.textProperty().bindBidirectional(project.dateProperty());

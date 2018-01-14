@@ -9,11 +9,15 @@ package de.gui;
 import java.io.*;
 import java.net.URL;
 import java.nio.channels.FileLock;
+import java.sql.*;
 import java.util.*;
 
 import de.coordz.CooSystem;
-import de.coordz.data.CooCustomer;
+import de.coordz.data.*;
+import de.coordz.db.*;
+import de.coordz.db.gen.inf.*;
 import de.gui.comp.*;
+import de.gui.comp.CooCustomerTreeItem.CooProjectTreeItem;
 import de.gui.pnl.*;
 import de.gui.sett.CooSettingsDialog;
 import de.gui.sett.CooSettingsDialog.SettingType;
@@ -141,6 +145,70 @@ public class CooController implements Initializable, CooDataChanged
 	{
 		openXMLDB(CooDialogs.showOpenFolderDialog(primaryStage,
 			"Datenbank öffnen"));
+	}
+	
+	@FXML
+	protected void connectDB()
+	{
+		try
+		{
+			CooDB database = CooSystem.getDatabase();
+			CooCustomerTreeItem root = new CooCustomerTreeItem(
+				new SimpleStringProperty(CooSystem.getModel()
+					.dbNameProperty().get()), new CooCustomer());
+
+			// FORTEST $TO: Load the customer from database
+			CooDBSelectStmt stmt = new CooDBSelectStmt();
+			stmt.addFrom(InfCustomer.TABLE_NAME);
+			stmt.addColumn("*");
+			
+			ResultSet res = database.execQuery(stmt);
+			while(res.next())
+			{
+				CooCustomer customer = new CooCustomer();
+				customer.cre(res);
+				CooCustomerTreeItem treeItm = new CooCustomerTreeItem(
+					customer.nameProperty(), customer);
+				root.getChildren().add(treeItm);
+			}
+			
+			// Load all projects from customers
+			for(TreeItem<String> itm : root.getChildren())
+			{
+				CooCustomerTreeItem treeItem = (CooCustomerTreeItem)itm;
+				loadCustomerProjects(database, treeItem, 
+					treeItem.customerProperty().get());
+			}
+			
+			treeViewPnl.getPrjTreeView().setRoot(root);
+			root.setExpanded(Boolean.TRUE);
+		}
+		catch(SQLException e)
+		{
+			CooDialogs.showExceptionDialog(primaryStage,
+				"Error while connection db", e);
+		}
+	}
+
+	private void loadCustomerProjects(CooDB database, 
+		CooCustomerTreeItem customerTreeItm, CooCustomer customer) throws SQLException
+	{
+		// FORTEST $TO: Load the projects from database
+		CooDBSelectStmt stmt = new CooDBSelectStmt();
+		stmt.addFrom(InfProject.TABLE_NAME);
+		stmt.addColumn("*");
+		stmt.addWhere(InfProject.CUSTOMERID + " = ?", 
+			customer.customerIdProperty().get());
+		
+		ResultSet res = database.execQuery(stmt);
+		while(res.next())
+		{
+			CooProject project = new CooProject();
+			project.cre(res);
+			CooProjectTreeItem prjTreeItm = new CooProjectTreeItem(
+				project.nameProperty(), project);
+			customerTreeItm.getChildren().add(prjTreeItm);
+		}
 	}
 
 	@FXML

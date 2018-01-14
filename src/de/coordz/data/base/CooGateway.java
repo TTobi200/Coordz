@@ -6,17 +6,21 @@
  */
 package de.coordz.data.base;
 
+import static de.util.CooSQLUtil.loadList;
 import static de.util.CooXmlDomUtil.*;
 
+import java.sql.SQLException;
 import java.util.*;
 
 import org.w3c.dom.*;
 
+import de.coordz.db.CooDB;
 import de.coordz.db.gen.dao.DaoGateway;
-import de.coordz.db.xml.CooDBXML;
+import de.coordz.db.gen.inf.InfLaser;
+import de.coordz.db.xml.*;
 import javafx.collections.*;
 
-public class CooGateway extends DaoGateway implements CooDBXML
+public class CooGateway extends DaoGateway implements CooDBXML, CooDBLoad
 {
 	/** {@link List} with all gateway {@link CooLaser} */
 	protected ObservableList<CooLaser> laser;
@@ -49,6 +53,15 @@ public class CooGateway extends DaoGateway implements CooDBXML
 			addToList("Laser", gateway,
 				CooLaser.class, this.laser);
 		}
+	}
+	
+	@Override
+	public void fromDB(CooDB database) throws SQLException
+	{
+		// FORTEST Select the laser
+		laser.setAll(loadList(database, InfLaser.TABLE_NAME, 
+			InfLaser.GATEWAYID, CooLaser.class,
+			gatewayIdProperty().get()));
 	}
 	
 	/**

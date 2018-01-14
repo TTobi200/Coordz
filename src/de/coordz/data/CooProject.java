@@ -6,25 +6,25 @@
  */
 package de.coordz.data;
 
+import static de.util.CooSQLUtil.*;
 import static de.util.CooXmlDomUtil.*;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Objects;
 
 import org.w3c.dom.*;
 
 import de.coordz.data.base.*;
-import de.coordz.db.xml.CooDBXML;
-import de.util.CooTimeUtil;
+import de.coordz.db.CooDB;
+import de.coordz.db.gen.dao.DaoProject;
+import de.coordz.db.gen.inf.*;
+import de.coordz.db.xml.*;
 import javafx.beans.property.*;
 import javafx.collections.*;
 
-public class CooProject implements CooDBXML
+public class CooProject extends DaoProject implements CooDBXML, CooDBLoad
 {
-	/** {@link StringProperty} for the project name */
-	protected StringProperty name;
-	/** {@link ObjectProperty} for the project {@link LocalDate} */
-	protected ObjectProperty<LocalDate> date;
 	/** {@link ObjectProperty} for the project {@link CooLAPSoftware} */
 	protected ObjectProperty<CooLAPSoftware> lapSoftware;
 	
@@ -33,8 +33,6 @@ public class CooProject implements CooDBXML
 
 	public CooProject()
 	{
-		name = new SimpleStringProperty();
-		date = new SimpleObjectProperty<>();
 		lapSoftware = new SimpleObjectProperty<>(
 						new CooLAPSoftware());
 		stations = FXCollections.observableArrayList();
@@ -44,9 +42,9 @@ public class CooProject implements CooDBXML
 	public void toXML(Document doc, Element root)
 	{
 		Element project = addElement(doc, root, "Project");
-		project.setAttribute("Name", name.get());
-		project.setAttribute("Date", String.valueOf(date.get() 
-			!= null ? date.get() : LocalDate.now()));
+		project.setAttribute("Name", nameProperty().get());
+		project.setAttribute("Date", String.valueOf(dateProperty().get() 
+			!= null ? dateProperty().get() : LocalDate.now()));
 		
 		lapSoftware.get().toXML(doc, project);
 
@@ -60,9 +58,10 @@ public class CooProject implements CooDBXML
 	{
 		if(Objects.nonNull(project))
 		{
-			name.set(project.getAttribute("Name"));
-			date.set(LocalDate.parse(project.getAttribute("Date"),
-				CooTimeUtil.SIMPLE_DATE_FORMATTER));
+			nameProperty().set(project.getAttribute("Name"));
+			// FIXME: $TO: Add the date as time stamp
+//			dateProperty().set(LocalDate.parse(project.getAttribute("Date"),
+//				CooTimeUtil.SIMPLE_DATE_FORMATTER));
 			lapSoftware.get().fromXML(getSingleElement(project,
 				"LAPSoftware"));
 
@@ -71,6 +70,26 @@ public class CooProject implements CooDBXML
 							"Stations");
 			addToList("Station", stations,
 				CooStation.class, this.stations);
+		}
+	}
+	
+	@Override
+	public void fromDB(CooDB database) throws SQLException
+	{
+		// FORTEST Select the stations
+		stations.setAll(loadList(database, InfStation.TABLE_NAME, 
+			InfStation.PROJECTID, CooStation.class, 
+			projectIdProperty().get()));
+		
+		// FORTEST Select the lap software
+		lapSoftware.set(loadDao(database, InfLAPSoftware.TABLE_NAME,
+			InfLAPSoftware.PROJECTID, CooLAPSoftware.class,
+			projectIdProperty().get()));
+		
+		// FORTEST load the station data
+		for(CooStation station : stations)
+		{
+			station.fromDB(database);
 		}
 	}
 	
@@ -85,24 +104,6 @@ public class CooProject implements CooDBXML
 	
 	/**
 	 * Method to access Property
-	 * @return {@link #name}
-	 */
-	public StringProperty nameProperty()
-	{
-		return name;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #date}
-	 */
-	public ObjectProperty<LocalDate> dateProperty()
-	{
-		return date;
-	}
-	
-	/**
-	 * Method to access Property
 	 * @return {@link #lapSoftware}
 	 */
 	public ObjectProperty<CooLAPSoftware> lapSoftwareProperty()
@@ -113,6 +114,6 @@ public class CooProject implements CooDBXML
 	@Override
 	public String toString()
 	{
-		return name.get();
+		return nameProperty().get();
 	}
 }

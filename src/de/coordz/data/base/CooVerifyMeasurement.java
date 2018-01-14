@@ -6,19 +6,22 @@
  */
 package de.coordz.data.base;
 
+import static de.util.CooSQLUtil.loadList;
 import static de.util.CooXmlDomUtil.*;
 
+import java.sql.SQLException;
 import java.util.Objects;
 
 import org.w3c.dom.*;
 
+import de.coordz.db.CooDB;
 import de.coordz.db.gen.dao.DaoVerifyMeasurement;
-import de.coordz.db.xml.CooDBXML;
+import de.coordz.db.gen.inf.InfRectangle;
+import de.coordz.db.xml.*;
 import javafx.collections.*;
 
-public class CooVerifyMeasurement extends DaoVerifyMeasurement implements CooDBXML
+public class CooVerifyMeasurement extends DaoVerifyMeasurement implements CooDBXML, CooDBLoad
 {
-	// FIXME $TO: Implement the db fields
 	/** {@link ObservableList} with all verify measurement specification {@link CooRectangle} */
 	protected ObservableList<CooRectangle> specification;
 	/** {@link ObservableList} with all verify measurement result {@link CooRectangle} */
@@ -64,6 +67,19 @@ public class CooVerifyMeasurement extends DaoVerifyMeasurement implements CooDBX
 			addToList("Rectangle", result,
 				CooRectangle.class, this.result);
 		}
+	}
+	
+	@Override
+	public void fromDB(CooDB database) throws SQLException
+	{
+		// FORTEST Select the specification rectangles
+		specification.setAll(loadList(database, InfRectangle.TABLE_NAME, 
+			InfRectangle.RECTANGLEID, CooRectangle.class,
+			specificationIdProperty().get()));
+		// FORTEST Select the result rectangles
+		result.setAll(loadList(database, InfRectangle.TABLE_NAME, 
+			InfRectangle.RECTANGLEID, CooRectangle.class,
+			resultIdProperty().get()));
 	}
 	
 	/**

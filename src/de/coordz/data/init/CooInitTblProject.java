@@ -17,6 +17,6 @@ public class CooInitTblProject extends InitTblProject
 	public void init() throws SQLException
 	{
 		// Add initial default project entry
-		put(1, Timestamp.valueOf(LocalDateTime.now()));
+		put(1, "A20XX.XXXX", Timestamp.valueOf(LocalDateTime.now()));
 	}
 }

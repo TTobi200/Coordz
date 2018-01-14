@@ -6,29 +6,25 @@
  */
 package de.coordz.data;
 
+import static de.util.CooSQLUtil.loadList;
 import static de.util.CooXmlDomUtil.*;
 
+import java.sql.SQLException;
 import java.util.*;
 
 import org.w3c.dom.*;
 
 import de.coordz.data.base.*;
-import de.coordz.db.xml.CooDBXML;
+import de.coordz.db.CooDB;
+import de.coordz.db.gen.dao.DaoCustomer;
+import de.coordz.db.gen.inf.*;
+import de.coordz.db.xml.*;
 import javafx.beans.property.*;
 import javafx.collections.*;
 import javafx.scene.image.Image;
 
-public class CooCustomer implements CooDBXML
+public class CooCustomer extends DaoCustomer implements CooDBXML, CooDBLoad
 {
-	/** {@link StringProperty} for the customer name */
-	protected StringProperty name;
-	/** {@link StringProperty} for the customer street */
-	protected StringProperty street;
-	/** {@link StringProperty} for the customer plz */
-	protected StringProperty plz;
-	/** {@link StringProperty} for the customer location */
-	protected StringProperty location;
-	
 	/** {@link ObjectProperty} for the customer logo */
 	protected ObjectProperty<Image> logo;
 	
@@ -42,11 +38,6 @@ public class CooCustomer implements CooDBXML
 	
 	public CooCustomer()
 	{
-		name = new SimpleStringProperty();
-		street = new SimpleStringProperty();
-		plz = new SimpleStringProperty();
-		location = new SimpleStringProperty();
-		
 		logo = new SimpleObjectProperty<>();
 		
 		contacts = FXCollections.observableArrayList();
@@ -58,10 +49,10 @@ public class CooCustomer implements CooDBXML
 	public void toXML(Document doc, Element root)
 	{
 		Element customer = addElement(doc, root, "Customer");
-		customer.setAttribute("Name", name.get());
-		customer.setAttribute("Street", street.get());
-		customer.setAttribute("PLZ", plz.get());
-		customer.setAttribute("Location", location.get());
+		customer.setAttribute("Name", nameProperty().get());
+		customer.setAttribute("Street", streetProperty().get());
+		customer.setAttribute("PLZ", plzProperty().get());
+		customer.setAttribute("Location", locationProperty().get());
 		
 		// Add all contacts
 		Element contacts = addElement(doc, customer, "Contacts");
@@ -77,10 +68,10 @@ public class CooCustomer implements CooDBXML
 	{
 		if(Objects.nonNull(customer))
 		{
-			name.set(customer.getAttribute("Name"));
-			street.set(customer.getAttribute("Street"));
-			plz.set(customer.getAttribute("PLZ"));
-			location.set(customer.getAttribute("Location"));
+			nameProperty().set(customer.getAttribute("Name"));
+			streetProperty().set(customer.getAttribute("Street"));
+			plzProperty().set(customer.getAttribute("PLZ"));
+			locationProperty().set(customer.getAttribute("Location"));
 			
 			// Load all contacts
 			Element contacts = getSingleElement(customer,
@@ -94,6 +85,23 @@ public class CooCustomer implements CooDBXML
 			addToList("Palet", palets,
 					CooPalet.class, this.palets);
 		}
+	}
+	
+	@Override
+	public void fromDB(CooDB database) throws SQLException
+	{
+		// FORTEST Select the contacts
+		contacts.setAll(loadList(database, InfContact.TABLE_NAME, 
+			InfContact.CUSTOMERID, CooContact.class, 
+			customerIdProperty().get()));
+		// FORTEST Select the palets
+		palets.setAll(loadList(database, InfPalet.TABLE_NAME, 
+			InfPalet.CUSTOMERID, CooPalet.class,
+			customerIdProperty().get()));
+		// FORTEST Select the projects
+		projects.setAll(loadList(database, InfProject.TABLE_NAME, 
+			InfProject.CUSTOMERID, CooProject.class,
+			customerIdProperty().get()));
 	}
 	
 	/**
@@ -134,42 +142,6 @@ public class CooCustomer implements CooDBXML
 	public  ObservableList<CooProject> getProjects()
 	{
 		return projects;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #name}
-	 */
-	public StringProperty nameProperty()
-	{
-		return name;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #street}
-	 */
-	public StringProperty streetProperty()
-	{
-		return street;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #plz}
-	 */
-	public StringProperty plzProperty()
-	{
-		return plz;
-	}
-	
-	/**
-	 * Method to access Property
-	 * @return {@link #location}
-	 */
-	public StringProperty locationProperty()
-	{
-		return location;
 	}
 	
 	/**

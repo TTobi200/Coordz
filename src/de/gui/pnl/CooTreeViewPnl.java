@@ -95,8 +95,8 @@ public class CooTreeViewPnl extends BorderPane
 								customer));
 						}
 
-						components.forEach(c -> c.projectChanged(
-							new CooProject()));
+						CooProject empty = new CooProject();
+						components.forEach(c -> c.projectChanged(empty));
 					}
 
 					btnExport.setDisable(selectedItem == prjTreeView.getRoot()

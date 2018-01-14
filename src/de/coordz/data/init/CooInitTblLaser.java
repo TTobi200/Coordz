@@ -16,7 +16,7 @@ public class CooInitTblLaser extends InitTblLaser
 	public void init() throws SQLException
 	{
 		// Add initial default laser entry
-		put("Laser 1", "AT123456", "SN123456",
+		put(1, "Laser 1", "AT123456", "SN123456",
 			0, 0, 0, 0d, 0, 0);
 	}
 }

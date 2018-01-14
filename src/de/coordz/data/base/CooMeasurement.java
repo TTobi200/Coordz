@@ -6,18 +6,22 @@
  */
 package de.coordz.data.base;
 
+import static de.util.CooSQLUtil.loadList;
 import static de.util.CooXmlDomUtil.*;
 
+import java.sql.SQLException;
 import java.util.Objects;
 
 import org.w3c.dom.*;
 
+import de.coordz.db.CooDB;
 import de.coordz.db.gen.dao.DaoMeasurement;
-import de.coordz.db.xml.CooDBXML;
+import de.coordz.db.gen.inf.*;
+import de.coordz.db.xml.*;
 import javafx.beans.property.*;
 import javafx.collections.*;
 
-public class CooMeasurement extends DaoMeasurement implements CooDBXML
+public class CooMeasurement extends DaoMeasurement implements CooDBXML, CooDBLoad
 {
 	// FIXME $TO: Moved total station to separate table
 	/** {@link ObjectProperty} for the station {@link CooTotalstation} */
@@ -87,6 +91,21 @@ public class CooMeasurement extends DaoMeasurement implements CooDBXML
 			addToList("Target", targets,
 				CooTarget.class, this.targets);
 		}
+	}
+	
+	@Override
+	public void fromDB(CooDB database) throws SQLException
+	{
+		// TODO $TO: Load the total station here
+		
+		// FORTEST Select the reticles
+		reticles.setAll(loadList(database, InfReticle.TABLE_NAME, 
+			InfReticle.MEASUREMENTID, CooReticle.class, 
+			measurementIdProperty().get()));
+		// FORTEST Select the targets
+		targets.setAll(loadList(database, InfTarget.TABLE_NAME, 
+			InfTarget.MEASUREMENTID, CooTarget.class, 
+			measurementIdProperty().get()));
 	}
 	
 	/**

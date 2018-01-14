@@ -8,17 +8,19 @@ package de.gui.pnl;
 
 import java.io.*;
 import java.net.MalformedURLException;
+import java.sql.SQLException;
 import java.util.Objects;
 
-import javafx.fxml.FXML;
-import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane;
+import de.coordz.CooSystem;
 import de.coordz.data.CooCustomer;
 import de.coordz.data.base.*;
 import de.gui.*;
 import de.gui.comp.*;
 import de.util.CooFileUtil;
 import de.util.log.CooLog;
+import javafx.fxml.FXML;
+import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 
 public class CooCoreDataPnl extends BorderPane implements CooDataChanged
 {
@@ -59,6 +61,21 @@ public class CooCoreDataPnl extends BorderPane implements CooDataChanged
 	@Override
 	public void customerChanged(CooCustomer customer)
 	{
+		// FORTEST $TO: Load the customer from database
+		// TODO: $TO: Move this to loading method
+		if(CooSystem.USE_DB)
+		{
+			try
+			{
+				customer.fromDB(CooSystem.getDatabase());
+			}
+			catch(SQLException e)
+			{
+				CooLog.error("Error while loading "
+					+ "customer from db", e);
+			}
+		}
+		
 		txtCustomer.bindBidirectional(customer.nameProperty());
 		txtStreet.bindBidirectional(customer.streetProperty());
 		txtPLZ.bindBidirectional(customer.plzProperty());

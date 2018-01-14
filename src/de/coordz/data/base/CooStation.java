@@ -6,18 +6,22 @@
  */
 package de.coordz.data.base;
 
+import static de.util.CooSQLUtil.*;
 import static de.util.CooXmlDomUtil.*;
 
+import java.sql.SQLException;
 import java.util.Objects;
 
 import org.w3c.dom.*;
 
+import de.coordz.db.CooDB;
 import de.coordz.db.gen.dao.DaoStation;
-import de.coordz.db.xml.CooDBXML;
+import de.coordz.db.gen.inf.*;
+import de.coordz.db.xml.*;
 import javafx.beans.property.*;
 import javafx.collections.*;
 
-public class CooStation extends DaoStation implements CooDBXML
+public class CooStation extends DaoStation implements CooDBXML, CooDBLoad
 {
 	// FIXME $TO: Link this with database fields
 	/** {@link ObjectProperty} for the station {@link CooRegionDividing} */
@@ -88,6 +92,40 @@ public class CooStation extends DaoStation implements CooDBXML
 				"VerifyMeasurement"));
 			gateway.get().fromXML(getSingleElement(station,
 				"Gateway"));
+		}
+	}
+	
+	
+	@Override
+	public void fromDB(CooDB database) throws SQLException
+	{
+		// FORTEST select the region dividing
+		regionDeviding.set(loadDao(database, InfRegionDividing.TABLE_NAME,
+			InfRegionDividing.PROJECTID, CooRegionDividing.class,
+			projectIdProperty().get()));
+		regionDeviding.get().fromDB(database);
+		
+		// FORTEST Select the measurements
+		measurements.setAll(loadList(database, InfMeasurement.TABLE_NAME, 
+			InfMeasurement.STATIONID, CooMeasurement.class,
+			stationIdProperty().get()));
+		
+		// FORTEST select the verify measurement
+		verifyMeasurement.set(loadDao(database, InfVerifyMeasurement.TABLE_NAME,
+			InfVerifyMeasurement.STATIONID, CooVerifyMeasurement.class,
+			stationIdProperty().get()));
+		verifyMeasurement.get().fromDB(database);
+		
+		// FORTEST select the gateway
+		gateway.set(loadDao(database, InfGateway.TABLE_NAME,
+			InfGateway.STATIONID, CooGateway.class,
+			stationIdProperty().get()));
+		gateway.get().fromDB(database);
+		
+		// FORTEST load the measurement data
+		for(CooMeasurement measurement : measurements)
+		{
+			measurement.fromDB(database);
 		}
 	}
 	

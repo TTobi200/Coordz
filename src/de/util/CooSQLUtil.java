@@ -6,9 +6,14 @@
  */
 package de.util;
 
+import java.sql.*;
+
 import de.coordz.CooSystem;
+import de.coordz.db.*;
 import de.coordz.db.impl.*;
+import de.util.log.CooLog;
 import javafx.beans.property.*;
+import javafx.collections.*;
 
 public class CooSQLUtil
 {
@@ -98,5 +103,60 @@ public class CooSQLUtil
 		{
 			return "'" + o + "'";
 		}		
+	}
+	
+	public static <T extends CooDBDao> T  loadDao(CooDB database, String tableName, 
+		String columnID, Class<T> clazz, int i) throws SQLException
+	{
+		T dao = null;
+		try
+		{
+			dao = clazz.newInstance();
+			CooDBSelectStmt stmt = new CooDBSelectStmt();
+			stmt.addFrom(tableName);
+			stmt.addColumn("*");
+			stmt.addWhere(columnID + " = ?", i);
+			
+			ResultSet res = database.execQuery(stmt);
+			if(res.next())
+			{
+				dao.cre(res);
+			}
+		}
+		catch(InstantiationException | IllegalAccessException e)
+		{
+			CooLog.error("Error while loading " + 
+				tableName + " db dao", e);
+		}
+		
+		return dao;
+	}
+	
+	public static <T extends CooDBDao> ObservableList<T>  loadList(CooDB database,
+		String tableName, String columnID, Class<T> clazz, int i) throws SQLException
+	{
+		ObservableList<T> list = FXCollections.observableArrayList();
+		try
+		{
+			CooDBSelectStmt stmt = new CooDBSelectStmt();
+			stmt.addFrom(tableName);
+			stmt.addColumn("*");
+			stmt.addWhere(columnID + " = ?", i);
+			
+			ResultSet res = database.execQuery(stmt);
+			while(res.next())
+			{
+				T dao = clazz.newInstance();
+				dao.cre(res);
+				list.add(dao);
+			}
+		}
+		catch(InstantiationException | IllegalAccessException e)
+		{
+			CooLog.error("Error while loading " + 
+				tableName + " db list", e);
+		}
+		
+		return list;
 	}
 }
