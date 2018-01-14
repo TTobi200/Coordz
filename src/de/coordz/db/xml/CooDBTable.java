@@ -20,7 +20,9 @@ import javafx.collections.FXCollections;
 public class CooDBTable implements CooDBXML, CooDBSQL
 {
 	protected StringProperty pKey;
+	protected StringProperty fKey;
 	protected ObjectProperty<CooDBValTypes> pKeyType;
+	protected ObjectProperty<CooDBValTypes> fKeyType;
 	protected StringProperty name;
 	protected StringProperty comment;
 	
@@ -31,7 +33,9 @@ public class CooDBTable implements CooDBXML, CooDBSQL
 		comment = new SimpleStringProperty();
 		name = new SimpleStringProperty();
 		pKey = new SimpleStringProperty();
+		fKey = new SimpleStringProperty();
 		pKeyType = new SimpleObjectProperty<>();
+		fKeyType = new SimpleObjectProperty<>();
 		columns = FXCollections.observableArrayList();
 	}
 	
@@ -52,6 +56,12 @@ public class CooDBTable implements CooDBXML, CooDBSQL
 			Element pKey = getSingleElement(table, "PKEY");
 			this.pKey.set(pKey.getAttribute("VALUE"));
 			this.pKeyType.set(CooDBValTypes.valueOf(pKey.getAttribute("TYPE")));
+			
+			// Get the foreign key and its type
+			Element fKey = getSingleElement(table, "FKEY");
+			Boolean fKeyPresent = Objects.nonNull(fKey);
+			this.fKey.set(fKeyPresent ? fKey.getAttribute("VALUE") : null);
+			this.fKeyType.set(fKeyPresent ? CooDBValTypes.valueOf(fKey.getAttribute("TYPE")) : null);
 			
 			// Get the comment
 			Element comment = getSingleElement(table, "COMMENT");
@@ -104,9 +114,19 @@ public class CooDBTable implements CooDBXML, CooDBSQL
 		return pKey;
 	}
 	
+	public StringProperty fKeyProperty()
+	{
+		return fKey;
+	}
+	
 	public ObjectProperty<CooDBValTypes> pKeyTypeProperty()
 	{
 		return pKeyType;
+	}
+	
+	public ObjectProperty<CooDBValTypes> fKeyTypeProperty()
+	{
+		return fKeyType;
 	}
 	
 	public StringProperty commentProperty()

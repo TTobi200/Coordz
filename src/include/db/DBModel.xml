@@ -17,6 +17,7 @@
 		<TABLE NAME="Project">
 			<COMMENT VALUE="Tabelle mit Coordz Projekten" />
 				<PKEY VALUE="projectId" TYPE="INTEGER"/>
+				<FKEY VALUE="customerId" TYPE="INTEGER"/>
 				<COLUMNS>
 					<COLUMN NAME="projectId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="ID"/>
 					<COLUMN NAME="customerId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="Kunden ID"/>
@@ -27,6 +28,7 @@
 		<TABLE NAME="LAPSoftware">
 			<COMMENT VALUE="Tabelle mit Coordz LAP-Software" />
 			<PKEY VALUE="lapSoftwareId" TYPE="INTEGER"/>
+			<FKEY VALUE="projectId" TYPE="INTEGER"/>
 			<COLUMNS>
 				<COLUMN NAME="lapSoftwareId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="ID"/>
 				<COLUMN NAME="projectId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="Kunden ID"/>
@@ -37,6 +39,7 @@
 		<TABLE NAME="Contact">
 			<COMMENT VALUE="Tabelle mit Coordz Kontakten" />
 			<PKEY VALUE="contactId" TYPE="INTEGER"/>
+			<FKEY VALUE="customerId" TYPE="INTEGER"/>
 			<COLUMNS>
 				<COLUMN NAME="contactId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="ID"/>
 				<COLUMN NAME="customerId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="Kunden ID"/>
@@ -49,6 +52,7 @@
 		<TABLE NAME="Palet">
 			<COMMENT VALUE="Tabelle mit Coordz Paletten" />
 			<PKEY VALUE="paletId" TYPE="INTEGER"/>
+			<FKEY VALUE="customerId" TYPE="INTEGER"/>
 			<COLUMNS>
 				<COLUMN NAME="paletId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="ID"/>
 				<COLUMN NAME="customerId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="Kunden ID"/>
@@ -61,6 +65,7 @@
 		<TABLE NAME="Station">
 			<COMMENT VALUE="Tabelle mit Coordz Stationen" />
 			<PKEY VALUE="stationId" TYPE="INTEGER"/>
+			<FKEY VALUE="projectId" TYPE="INTEGER"/>
 			<COLUMNS>
 				<COLUMN NAME="stationId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="ID"/>
 				<COLUMN NAME="projectId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="Projekt ID"/>
@@ -75,6 +80,7 @@
 		<TABLE NAME="RegionDividing">
 			<COMMENT VALUE="Tabelle mit Coordz Bereichsaufteilungen" />
 			<PKEY VALUE="regionDividingId" TYPE="INTEGER"/>
+			<FKEY VALUE="projectId" TYPE="INTEGER"/>
 			<COLUMNS>
 				<COLUMN NAME="regionDividingId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="ID"/>
 				<COLUMN NAME="projectId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="Projekt ID"/>
@@ -84,6 +90,7 @@
 		<TABLE NAME="Laser">
 			<COMMENT VALUE="Tabelle mit Coordz Laser" />
 			<PKEY VALUE="laserId" TYPE="INTEGER"/>
+			<FKEY VALUE="gatewayId" TYPE="INTEGER"/>
 			<COLUMNS>
 				<COLUMN NAME="laserId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="ID"/>
 				<COLUMN NAME="gatewayId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="Gateway ID"/>
@@ -101,6 +108,7 @@
 		<TABLE NAME="Measurement">
 			<COMMENT VALUE="Tabelle mit Coordz Messungen" />
 			<PKEY VALUE="measurementId" TYPE="INTEGER"/>
+			<FKEY VALUE="stationId" TYPE="INTEGER"/>
 			<COLUMNS>
 				<COLUMN NAME="measurementId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="ID"/>
 				<COLUMN NAME="stationId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="Stations ID"/>
@@ -115,6 +123,7 @@
 		<TABLE NAME="Totalstation">
 			<COMMENT VALUE="Tabelle mit Coordz Totalstationen" />
 			<PKEY VALUE="totalstationId" TYPE="INTEGER"/>
+			<FKEY VALUE="measurementId" TYPE="INTEGER"/>
 			<COLUMNS>
 				<COLUMN NAME="totalstationId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="ID"/>
 				<COLUMN NAME="measurementId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="Messung ID"/>
@@ -128,6 +137,7 @@
 		<TABLE NAME="Reticle">
 			<COMMENT VALUE="Tabelle mit Coordz Zielmarken" />
 			<PKEY VALUE="reticleId" TYPE="INTEGER"/>
+			<FKEY VALUE="measurementId" TYPE="INTEGER"/>
 			<COLUMNS>
 				<COLUMN NAME="reticleId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="ID"/>
 				<COLUMN NAME="measurementId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="Messung ID"/>
@@ -140,6 +150,7 @@
 		<TABLE NAME="Target">
 			<COMMENT VALUE="Tabelle mit Coordz Targets" />
 			<PKEY VALUE="targetId" TYPE="INTEGER"/>
+			<FKEY VALUE="measurementId" TYPE="INTEGER"/>
 			<COLUMNS>
 				<COLUMN NAME="targetId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="ID"/>
 				<COLUMN NAME="measurementId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="Messung ID"/>
@@ -152,6 +163,7 @@
 		<TABLE NAME="VerifyMeasurement">
 			<COMMENT VALUE="Tabelle mit Coordz Kontroll Messungen" />
 			<PKEY VALUE="verifyMeasurementId" TYPE="INTEGER"/>
+			<FKEY VALUE="stationId" TYPE="INTEGER"/>
 			<COLUMNS>
 				<COLUMN NAME="verifyMeasurementId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="ID"/>
 				<COLUMN NAME="stationId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="Station ID"/>
@@ -178,6 +190,7 @@
 		<TABLE NAME="Gateway">
 			<COMMENT VALUE="Tabelle mit Coordz Gateways" />
 			<PKEY VALUE="gatewayId" TYPE="INTEGER"/>
+			<FKEY VALUE="stationId" TYPE="INTEGER"/>
 			<COLUMNS>
 				<COLUMN NAME="gatewayId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="ID"/>
 				<COLUMN NAME="stationId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="Station ID"/>

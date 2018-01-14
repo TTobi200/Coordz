@@ -53,7 +53,7 @@
 								</ImageView>
 							</graphic>
 						</MenuItem>
-						<MenuItem mnemonicParsing="false" text="Verbinden" onAction="#connectDB">
+						<MenuItem fx:id="itmConnDB" mnemonicParsing="false" text="Verbinden" onAction="#connectDB">
 							<accelerator>
 								<KeyCombination fx:value="Ctrl+D" />
 							</accelerator>

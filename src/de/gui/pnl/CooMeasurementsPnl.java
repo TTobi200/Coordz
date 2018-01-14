@@ -6,9 +6,12 @@
  */
 package de.gui.pnl;
 
+import static de.util.CooSQLUtil.updateDaos;
+
 import java.io.*;
 import java.util.*;
 
+import de.coordz.CooSystem;
 import de.coordz.data.*;
 import de.coordz.data.base.*;
 import de.coordz.lap.*;
@@ -433,6 +436,15 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	
 	private void stationChanged(CooStation station)
 	{
+		// FORTEST $TO: Load the measurement from database
+		if(CooSystem.USE_DB && Objects.nonNull(station))
+		{
+			Integer stationId = station.stationIdProperty().get();
+			updateDaos(tblMeasurement, stationId);
+			updateDaos(tblRefSpec, stationId);
+			updateDaos(tblResult, stationId);
+		}
+		
 		// Display all measurements for this station
 		tblMeasurement.setItems(Objects.nonNull(station)
 			? station.getMeasurements() : null);
@@ -449,6 +461,15 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 	@Override
 	public void measurementChanged(CooMeasurement measurement)
 	{
+		// FORTEST $TO: Load the measurement from database
+		if(CooSystem.USE_DB && Objects.nonNull(measurement))
+		{
+			Integer measurementId = measurement.measurementIdProperty().get();
+			updateDaos(tblReticles, measurementId);
+			updateDaos(tblTargets, measurementId);
+			updateDaos(tblTotalStation, measurementId);
+		}
+		
 		tblReticles.setItems(Objects.nonNull(measurement) ?
 						measurement.getReticles() : null);
 		tblTargets.setItems(Objects.nonNull(measurement) ?

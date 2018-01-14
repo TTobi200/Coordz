@@ -6,6 +6,8 @@
  */
 package de.gui.pnl;
 
+import static de.util.CooSQLUtil.*;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Objects;
@@ -95,6 +97,12 @@ public class CooProjectDataPnl extends BorderPane implements CooDataChanged
 			try
 			{
 				project.fromDB(CooSystem.getDatabase());
+				updateDao(project, txtPrjName.focusedProperty());
+				updateDao(project, txtSoftName.focusedProperty());
+				updateDao(project, txtSoftVersion.focusedProperty());
+				
+				updateDaos(tblStations, 
+					project.projectIdProperty().get());
 			}
 			catch(SQLException e)
 			{

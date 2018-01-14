@@ -47,6 +47,8 @@ public class CooController implements Initializable, CooDataChanged
 	protected CooMeasurementsPnl measurementsPnl;
 	@FXML
 	protected Label lblPrj;
+	@FXML
+	protected MenuItem itmConnDB;
 
 	@FXML
 	protected Menu menuDocs;
@@ -108,6 +110,7 @@ public class CooController implements Initializable, CooDataChanged
 			// Or if tab is detached from tabpane
 			!tabPane.getTabs().contains(tabGallery)));
 
+		itmConnDB.setDisable(!CooSystem.USE_DB);
 		// FORTEST load the coordz xml database
 //		primaryStage.setOnShowing(e -> openXMLDB(new File("D:\\Desktop\\Unitechnik\\"
 //			+ "Projekte\\Beton\\Laser\\_CoordzXML")));

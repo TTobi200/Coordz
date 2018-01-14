@@ -8,7 +8,7 @@ package de.coordz.db;
 
 import java.io.*;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.*;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -103,6 +103,8 @@ public class CooDBCreDaos
 			out.println("\t\ttableName = " + CooDBCreInfs.getColConst(table, "TABLE_NAME") +";");
 			out.println("\t\ttablePKey = " + CooDBCreInfs.getColConst(table, 
 				table.pKeyProperty().get()) + ";");
+			out.println("\t\ttableFKey = " + (Objects.nonNull(table.fKeyProperty().get()) ? 
+				CooDBCreInfs.getColConst(table, table.fKeyProperty().get()) : "null") + ";");
 			out.println();
 			
 			for(CooDBColumn col : table.getColumns())

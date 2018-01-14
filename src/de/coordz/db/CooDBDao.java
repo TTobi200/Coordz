@@ -21,6 +21,8 @@ public abstract class CooDBDao
 	protected String tableName;
 	/** {@link String} with the table primary key */
 	protected String tablePKey;
+	/** {@link String} with the table foreign key */
+	protected String tableFKey;
 	/** {@link LinkedHashMap} with column to property */
 	protected LinkedHashMap<String, Property<?>> columnToProperty;
 	/** Boolean flag if dao is in database */
@@ -263,9 +265,27 @@ public abstract class CooDBDao
 	 */
 	public boolean insert() throws SQLException
 	{
+		return insert(null);
+	}
+	
+	/**
+	 * Method to insert this DAO to the database.
+	 * @param fKey = the table foreignKey
+	 * @return if this dao {@link #isInDB}
+	 * @throws SQLException - when insert went wrong
+	 */
+	public boolean insert(Integer fKey) throws SQLException
+	{
 		StringBuilder stmt = new StringBuilder("INSERT INTO ");
 		stmt.append(tableName)
 			.append(" VALUES (");
+		
+		// Check if foreign key specified
+		if(Objects.nonNull(tableFKey) && Objects.nonNull(fKey))
+		{
+			((IntegerProperty)columnToProperty
+				.get(tableFKey.toUpperCase())).setValue(fKey);
+		}
 		
 		int i = 0;
 		for(String column : columnToProperty.keySet())

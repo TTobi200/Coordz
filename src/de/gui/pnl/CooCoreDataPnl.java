@@ -6,6 +6,8 @@
  */
 package de.gui.pnl;
 
+import static de.util.CooSQLUtil.*;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.sql.SQLException;
@@ -46,8 +48,7 @@ public class CooCoreDataPnl extends BorderPane implements CooDataChanged
 		try
 		{
 			CooFileUtil.loadFXML(this, CooFileUtil.FXML_COMP +
-										CooFileUtil.IN_JAR_SEPERATOR
-										+ "CooCoreDataPnl.fxml", this);
+				CooFileUtil.IN_JAR_SEPERATOR + "CooCoreDataPnl.fxml", this);
 		}
 		catch(IOException e)
 		{
@@ -68,6 +69,14 @@ public class CooCoreDataPnl extends BorderPane implements CooDataChanged
 			try
 			{
 				customer.fromDB(CooSystem.getDatabase());
+				updateDao(customer, txtCustomer.focusedProperty());
+				updateDao(customer, txtStreet.focusedProperty());
+				updateDao(customer, txtPLZ.focusedProperty());
+				updateDao(customer, txtLocation.focusedProperty());
+				
+				Integer customerID = customer.customerIdProperty().get();
+				updateDaos(tblContacts, customerID);
+				updateDaos(tblPalets, customerID);
 			}
 			catch(SQLException e)
 			{
