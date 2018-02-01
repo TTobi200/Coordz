@@ -16,6 +16,8 @@
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.text.TextFlow?>
+<?import javafx.scene.control.ScrollPane?>
 
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
@@ -73,8 +75,11 @@
 				</HBox>
 			</top>
 			<center>
-				<TextArea fx:id="txtLog" editable="false"
-					BorderPane.alignment="CENTER" />
+			<ScrollPane fx:id="scrollPane">
+				<content>
+					<TextFlow fx:id="txtLog" lineSpacing="3" BorderPane.alignment="CENTER" />
+				</content>
+			</ScrollPane>
 			</center>
 		</BorderPane>
 	</center>

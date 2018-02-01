@@ -20,8 +20,11 @@ import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.collections.*;
 import javafx.fxml.FXML;
+import javafx.geometry.Orientation;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.*;
 import javafx.stage.*;
 
 public class CooAutoCalDialog extends Stage
@@ -48,7 +51,9 @@ public class CooAutoCalDialog extends Stage
 	@FXML
 	private CheckBox cbAdjustZ;
 	@FXML
-	private TextArea txtLog;
+	private TextFlow txtLog;
+	@FXML
+	private ScrollPane scrollPane;
 
 	/** {@link Map} with all target results */
 	private Map<Short, Float> targetResults;
@@ -94,7 +99,7 @@ public class CooAutoCalDialog extends Stage
 			tblTargets.setClazz(CooTarget.class);
 			tblTargets.getSelectionModel().setSelectionMode(
 				SelectionMode.MULTIPLE);
-
+			
 			// Check if no targets committed
 			if(Objects.isNull(targets) | targets.isEmpty())
 			{
@@ -127,19 +132,15 @@ public class CooAutoCalDialog extends Stage
 		targetResults = new HashMap<>(targetCount);
 		bestTargets = new HashMap<>(targetCount);
 		progress.setVisible(Boolean.TRUE);
-		progress.setText("Process started...");
+		txtLog.getChildren().clear();
+		progress("Process started...");
 		running = Boolean.TRUE;
 		run = 1;
 		
 		ObservableList<CooTarget> targetsToAdjust = cbOnlySelected.isSelected()
 			? tblTargets.getSelectionModel().getSelectedItems() : tblTargets.getItems();
 		ObservableList<CooTarget> targets = tblTargets.getItems();
-		// TODO $TO: Check why temp file not working?
-//		File tempFile = File.createTempFile("tempCalibFile", ".cal");
-//		tempFile.deleteOnExit();
-		
-		File tempFile = new File("D:\\Desktop\\UNITECHNIK\\Projekte\\Beton\\Leitrechner"
-			+ "\\A2017.10305 Mischek Gerasdorf\\01_Inbetriebnahme\\Coordz Test\\Mischek_Laser_U1.cal");
+		File tempFile = new File("./CoordzAutoCal.cal");
 			
 		// Create own worker thread
 		Thread worker = new Thread(() -> 
@@ -150,55 +151,57 @@ public class CooAutoCalDialog extends Stage
 				log("Using range " + spinRange.getValue() + "...");
 				
 				// Test the committed targets
-				initialTest(targets, tempFile);
-				
-				for(short targetNo = 0; targetNo < targets.size(); targetNo++)
+				if(running = initialTest(targets, tempFile))
 				{
-					// Get the target
-					CooTarget t = targets.get(targetNo);
-					// Get the target name
-					String targetName = t.nameProperty().get();
-					
-					// Check if target should be adjusted
-					if(targetsToAdjust.contains(t))
+					for(short targetNo = 0; targetNo < targets.size(); targetNo++)
 					{
-						if(cbAdjustX.isSelected())
+						// Get the target
+						CooTarget t = targets.get(targetNo);
+						// Get the target name
+						String targetName = t.nameProperty().get();
+						
+						// Check if target should be adjusted
+						if(targetsToAdjust.contains(t))
 						{
-							// Start adjusting targets x coordinates
-							log("Adjust X coord of target " + targetName);
-							adjustXCoord(targets, tempFile, targetNo, spinRange.getValue());
+							if(cbAdjustX.isSelected())
+							{
+								// Start adjusting targets x coordinates
+								log("Adjust X coord of target " + targetName);
+								adjustXCoord(targets, tempFile, targetNo, spinRange.getValue());
+							}
+							
+							if(cbAdjustY.isSelected())
+							{
+								// Start adjusting targets y coordinates
+								log("Adjust Y coord of target " + targetName);
+								adjustYCoord(targets, tempFile, targetNo, spinRange.getValue());
+							}
+							
+							if(cbAdjustZ.isSelected())
+							{
+								// Start adjusting targets z coordinates
+								log("Adjust Z coord of target " + targetName);
+								adjustZCoord(targets, tempFile, targetNo, spinRange.getValue());
+							}
 						}
 						
-						if(cbAdjustY.isSelected())
+						// Check if user canceled
+						if(!running)
 						{
-							// Start adjusting targets y coordinates
-							log("Adjust Y coord of target " + targetName);
-							adjustYCoord(targets, tempFile, targetNo, spinRange.getValue());
-						}
-						
-						if(cbAdjustZ.isSelected())
-						{
-							// Start adjusting targets z coordinates
-							log("Adjust Z coord of target " + targetName);
-							adjustZCoord(targets, tempFile, targetNo, spinRange.getValue());
+							break;
 						}
 					}
 					
-					// Check if user canceled
-					if(!running)
-					{
-						break;
-					}
+					// Print out the best target combination
+					log("Best target combination was:");
+					bestTargets.values().forEach(t -> log(TAB + t.toString()));
 				}
-				
-				// Print out the best target combination
-				log("Best target combination was:");
-				bestTargets.values().forEach(t -> log(TAB + t.toString()));
 				
 				// Inform user that process finished
 				log("Automated calibration finished!");
 				progress("Process finished");
 				running = Boolean.FALSE;
+//				logSeperator();
 				
 				// FORTEST $TO: Dont delete the calibration file
 				// Delete the calibration file
@@ -206,7 +209,7 @@ public class CooAutoCalDialog extends Stage
 			}
 			catch (Exception e) 
 			{
-				log("Exception occured  - " + e.getMessage());
+				error("Exception occured  - " + e.getMessage());
 				CooLog.error("Error while automated calibration", e);
 			}
 		});
@@ -214,9 +217,10 @@ public class CooAutoCalDialog extends Stage
 		worker.start();
 	}
 	
-	private void initialTest(ObservableList<CooTarget> targets,
+	private boolean initialTest(ObservableList<CooTarget> targets,
 		File calFile) throws IOException
 	{
+		boolean successfull = Boolean.FALSE;
 		log("Initial calibration started...");
 		
 		// Write the new values into calibration file
@@ -225,20 +229,44 @@ public class CooAutoCalDialog extends Stage
 		// Start auto calibration and check result
 		CooLAPPacketImpl result = client.startAutoCalibration(calFile);	
 		
-		if(result.getResult() == Result.SUCCESSFUL)
+		switch(result.getResult())
 		{
-			// Add the lap target results
-			ObservableList<CooLAPTarget> lapTargets = FXCollections.observableArrayList();
-				result.getProjectors().forEach(p -> lapTargets.addAll(p.getTargets()));
-			lapTargets.forEach(lapT -> targetResults.put(lapT.getNumber(), lapT.getDeviation()));
-			// Add the initial targets
-			for(short i = 0; i < targets.size(); i++)
-			{
-				bestTargets.put(i, copyTarget(targets.get(i)));
-			}
+			case FAULTY:
+			case UNKNOWN:
+			case NO_OPEN_FILE:
+			case FILE_NOT_FOUND:
+			case FILE_NOT_READABLE:
+			case NO_VALID_CALIBRATION:
+				error("Error <" + result.getResult().name() + 
+					"> while initial calibration!");
+				successfull = Boolean.FALSE;
+				break;
 			
-			log(TAB + "Initial results: " + targetResults.toString());
+			case PROJECTION_OUT_OF_RANGE:
+			case MANUAL_CALIBRATION_REQUIRED:
+			case SYSTEM_NOT_CALIBRATED:
+				error("Please perform a manual calibration with "
+					+ "file <" + calFile.getAbsolutePath() + "> first...");
+				successfull = Boolean.FALSE;
+				break;
+				
+			case SUCCESSFUL:
+				// Add the lap target results
+				ObservableList<CooLAPTarget> lapTargets = FXCollections.observableArrayList();
+					result.getProjectors().forEach(p -> lapTargets.addAll(p.getTargets()));
+				lapTargets.forEach(lapT -> targetResults.put(lapT.getNumber(), lapT.getDeviation()));
+				// Add the initial targets
+				for(short i = 0; i < targets.size(); i++)
+				{
+					bestTargets.put(i, copyTarget(targets.get(i)));
+				}
+				
+				log(TAB + "Initial results: " + targetResults.toString());
+				successfull = Boolean.TRUE;
+				break;
 		}
+		
+		return successfull;
 	}
 
 	private void adjustXCoord(ObservableList<CooTarget> targets, 
@@ -344,7 +372,7 @@ public class CooAutoCalDialog extends Stage
 				// And compare it with actual
 				if(target.get().getDeviation() < deviation)
 				{
-					log(TAB + TAB + "Deviation changed from " + deviation +
+					success(TAB + TAB + "Deviation changed from " + deviation +
 						" to " + target.get().getDeviation());
 					
 					// Copy the target and add it to best targets
@@ -388,18 +416,49 @@ public class CooAutoCalDialog extends Stage
 			hide();
 		}
 
-		log("Automated calibration canceled by user...");
-		log("Please wait until last target scan finished...");
+		error("Automated calibration canceled by user...");
+		error("Please wait until last target scan finished...");
 		running = Boolean.FALSE;
 		progress.setVisible(Boolean.FALSE);
 	}
 	
-	private void log(String message)
+	protected void error(String message)
+	{
+		log(message, Color.RED);
+	}
+	
+	protected void success(String message)
+	{
+		log(message, Color.BLUE);
+	}
+	
+	protected void log(String message)
+	{
+		log(message, Color.BLACK);
+	}
+	
+	protected void logSeperator()
+	{
+		// Create a separator 
+		Separator separator = new Separator(Orientation.HORIZONTAL);
+		separator.prefWidthProperty().bind(txtLog.widthProperty());
+		log(separator);
+	}
+	
+	protected void log(String message, Color color)
+	{
+		Text text = new Text(message);
+		text.setFill(color);
+		log(text, new Text(System.lineSeparator()));
+	}
+	
+	private void log(Node... n)
 	{
 		Platform.runLater(() -> 
 		{
-			txtLog.appendText(message);
-			txtLog.appendText("\r\n");
+			txtLog.getChildren().addAll(n);
+			scrollPane.getParent().layout();
+			scrollPane.setVvalue(1.0);
 		});
 	}
 	
