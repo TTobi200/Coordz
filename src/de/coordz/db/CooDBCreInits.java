@@ -8,7 +8,7 @@ package de.coordz.db;
 
 import java.io.*;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.*;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -58,6 +58,8 @@ public class CooDBCreInits
 				out.println("public abstract class " + initName + " extends " + CooDBInit.class.getName());
 				out.print("{");
 				
+					// Add the put methods
+					addPutMethods(out, table);
 					// Add the put method
 					addPutMethod(out, table);
 				
@@ -70,6 +72,47 @@ public class CooDBCreInits
 			{
 				CooLog.error("Error while creating Init", e);
 			}
+		}
+	}
+	
+	private void addPutMethods(PrintWriter out, CooDBTable table)
+	{
+		// Get the table columns
+		List<CooDBColumn> columns = table.getColumns();
+		List<CooDBColumn> columnsCopy = new ArrayList<>(columns.size());
+		
+		// Skip the primary key and start at column 1
+		for(int i = 1; i < columns.size() - 1; i++)
+		{
+			out.println();
+			out.print("\tprotected void put(");
+			columnsCopy.add(columns.get(i));
+			
+			// Loop through the columns
+			for(int j = 0; j < columnsCopy.size(); j++)
+			{
+				// Construct the put method head with parameter
+				CooDBColumn col = columnsCopy.get(j);
+				out.print(col.typeProperty().get().getPrimitive() + " " + col.nameProperty().get() 
+					+ (j < columnsCopy.size() - 1 ? ", " : ") throws SQLException"));
+			}
+			out.println();
+			out.println("\t{");
+			
+			// Construct the put call
+			out.print("\t\tput(");
+			// Loop through the columns
+			for(int j = 0; j < columnsCopy.size(); j++)
+			{
+				// Add the variables to put call - add default last
+				CooDBColumn col = columnsCopy.get(j);
+				out.print(col.nameProperty().get() 
+					+ (j < columnsCopy.size() - 1 ? ", " : ", " +
+						getDefault(columns.get(j + 2))));
+			}
+			out.print(");");
+			out.println();
+			out.println("\t}");
 		}
 	}
 
@@ -110,5 +153,31 @@ public class CooDBCreInits
 		// Add the dao insert and close method
 		out.println("\t\tdao.insert();");
 		out.println("\t}");
+	}
+	
+	private String getDefault(CooDBColumn column)
+	{
+		String def = null;
+		// Switch the column type 
+		switch(column.typeProperty().get())
+		{
+			case BOOLEAN:
+				def = "Boolean.FALSE";
+				break;
+			case DOUBLE:
+				def = "0.0d";
+				break;
+			case INTEGER:
+				def = "0";
+				break;
+			case VARCHAR:
+				def = "\"\"";
+				break;
+			default:
+			case TIMESTAMP:
+				def = null;
+				break;
+		}
+		return def;
 	}
 }
