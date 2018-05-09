@@ -7,6 +7,7 @@
 package de.gui;
 
 import java.io.*;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -195,6 +196,14 @@ public class CooDialogs
 				((DatePicker)n).setEditable(false);
 				((DatePicker)n).getEditor().textProperty().bindBidirectional(p, 
 					new LocalDateStringConverter());
+			}
+			else if(p instanceof ObjectProperty<?> 
+				&& p.getValue() instanceof Timestamp | Objects.isNull(p.getValue()))
+			{
+				n = new DatePicker(((Timestamp)p.getValue()).toLocalDateTime().toLocalDate());
+				((DatePicker)n).setEditable(false);
+				((DatePicker)n).getEditor().textProperty().bindBidirectional(p, 
+					new CooTimestampStringConverter());
 			}
 			else if(p instanceof ObjectProperty<?> 
 				&& p.getValue() instanceof CooPaletType | Objects.isNull(p.getValue()))

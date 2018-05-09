@@ -191,7 +191,6 @@ public abstract class CooDBDao
 	 * @param prop = the {@link Property} to set
 	 * @param value = the value to set
 	 */
-	@SuppressWarnings("unchecked")
 	private void setProperty(Property<?> prop, Object value)
 	{
 		if(prop instanceof StringProperty)
@@ -214,8 +213,7 @@ public abstract class CooDBDao
 		}
 		else if(prop instanceof ObjectProperty)
 		{
-			((ObjectProperty<Timestamp>)prop).setValue(
-				(Timestamp)value);
+			CooSQLUtil.setTimestampProperty(prop, value);
 		}
 	}
 
@@ -235,7 +233,7 @@ public abstract class CooDBDao
 		{
 			Property<?> p = columnToProperty.get(column);
 			
-			stmt.append(column + " = " );
+			stmt.append(CooSQLUtil.escapeColumn(column) + " = " );
 			
 			// On integer property don't escape value with ''
 			CooSQLUtil.escapeString(p, stmt);

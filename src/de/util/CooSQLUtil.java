@@ -106,6 +106,15 @@ public class CooSQLUtil
 		}		
 	}
 	
+	public static String escapeColumn(String column)
+	{
+		// Escape the oracle column names
+		return CooSystem.getDatabase() instanceof CooDBOracle 
+			// Leave out the * placeholder			
+			&& !column.equals("*") ?			
+				"\"" + column + "\"" : column;
+	}
+	
 	public static void updateDao(CooDBDao dao, 
 		ReadOnlyBooleanProperty focused)
 	{
@@ -211,5 +220,30 @@ public class CooSQLUtil
 		}
 		
 		return list;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static void setTimestampProperty(Property<?> prop, Object value)
+	{
+		try
+		{
+			if(value instanceof java.sql.Timestamp)
+			{
+				((ObjectProperty<java.sql.Timestamp>)prop).setValue(
+					(java.sql.Timestamp)value);
+			}
+			else if(value instanceof oracle.sql.TIMESTAMP)
+			{
+				// Convert to oracle Timestamp
+				((ObjectProperty<java.sql.Timestamp>)prop).setValue(
+					oracle.sql.TIMESTAMP.toTimestamp(
+						((oracle.sql.TIMESTAMP)value).getBytes()));
+			}
+		}
+		catch(SQLException e)
+		{
+			CooLog.error("Error while setting "
+				+ "timestamp property", e);
+		}
 	}
 }

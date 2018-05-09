@@ -23,13 +23,13 @@ public class CooDBSelectStmt
 	public static final String DESC = "DESC";
 	
 	/** {@link List} with columns to select */
-	private List<String> column;
+	protected List<String> column;
 	/** {@link List} with tables to select from */
-	private List<String> from;
+	protected List<String> from;
 	/** {@link List} with where arguments */
-	private List<String> where;
+	protected List<String> where;
 	/** {@link List} with order by arguments */
-	private List<String> orderBy;
+	protected List<String> orderBy;
 	
 	public CooDBSelectStmt()
 	{
@@ -106,7 +106,7 @@ public class CooDBSelectStmt
 		// Add the column arguments
 		for(int i = 0; i < column.size(); i++)
 		{
-			String c = column.get(i);
+			String c = CooSQLUtil.escapeColumn(column.get(i));
 			stmt.append(c).append(i < column.size() -1 ? ", " : "");
 		}
 
