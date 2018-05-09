@@ -12,7 +12,10 @@ import java.util.Objects;
 
 import org.w3c.dom.*;
 
-public class CooReticle extends CooTarget
+import de.coordz.db.gen.dao.DaoReticle;
+import de.coordz.db.xml.CooDBXML;
+
+public class CooReticle extends DaoReticle implements CooDBXML
 {
 	@Override
 	public void toXML(Document doc, Element root)
@@ -34,5 +37,19 @@ public class CooReticle extends CooTarget
 			yProperty().set(Integer.valueOf(reticle.getAttribute("Y")));
 			zProperty().set(Integer.valueOf(reticle.getAttribute("Z")));
 		}
+	}
+	
+	@Override
+	public String toString()
+	{
+		// Build a string describing this reticle
+		StringBuilder reticle = new StringBuilder("Reticle");
+		reticle.append(" [")
+		.append("Name=" + nameProperty().get()).append("; ")
+		.append("X=" + xProperty().get()).append("; ")
+		.append("Y=" + yProperty().get()).append("; ")
+		.append("Z=" + zProperty().get()).append("]");
+		
+		return reticle.toString();
 	}
 }
