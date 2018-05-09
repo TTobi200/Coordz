@@ -11,43 +11,22 @@ import java.io.*;
 import java.util.*;
 
 import javax.imageio.ImageIO;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.*;
-import org.xml.sax.SAXException;
 
 import de.coordz.data.*;
 import de.coordz.data.base.*;
-import de.util.*;
+import de.util.CooFileUtil;
 import de.util.log.CooLog;
-import javafx.application.Platform;
-import javafx.embed.swing.*;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
 public class CooXlsDocument extends CooDocument
 {
-	public static void main(String[] args) throws SAXException, IOException, ParserConfigurationException
-	{
-		new JFXPanel();
-		
-		List<CooCustomer> customers = CooXMLDBUtil.getAllCustomers(
-			new File("D:/Unitechnik/repos/Coordz/CoordzXML"));
-		
-		CooCustomer mischek = customers.get(1);
-		
-		CooXlsDocument doc = new CooXlsDocument();
-		doc.getAvailableContent().forEach(c -> doc.addContent(c));
-//		doc.addContent(Content.TITLE_PAGE, Content.HEADER_FOOTER);
-		doc.save(new File("C:/Users/tobias.ohm/Desktop/Test/Test"),
-			mischek, mischek.getProjects().get(0));
-		
-		Platform.exit();
-	}
-	
 	public static enum Columns
 	{
 		A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z;

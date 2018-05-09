@@ -2,18 +2,18 @@
  * $Header$
  * 
  * $Log$
- * Copyright © 2015 T.Ohm . All Rights Reserved.
+ * Copyright © 2018 T.Ohm . All Rights Reserved.
  */
 package de.gui.sett;
 import java.util.*;
 import java.util.prefs.Preferences;
 
+import de.gui.sett.CooSettingsDialog.SettingType;
 import javafx.beans.property.*;
 import javafx.collections.*;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import de.gui.sett.CooSettingsDialog.SettingType;
 
 public class CooSettingsGroup
 {
@@ -29,9 +29,9 @@ public class CooSettingsGroup
 	{
 		this.treeItm = treeItm;
 		this.tree = tree;
-		fields = new HashMap<String, Node>();
-		props = new HashMap<String, Property<?>>();
-		defaultValues = new HashMap<String, String>();
+		fields = new HashMap<>();
+		props = new HashMap<>();
+		defaultValues = new HashMap<>();
 		gridFields = new GridPane();
 		gridFields.setHgap(5d);
 		gridFields.setVgap(5d);
@@ -41,34 +41,41 @@ public class CooSettingsGroup
 	public void setFieldValue(String field, String value)
 	{
 		Node n = fields.get(field);
-		
-		// Always prefer the default value
+		// Always prefer the preference value
 		String defValue = defaultValues.get(field);
+		value = Objects.isNull(value) ? defValue : value;
+		
+		Property p = props.get(field);
 
 		if(n instanceof TextField)
 		{
-			((TextField)n).setText(Objects.nonNull(defValue) ? defValue : value);
+			((TextField)n).setText(value);
+			((StringProperty)p).setValue(value);
 		}
 		else if(n instanceof CheckBox)
 		{
-			((CheckBox)n).setSelected(Boolean.valueOf(Objects.nonNull(defValue) ? defValue : value));
+			((CheckBox)n).setSelected(Boolean.valueOf(value));
+			((BooleanProperty)p).set(Boolean.valueOf(value));
 		}
 		else if(n instanceof ComboBox<?>)
 		{
-			((ComboBox)n).getSelectionModel().select(Objects.nonNull(defValue) ? defValue : value);
+			((ComboBox)n).getSelectionModel().select(value);
+			((StringProperty)p).setValue(value);
 		}
 	}
 
-	public void save(String name, Preferences settings)
+	public void saveUI(String name, Preferences settings)
 	{
 		Preferences node = settings.node(name);
+		
+		// Save values from fields
 		fields.keySet().forEach(f ->
 		{
 			// Get the field for name
 			Node n = fields.get(f);
 			// Get the property for field
 			Property<?> prop = props.get(f);
-
+			
 			if(n instanceof TextField)
 			{
 				// TODO maybe support putInt, Double etc by parsing text
@@ -95,6 +102,22 @@ public class CooSettingsGroup
 						String.valueOf(value));
 				}
 			}
+		});
+	}
+	
+	public void saveWithoutUI(String name, Preferences settings)
+	{
+		Preferences node = settings.node(name);
+		
+		// Save values from properties if
+		// not edited by user interface
+		props.keySet().forEach(n ->
+		{
+			// Get the property for name
+			Property<?> p = props.get(n);
+			// Store the props as string
+			node.put(n, Objects.isNull(p.getValue()) ? "" : 
+				String.valueOf(p.getValue()));
 		});
 	}
 
@@ -170,10 +193,11 @@ public class CooSettingsGroup
 				break;
 			case COMBO:
 				prop = new SimpleStringProperty();
-				sett = new ComboBox<String>(FXCollections.observableArrayList(
+				sett = new ComboBox<>(FXCollections.observableArrayList(
 					Arrays.asList(values)));
 				((ComboBox<?>)sett).setMaxWidth(
 					Double.POSITIVE_INFINITY);
+				((ComboBox<?>)sett).getSelectionModel().selectFirst();
 				break;
 			case TEXT:
 				prop = new SimpleStringProperty(value);

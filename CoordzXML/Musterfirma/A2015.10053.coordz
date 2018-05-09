@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<CoordzData>
+    <Project Date="2005-01-01" Name="A2015.10053">
+        <LAPSoftware Name="ProSoft 2D" Version="3.5.8 beta4"/>
+        <Stations>
+            <Station Description="Umlauf Station mit Laser" File="D:\Unitechnik\repos\Coordz" Name="U1" XOffset="-17" YOffset="-3" ZOffset="-4">
+                <RegionDividing>
+                    <Laser ArticleNr="" From="0" Name="Las1" SerialNr="" To="0" TotalDeviation="0.0" X="0" Y="0" Z="0"/>
+                    <Laser ArticleNr="" From="0" Name="Las2" SerialNr="" To="0" TotalDeviation="0.0" X="0" Y="0" Z="0"/>
+                </RegionDividing>
+                <Measurements>
+                    <Measurement Date="2005-01-01" From="10.00Uhr" Name="07.07.15(2)" Notes="" To="18.00Uhr" Weather="Sonnig">
+                        <Totalstation DeltaX="1.0E-4" DeltaY="1.0E-4" X="-592" Y="-1775" Z="898"/>
+                        <Reticles>
+                            <Reticle Name="1" X="3550" Y="24" Z="15"/>
+                            <Reticle Name="2" X="3550" Y="24" Z="15"/>
+                        </Reticles>
+                        <Targets>
+                            <Target Name="1" X="902" Y="79" Z="-416"/>
+                            <Target Name="2" X="3599" Y="77" Z="-416"/>
+                            <Target Name="3" X="6305" Y="74" Z="-415"/>
+                            <Target Name="4" X="6306" Y="3860" Z="-414"/>
+                            <Target Name="5" X="3602" Y="3859" Z="-417"/>
+                            <Target Name="6" X="898" Y="3860" Z="-416"/>
+                        </Targets>
+                    </Measurement>
+                </Measurements>
+                <VerifyMeasurement>
+                    <Specification>
+                        <Rectangle D1="0" D2="0" Height="0" Length="0" Name="" Width="0" X="0" Y="0" Z="0"/>
+                        <Rectangle D1="0" D2="0" Height="0" Length="0" Name="" Width="0" X="0" Y="0" Z="0"/>
+                    </Specification>
+                    <Result>
+                        <Rectangle D1="0" D2="0" Height="0" Length="0" Name="" Width="0" X="0" Y="0" Z="0"/>
+                        <Rectangle D1="0" D2="0" Height="0" Length="0" Name="" Width="0" X="0" Y="0" Z="0"/>
+                    </Result>
+                </VerifyMeasurement>
+                <Gateway IP="112112" MAC="243243">
+                    <Laser ArticleNr="" From="0" Name="Las1" SerialNr="" To="0" TotalDeviation="0.0" X="0" Y="0" Z="0"/>
+                    <Laser ArticleNr="" From="0" Name="Las2" SerialNr="" To="0" TotalDeviation="0.0" X="0" Y="0" Z="0"/>
+                </Gateway>
+            </Station>
+        </Stations>
+    </Project>
+</CoordzData>

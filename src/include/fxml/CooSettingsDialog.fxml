@@ -52,7 +52,7 @@
 		</effect>
 			<items>
 				<Button mnemonicParsing="false" text="Abbrechen" onAction="#cancel"/>
-				<Button mnemonicParsing="false" text="Speichern" onAction="#save"/>
+				<Button mnemonicParsing="false" text="Speichern" onAction="#saveUI"/>
 			</items>
 		</ToolBar>
 	</bottom>

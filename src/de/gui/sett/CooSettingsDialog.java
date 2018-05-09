@@ -2,7 +2,7 @@
  * $Header$
  * 
  * $Log$
- * Copyright © 2015 T.Ohm . All Rights Reserved.
+ * Copyright © 2018 T.Ohm . All Rights Reserved.
  */
 package de.gui.sett;
 
@@ -12,6 +12,10 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.prefs.*;
 
+import com.sun.webkit.WebPage;
+
+import de.util.CooFileUtil;
+import de.util.log.CooLog;
 import javafx.beans.property.*;
 import javafx.event.*;
 import javafx.fxml.FXML;
@@ -21,10 +25,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.*;
 import javafx.stage.*;
-
-import com.sun.webkit.WebPage;
-
-import de.util.CooFileUtil;
 
 public class CooSettingsDialog extends Stage
 {
@@ -49,6 +49,7 @@ public class CooSettingsDialog extends Stage
 	@FXML
 	protected Button btnCancel;
 
+	protected String name;
 	protected WebView webView;
 	protected Map<String, CooSettingsGroup> groups;
 	protected Preferences settings;
@@ -84,6 +85,7 @@ public class CooSettingsDialog extends Stage
 			return "onSave";
 		}
 	};
+
 	
 	public CooSettingsDialog(Stage owner, String name, Image logo)
 	{
@@ -93,7 +95,7 @@ public class CooSettingsDialog extends Stage
 		}
 		catch(IOException e)
 		{
-			e.printStackTrace();
+			CooLog.error("Error while opening settings dialog", e);
 		}
 	}
 
@@ -103,8 +105,9 @@ public class CooSettingsDialog extends Stage
 			this, CooFileUtil.FXML_FOLDER +
 					CooFileUtil.IN_JAR_SEPERATOR + FXML);
 
-		groups = new HashMap<String, CooSettingsGroup>();
-		TreeItem<String> rootItm = new TreeItem<String>(name);
+		this.name = name;
+		groups = new HashMap<>();
+		TreeItem<String> rootItm = new TreeItem<>(name);
 
 		setScene(new Scene(root));
 		getIcons().add(logo);
@@ -114,29 +117,12 @@ public class CooSettingsDialog extends Stage
 		setHeight(HEIGHT);
 		initModality(Modality.WINDOW_MODAL);
 		initOwner(owner);
-		setX(owner.getX() + owner.getWidth() /
-			2 - WIDTH / 2);
-		setY(owner.getY() + owner.getHeight() /
-			2 - HEIGHT / 2);
 
-		rootItm.setExpanded(true);
+		rootItm.setExpanded(Boolean.TRUE);
 		treeView.setRoot(rootItm);
 		treeView.getSelectionModel()
 			.selectedItemProperty()
 			.addListener((o, c, n) -> selectionChanged(n));
-		
-		showingProperty().addListener((o, c, n) -> 
-		{
-			try
-			{
-				createTitlePage(name);
-				load(Preferences.userRoot().node(name));
-			}
-			catch(BackingStoreException e)
-			{
-				e.printStackTrace();
-			}
-		});
 	}
 
 	protected void createTitlePage(String name)
@@ -203,7 +189,7 @@ public class CooSettingsDialog extends Stage
 			return groups.get(group);
 		}
 
-		TreeItem<String> newItm = new TreeItem<String>(group);
+		TreeItem<String> newItm = new TreeItem<>(group);
 		CooSettingsGroup settGroup = new CooSettingsGroup(treeView, newItm);
 		treeView.getRoot().getChildren().add(newItm);
 
@@ -224,14 +210,23 @@ public class CooSettingsDialog extends Stage
 
 			groups.put(name, group);
 		}
+		
+		createTitlePage(name);
 	}
 
 	@FXML
-	protected void save()
+	protected void saveUI()
 	{
 		groups.keySet().forEach(name ->
-			groups.get(name).save(name, settings));
+			groups.get(name).saveUI(name, settings));
 		getOnSave().handle(new ActionEvent());
+	}
+	
+	@FXML
+	protected void saveWithoutUI()
+	{
+		groups.keySet().forEach(name ->
+			groups.get(name).saveWithoutUI(name, settings));
 	}
 
 	@FXML
@@ -268,9 +263,16 @@ public class CooSettingsDialog extends Stage
 
 		String name = n.getValue();
 		lblSettName.setText(name);
-		lblSettName.setGraphic(n.getGraphic());
-		stackPane.getChildren().add(
+		
+		// Add the surrounding scroll pane
+		ScrollPane scrollPane = new ScrollPane(
 			groups.get(name).getGridFields());
+		scrollPane.setFitToHeight(Boolean.TRUE);
+		scrollPane.setFitToWidth(Boolean.TRUE);
+		
+		// Add the controls to view
+		lblSettName.setGraphic(n.getGraphic());
+		stackPane.getChildren().add(scrollPane);
 	}
 
 	protected void clearSetting()

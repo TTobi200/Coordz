@@ -19,11 +19,8 @@ import de.coordz.db.gen.inf.*;
 import de.gui.comp.*;
 import de.gui.comp.CooCustomerTreeItem.CooProjectTreeItem;
 import de.gui.pnl.*;
-import de.gui.sett.CooSettingsDialog;
-import de.gui.sett.CooSettingsDialog.SettingType;
 import de.util.*;
 import javafx.beans.property.*;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.fxml.*;
 import javafx.scene.control.*;
@@ -61,6 +58,7 @@ public class CooController implements Initializable, CooDataChanged
 	@FXML
 	protected CooImageGallery imageGallery;
 
+	protected UTPreferences prefs;
 	private Property<String> xmlDbPath;
 	private RandomAccessFile randomAccessFile;
 	private FileLock fileLock;
@@ -91,6 +89,9 @@ public class CooController implements Initializable, CooDataChanged
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
 	{
+		// Load the system preferences
+		prefs = new UTPreferences(primaryStage);
+		
 		treeViewPnl.addDataChangedListener(coreDataPnl);
 		treeViewPnl.addDataChangedListener(projectDataPnl);
 		treeViewPnl.addDataChangedListener(measurementsPnl);
@@ -102,11 +103,15 @@ public class CooController implements Initializable, CooDataChanged
 		// Add documents to GUI
 		CooGuiUtil.addDocToMenu(menuDocs, new File(DOCUMENT_FOLDER));
 		
+		// Get the current images folder
+		File imgFolder = CooSystem.USE_DB ? CooDBImportUtil.getImagesFolder(
+				prefs.getDBFolder(), customer) : CooXMLDBUtil.getImagesFolder(customer);
+		
 		// FIXME: $TO: TabPanes loose selection when they where detached
 		// Load the Images when tab selected
 		tabGallery.setOnSelectionChanged(e -> imageGallery.loadImages(
 			// Check if tab is selected 
-			CooXMLDBUtil.getImagesFolder(customer), tabGallery.isSelected() | 
+			imgFolder, tabGallery.isSelected() | 
 			// Or if tab is detached from tabpane
 			!tabPane.getTabs().contains(tabGallery)));
 
@@ -125,9 +130,12 @@ public class CooController implements Initializable, CooDataChanged
 		// Refresh the gallery when selected
 		if(tabGallery.isSelected())
 		{
+			// Get the current images folder
+			File imgFolder = CooSystem.USE_DB ? CooDBImportUtil.getImagesFolder(
+					prefs.getDBFolder(), customer) : CooXMLDBUtil.getImagesFolder(customer);
+			
 			// Load the images for selected customer
-			imageGallery.loadImages(CooXMLDBUtil.getImagesFolder(
-				customer), Boolean.TRUE);
+			imageGallery.loadImages(imgFolder, Boolean.TRUE);
 		}
 	}
 
@@ -245,66 +253,11 @@ public class CooController implements Initializable, CooDataChanged
 		CooGuiUtil.paste(primaryStage.getScene());
 	}
 
-	@SuppressWarnings("unchecked")
 	@FXML
 	protected void openSettings()
 	{
-		// FORTEST try out the new settings dialog ^_^
-
-		// Create the dialog
-		CooSettingsDialog dialog = new CooSettingsDialog(primaryStage,
-			"Coordz",
-			CooFileUtil.getResourceIcon("Logo.png"));
-
-		// Add the settings - text, bool, combo
-		dialog.addSetting("Allgemein", "Datei", SettingType.TEXT);
-		dialog.addSetting("Allgemein", "Automatisch verbinden",
-			SettingType.BOOLEAN);
-		dialog.addSetting("Allgemein", "Sprache", SettingType.COMBO,
-			"Deutsch", "Englisch");
-
-		dialog.addSetting("Anzeige", "Name", SettingType.TEXT);
-		dialog.addSetting("Anzeige", "Animiert", SettingType.BOOLEAN);
-		dialog.addSetting("Anzeige", "Style", SettingType.COMBO,
-			"Style 1", "Style 2");
-
-		dialog.addSetting("LAP Software", "Bereichsaufteilung mit Überlappung", SettingType.BOOLEAN);
-		dialog.addSetting("LAP Software", "Bereichsaufteilung Überlappung", SettingType.TEXT);
-
-		// LOOK HERE - connect user property to setting
-		xmlDbPath.bind((ObservableValue<String>)dialog.addSetting(
-			"XML-Datenbank", "Pfad", SettingType.TEXT, xmlDbPath.getValue()));
-		dialog.addSetting("XML-Datenbank", "Automatisch laden",
-			SettingType.BOOLEAN);
-
-		dialog.addSetting("Datenbank", "Name", SettingType.TEXT);
-		dialog.addSetting("Datenbank", "Treiber", SettingType.TEXT);
-		dialog.addSetting("Datenbank", "Benutzer", SettingType.TEXT);
-		dialog.addSetting("Datenbank", "Passwort", SettingType.TEXT);
-
-		dialog.addSetting("Update", "Version", SettingType.TEXT);
-		dialog.addSetting("Update", "Automatisch überprüfen",
-			SettingType.BOOLEAN);
-
-		// User decides what to do on cancel
-		dialog.setOnCancel(l ->
-		{
-			if(CooDialogs.showConfirmDialog(dialog, "Änderungen verwerfen",
-				"Möchten Sie wirklich abbrechen?"))
-			{
-				dialog.close();
-			}
-		});
-
-		// User decides what to do on save
-		dialog.setOnSave(l ->
-		{
-			dialog.close();
-		});
-
-		CooGuiUtil.grayOutParent(primaryStage,
-			dialog.showingProperty());
-		dialog.showAndWait();
+		// Open the settings dialog
+		prefs.showAndWait();
 	}
 
 	protected void openXMLDB(final File xmlDBFolder)
