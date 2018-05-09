@@ -42,7 +42,7 @@ public class CooSystem
 	private static FileLock fileLock;
 	
 	/** Flag if database should be used - otherwise xml */
-	public static final boolean USE_DB = Boolean.FALSE;
+	public static final boolean USE_DB = Boolean.TRUE;
 	/** The {@link CooDBModel} used in {@link #database} */
 	private static CooDBModel model;
 	/** The actual used {@link CooDB} */
