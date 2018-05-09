@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<DBMODEL DBTYPE="ORACLE" DBHOST="localhost" DBPORT="1521" DBNAME="XE" 
-	DBUSER="utgeneric" DBPASSWORD="manager" DBCREATE="TRUE">
+<DBMODEL DBTYPE="DERBY" DBHOST="localhost" DBPORT="1521" DBNAME="CoordzDB" 
+	DBUSER="Coordz" DBPASSWORD="P4$$w0rd" DBCREATE="TRUE">
 	<TABLES>
 		<TABLE NAME="Customer">
 			<COMMENT VALUE="Tabelle mit Coordz Kunden" />
