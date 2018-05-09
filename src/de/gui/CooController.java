@@ -103,22 +103,19 @@ public class CooController implements Initializable, CooDataChanged
 		// Add documents to GUI
 		CooGuiUtil.addDocToMenu(menuDocs, new File(DOCUMENT_FOLDER));
 		
-		// Get the current images folder
-		File imgFolder = CooSystem.USE_DB ? CooDBImportUtil.getImagesFolder(
-				prefs.getDBFolder(), customer) : CooXMLDBUtil.getImagesFolder(customer);
 		
 		// FIXME: $TO: TabPanes loose selection when they where detached
 		// Load the Images when tab selected
 		tabGallery.setOnSelectionChanged(e -> imageGallery.loadImages(
+			// Get the current images folder
+			CooSystem.USE_DB ? CooDBImportUtil.getImagesFolder(
+				prefs.getDBFolder(), customer) : CooXMLDBUtil.getImagesFolder(customer)
 			// Check if tab is selected 
-			imgFolder, tabGallery.isSelected() | 
+			, tabGallery.isSelected() | 
 			// Or if tab is detached from tabpane
 			!tabPane.getTabs().contains(tabGallery)));
 
 		itmConnDB.setDisable(!CooSystem.USE_DB);
-		// FORTEST load the coordz xml database
-//		primaryStage.setOnShowing(e -> openXMLDB(new File("D:\\Desktop\\Unitechnik\\"
-//			+ "Projekte\\Beton\\Laser\\_CoordzXML")));
 	}
 	
 	@Override
