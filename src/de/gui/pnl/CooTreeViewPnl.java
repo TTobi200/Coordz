@@ -7,6 +7,7 @@
 package de.gui.pnl;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Objects;
 
 import de.coordz.data.*;
@@ -115,7 +116,7 @@ public class CooTreeViewPnl extends BorderPane
 	}
 
 	@FXML
-	protected void add()
+	protected void add() throws SQLException
 	{
 		TreeItem<String> selItem = prjTreeView.getSelectionModel()
 			.getSelectedItem();
@@ -124,8 +125,10 @@ public class CooTreeViewPnl extends BorderPane
 		if(Objects.nonNull(selItem) && selItem == prjTreeView.getRoot())
 		{
 			CooCustomer newCustomer = new CooCustomer();
+			newCustomer.cre();
 			newCustomer.nameProperty().set("Neuer Kunde");
-
+			newCustomer.insert();
+			
 			selItem.getChildren().add(
 				new CooCustomerTreeItem(newCustomer.nameProperty(),
 					newCustomer));
@@ -133,9 +136,12 @@ public class CooTreeViewPnl extends BorderPane
 		else if(selItem instanceof CooCustomerTreeItem)
 		{
 			CooProject newPrj = new CooProject();
+			CooCustomer customer = ((CooCustomerTreeItem)selItem)
+				.customerProperty().get();
+			newPrj.cre();
 			newPrj.nameProperty().set("Neues Projekt");
-			((CooCustomerTreeItem)selItem).customerProperty()
-				.get().addProject(newPrj);
+			customer.addProject(newPrj);
+			newPrj.insert(customer.customerIdProperty().get());
 
 			selItem.getChildren().add(new CooProjectTreeItem(
 				newPrj.nameProperty(), newPrj));
