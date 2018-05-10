@@ -89,4 +89,11 @@ public abstract class CooDB
 	 * @return a {@link String} containing the escaped column
 	 */
 	public abstract String escapeColumn(String column);
+	
+	/**
+	 * Method to get create a {@link Blob} for this specified {@link CooDB}.
+	 * @return a new created empty {@link Blob}
+	 * @throws SQLException when {@link Blob} creation failed
+	 */
+	public abstract Blob createBlob()  throws SQLException;
 }

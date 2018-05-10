@@ -52,7 +52,6 @@ public class CooDBCreDaos
 				
 				// Define the used imports
 				addNeededImports(out, table);
-				out.println("import " + CooDBDao.class.getPackage().getName() + ".gen.inf.*;");
 				out.println();
 				
 				out.println("public class " + daoName + " extends " + CooDBDao.class.getName());
@@ -93,6 +92,8 @@ public class CooDBCreDaos
 				.findAny().isPresent();
 		
 		out.println("import javafx.beans.property.*;");
+		out.println("import " + CooDBDao.class.getPackage().getName() + ".*;");
+		out.println("import " + CooDBDao.class.getPackage().getName() + ".gen.inf.*;");
 		
 		if(timestampUsed)
 		{
@@ -120,9 +121,13 @@ public class CooDBCreDaos
 			{
 				// Put the property to columns map
 				out.println("\t\taddColumn(" + CooDBCreInfs.getColConst(table,
+					// Add the column name
 					col.nameProperty().get()) + ", " + 
-						col.nameProperty().get() + "Property = new Simple" 
-							+ col.typeProperty().get().getProperty() + "()" +");");
+						// Add the column DB value type
+						CooDBValTypes.class.getSimpleName() + "." + col.typeProperty().get() + ", " +	
+							// Add the property for this column
+							col.nameProperty().get() + "Property = new Simple" 
+								+ col.typeProperty().get().getProperty() + "()" +");");
 			}
 		
 		out.println("\t}");

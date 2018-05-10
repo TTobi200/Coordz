@@ -14,7 +14,7 @@ import de.coordz.CooSystem;
 import de.util.CooSQLUtil;
 import de.util.log.CooLog;
 import javafx.beans.property.*;
-import oracle.sql.TIMESTAMP;
+import oracle.sql.*;
 
 public abstract class CooDBDao
 {
@@ -26,12 +26,15 @@ public abstract class CooDBDao
 	protected String tableFKey;
 	/** {@link LinkedHashMap} with column to property */
 	protected LinkedHashMap<String, Property<?>> columnToProperty;
+	/** {@link LinkedHashMap} with column to type */
+	protected LinkedHashMap<String, CooDBValTypes> columnToType;
 	/** Boolean flag if dao is in database */
 	private boolean isInDB;
 	
 	protected CooDBDao()
 	{
 		columnToProperty = new LinkedHashMap<>();
+		columnToType = new LinkedHashMap<>();
 	}
 	
 	/**
@@ -101,14 +104,14 @@ public abstract class CooDBDao
 		if(init && !isInDB)
 		{
 			// If not in database - fill with defaults
-			intDefaults();
+			initDefaults();
 		}
 	}
 	
 	/**
 	 * Method to initializes default values of this DAO.
 	 */
-	private void intDefaults()
+	private void initDefaults()
 	{
 		if(!columnToProperty.isEmpty())
 		{
@@ -119,19 +122,39 @@ public abstract class CooDBDao
 			{
 				// Get the property for column
 				Property<?> p = columnToProperty.get(column);
+				// Get the column DB type
+				CooDBValTypes type = columnToType.get(column);
 				
-				if(p instanceof StringProperty)
+				try
 				{
-					setProperty(p, "");
+					switch(type)
+					{
+						default:
+						case VARCHAR:
+							setProperty(p, "");
+							break;
+						case DOUBLE:
+							setProperty(p, 0.0d);
+							break;
+						case INTEGER:
+							setProperty(p, 0);
+							break;
+						case BOOLEAN:
+							setProperty(p, Boolean.FALSE);
+							break;
+						case TIMESTAMP:
+							setProperty(p, Timestamp.valueOf(
+								LocalDateTime.now()));
+							break;
+						case BLOB:
+							setProperty(p, CooSystem.getDatabase()
+								.createBlob());
+							break;
+					}
 				}
-				else if(p instanceof IntegerProperty)
+				catch(SQLException e)
 				{
-					setProperty(p, 0);
-				}
-				else if(p instanceof ObjectProperty)
-				{
-					setProperty(p, Timestamp.valueOf(
-						LocalDateTime.now()));
+					CooLog.error("Error while initializing dao", e);
 				}
 			});
 		}
@@ -192,7 +215,7 @@ public abstract class CooDBDao
 	 * @param prop = the {@link Property} to set
 	 * @param value = the value to set
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "deprecation" })
 	private void setProperty(Property<?> prop, Object value)
 	{
 		if(prop instanceof StringProperty)
@@ -219,9 +242,9 @@ public abstract class CooDBDao
 			{
 				CooSQLUtil.setTimestampProperty(prop, value);
 			}
-			else if(value instanceof Blob)
+			else if(value instanceof Blob || value instanceof BLOB)
 			{
-				((ObjectProperty<Blob>)prop).setValue((Blob)value);
+				CooSQLUtil.setBlobProperty(prop, value);
 			}
 		}
 	}
@@ -431,11 +454,15 @@ public abstract class CooDBDao
 	/**
 	 * Method to add column for this DAO.
 	 * @param column = the name of the column
+	 * @param type = the {@link CooDBValTypes} of the column
 	 * @param property = the property of this column
 	 */
-	public void addColumn(String column, Property<?> property)
+	public void addColumn(String column, CooDBValTypes type, Property<?> property)
 	{
+		// Store the column name to assigned property
 		columnToProperty.put(column.toUpperCase(), property);
+		// Store the column name to column DB type
+		columnToType.put(column.toUpperCase(), type);
 	}
 	
 	/**

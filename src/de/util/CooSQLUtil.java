@@ -15,15 +15,18 @@ import de.gui.comp.CooTableView;
 import de.util.log.CooLog;
 import javafx.beans.property.*;
 import javafx.collections.*;
+import oracle.sql.BLOB;
 
+@SuppressWarnings("deprecation")
 public class CooSQLUtil
 {
 	/**
 	 * Utility method to escape String in SQL statement.
 	 * @param p = the property from value
 	 * @param stmt = the statement as {@link StringBuilder}
+	 * @throws SQLException when escaping went wrong
 	 */
-	public static void escapeString(Property<?> p, StringBuilder stmt)
+	public static void escapeString(Property<?> p, StringBuilder stmt) throws SQLException
 	{
 		stmt.append(escapeString(p));
 	}
@@ -32,8 +35,9 @@ public class CooSQLUtil
 	 * Utility method to escape String in SQL statement.
 	 * @param p = the property from value
 	 * @return the escaped {@link Object}
+	 * @throws SQLException when escaping went wrong
 	 */
-	public static Object escapeString(Property<?> p)
+	public static Object escapeString(Property<?> p) throws SQLException
 	{
 		if(p instanceof IntegerProperty)
 		{
@@ -60,6 +64,12 @@ public class CooSQLUtil
 		{
 			// Convert boolean to a digit for oracle
 			return "'" + ((boolean)p.getValue() ? 1 : 0) + "'";
+		}
+		if(p instanceof ObjectProperty && p.getValue() instanceof BLOB &&
+			CooSystem.getDatabase() instanceof CooDBOracle)
+		{
+			// Always insert empty blob
+			return "hextoraw('0')";
 		}
 		else
 		{
@@ -244,6 +254,29 @@ public class CooSQLUtil
 		{
 			CooLog.error("Error while setting "
 				+ "timestamp property", e);
+		}
+	}
+	
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public static void setBlobProperty(Property<?> prop, Object value)
+	{
+		try
+		{
+			if(value instanceof java.sql.Blob)
+			{
+				((ObjectProperty<java.sql.Blob>)prop).setValue(
+					(java.sql.Blob)value);
+			}
+			else if(value instanceof oracle.sql.BLOB)
+			{
+				((ObjectProperty<java.sql.Blob>)prop).setValue(
+					(Blob)((oracle.sql.BLOB)value).toJdbc());
+			}
+		}
+		catch(SQLException e)
+		{
+			CooLog.error("Error while setting "
+				+ "Blob property", e);
 		}
 	}
 }

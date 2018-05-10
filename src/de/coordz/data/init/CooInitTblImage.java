@@ -30,6 +30,7 @@ public class CooInitTblImage extends InitTblImage
 		image.cre();
 		image.customerIdProperty().set(customerId);
 		image.nameProperty().set(name);
+		image.insert();
 		image.store(new File(file));
 	}
 }

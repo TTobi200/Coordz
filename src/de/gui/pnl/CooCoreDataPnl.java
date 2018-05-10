@@ -10,12 +10,15 @@ import static de.util.CooSQLUtil.*;
 
 import java.io.*;
 import java.net.MalformedURLException;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Objects;
 
 import de.coordz.CooSystem;
 import de.coordz.data.CooCustomer;
 import de.coordz.data.base.*;
+import de.coordz.data.init.CooInitTblImage;
+import de.coordz.db.CooDBSelectStmt;
+import de.coordz.db.gen.inf.InfImage;
 import de.gui.*;
 import de.gui.comp.*;
 import de.util.CooFileUtil;
@@ -42,6 +45,8 @@ public class CooCoreDataPnl extends BorderPane implements CooDataChanged
 
 	@FXML
 	protected CooImageView imgViewLogo;
+	
+	private CooCustomer customer;
 
 	public CooCoreDataPnl()
 	{
@@ -85,6 +90,7 @@ public class CooCoreDataPnl extends BorderPane implements CooDataChanged
 			}
 		}
 		
+		this.customer = customer;
 		txtCustomer.bindBidirectional(customer.nameProperty());
 		txtStreet.bindBidirectional(customer.streetProperty());
 		txtPLZ.bindBidirectional(customer.plzProperty());
@@ -100,23 +106,52 @@ public class CooCoreDataPnl extends BorderPane implements CooDataChanged
 	@FXML
 	public void changeLogo()
 	{
-		File logoFile = CooDialogs.showOpenImageDialog(getScene().getWindow(),
-			"Logo auswählen");
-
-		if(Objects.nonNull(logoFile))
+		try
 		{
-			try
-			{
-				imgViewLogo.imageProperty().set(new Image(logoFile.toURI()
-					.toURL()
-					.toString()));
-			}
-			catch(MalformedURLException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			File logoFile = CooDialogs.showOpenImageDialog(getScene().getWindow(),
+				"Logo auswählen");
 
+			if(Objects.nonNull(logoFile))
+			{
+				imgViewLogo.imageProperty().set(new Image(
+					logoFile.toURI().toURL().toString()));
+				
+				// FORTEST Store the image in database
+				if(CooSystem.USE_DB)
+				{
+					// Select existing customer logo
+					CooDBSelectStmt stmt = new CooDBSelectStmt();
+					stmt.addFrom(InfImage.TABLE_NAME);
+					stmt.addColumn("*");
+					stmt.addWhere(InfImage.CUSTOMERID + " = ?", 
+						customer.customerIdProperty().get());
+					stmt.addWhere(InfImage.NAME + " = ?",
+						CooInitTblImage.IMAGE_LOGO);
+					
+					CooImage daoImage = new CooImage();
+					ResultSet res = CooSystem.getDatabase().execQuery(stmt);
+					
+					if(res.next())
+					{
+						// Image already present
+						daoImage.cre(res);
+					}
+					else
+					{
+						// Insert a new omage entry
+						daoImage.cre();
+						daoImage.nameProperty().set(CooInitTblImage.IMAGE_LOGO);
+						daoImage.insert(customer.customerIdProperty().get());
+					}
+					
+					// Store the image data in blob
+					daoImage.store(logoFile);
+				}
+			}
+		}
+		catch(MalformedURLException | SQLException e)
+		{
+			CooLog.error("Error while changing customer logo", e);
 		}
 	}
 }

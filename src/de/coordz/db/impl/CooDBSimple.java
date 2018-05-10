@@ -114,4 +114,11 @@ public abstract class CooDBSimple extends CooDB
 	{
 		return "\"" + column + "\"";
 	}
+	
+	@Override
+	public Blob createBlob() throws SQLException
+	{
+		CooLog.debug("Creating empty Blob on databse connection.");
+		return conn.createBlob();
+	}
 }

@@ -30,19 +30,17 @@ public class CooImage extends DaoImage
 	{
 		try
 		{
-			// Add initial default image entry
-			PreparedStatement stmt = CooSystem.getDatabase().prepareStatement(
-				"INSERT INTO " + InfImage.TABLE_NAME + " VALUES (?, ?, ?, ?)");
-				
-			// Set the primary key
-			stmt.setInt(imageIdProperty().get(), 1);
-			// Set the foreign key customer id
-			stmt.setInt(2, customerIdProperty().get());
-			// Set the image name
-			stmt.setString(3, nameProperty().get());
-					
-			FileInputStream fin = new FileInputStream("./CoordzXML/Musterfirma/Logo.png");
-			stmt.setBinaryStream(4, fin, fin.available());  
+			// Create prepared statement to update image into blob
+			PreparedStatement stmt = CooSystem.getDatabase().prepareStatement("UPDATE " + 
+				InfImage.TABLE_NAME + " SET " + InfImage.DATA + " = ? WHERE " + InfImage.IMAGEID + " = ?");
+			
+			// Add the image as binary stream blob
+			FileInputStream fin = new FileInputStream(imageFile);
+			stmt.setBinaryStream(1, fin, fin.available());  
+			// Add the where image id
+			stmt.setInt(2, imageIdProperty().get());
+			
+			// Execute the update on database
 			stmt.executeUpdate();
 		}
 		catch (IOException | SQLException e)
