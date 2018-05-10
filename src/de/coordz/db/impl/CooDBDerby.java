@@ -10,7 +10,6 @@ import java.sql.*;
 import java.util.Objects;
 
 import de.coordz.CooSystem;
-import de.coordz.db.CooDBValTypes;
 import de.util.log.CooLog;
 
 public class CooDBDerby extends CooDBSimple
@@ -85,31 +84,5 @@ public class CooDBDerby extends CooDBSimple
 					"TRUNCATE " + type + " " + name);
 			}
 		}
-	}
-	
-	@Override
-	public String getDataType(CooDBValTypes type, String column)
-	{
-		String retType = null;
-		switch(type)
-		{
-			case BOOLEAN:
-				retType = "BOOLEAN";
-				break;
-			case INTEGER:
-				retType = "INTEGER";
-				break;
-			case DOUBLE:
-				retType = "DOUBLE";
-				break;
-			case TIMESTAMP:
-				retType = "TIMESTAMP";
-				break;
-			default:
-			case VARCHAR:
-				retType = "VARCHAR";
-				break;
-		}
-		return retType;
 	}
 }

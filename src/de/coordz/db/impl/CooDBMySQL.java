@@ -87,7 +87,8 @@ public class CooDBMySQL extends CooDBSimple
 	@Override
 	public String getDataType(CooDBValTypes type, String column)
 	{
-		String retType = null;
+		String retType = super.getDataType(type, column);
+		
 		switch(type)
 		{
 			case BOOLEAN:
@@ -95,19 +96,7 @@ public class CooDBMySQL extends CooDBSimple
 				// Use the CooSQLUtil.escapeString(Property<?> p)
 				retType = "BOOLEAN";
 				break;
-			case INTEGER:
-				retType = "INTEGER";
-				break;
-			case DOUBLE:
-				retType = "DOUBLE";
-				break;
-			case TIMESTAMP:
-				retType = "TIMESTAMP";
-				break;
 			default:
-			case VARCHAR:
-				retType = "VARCHAR";
-				break;
 		}
 		return retType;
 	}

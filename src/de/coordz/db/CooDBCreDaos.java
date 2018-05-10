@@ -51,9 +51,7 @@ public class CooDBCreDaos
 				out.println();
 				
 				// Define the used imports
-				out.println("import javafx.beans.property.*;");
-				// Check if time stamp import used
-				addTimestampImport(out, table);
+				addNeededImports(out, table);
 				out.println("import " + CooDBDao.class.getPackage().getName() + ".gen.inf.*;");
 				out.println();
 				
@@ -82,16 +80,27 @@ public class CooDBCreDaos
 		}
 	}
 
-	private void addTimestampImport(PrintWriter out, CooDBTable table)
+	private void addNeededImports(PrintWriter out, CooDBTable table)
 	{
 		// Check if time stamp used in this dao
 		boolean timestampUsed = table.getColumns().stream().filter(
 			c -> c.typeProperty().get()	== CooDBValTypes.TIMESTAMP)
 				.findAny().isPresent();
 		
+		// Check if Blob used in this dao
+		boolean blobUsed = table.getColumns().stream().filter(
+			c -> c.typeProperty().get()	== CooDBValTypes.BLOB)
+				.findAny().isPresent();
+		
+		out.println("import javafx.beans.property.*;");
+		
 		if(timestampUsed)
 		{
 			out.println("import java.sql.Timestamp;");
+		}
+		if(blobUsed)
+		{
+			out.println("import java.sql.Blob;");
 		}		
 	}
 

@@ -55,6 +55,14 @@ public abstract class CooDB
 	public abstract int execUpdate(String sql) throws SQLException;
 	
 	/**
+	 * Method to create a prepared SQL-Update-Statement for this DB.
+	 * @param sql = the SQL-Update-Statement to prepare
+	 * @return the created PreparedStatement 
+	 * @throws SQLException - if prepared statement could not be created
+	 */
+	public abstract PreparedStatement prepareStatement(String sql) throws SQLException;
+	
+	/**
 	 * Method to clean up this DB. Restores an empty DB.
 	 * @param dropTable = boolean flag if table should be dropped
 	 * @throws SQLException - when cleanup failed

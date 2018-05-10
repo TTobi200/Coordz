@@ -12,7 +12,8 @@ public enum CooDBValTypes
 	INTEGER("int", "IntegerProperty"),
 	DOUBLE("double", "DoubleProperty"),
 	BOOLEAN("boolean", "BooleanProperty"), 
-	TIMESTAMP("Timestamp", "ObjectProperty<Timestamp>");
+	TIMESTAMP("Timestamp", "ObjectProperty<Timestamp>"),
+	BLOB("Blob", "ObjectProperty<Blob>");
 	
 	private String primitive;
 	private String property;

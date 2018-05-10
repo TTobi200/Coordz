@@ -26,6 +26,7 @@ public class CooDataInit extends CooDBInit
 		new CooInitTblContact().init();
 		new CooInitTblCustomer().init();
 		new CooInitTblGateway().init();
+		new CooInitTblImage().init();
 		new CooInitTblLAPSoftware().init();
 		new CooInitTblLaser().init();
 		new CooInitTblMeasurement().init();

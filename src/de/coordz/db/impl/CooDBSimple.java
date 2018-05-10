@@ -47,6 +47,35 @@ public abstract class CooDBSimple extends CooDB
 	}
 	
 	@Override
+	public String getDataType(CooDBValTypes type, String column)
+	{
+		String retType = null;
+		switch(type)
+		{
+			case BOOLEAN:
+				retType = "BOOLEAN";
+				break;
+			case INTEGER:
+				retType = "INTEGER";
+				break;
+			case DOUBLE:
+				retType = "DOUBLE";
+				break;
+			case TIMESTAMP:
+				retType = "TIMESTAMP";
+				break;
+			case BLOB:
+				retType = "BLOB";
+				break;
+			default:
+			case VARCHAR:
+				retType = "VARCHAR";
+				break;
+		}
+		return retType;
+	}
+	
+	@Override
 	public boolean exec(String sql) throws SQLException
 	{
 		CooLog.debug("Execute SQL: \"" + sql + "\"");
@@ -71,6 +100,13 @@ public abstract class CooDBSimple extends CooDB
 	{
 		CooLog.debug("Execute SQL Update: \"" + sql + "\"");
 		return stmt.executeUpdate(sql);
+	}
+	
+	@Override
+	public PreparedStatement prepareStatement(String sql) throws SQLException
+	{
+		CooLog.debug("Creating prepared SQL Update statement: \"" + sql + "\"");
+		return conn.prepareStatement(sql);
 	}
 	
 	@Override

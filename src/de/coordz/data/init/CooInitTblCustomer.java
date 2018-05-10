@@ -17,6 +17,6 @@ public class CooInitTblCustomer extends InitTblCustomer
 	{
 		// Add initial default customer entry
 		put("Musterfirma", "Musterstr. 7", 
-			"12345", "Musterhausen", "logo.png");
+			"12345", "Musterhausen");
 	}
 }

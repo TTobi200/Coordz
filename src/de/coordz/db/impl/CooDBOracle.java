@@ -91,7 +91,8 @@ public class CooDBOracle extends CooDBSimple
 	@Override
 	public String getDataType(CooDBValTypes type, String column)
 	{
-		String retType = null;
+		String retType = super.getDataType(type, column);
+		
 		switch(type)
 		{
 			case BOOLEAN:
@@ -99,19 +100,10 @@ public class CooDBOracle extends CooDBSimple
 				// char and check if set 0 = false or 1 = true
 				retType = "char check (" + column + " in (0, 1))";
 				break;
-			case INTEGER:
-				retType = "INTEGER";
-				break;
 			case DOUBLE:
 				retType = "DOUBLE PRECISION";
 				break;
-			case TIMESTAMP:
-				retType = "TIMESTAMP";
-				break;
 			default:
-			case VARCHAR:
-				retType = "VARCHAR";
-				break;
 		}
 		return retType;
 	}
