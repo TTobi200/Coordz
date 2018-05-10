@@ -4,7 +4,7 @@
  * $Log$
  * Copyright © 2015 T.Ohm . All Rights Reserved.
  */
-package de.util;
+package de.coordz.data;
 
 import javafx.beans.property.*;
 
