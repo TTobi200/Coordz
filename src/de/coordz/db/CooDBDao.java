@@ -14,6 +14,7 @@ import de.coordz.CooSystem;
 import de.util.CooSQLUtil;
 import de.util.log.CooLog;
 import javafx.beans.property.*;
+import oracle.sql.TIMESTAMP;
 
 public abstract class CooDBDao
 {
@@ -191,6 +192,7 @@ public abstract class CooDBDao
 	 * @param prop = the {@link Property} to set
 	 * @param value = the value to set
 	 */
+	@SuppressWarnings("unchecked")
 	private void setProperty(Property<?> prop, Object value)
 	{
 		if(prop instanceof StringProperty)
@@ -213,7 +215,14 @@ public abstract class CooDBDao
 		}
 		else if(prop instanceof ObjectProperty)
 		{
-			CooSQLUtil.setTimestampProperty(prop, value);
+			if(value instanceof Timestamp || value instanceof TIMESTAMP)
+			{
+				CooSQLUtil.setTimestampProperty(prop, value);
+			}
+			else if(value instanceof Blob)
+			{
+				((ObjectProperty<Blob>)prop).setValue((Blob)value);
+			}
 		}
 	}
 
@@ -382,8 +391,17 @@ public abstract class CooDBDao
 				}
 				else if(p instanceof ObjectProperty)
 				{
-					((ObjectProperty<Timestamp>)p).setValue(
-						Timestamp.valueOf(LocalDateTime.now()));
+					Object data = result.getObject(idx);
+					if(data instanceof Timestamp || data instanceof TIMESTAMP)
+					{
+						// FIXME $TO: Insert the data from result set here?!
+						((ObjectProperty<Timestamp>)p).setValue(
+							Timestamp.valueOf(LocalDateTime.now()));
+					}
+					else if(data instanceof Blob)
+					{
+						((ObjectProperty<Blob>)p).setValue((Blob)data);
+					}
 				}
 				idx++;
 			}

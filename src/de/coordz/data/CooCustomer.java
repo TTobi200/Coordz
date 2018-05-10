@@ -9,13 +9,15 @@ package de.coordz.data;
 import static de.util.CooSQLUtil.loadList;
 import static de.util.CooXmlDomUtil.*;
 
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 
 import org.w3c.dom.*;
 
+import de.coordz.CooSystem;
 import de.coordz.data.base.*;
-import de.coordz.db.CooDB;
+import de.coordz.data.init.CooInitTblImage;
+import de.coordz.db.*;
 import de.coordz.db.gen.dao.DaoCustomer;
 import de.coordz.db.gen.inf.*;
 import de.coordz.db.xml.*;
@@ -90,6 +92,23 @@ public class CooCustomer extends DaoCustomer implements CooDBXML, CooDBLoad
 	@Override
 	public void fromDB(CooDB database) throws SQLException
 	{
+		// FORTEST Load the customer image
+		CooDBSelectStmt stmt = new CooDBSelectStmt();
+		stmt.addFrom(InfImage.TABLE_NAME);
+		stmt.addColumn("*");
+		stmt.addWhere(InfImage.CUSTOMERID + " = ?", 
+			customerIdProperty().get());
+		stmt.addWhere(InfImage.NAME + " = ?",
+			CooInitTblImage.IMAGE_LOGO);
+		
+		ResultSet res = CooSystem.getDatabase().execQuery(stmt);
+		if(res.next())
+		{
+			CooImage image = new CooImage();
+			image.cre(res);
+			logo.set(image.load());
+		}
+		
 		// FORTEST Select the contacts
 		contacts.setAll(loadList(database, InfContact.TABLE_NAME, 
 			InfContact.CUSTOMERID, CooContact.class, 

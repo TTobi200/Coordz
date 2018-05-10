@@ -27,10 +27,10 @@
 		<TABLE NAME="Image">
 			<COMMENT VALUE="Tabelle mit Coordz Bildern" />
 				<PKEY VALUE="imageId" TYPE="INTEGER"/>
-				<FKEY VALUE="projectId" TYPE="INTEGER"/>
+				<FKEY VALUE="customerId" TYPE="INTEGER"/>
 				<COLUMNS>
 					<COLUMN NAME="imageId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="ID"/>
-					<COLUMN NAME="projectId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="Projekt ID"/>
+					<COLUMN NAME="customerId" TYPE="INTEGER" LENGTH="200" NULLABLE="FALSE" DESC="Kunden ID"/>
 					<COLUMN NAME="name" TYPE="VARCHAR" LENGTH="200" NULLABLE="TRUE" DESC="Name"/>
 					<COLUMN NAME="data" TYPE="BLOB" LENGTH="4000" NULLABLE="TRUE" DESC="Daten"/>
 				</COLUMNS>
