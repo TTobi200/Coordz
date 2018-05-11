@@ -118,8 +118,9 @@ public class CooSQLUtil
 	
 	public static String escapeColumn(String column)
 	{
-		// Escape the oracle column names
-		return CooSystem.getDatabase() instanceof CooDBOracle 
+		// Escape the oracle and derby column names
+		return (CooSystem.getDatabase() instanceof CooDBOracle 
+			|| CooSystem.getDatabase() instanceof CooDBDerby)
 			// Leave out the * placeholder			
 			&& !column.equals("*") ?			
 				"\"" + column + "\"" : column;
