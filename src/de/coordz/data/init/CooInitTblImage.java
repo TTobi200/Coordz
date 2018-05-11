@@ -21,6 +21,13 @@ public class CooInitTblImage extends InitTblImage
 	{
 		// Add initial default image entry
 		put(1, IMAGE_LOGO, "./CoordzXML/Musterfirma/Logo.png");
+		
+		// Add initial default customer image entries
+		File imgFolder = new File("./CoordzXML/Musterfirma/images");
+		for(File f : imgFolder.listFiles())
+		{
+			put(1, f.getName(), f.getAbsolutePath());
+		}
 	}
 	
 	protected void put(int customerId, String name, String file)
