@@ -7,6 +7,7 @@
 package de.coordz.db;
 
 import java.sql.*;
+import java.util.List;
 
 public abstract class CooDB
 {
@@ -53,6 +54,15 @@ public abstract class CooDB
 	 * @throws SQLException - if statement could not be executed
 	 */
 	public abstract int execUpdate(String sql) throws SQLException;
+	
+	/**
+	 * Method to execute committed prepared SQL-Update-Statement on this DB.
+	 * @param stmt = the prepared SQL-Update-Statement {@link String} to execute
+	 * @param args = the statement arguments
+	 * @return integer with resulting count
+	 * @throws SQLException - if prepared statement could not be executed
+	 */
+	public abstract int execPrepareStatement(String stmt, List<Object> args) throws SQLException;
 	
 	/**
 	 * Method to create a prepared SQL-Update-Statement for this DB.

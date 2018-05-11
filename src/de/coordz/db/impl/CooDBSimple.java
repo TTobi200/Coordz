@@ -7,7 +7,9 @@
 package de.coordz.db.impl;
 
 import java.sql.*;
-import java.util.Objects;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.*;
 
 import de.coordz.db.*;
 import de.util.log.CooLog;
@@ -103,22 +105,70 @@ public abstract class CooDBSimple extends CooDB
 	}
 	
 	@Override
+	public int execPrepareStatement(String stmt, List<Object> args)
+		throws SQLException
+	{
+		// Create a prepared statement on database 
+		PreparedStatement prepStmt = prepareStatement(stmt);
+		
+		// Fill the statement with data
+		int index = 1;
+		for(Object o : args)
+		{
+			if (o instanceof Integer) 
+			{
+				prepStmt.setInt(index, (Integer)o);
+			}
+			else if (o instanceof Double) 
+			{
+				prepStmt.setDouble(index, (Double)o);
+			}
+			else if (o instanceof Boolean) 
+			{
+				prepStmt.setBoolean(index, (Boolean)o);
+			}
+			else if (o instanceof Timestamp) 
+			{
+				prepStmt.setTimestamp(index, (Timestamp)o);
+			}
+			else if (o instanceof LocalDate) 
+			{
+				prepStmt.setDate(index, Date.valueOf(
+					(LocalDate)o));
+			}
+			else if (o instanceof Blob) 
+			{
+				prepStmt.setBinaryStream(index, 
+					((Blob)o).getBinaryStream());
+			}
+			else
+			{
+				prepStmt.setString(index, (String)o);
+			}
+			
+			index++;
+		}
+		
+		CooLog.debug("Executing prepared SQL Update statement: \"" +
+			stmt + "\" " + args.toString());
+		return prepStmt.executeUpdate();
+	}
+	
+	@Override
 	public PreparedStatement prepareStatement(String sql) throws SQLException
 	{
-		CooLog.debug("Creating prepared SQL Update statement: \"" + sql + "\"");
 		return conn.prepareStatement(sql);
+	}
+	
+	@Override
+	public Blob createBlob() throws SQLException
+	{
+		return conn.createBlob();
 	}
 	
 	@Override
 	public String escapeColumn(String column)
 	{
 		return "\"" + column + "\"";
-	}
-	
-	@Override
-	public Blob createBlob() throws SQLException
-	{
-		CooLog.debug("Creating empty Blob on databse connection.");
-		return conn.createBlob();
 	}
 }

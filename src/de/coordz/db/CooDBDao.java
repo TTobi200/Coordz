@@ -317,21 +317,21 @@ public abstract class CooDBDao
 				.get(tableFKey.toUpperCase())).setValue(fKey);
 		}
 		
-		int i = 0;
-		for(String column : columnToProperty.keySet())
+		for(int i = 0; i < columnToProperty.size(); i++)
 		{
-			// Add the value of the property
-			Property<?> p = columnToProperty.get(column);
-			
-			// On integer property don't escape value with ''
-			CooSQLUtil.escapeString(p, stmt);
-			
+			stmt.append("?");
 			// Append , if not the last otherwise close with )
-			stmt.append(i++ < columnToProperty.size() -1 ? ", " : ")");
+			stmt.append(i < columnToProperty.size() -1 ? ", " : ")");
 		}
 		
-		// Execute the SQL statement
-		CooSystem.getDatabase().exec(stmt.toString());
+		// Collect the prepared statement arguments
+		List<Object> args = new ArrayList<>();
+		columnToProperty.values().forEach(p 
+			-> args.add(p.getValue()));
+		
+		// Execute the prepared SQL statement
+		CooSystem.getDatabase().execPrepareStatement(
+			stmt.toString(), args);
 		
 		// This item is in database
 		return isInDB = Boolean.TRUE;
@@ -346,16 +346,14 @@ public abstract class CooDBDao
 		// Only if this DAO is in database
 		if(isInDB)
 		{
-			StringBuilder stmt = new StringBuilder("DELETE FROM ");
-			stmt.append(tableName)
-			.append(" WHERE ")
-			.append(tablePKey.toUpperCase())
-			.append(" = ")
-			.append(CooSQLUtil.escapeString(
-				columnToProperty.get(tablePKey.toUpperCase())));
+			CooDBDeleteStmt stmt = new CooDBDeleteStmt();
+			stmt.addFrom(tableName)
+				.addWhere(tablePKey.toUpperCase() + " = ?", 
+					CooSQLUtil.escapeString(columnToProperty.get(
+						tablePKey.toUpperCase())));
 			
 			// Execute the SQL statement
-			CooSystem.getDatabase().exec(stmt.toString());
+			CooSystem.getDatabase().execQuery(stmt);
 			
 			// This item is in database
 			isInDB = Boolean.FALSE;

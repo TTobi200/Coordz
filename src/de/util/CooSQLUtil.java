@@ -257,7 +257,7 @@ public class CooSQLUtil
 		}
 	}
 	
-	@SuppressWarnings({ "unchecked", "deprecation" })
+	@SuppressWarnings({ "unchecked" })
 	public static void setBlobProperty(Property<?> prop, Object value)
 	{
 		try
