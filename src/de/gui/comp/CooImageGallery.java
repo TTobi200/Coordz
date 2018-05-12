@@ -3,7 +3,7 @@ package de.gui.comp;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.*;
 
 import javax.imageio.*;
@@ -121,8 +121,7 @@ public class CooImageGallery extends BorderPane
 							
 							// Create a new image slide
 							VBox imageSlide = createImageSlideDB(
-								daoImage.nameProperty().get(),
-								daoImage.load(150, 0));
+								customer, daoImage, daoImage.load(150, 0));
 							
 							// Add the image later for loading effect
 							Platform.runLater(() -> 
@@ -146,8 +145,8 @@ public class CooImageGallery extends BorderPane
 		progress.progressProperty().bind(task.progressProperty());
 		new Thread(task).start();
 		
-		// Forward the dragged file to copy it to image folder
-//		setOnDragDropped(e -> copyImage(imgFolder, e));
+		// Forward the dragged to store image in database
+		setOnDragDropped(e -> storeImage(customer, e));
 	}
 	
 	public void loadImages(File imgFolder, boolean load)
@@ -207,6 +206,63 @@ public class CooImageGallery extends BorderPane
 		
 		// Forward the dragged file to copy it to image folder
 		setOnDragDropped(e -> copyImage(imgFolder, e));
+	}
+	
+	public void storeImage(CooCustomer customer, DragEvent e)
+	{
+		Dragboard db = e.getDragboard();
+		List<File> files = db.getFiles();
+		
+		// Run the image loading in separated thread
+		Task<Void> task = new Task<Void>()
+		{
+			@Override
+			protected Void call() throws Exception
+			{
+				// Set the loading cursor
+				setCursor(Cursor.WAIT);
+				
+				// Check if we have a file dragged
+				if(!files.isEmpty())
+				{
+					for(File file : files)
+					{
+						try(ImageInputStream iis = ImageIO.createImageInputStream(file))
+						{
+							// TODO $TO: Display a message when file already exists?
+							if(Objects.nonNull(file))
+							{
+								// Store the image into database
+								CooImage daoImage = new CooImage();
+								daoImage.cre();
+								daoImage.nameProperty().set(file.getName());
+								daoImage.insert(customer.customerIdProperty().get());
+								daoImage.store(file);
+							}		
+						}
+						catch(IOException ex)
+						{
+							CooLog.error("Error while storing image", ex);
+						}
+					}
+				}
+				
+				// Start reloading all images
+				loadImagesDB(customer, Boolean.TRUE);
+				
+				// Complete the drag event
+				e.setDropCompleted(Boolean.TRUE);
+				e.consume();
+				
+				// Set the default cursor
+				setCursor(Cursor.DEFAULT);
+				return null;
+			}
+		};
+		// Bind the task progress and text to progress bar
+		lblProgress.textProperty().bind(task.messageProperty());
+		progress.progressProperty().bind(task.progressProperty());
+		new Thread(task).start();
 	}
 	
 	public void copyImage(File imgFolder, DragEvent e)
@@ -336,15 +392,12 @@ public class CooImageGallery extends BorderPane
 		return vbox;
 	}
 	
-	private VBox createImageSlideDB(String name, Image image)
+	private VBox createImageSlideDB(CooCustomer customer, 
+		CooImage daoImage, Image image)
 	{
 		VBox vbox = new VBox();
 		vbox.setAlignment(Pos.CENTER);
 		
-		// Load the image to image view
-//		Image image = new Image(stream, 150,
-//			0, Boolean.TRUE,	Boolean.TRUE);
-			
 		ImageView imageView = new ImageView(image);
 		imageView.setEffect(new DropShadow(15,
 			Color.DARKGRAY));
@@ -377,9 +430,9 @@ public class CooImageGallery extends BorderPane
 		
 		// Add action to delete image
 		imgViewDelete.setPickOnBounds(Boolean.TRUE);
-//		imgViewDelete.setOnMouseClicked(e -> 
-//			imgViewDelete.setVisible(deleteImage(
-//				imageFolder, imageFile)));
+		imgViewDelete.setOnMouseClicked(e -> 
+			imgViewDelete.setVisible(deleteImageDB(
+				customer, daoImage)));
 		
 		imageView.setOnMouseClicked(e -> 
 		{
@@ -387,15 +440,41 @@ public class CooImageGallery extends BorderPane
 			if(e.getButton().equals(MouseButton
 				.PRIMARY) && e.getClickCount() == 2)
 			{
-//				openImageDetail(imageFile);
+				openImageDetailDB(daoImage);
 			}
 		});
 		
 		// Image slide vbox with image and its name
 		vbox.getChildren().add(new StackPane(imageView, imgViewDelete));
-		vbox.getChildren().add(new Label(name));
+		vbox.getChildren().add(new Label(daoImage.nameProperty().get()));
 			
 		return vbox;
+	}
+	
+	private boolean deleteImageDB(CooCustomer customer, CooImage daoImage)
+	{
+		// Return if image has been deleted
+		boolean deleted = Boolean.FALSE;
+		
+		// Ask the user if really wants to delete image
+		if(Objects.nonNull(daoImage) && CooDialogs.showConfirmDialog(
+			getScene().getWindow(),	"Bild löschen", "Wollen Sie das Bild "
+			+ daoImage.nameProperty().get() + " wirklich löschen?"))
+		{
+			try
+			{
+				// Delete the image file and remove the slide
+				daoImage.delete();
+				loadImagesDB(customer, Boolean.TRUE);
+				deleted = Boolean.TRUE;
+			}
+			catch(SQLException e)
+			{
+				CooLog.error("Error while deleting image", e);
+			}
+		}
+		
+		return deleted;
 	}
 
 	private boolean deleteImage(File imageFolder, File imageFile)
@@ -422,6 +501,47 @@ public class CooImageGallery extends BorderPane
 		}
 		
 		return deleted;
+	}
+	
+	private void openImageDetailDB(CooImage daoImage)
+	{
+		try
+		{
+			Stage newStage = new Stage();
+			BorderPane borderPane = new BorderPane();
+			Scene scene = new Scene(borderPane);
+			ImageView imageView = new ImageView();
+			Image imageLarge = daoImage.load();
+			
+			// Load the image cached ad smooth
+			imageView.setImage(imageLarge);
+			imageView.setPreserveRatio(Boolean.TRUE);
+			imageView.setSmooth(Boolean.TRUE);
+			imageView.setCache(Boolean.TRUE);
+			borderPane.setCenter(imageView);
+			
+			// Create the new stage 
+			newStage.setWidth(750);
+			newStage.setHeight(500);
+			newStage.setTitle(CooMainFrame.TITLE 
+				+ " - " + daoImage.nameProperty().get());
+			newStage.getIcons().add(CooFileUtil
+				.getResourceIcon("Logo.png"));
+			CooGuiUtil.relativeToOwner(newStage, 
+				getScene().getWindow());
+
+			// Use max size for image view in scene
+			imageView.fitWidthProperty().bind(newStage.widthProperty());
+			imageView.fitHeightProperty().bind(newStage.heightProperty());
+			
+			newStage.setScene(scene);
+			newStage.show();
+		}
+		catch(SQLException ex)
+		{
+			CooLog.error("Error while opening"
+				+ " image in window", ex);
+		}		
 	}
 
 	private void openImageDetail(File imageFile)

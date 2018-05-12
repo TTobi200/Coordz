@@ -121,10 +121,9 @@ public class CooController implements Initializable, CooDataChanged
 			// FIXME: $TO: TabPanes loose selection when they where detached
 			tabGallery.setOnSelectionChanged(e -> imageGallery.loadImages(
 				// Get the current images folder
-				CooSystem.USE_DB ? CooDBImportUtil.getImagesFolder(
-					prefs.getDBFolder(), customer) : CooXMLDBUtil.getImagesFolder(customer)
+				CooXMLDBUtil.getImagesFolder(customer),
 				// Check if tab is selected 
-				, tabGallery.isSelected() | 
+				tabGallery.isSelected() | 
 				// Or if tab is detached from tabpane
 				!tabPane.getTabs().contains(tabGallery)));
 		}
@@ -141,18 +140,17 @@ public class CooController implements Initializable, CooDataChanged
 		// Refresh the gallery when selected
 		if(tabGallery.isSelected())
 		{
-			// Get the current images folder
-			File imgFolder = CooSystem.USE_DB ? CooDBImportUtil.getImagesFolder(
-					prefs.getDBFolder(), customer) : CooXMLDBUtil.getImagesFolder(customer);
-			
 			// Load the images for selected customer
 			// FORTEST Load the images from database
 			if(CooSystem.USE_DB)
 			{
-				imageGallery.loadImagesDB(customer, Boolean.TRUE);	
+				// FIXME $TO: Check why this is not working properly?
+				imageGallery.loadImagesDB(customer, Boolean.TRUE);
 			}
 			else
 			{
+				// Get the current images folder
+				File imgFolder = CooXMLDBUtil.getImagesFolder(customer);
 				imageGallery.loadImages(imgFolder, Boolean.TRUE);
 			}
 		}

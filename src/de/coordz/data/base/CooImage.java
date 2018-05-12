@@ -19,7 +19,7 @@ public class CooImage extends DaoImage
 {
 	public Image load() throws SQLException
 	{
-		return load(500, 500);
+		return load(1024, 780);
 	}
 	
 	public Image load(double width, double height) throws SQLException
