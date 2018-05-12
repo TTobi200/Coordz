@@ -103,6 +103,7 @@ public class CooView2D extends BorderPane implements CooDataChanged, CooMeasurem
 			measurement.getTargets().addListener(
 				new ListChangeListener<CooTarget>()
 			{
+				@SuppressWarnings("unlikely-arg-type")
 				@Override
 				public void onChanged(Change<? extends CooTarget> c)
 				{
