@@ -31,6 +31,7 @@ public class CooFileUtil
 
 	public static final String FXML_COMP = FXML_FOLDER + IN_JAR_SEPERATOR
 											+ "comp";
+	public static final String DOCUMENT_FOLDER = "./doc";
 
 	public static boolean fileCanBeLoad(String filePath)
 	{

@@ -28,8 +28,6 @@ import javafx.stage.Stage;
 
 public class CooController implements Initializable, CooDataChanged
 {
-	public static final String DOCUMENT_FOLDER = "./doc";
-
 	protected static CooController instance;
 	protected Stage primaryStage;
 
@@ -105,8 +103,8 @@ public class CooController implements Initializable, CooDataChanged
 		CooTabPaneDetacherUtil.create().makeTabsDetachable(tabPane);
 
 		// Add documents to GUI
-		CooGuiUtil.addDocToMenu(menuDocs, new File(DOCUMENT_FOLDER));
-		
+		CooGuiUtil.addDocToMenu(menuDocs, new File(
+			CooFileUtil.DOCUMENT_FOLDER));
 		
 		// FORTEST Load the images from database
 		// Load the Images when tab selected
