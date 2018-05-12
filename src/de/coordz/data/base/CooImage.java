@@ -19,11 +19,17 @@ public class CooImage extends DaoImage
 {
 	public Image load() throws SQLException
 	{
+		return load(500, 500);
+	}
+	
+	public Image load(double width, double height) throws SQLException
+	{
 		// Get the image data from blob
 		byte barr[] = dataProperty().get().getBytes(1, 
 			(int)dataProperty().get().length());
 		// Create and return the image
-		return new Image(new ByteArrayInputStream(barr));
+		return new Image(new ByteArrayInputStream(barr), width, height,
+			Boolean.TRUE, Boolean.TRUE);
 	}
 	
 	public void store(File imageFile) 

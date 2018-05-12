@@ -104,16 +104,30 @@ public class CooController implements Initializable, CooDataChanged
 		CooGuiUtil.addDocToMenu(menuDocs, new File(DOCUMENT_FOLDER));
 		
 		
-		// FIXME: $TO: TabPanes loose selection when they where detached
+		// FORTEST Load the images from database
 		// Load the Images when tab selected
-		tabGallery.setOnSelectionChanged(e -> imageGallery.loadImages(
-			// Get the current images folder
-			CooSystem.USE_DB ? CooDBImportUtil.getImagesFolder(
-				prefs.getDBFolder(), customer) : CooXMLDBUtil.getImagesFolder(customer)
-			// Check if tab is selected 
-			, tabGallery.isSelected() | 
-			// Or if tab is detached from tabpane
-			!tabPane.getTabs().contains(tabGallery)));
+		if(CooSystem.USE_DB)
+		{
+			tabGallery.setOnSelectionChanged(e -> 
+				// Load the images from database
+				imageGallery.loadImagesDB(customer, 
+				// Check if tab is selected 
+				tabGallery.isSelected() | 
+				// Or if tab is detached from tabpane
+				!tabPane.getTabs().contains(tabGallery)));
+		}
+		else
+		{
+			// FIXME: $TO: TabPanes loose selection when they where detached
+			tabGallery.setOnSelectionChanged(e -> imageGallery.loadImages(
+				// Get the current images folder
+				CooSystem.USE_DB ? CooDBImportUtil.getImagesFolder(
+					prefs.getDBFolder(), customer) : CooXMLDBUtil.getImagesFolder(customer)
+				// Check if tab is selected 
+				, tabGallery.isSelected() | 
+				// Or if tab is detached from tabpane
+				!tabPane.getTabs().contains(tabGallery)));
+		}
 
 		itmConnDB.setDisable(!CooSystem.USE_DB);
 	}
@@ -132,7 +146,15 @@ public class CooController implements Initializable, CooDataChanged
 					prefs.getDBFolder(), customer) : CooXMLDBUtil.getImagesFolder(customer);
 			
 			// Load the images for selected customer
-			imageGallery.loadImages(imgFolder, Boolean.TRUE);
+			// FORTEST Load the images from database
+			if(CooSystem.USE_DB)
+			{
+				imageGallery.loadImagesDB(customer, Boolean.TRUE);	
+			}
+			else
+			{
+				imageGallery.loadImages(imgFolder, Boolean.TRUE);
+			}
 		}
 	}
 

@@ -3,11 +3,17 @@ package de.gui.comp;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
+import java.sql.ResultSet;
 import java.util.*;
 
 import javax.imageio.*;
 import javax.imageio.stream.ImageInputStream;
 
+import de.coordz.CooSystem;
+import de.coordz.data.CooCustomer;
+import de.coordz.data.base.CooImage;
+import de.coordz.db.CooDBSelectStmt;
+import de.coordz.db.gen.inf.InfImage;
 import de.gui.*;
 import de.util.*;
 import de.util.log.CooLog;
@@ -70,6 +76,78 @@ public class CooImageGallery extends BorderPane
 				TransferMode.COPY : null);
 			e.consume();
 		});	
+	}
+	
+	public void loadImagesDB(CooCustomer customer, boolean load)
+	{
+		// Run the image loading in separated thread
+		Task<Void> task = new Task<Void>()
+		{
+			@Override
+			protected Void call() throws Exception
+			{
+				// Set the loading cursor
+				setCursor(Cursor.WAIT);
+				
+				// First clear the view
+				Platform.runLater(() -> tilePane
+					.getChildren().clear());
+				
+				// Check if we should load and images are available
+				if(load && Objects.nonNull(customer))
+				{
+					// Create statement to load customer images
+					CooDBSelectStmt stmt = new CooDBSelectStmt();
+					stmt.addFrom(InfImage.TABLE_NAME);
+					stmt.addColumn("*");
+					stmt.addWhere(InfImage.CUSTOMERID + " = ?", 
+						customer.customerIdProperty().get());
+
+					ResultSet res = CooSystem.getDatabase().execQuery(stmt);
+					int i = 0;
+
+					// Check if we have files to display
+					if(!res.next())
+					{
+						updateProgress(1, 1);
+						updateMessage("Keine Bilder vorhanden");
+					}
+					else
+					{
+						do
+						{
+							CooImage daoImage = new CooImage();
+							daoImage.cre(res);
+							
+							// Create a new image slide
+							VBox imageSlide = createImageSlideDB(
+								daoImage.nameProperty().get(),
+								daoImage.load(150, 0));
+							
+							// Add the image later for loading effect
+							Platform.runLater(() -> 
+								tilePane.getChildren().add(imageSlide));
+
+							// Update the loading progress
+							// TODO $TO: Fix the loading progress 
+							updateProgress(++i, i);
+							updateMessage(i + " / " + i);
+						}while(res.next());
+					}
+				}
+				
+				// Set the default cursor
+				setCursor(Cursor.DEFAULT);
+				return null;
+			}
+		};
+		// Bind the task progress and text to progress bar
+		lblProgress.textProperty().bind(task.messageProperty());
+		progress.progressProperty().bind(task.progressProperty());
+		new Thread(task).start();
+		
+		// Forward the dragged file to copy it to image folder
+//		setOnDragDropped(e -> copyImage(imgFolder, e));
 	}
 	
 	public void loadImages(File imgFolder, boolean load)
@@ -255,6 +333,68 @@ public class CooImageGallery extends BorderPane
 			CooLog.error("Error while "
 				+ "loading image", ex);
 		}
+		return vbox;
+	}
+	
+	private VBox createImageSlideDB(String name, Image image)
+	{
+		VBox vbox = new VBox();
+		vbox.setAlignment(Pos.CENTER);
+		
+		// Load the image to image view
+//		Image image = new Image(stream, 150,
+//			0, Boolean.TRUE,	Boolean.TRUE);
+			
+		ImageView imageView = new ImageView(image);
+		imageView.setEffect(new DropShadow(15,
+			Color.DARKGRAY));
+		imageView.setFitWidth(150);
+		imageView.setPickOnBounds(Boolean.TRUE);
+		
+		// Load the delete image icon
+		Image imgDelete = CooFileUtil.getResourceIcon("delete_cross.png");
+		ImageView imgViewDelete = new ImageView(imgDelete);
+		imgViewDelete.setEffect(new DropShadow(10,
+			Color.DARKGRAY));
+		imgViewDelete.setTranslateX(
+			// Move to right site
+			(imgViewDelete.getTranslateX()
+			+ imageView.getBoundsInParent().getWidth() / 2)
+			// Move backwards image size and offset
+			- imgDelete.getWidth() - 15);
+		imgViewDelete.setTranslateY(
+			// Move to the top
+			(imgViewDelete.getTranslateY() 
+			- imageView.getBoundsInParent().getHeight() / 2)
+			// Move down image size and offset
+			+ imgDelete.getWidth() + 15);
+		imgViewDelete.setVisible(Boolean.FALSE);
+		
+		// Display the delete icon on mouse over
+		imgViewDelete.setOnMouseEntered(e -> imgViewDelete.setVisible(Boolean.TRUE));
+		imageView.setOnMouseEntered(e -> imgViewDelete.setVisible(Boolean.TRUE));
+		imageView.setOnMouseExited(e -> imgViewDelete.setVisible(Boolean.FALSE));
+		
+		// Add action to delete image
+		imgViewDelete.setPickOnBounds(Boolean.TRUE);
+//		imgViewDelete.setOnMouseClicked(e -> 
+//			imgViewDelete.setVisible(deleteImage(
+//				imageFolder, imageFile)));
+		
+		imageView.setOnMouseClicked(e -> 
+		{
+			// Check if double left click
+			if(e.getButton().equals(MouseButton
+				.PRIMARY) && e.getClickCount() == 2)
+			{
+//				openImageDetail(imageFile);
+			}
+		});
+		
+		// Image slide vbox with image and its name
+		vbox.getChildren().add(new StackPane(imageView, imgViewDelete));
+		vbox.getChildren().add(new Label(name));
+			
 		return vbox;
 	}
 

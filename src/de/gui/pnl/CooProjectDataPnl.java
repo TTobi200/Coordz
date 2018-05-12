@@ -100,6 +100,8 @@ public class CooProjectDataPnl extends BorderPane implements CooDataChanged
 				updateDao(project, txtPrjName.focusedProperty());
 				updateDao(project, txtSoftName.focusedProperty());
 				updateDao(project, txtSoftVersion.focusedProperty());
+				updateDao(project, txtGateIp.focusedProperty());
+				updateDao(project, txtGateMAC.focusedProperty());
 				
 				updateDaos(tblStations, 
 					project.projectIdProperty().get());
