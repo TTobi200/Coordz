@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Objects;
 
+import de.coordz.CooSystem;
 import de.coordz.data.*;
 import de.coordz.doc.*;
 import de.gui.*;
@@ -32,6 +33,8 @@ public class CooTreeViewPnl extends BorderPane
 	@FXML
 	protected Button btnAdd;
 	@FXML
+	protected Button btnSave;
+	@FXML
 	protected Button btnDelete;
 	@FXML
 	protected Button btnExport;
@@ -52,6 +55,9 @@ public class CooTreeViewPnl extends BorderPane
 			CooLog.debug("Could not load FXML", e);
 		}
 
+		// FORTEST Disable the save button if using DB
+		btnSave.setDisable(CooSystem.USE_DB);
+		
 		components = FXCollections.observableArrayList();
 		prjTreeView.getSelectionModel().selectedItemProperty()
 			.addListener(new ChangeListener<TreeItem<String>>()
@@ -189,7 +195,7 @@ public class CooTreeViewPnl extends BorderPane
 	}
 
 	@FXML
-	protected void delete()
+	protected void delete() throws SQLException
 	{
 		TreeItem<String> selItem = prjTreeView.getSelectionModel()
 			.getSelectedItem();
@@ -213,14 +219,30 @@ public class CooTreeViewPnl extends BorderPane
 					CooProject project = ((CooProjectTreeItem)selItem)
 						.projectProperty().get();
 
-					CooXMLDBUtil.deleteProject(customer, project);
+					// FORTEST Delete the project in DB mode
+					if(CooSystem.USE_DB)
+					{
+						project.delete();
+					}
+					else
+					{
+						CooXMLDBUtil.deleteProject(customer, project);
+					}
 				}
 				else if(selItem instanceof CooCustomerTreeItem)
 				{
 					CooCustomer customer = ((CooCustomerTreeItem)selItem)
 						.customerProperty().get();
 
-					CooXMLDBUtil.deleteCustomer(customer);
+					// FORTEST Delete the customer in DB mode
+					if(CooSystem.USE_DB)
+					{
+						customer.delete();
+					}
+					else
+					{
+						CooXMLDBUtil.deleteCustomer(customer);
+					}
 				}
 
 				// Remove the selected item

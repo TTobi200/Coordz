@@ -45,6 +45,10 @@ public class CooController implements Initializable, CooDataChanged
 	@FXML
 	protected Label lblPrj;
 	@FXML
+	protected MenuItem itmNew;
+	@FXML
+	protected MenuItem itmOpen;
+	@FXML
 	protected MenuItem itmConnDB;
 
 	@FXML
@@ -128,6 +132,9 @@ public class CooController implements Initializable, CooDataChanged
 				!tabPane.getTabs().contains(tabGallery)));
 		}
 
+		// FORTEST Disable menu items if running on DB mode
+		itmNew.setDisable(CooSystem.USE_DB);
+		itmOpen.setDisable(CooSystem.USE_DB);
 		itmConnDB.setDisable(!CooSystem.USE_DB);
 	}
 	
