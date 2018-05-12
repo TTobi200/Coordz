@@ -8,8 +8,7 @@ package de.coordz;
 
 import static de.util.CooXmlDomUtil.getDocumentBuilder;
 
-import java.io.*;
-import java.nio.channels.FileLock;
+import java.io.IOException;
 import java.util.Objects;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -38,8 +37,8 @@ public class CooSystem
 	// Decoded with default key
 	public static final String ADMIN_PASSWORD = "HtkkjeFirns";
 
-	private static RandomAccessFile randomAccessFile;
-	private static FileLock fileLock;
+//	private static RandomAccessFile randomAccessFile;
+//	private static FileLock fileLock;
 	
 	/** Flag if database should be used - otherwise xml */
 	public static final boolean USE_DB = Boolean.TRUE;
@@ -63,19 +62,19 @@ public class CooSystem
 	 */
 	public static void exit(int status)
 	{
-		if(Objects.nonNull(fileLock) && Objects.nonNull(randomAccessFile))
-		{
-			try
-			{
-				fileLock.release();
-				randomAccessFile.close();
-				CooLog.debug("Releasing the file lock");
-			}
-			catch(Exception e)
-			{
-				CooLog.error("Error while releasing file lock", e);
-			}
-		}
+//		if(Objects.nonNull(fileLock) && Objects.nonNull(randomAccessFile))
+//		{
+//			try
+//			{
+//				fileLock.release();
+//				randomAccessFile.close();
+//				CooLog.debug("Releasing the file lock");
+//			}
+//			catch(Exception e)
+//			{
+//				CooLog.error("Error while releasing file lock", e);
+//			}
+//		}
 		
 		CooLog.debug("Shutdown Coordz State:" + status);
 		Platform.exit();
@@ -101,16 +100,16 @@ public class CooSystem
 			 CooLoggerUtil.initLogging(LOGGING_FOLDER, 
 				 DAYS_TO_SAVE_LOGS, REORG_LOGS);
 
-			// Lock a random file to secure single instance
-			final File file = new File("Coo_Running_Flag");
-			randomAccessFile = new RandomAccessFile(file, "rw");
-			fileLock = randomAccessFile.getChannel().tryLock();
-
-			if(fileLock == null)
-			{
-				CooLog.error("Coo already running - fileLocked - shutting down");
-				exit(FATAL);
-			}
+//			// Lock a random file to secure single instance
+//			final File file = new File("Coo_Running_Flag");
+//			randomAccessFile = new RandomAccessFile(file, "rw");
+//			fileLock = randomAccessFile.getChannel().tryLock();
+//
+//			if(fileLock == null)
+//			{
+//				CooLog.error("Coo already running - fileLocked - shutting down");
+//				exit(FATAL);
+//			}
 		}
 		catch(IOException e)
 		{
