@@ -16,6 +16,6 @@ public class CooInitTblPalet extends InitTblPalet
 	public void init() throws SQLException
 	{
 		// Add initial default palet entry
-		put(1, "Palette 1", "0", 0, 0);
+		put(1, "Palette 1", "0", 3000, 5000);
 	}
 }
