@@ -12,6 +12,7 @@ import javax.imageio.stream.ImageInputStream;
 import de.coordz.CooSystem;
 import de.coordz.data.CooCustomer;
 import de.coordz.data.base.CooImage;
+import de.coordz.data.init.CooInitTblImage;
 import de.coordz.db.CooDBSelectStmt;
 import de.coordz.db.gen.inf.InfImage;
 import de.gui.*;
@@ -98,10 +99,12 @@ public class CooImageGallery extends BorderPane
 				{
 					// Create statement to load customer images
 					CooDBSelectStmt stmt = new CooDBSelectStmt();
-					stmt.addFrom(InfImage.TABLE_NAME);
-					stmt.addColumn("*");
-					stmt.addWhere(InfImage.CUSTOMERID + " = ?", 
-						customer.customerIdProperty().get());
+					stmt.addFrom(InfImage.TABLE_NAME)
+						.addColumn("*")
+						.addWhere(InfImage.CUSTOMERID + " = ?", 
+							customer.customerIdProperty().get())
+						.addWhere(InfImage.NAME + " != ?", 
+							CooInitTblImage.IMAGE_LOGO);
 
 					ResultSet res = CooSystem.getDatabase().execQuery(stmt);
 					int i = 0;
