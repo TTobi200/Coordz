@@ -14,6 +14,7 @@ import java.util.*;
 import org.controlsfx.control.*;
 
 import de.coordz.data.*;
+import de.coordz.db.*;
 import de.coordz.doc.CooDocument;
 import de.coordz.doc.CooDocument.Content;
 import de.coordz.lap.CooLAPClient;
@@ -239,6 +240,92 @@ public class CooDialogs
 		dlg.setHeaderText(head);
 		dlg.getDialogPane().setContent(pane);
 		dlg.showAndWait();
+	}
+	
+	public static CooDB showConnectToDB(Window owner)
+	{
+		GridPane pane = new GridPane();
+		pane.setHgap(5d);
+		pane.setVgap(5d);
+		Label lblType = new Label("Type:");
+		ComboBox<CooDBTypes> txtType = new ComboBox<>(
+			FXCollections.observableArrayList(CooDBTypes.values()));
+		Label lblHost = new Label("Host:");
+		TextField txtHost = new TextField();
+		Label lblPort = new Label("Port:");
+		TextField txtPort = new TextField();
+		Label lblName = new Label("Name:");
+		TextField txtName = new TextField();
+		Label lblUser = new Label("Benutzer:");
+		TextField txtUser = new TextField();
+		Label lblPassword = new Label("Passwort:");
+		PasswordField txtPasword = new PasswordField();
+
+		txtType.setMinWidth(280);
+		txtHost.setMinWidth(280);
+		txtPort.setMinWidth(280);
+		txtName.setMinWidth(280);
+		txtUser.setMinWidth(280);
+		txtPasword.setMinWidth(280);
+
+		GridPane.setRowIndex(lblType, 1);
+		GridPane.setRowIndex(txtType, 1);
+		GridPane.setRowIndex(lblHost, 2);
+		GridPane.setRowIndex(txtHost, 2);
+		GridPane.setRowIndex(lblPort, 3);
+		GridPane.setRowIndex(txtPort, 3);
+		GridPane.setRowIndex(lblName, 4);
+		GridPane.setRowIndex(txtName, 4);
+		GridPane.setRowIndex(lblUser, 5);
+		GridPane.setRowIndex(txtUser, 5);
+		GridPane.setRowIndex(lblPassword, 6);
+		GridPane.setRowIndex(txtPasword, 6);
+
+		GridPane.setColumnIndex(lblType, 1);
+		GridPane.setColumnIndex(txtType, 2);
+		GridPane.setColumnIndex(lblHost, 1);
+		GridPane.setColumnIndex(txtHost, 2);
+		GridPane.setColumnIndex(lblPort, 1);
+		GridPane.setColumnIndex(txtPort, 2);
+		GridPane.setColumnIndex(lblName, 1);
+		GridPane.setColumnIndex(txtName, 2);
+		GridPane.setColumnIndex(lblUser, 1);
+		GridPane.setColumnIndex(txtUser, 2);
+		GridPane.setColumnIndex(lblPassword, 1);
+		GridPane.setColumnIndex(txtPasword, 2);
+		
+		pane.getChildren().addAll(lblType, txtType, lblHost, 
+			txtHost, lblPort, txtPort, lblName, txtName, 
+			lblUser, txtUser, lblPassword, txtPasword);
+
+		Alert dlg = new Alert(AlertType.CONFIRMATION);
+		dlg.setTitle(CooMainFrame.TITLE);
+		CooGuiUtil.grayOutParent(owner,
+			dlg.showingProperty());
+		dlg.initOwner(owner);
+		dlg.setHeaderText("Datenbank verbinden");
+		dlg.getDialogPane().setContent(pane);
+		dlg.showAndWait();
+		
+		CooDB database = null;
+		if(dlg.getResult().equals(ButtonType.OK))
+		{
+			try
+			{
+				CooDBTypes type = txtType.getSelectionModel().getSelectedItem();
+				database = type.getInstance().newInstance();
+				database.connect(txtHost.getText(), txtPort.getText(),
+					txtName.getText(), txtUser.getText(), 
+					txtPasword.getText(), Boolean.FALSE);
+			}
+			catch(Exception e)
+			{
+				showExceptionDialog(owner, 
+					"Fehler beim Verbinden", e);
+			}
+		}
+		
+		return database;
 	}
 	
 	public static CooLAPClient showConnectToLAPSoft(Window owner)

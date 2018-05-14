@@ -43,7 +43,17 @@ public abstract class CooDBDao
 	 */
 	public void cre() throws SQLException
 	{
-		cre(Boolean.TRUE);
+		cre(CooSystem.getDatabase());
+	}
+	
+	/**
+	 * Method to create a DAO with next primary key.
+	 * @param database = the {@link CooDB} to create this item
+	 * @throws SQLException - when creation from {@link ResultSet} failed
+	 */
+	public void cre(CooDB database) throws SQLException
+	{
+		cre(database, Boolean.TRUE);
 	}
 	
 	/**
@@ -52,6 +62,17 @@ public abstract class CooDBDao
 	 * @throws SQLException - when creation from {@link ResultSet} failed
 	 */
 	public void cre(boolean init) throws SQLException
+	{
+		cre(CooSystem.getDatabase(), init);
+	}
+	
+	/**
+	 * Method to create a DAO with next primary key.
+	 * @param database = the {@link CooDB} to create this item
+	 * @param init = flag if dao should be initialized
+	 * @throws SQLException - when creation from {@link ResultSet} failed
+	 */
+	public void cre(CooDB database, boolean init) throws SQLException
 	{
 		// Build the select statement
 		CooLog.debug("Searching for next available primary key");
@@ -62,8 +83,7 @@ public abstract class CooDBDao
 			.append(tableName);
 		
 		// Select the max primary key from table
-		ResultSet res = CooSystem.getDatabase()
-			.execQuery(stmt.toString());
+		ResultSet res = database.execQuery(stmt.toString());
 		
 		// Set the max entry to unknown
 		int maxEntry = -1;
@@ -76,7 +96,7 @@ public abstract class CooDBDao
 			"> found for table <" + tableName + ">");
 
 		// Create DAO with next primary key
-		cre(maxEntry + 1, init);
+		cre(database, maxEntry + 1, init);
 	}
 	
 	/**
@@ -87,7 +107,19 @@ public abstract class CooDBDao
 	 */
 	public void cre(int pkey) throws SQLException
 	{
-		cre(pkey, Boolean.TRUE);
+		cre(CooSystem.getDatabase(), pkey);
+	}
+	
+	/**
+	 * Method to create a DAO from committed primary key.
+	 * Calls the {@link #doSelect(int)} for primary key.
+	 * @param database = the {@link CooDB} to create this item
+	 * @param pkey = the primary key to create DAO from
+	 * @throws SQLException - when creation from {@link ResultSet} failed
+	 */
+	public void cre(CooDB database, int pkey) throws SQLException
+	{
+		cre(database, pkey, Boolean.TRUE);
 	}
 	
 	/**
@@ -99,19 +131,33 @@ public abstract class CooDBDao
 	 */
 	public void cre(int pkey, boolean init) throws SQLException
 	{
-		isInDB = doSelect(pkey);
+		cre(CooSystem.getDatabase(), pkey, init);
+	}
+	
+	/**
+	 * Method to create a DAO from committed primary key.
+	 * Calls the {@link #doSelect(int)} for primary key.
+	 * @param database = the {@link CooDB} to create this item
+	 * @param pkey = the primary key to create DAO from
+	 * @param init = flag if dao should be initialized
+	 * @throws SQLException - when creation from {@link ResultSet} failed
+	 */
+	public void cre(CooDB database, int pkey, boolean init) throws SQLException
+	{
+		isInDB = doSelect(database, pkey);
 		
 		if(init && !isInDB)
 		{
 			// If not in database - fill with defaults
-			initDefaults();
+			initDefaults(database);
 		}
 	}
 	
 	/**
 	 * Method to initializes default values of this DAO.
+	 * @param database = the {@link CooDB} to initialize this item
 	 */
-	private void initDefaults()
+	private void initDefaults(CooDB database)
 	{
 		if(!columnToProperty.isEmpty())
 		{
@@ -147,8 +193,7 @@ public abstract class CooDBDao
 								LocalDateTime.now()));
 							break;
 						case BLOB:
-							setProperty(p, CooSystem.getDatabase()
-								.createBlob());
+							setProperty(p, database.createBlob());
 							break;
 					}
 				}
@@ -256,6 +301,17 @@ public abstract class CooDBDao
 	 */
 	public boolean update() throws SQLException
 	{
+		return update(CooSystem.getDatabase());
+	}
+	
+	/**
+	 * Method to update this DAO in the database.
+	 * @param database = the {@link CooDB} to update this item
+	 * @return if this dao {@link #isInDB}
+	 * @throws SQLException - when update went wrong
+	 */
+	public boolean update(CooDB database) throws SQLException
+	{
 		StringBuilder stmt = new StringBuilder("UPDATE ");
 		stmt.append(tableName)
 			.append(" SET ");
@@ -284,8 +340,8 @@ public abstract class CooDBDao
 				columnToProperty.get(tablePKey.toUpperCase())));
 		
 		// Execute the SQL update statement
-		return isInDB = CooSystem.getDatabase().
-			execUpdate(stmt.toString()) > 0;
+		return isInDB = database.execUpdate(
+			stmt.toString()) > 0;
 	}
 	
 	/**
@@ -295,7 +351,7 @@ public abstract class CooDBDao
 	 */
 	public boolean insert() throws SQLException
 	{
-		return insert(null);
+		return insert(CooSystem.getDatabase(), null);
 	}
 	
 	/**
@@ -305,6 +361,29 @@ public abstract class CooDBDao
 	 * @throws SQLException - when insert went wrong
 	 */
 	public boolean insert(Integer fKey) throws SQLException
+	{
+		return insert(CooSystem.getDatabase(), fKey);
+	}
+	
+	/**
+	 * Method to insert this DAO to the database.
+	 * @param database = the {@link CooDB} to insert this item
+	 * @return if this dao {@link #isInDB}
+	 * @throws SQLException - when insert went wrong
+	 */
+	public boolean insert(CooDB database) throws SQLException
+	{
+		return insert(database, null);
+	}
+	
+	/**
+	 * Method to insert this DAO to the database.
+	 * @param fKey = the table foreignKey
+	 * @param database = the {@link CooDB} to insert this item
+	 * @return if this dao {@link #isInDB}
+	 * @throws SQLException - when insert went wrong
+	 */
+	public boolean insert(CooDB database, Integer fKey) throws SQLException
 	{
 		StringBuilder stmt = new StringBuilder("INSERT INTO ");
 		stmt.append(tableName)
@@ -330,7 +409,7 @@ public abstract class CooDBDao
 			-> args.add(p.getValue()));
 		
 		// Execute the prepared SQL statement
-		CooSystem.getDatabase().execPrepareStatement(
+		database.execPrepareStatement(
 			stmt.toString(), args);
 		
 		// This item is in database
@@ -343,6 +422,16 @@ public abstract class CooDBDao
 	 */
 	public void delete() throws SQLException
 	{
+		delete(CooSystem.getDatabase());
+	}
+	
+	/**
+	 * Method to delete this DAO from database.
+	 * @param database = the {@link CooDB} to delete this item
+	 * @throws SQLException - when delete went wrong
+	 */
+	public void delete(CooDB database) throws SQLException
+	{
 		// Only if this DAO is in database
 		if(isInDB)
 		{
@@ -353,7 +442,7 @@ public abstract class CooDBDao
 						tablePKey.toUpperCase())));
 			
 			// Execute the SQL statement
-			CooSystem.getDatabase().execQuery(stmt);
+			database.execQuery(stmt);
 			
 			// This item is in database
 			isInDB = Boolean.FALSE;
@@ -362,12 +451,13 @@ public abstract class CooDBDao
 	
 	/**
 	 * Method to select DAO for committed primary key.
+	 * @param database = the {@link CooDB} to select this item
 	 * @param pkey = the primary key of DAO
 	 * @return true if DAO is in database
 	 * @throws SQLException - when failed to select DAO
 	 */
 	@SuppressWarnings("unchecked")
-	private boolean doSelect(Object pkey) throws SQLException
+	private boolean doSelect(CooDB database, Object pkey) throws SQLException
 	{
 		// Try to find dao with same primary key
 		CooDBSelectStmt stmt = new CooDBSelectStmt();
@@ -392,7 +482,7 @@ public abstract class CooDBDao
 		}
 		
 		// Execute the SQL statement
-		ResultSet result = CooSystem.getDatabase().execQuery(stmt.toString());
+		ResultSet result = database.execQuery(stmt.toString());
 		
 		// Only if data found
 		if(result.next() && !columnToProperty.isEmpty())
