@@ -56,6 +56,14 @@ public abstract class CooDB
 	public abstract int execUpdate(String sql) throws SQLException;
 	
 	/**
+	 * Method to execute committed {@link CooDBDeleteStmt} on this DB.
+	 * @param stmt = the {@link CooDBDeleteStmt} to execute
+	 * @return integer with resulting count
+	 * @throws SQLException - if statement could not be executed
+	 */
+	public abstract int execUpdate(CooDBDeleteStmt stmt) throws SQLException;
+	
+	/**
 	 * Method to execute committed prepared SQL-Update-Statement on this DB.
 	 * @param stmt = the prepared SQL-Update-Statement {@link String} to execute
 	 * @param args = the statement arguments

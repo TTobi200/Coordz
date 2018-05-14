@@ -105,6 +105,12 @@ public abstract class CooDBSimple extends CooDB
 	}
 	
 	@Override
+	public int execUpdate(CooDBDeleteStmt stmt) throws SQLException
+	{
+		return execUpdate(stmt.build());
+	}
+	
+	@Override
 	public int execPrepareStatement(String stmt, List<Object> args)
 		throws SQLException
 	{

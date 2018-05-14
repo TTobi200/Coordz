@@ -442,7 +442,7 @@ public abstract class CooDBDao
 						tablePKey.toUpperCase())));
 			
 			// Execute the SQL statement
-			database.execQuery(stmt);
+			database.execUpdate(stmt);
 			
 			// This item is in database
 			isInDB = Boolean.FALSE;
