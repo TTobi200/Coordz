@@ -10,7 +10,7 @@ import java.sql.*;
 import java.util.Objects;
 
 import de.coordz.db.CooDBValTypes;
-import de.util.NativeUtils;
+import de.util.CooNativeUtils;
 import de.util.log.CooLog;
 
 public class CooDBSQLServer extends CooDBSimple
@@ -36,7 +36,7 @@ public class CooDBSQLServer extends CooDBSimple
 		{
 			// Load the windows authentication native
 			String bit = "x" + System.getProperty("sun.arch.data.model");
-			NativeUtils.loadLibraryToPath("/include/jar/sqljdbc_6.4/enu"
+			CooNativeUtils.loadLibraryToPath("/include/jar/sqljdbc_6.4/enu"
 				+ "/auth/" + bit + "/sqljdbc_auth.dll");
 			
 			// Connect to the database

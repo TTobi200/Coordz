@@ -36,7 +36,7 @@ import java.nio.file.*;
  * @see <a href="https://github.com/adamheinrich/native-utils">https://github.com/adamheinrich/native-utils</a>
  *
  */
-public class NativeUtils {
+public class CooNativeUtils {
  
     /**
      * The minimum length a prefix for a file has to have according to {@link File#createTempFile(String, String)}}.
@@ -52,7 +52,7 @@ public class NativeUtils {
     /**
      * Private constructor - this class will never be instanced
      */
-    private NativeUtils() {
+    private CooNativeUtils() {
     }
     
     public static void loadLibraryToPath(String path) throws IOException
@@ -97,7 +97,7 @@ public class NativeUtils {
 
         File temp = new File(temporaryDir, filename);
 
-        try (InputStream is = NativeUtils.class.getResourceAsStream(path)) {
+        try (InputStream is = CooNativeUtils.class.getResourceAsStream(path)) {
             Files.copy(is, temp.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             temp.delete();
