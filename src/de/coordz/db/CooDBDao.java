@@ -321,7 +321,7 @@ public abstract class CooDBDao
 		{
 			Property<?> p = columnToProperty.get(column);
 			
-			stmt.append(CooSQLUtil.escapeColumn(column) + " = " );
+			stmt.append(database.escapeColumn(column) + " = " );
 			
 			// On integer property don't escape value with ''
 			CooSQLUtil.escapeString(p, stmt);

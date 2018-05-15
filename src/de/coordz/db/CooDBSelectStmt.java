@@ -8,6 +8,7 @@ package de.coordz.db;
 
 import java.util.*;
 
+import de.coordz.CooSystem;
 import de.util.CooSQLUtil;
 
 /**
@@ -106,7 +107,7 @@ public class CooDBSelectStmt
 		// Add the column arguments
 		for(int i = 0; i < column.size(); i++)
 		{
-			String c = CooSQLUtil.escapeColumn(column.get(i));
+			String c = CooSystem.getDatabase().escapeColumn(column.get(i));
 			stmt.append(c).append(i < column.size() -1 ? ", " : "");
 		}
 

@@ -175,6 +175,6 @@ public abstract class CooDBSimple extends CooDB
 	@Override
 	public String escapeColumn(String column)
 	{
-		return "\"" + column + "\"";
+		return !column.equals("*") ? "\"" + column + "\"" : column;
 	}
 }
