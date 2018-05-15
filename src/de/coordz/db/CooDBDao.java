@@ -319,18 +319,9 @@ public abstract class CooDBDao
 		int i = 0;
 		for(String column : columnToProperty.keySet())
 		{
-			Property<?> p = columnToProperty.get(column);
-			
-			stmt.append(database.escapeColumn(column) + " = " );
-			
-			// On integer property don't escape value with ''
-			CooSQLUtil.escapeString(p, stmt);
-			
-			// Append , if not the last
-			if(i++ < columnToProperty.size() -1)
-			{
-				stmt.append(", ");
-			}
+			stmt.append(database.escapeColumn(column) + " = ?" );
+			// Append , if not the last otherwise close with )
+			stmt.append(i++ < columnToProperty.size() -1 ? ", " : "");
 		}
 		
 		stmt.append(" WHERE ")
@@ -339,9 +330,14 @@ public abstract class CooDBDao
 			.append(CooSQLUtil.escapeString(
 				columnToProperty.get(tablePKey.toUpperCase())));
 		
+		// Collect the prepared statement arguments
+		List<Object> args = new ArrayList<>();
+		columnToProperty.values().forEach(p 
+			-> args.add(p.getValue()));
+		
 		// Execute the SQL update statement
-		return isInDB = database.execUpdate(
-			stmt.toString()) > 0;
+		return isInDB = database.execPrepareStatement(
+			stmt.toString(), args) > 0;
 	}
 	
 	/**
