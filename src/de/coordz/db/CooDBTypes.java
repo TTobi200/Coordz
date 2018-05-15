@@ -10,10 +10,11 @@ import de.coordz.db.impl.*;
 
 public enum CooDBTypes
 {
-	DERBY("Derby", CooDBDerby.class), 		// Fully working
-	ORACLE("Oracle", CooDBOracle.class),		// Fully working
-	MYSQL("MySQL", CooDBMySQL.class),		// Not tested yet
-	MARIADB("MariaDB", CooDBMariaDB.class);	// Not tested yet
+	DERBY("Derby", CooDBDerby.class), 				// Fully working
+	ORACLE("Oracle", CooDBOracle.class),			// Fully working
+	SQLSERVER("SQLServer", CooDBSQLServer.class),	// Not tested yet
+	MYSQL("MySQL", CooDBMySQL.class),				// Not tested yet
+	MARIADB("MariaDB", CooDBMariaDB.class);			// Not tested yet
 	
 	private String name;
 	private Class<CooDB> instance;
