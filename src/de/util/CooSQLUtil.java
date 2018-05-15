@@ -8,6 +8,8 @@ package de.util;
 
 import java.sql.*;
 
+import javax.sql.rowset.serial.SerialBlob;
+
 import de.coordz.CooSystem;
 import de.coordz.db.*;
 import de.coordz.db.impl.*;
@@ -272,6 +274,11 @@ public class CooSQLUtil
 			{
 				((ObjectProperty<java.sql.Blob>)prop).setValue(
 					(Blob)((oracle.sql.BLOB)value).toJdbc());
+			}
+			else if(value instanceof byte[]) // SQL-Server
+			{
+				((ObjectProperty<java.sql.Blob>)prop).setValue(
+					new SerialBlob((byte[])value));
 			}
 		}
 		catch(SQLException e)

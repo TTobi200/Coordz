@@ -287,7 +287,7 @@ public abstract class CooDBDao
 			{
 				CooSQLUtil.setTimestampProperty(prop, value);
 			}
-			else if(value instanceof Blob || value instanceof BLOB)
+			else if(value instanceof Blob || value instanceof BLOB || value instanceof byte[])
 			{
 				CooSQLUtil.setBlobProperty(prop, value);
 			}
