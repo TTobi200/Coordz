@@ -17,6 +17,7 @@
         	<zipfileset excludes="META-INF/services/*" src="./src/include/jar/derbyrun.jar"/>
             <zipfileset excludes="META-INF/services/*" src="./src/include/jar/ojdbc7.jar"/>
         	<zipfileset excludes="META-INF/services/*" src="./src/include/jar/mysql5.1.44.jar"/>
+        	<zipfileset excludes="META-INF/*" src="./src/include/jar/mssql-jdbc-6.4.0.jre8.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="./src/include/jar/controlsfx-8.40.12.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="./src/include/jar/itextpdf-5.2.1.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="./src/include/jar/jim3dsModelImporterJFX.jar"/>
