@@ -6,7 +6,7 @@
  */
 package de.gui.pnl;
 
-import static de.util.CooSQLUtil.updateDaos;
+import static de.util.CooSQLUtil.*;
 
 import java.io.*;
 import java.util.*;
@@ -468,6 +468,7 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 			updateDaos(tblReticles, measurementId);
 			updateDaos(tblTargets, measurementId);
 			updateDaos(tblTotalStation, measurementId);
+			updateDao(measurement, txtNotes.focusedProperty());
 		}
 		
 		tblReticles.setItems(Objects.nonNull(measurement) ?
