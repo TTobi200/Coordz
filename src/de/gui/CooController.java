@@ -131,8 +131,8 @@ public class CooController implements Initializable, CooDataChanged
 		}
 
 		// FORTEST Disable menu items if running on DB mode
-		itmNew.setDisable(CooSystem.USE_DB);
-		itmOpen.setDisable(CooSystem.USE_DB);
+		itmNew.setVisible(!CooSystem.USE_DB);
+		itmOpen.setVisible(!CooSystem.USE_DB);
 		itmConnDB.setDisable(!CooSystem.USE_DB);
 	}
 	

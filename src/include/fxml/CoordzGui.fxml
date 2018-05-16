@@ -158,7 +158,7 @@
 					visible="false" />
 				<Menu mnemonicParsing="false" text="Hilfe">
 					<items>
-						<MenuItem mnemonicParsing="false" text="Anleitung">
+						<MenuItem mnemonicParsing="false" text="Anleitung" visible="false">
 							<accelerator>
 								<KeyCombination fx:value="Ctrl+Shift+M" />
 							</accelerator>
