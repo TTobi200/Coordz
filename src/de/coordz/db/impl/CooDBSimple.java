@@ -155,8 +155,15 @@ public abstract class CooDBSimple extends CooDB
 			index++;
 		}
 		
-		CooLog.debug("Executing prepared SQL Update statement: \"" +
-			stmt + "\" " + args.toString());
+		// Build the log statement string
+		for(Object a : args)
+		{
+			stmt = stmt.replaceFirst("\\?", 
+				"\"" + String.valueOf(a) + "\"");
+		}
+
+		CooLog.debug("Executing prepared SQL Update "
+			+ "statement: \"" + stmt + "\" ");
 		return prepStmt.executeUpdate();
 	}
 	
