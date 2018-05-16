@@ -567,6 +567,10 @@ public abstract class CooDBDao
 		return tableName;
 	}
 	
+	/**
+	 * Method to get the {@link #tablePKey} of this DAO.
+	 * @return the {@link #tablePKey} of this DAO.
+	 */
 	public String getTablePKey()
 	{
 		return tablePKey;
