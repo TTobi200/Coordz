@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<DBMODEL DBTYPE="SQLSERVER" DBHOST="UTSRV29\SQLEXPRESS_12" DBPORT="1521" DBNAME="Coords" 
+<DBMODEL DBTYPE="DERBY" DBHOST="localhost" DBPORT="1521" DBNAME="CoordzDB" 
 	DBUSER="Coordz" DBPASSWORD="P4$$w0rd" DBCREATE="TRUE">
 	<TABLES>
 		<TABLE NAME="Customer">
