@@ -93,6 +93,17 @@ public class CooProject extends DaoProject implements CooDBXML, CooDBLoad
 		}
 	}
 	
+	@Override
+	public void delete(CooDB database) throws SQLException
+	{
+		// Delete the project DAO
+		super.delete(database);
+		
+		// Also delete all referred data
+		deleteAll(database, stations);
+		deleteAll(database, lapSoftware.get());
+	}
+	
 	/**
 	 * Method to access {@link CooStation}
 	 * @return {@link #stations}

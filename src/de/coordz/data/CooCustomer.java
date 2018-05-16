@@ -6,7 +6,7 @@
  */
 package de.coordz.data;
 
-import static de.util.CooSQLUtil.loadList;
+import static de.util.CooSQLUtil.*;
 import static de.util.CooXmlDomUtil.*;
 
 import java.sql.*;
@@ -121,6 +121,26 @@ public class CooCustomer extends DaoCustomer implements CooDBXML, CooDBLoad
 		projects.setAll(loadList(database, InfProject.TABLE_NAME, 
 			InfProject.CUSTOMERID, CooProject.class,
 			customerIdProperty().get()));
+	}
+	
+	@Override
+	public void delete(CooDB database) throws SQLException
+	{
+		// Delete all referred data
+		deleteAll(database, contacts);
+		deleteAll(database, palets);
+		deleteAll(database, projects);
+		
+		// Delete all customer images
+		CooDBDeleteStmt stmt = new CooDBDeleteStmt();
+		stmt.addFrom(InfImage.TABLE_NAME);
+		stmt.addColumn("*");
+		stmt.addWhere(InfImage.CUSTOMERID + " = ?",
+			customerIdProperty().get());
+		database.execUpdate(stmt);
+
+		// Delete the customer DAO
+		super.delete(database);
 	}
 	
 	/**

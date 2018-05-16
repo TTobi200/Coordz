@@ -6,7 +6,7 @@
  */
 package de.coordz.data.base;
 
-import static de.util.CooSQLUtil.loadList;
+import static de.util.CooSQLUtil.*;
 import static de.util.CooXmlDomUtil.*;
 
 import java.sql.SQLException;
@@ -96,7 +96,10 @@ public class CooMeasurement extends DaoMeasurement implements CooDBXML, CooDBLoa
 	@Override
 	public void fromDB(CooDB database) throws SQLException
 	{
-		// TODO $TO: Load the total station here
+		// FORTEST Select the total station
+		totalStation.set(loadDao(database, InfTotalstation.TABLE_NAME,
+			InfTotalstation.MEASUREMENTID, CooTotalstation.class,
+			stationIdProperty().get()));
 		
 		// FORTEST Select the reticles
 		reticles.setAll(loadList(database, InfReticle.TABLE_NAME, 
@@ -106,6 +109,18 @@ public class CooMeasurement extends DaoMeasurement implements CooDBXML, CooDBLoa
 		targets.setAll(loadList(database, InfTarget.TABLE_NAME, 
 			InfTarget.MEASUREMENTID, CooTarget.class, 
 			measurementIdProperty().get()));
+	}
+	
+	@Override
+	public void delete(CooDB database) throws SQLException
+	{
+		// Delete all referred data
+		deleteAll(database, totalStation.get());
+		deleteAll(database, reticles);
+		deleteAll(database, targets);
+
+		// Delete the DAO
+		super.delete(database);
 	}
 	
 	/**

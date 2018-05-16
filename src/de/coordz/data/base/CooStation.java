@@ -129,6 +129,19 @@ public class CooStation extends DaoStation implements CooDBXML, CooDBLoad
 		}
 	}
 	
+	@Override
+	public void delete(CooDB database) throws SQLException
+	{
+		// Delete all referred data
+		deleteAll(database, regionDeviding.get());
+		deleteAll(database, measurements);
+		deleteAll(database, verifyMeasurement.get());
+		deleteAll(database, gateway.get());
+
+		// Delete the DAO
+		super.delete(database);
+	}
+	
 	/**
 	 * Method to access {@link CooMeasurement}
 	 * @return {@link #measurements}

@@ -6,7 +6,7 @@
  */
 package de.coordz.data.base;
 
-import static de.util.CooSQLUtil.loadList;
+import static de.util.CooSQLUtil.*;
 import static de.util.CooXmlDomUtil.*;
 
 import java.sql.SQLException;
@@ -80,6 +80,17 @@ public class CooVerifyMeasurement extends DaoVerifyMeasurement implements CooDBX
 		result.setAll(loadList(database, InfRectangle.TABLE_NAME, 
 			InfRectangle.RECTANGLEID, CooRectangle.class,
 			resultIdProperty().get()));
+	}
+	
+	@Override
+	public void delete(CooDB database) throws SQLException
+	{
+		// Delete all referred data
+		deleteAll(database, specification);
+		deleteAll(database, result);
+
+		// Delete the DAO
+		super.delete(database);
 	}
 	
 	/**

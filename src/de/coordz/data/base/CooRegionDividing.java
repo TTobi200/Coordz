@@ -6,7 +6,7 @@
  */
 package de.coordz.data.base;
 
-import static de.util.CooSQLUtil.loadList;
+import static de.util.CooSQLUtil.*;
 import static de.util.CooXmlDomUtil.*;
 
 import java.sql.SQLException;
@@ -91,6 +91,16 @@ public class CooRegionDividing extends DaoRegionDividing implements CooDBXML, Co
 		laser.setAll(loadList(database, InfLaser.TABLE_NAME, 
 			InfLaser.LASERID, CooLaser.class, 
 			laserIdProperty().get()));
+	}
+	
+	@Override
+	public void delete(CooDB database) throws SQLException
+	{
+		// Delete all referred data
+		deleteAll(database, laser);
+
+		// Delete the DAO
+		super.delete(database);
 	}
 	
 	/**

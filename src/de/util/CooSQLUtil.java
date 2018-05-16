@@ -7,6 +7,7 @@
 package de.util;
 
 import java.sql.*;
+import java.util.Objects;
 
 import javax.sql.rowset.serial.SerialBlob;
 
@@ -223,6 +224,24 @@ public class CooSQLUtil
 		}
 		
 		return list;
+	}
+	
+	public  static <T extends CooDBDao> void deleteAll(CooDB database, 
+		ObservableList<T>daos) throws SQLException
+	{
+		for(T dao : daos)
+		{
+			deleteAll(database, dao);
+		}
+	}
+	
+	public  static <T extends CooDBDao> void deleteAll(CooDB database, 
+		T dao) throws SQLException
+	{
+		if(Objects.nonNull(dao) && dao.isInDB())
+		{
+			dao.delete(database);
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
