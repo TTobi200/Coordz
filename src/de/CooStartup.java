@@ -32,21 +32,23 @@ public class CooStartup
 		
 		try
 		{
-			CooSystem.startupDatabase();
 			
 			// Check if generating daos should be executed
 			if(argList.contains("GENALL"))
 			{
+				CooSystem.startupDatabase();
 				doGenAll(argList);
 			} 
 			// Check if db should be initialized
 			else if(argList.contains("INITDB"))
 			{
+				CooSystem.startupDatabase();
 				doInitDB(argList);
 			}
 			// Check if db should be initialized from xml
 			else if(argList.contains("INITDBXML"))
 			{
+				CooSystem.startupDatabase();
 				doInitDBXML(argList);
 			}
 			// When we have no parameter - start GUI

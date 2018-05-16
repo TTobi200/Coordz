@@ -16,6 +16,7 @@ import de.coordz.CooSystem;
 import de.coordz.data.*;
 import de.coordz.db.*;
 import de.coordz.db.gen.inf.*;
+import de.coordz.db.xml.CooDBModel;
 import de.gui.comp.*;
 import de.gui.comp.CooCustomerTreeItem.CooProjectTreeItem;
 import de.gui.pnl.*;
@@ -185,38 +186,47 @@ public class CooController implements Initializable, CooDataChanged
 	{
 		try
 		{
-			CooDB database = CooSystem.getDatabase();
-			CooCustomerTreeItem root = new CooCustomerTreeItem(
-				new SimpleStringProperty(CooSystem.getModel()
-					.dbNameProperty().get()), new CooCustomer());
+			// Ask user to enter database credentials
+			CooDBModel model = CooDialogs.showDBModel(primaryStage);
+			
+			if(Objects.nonNull(model))
+			{
+				// Startup the database connection from model
+				CooSystem.startupDatabase(model);
+				
+				// FORTEST $TO: Load the customer from database
+				CooDB database = CooSystem.getDatabase();
+				CooCustomerTreeItem root = new CooCustomerTreeItem(
+					new SimpleStringProperty(CooSystem.getModel()
+						.dbNameProperty().get()), new CooCustomer());
 
-			// FORTEST $TO: Load the customer from database
-			CooDBSelectStmt stmt = new CooDBSelectStmt();
-			stmt.addFrom(InfCustomer.TABLE_NAME);
-			stmt.addColumn("*");
-			
-			ResultSet res = database.execQuery(stmt);
-			while(res.next())
-			{
-				CooCustomer customer = new CooCustomer();
-				customer.cre(res);
-				CooCustomerTreeItem treeItm = new CooCustomerTreeItem(
-					customer.nameProperty(), customer);
-				root.getChildren().add(treeItm);
+				CooDBSelectStmt stmt = new CooDBSelectStmt();
+				stmt.addFrom(InfCustomer.TABLE_NAME);
+				stmt.addColumn("*");
+				
+				ResultSet res = database.execQuery(stmt);
+				while(res.next())
+				{
+					CooCustomer customer = new CooCustomer();
+					customer.cre(res);
+					CooCustomerTreeItem treeItm = new CooCustomerTreeItem(
+						customer.nameProperty(), customer);
+					root.getChildren().add(treeItm);
+				}
+				
+				// Load all projects from customers
+				for(TreeItem<String> itm : root.getChildren())
+				{
+					CooCustomerTreeItem treeItem = (CooCustomerTreeItem)itm;
+					loadCustomerProjects(database, treeItem, 
+						treeItem.customerProperty().get());
+				}
+				
+				treeViewPnl.getPrjTreeView().setRoot(root);
+				root.setExpanded(Boolean.TRUE);
 			}
-			
-			// Load all projects from customers
-			for(TreeItem<String> itm : root.getChildren())
-			{
-				CooCustomerTreeItem treeItem = (CooCustomerTreeItem)itm;
-				loadCustomerProjects(database, treeItem, 
-					treeItem.customerProperty().get());
-			}
-			
-			treeViewPnl.getPrjTreeView().setRoot(root);
-			root.setExpanded(Boolean.TRUE);
 		}
-		catch(SQLException e)
+		catch(SQLException | InstantiationException | IllegalAccessException e)
 		{
 			CooDialogs.showExceptionDialog(primaryStage,
 				"Error while connection db", e);

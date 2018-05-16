@@ -9,7 +9,6 @@ package de.coordz;
 import static de.util.CooXmlDomUtil.getDocumentBuilder;
 
 import java.io.IOException;
-import java.util.Objects;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -119,8 +118,7 @@ public class CooSystem
 	public static void startupDatabase() throws SAXException, ParserConfigurationException,
 		InstantiationException, IllegalAccessException, IOException
 	{
-		// There should only be once database running
-		if(USE_DB && Objects.isNull(database))
+		if(CooSystem.USE_DB)
 		{
 			// Load the current database model
 			model = new CooDBModel();
@@ -129,6 +127,19 @@ public class CooSystem
 					CooFileUtil.IN_JAR_SEPERATOR + "DBModel.xml"))
 				.getDocumentElement();
 			model.fromXML(root);
+			
+			// Startup database from model
+			startupDatabase(model);
+		}
+	}
+	
+	public static void startupDatabase(CooDBModel model) 
+		throws InstantiationException, IllegalAccessException
+	{
+		if(CooSystem.USE_DB)
+		{
+			// Store the database model
+			CooSystem.model = model;
 			
 			// Create the database and establish connection
 			database = model.dbTypeProperty().get().getInstance().newInstance();

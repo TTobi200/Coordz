@@ -15,6 +15,7 @@ import org.controlsfx.control.*;
 
 import de.coordz.data.*;
 import de.coordz.db.*;
+import de.coordz.db.xml.CooDBModel;
 import de.coordz.doc.CooDocument;
 import de.coordz.doc.CooDocument.Content;
 import de.coordz.lap.CooLAPClient;
@@ -244,11 +245,40 @@ public class CooDialogs
 	
 	public static CooDB showConnectToDB(Window owner)
 	{
+		CooDBModel model = showDBModel(owner);
+		
+		CooDB database = null;
+		if(Objects.nonNull(model))
+		{
+			try
+			{
+				database = model.dbTypeProperty().get()
+					.getInstance().newInstance();
+				database.connect(
+					model.dbHostProperty().get(),
+					model.dbPortProperty().get(),
+					model.dbNameProperty().get(),
+					model.dbUserProperty().get(),
+					model.dbPasswordProperty().get(),
+					Boolean.FALSE);
+			}
+			catch(Exception e)
+			{
+				showExceptionDialog(owner, 
+					"Fehler beim Verbinden", e);
+			}
+		}
+		
+		return database;
+	}
+	
+	public static CooDBModel showDBModel(Window owner)
+	{
 		GridPane pane = new GridPane();
 		pane.setHgap(5d);
 		pane.setVgap(5d);
 		Label lblType = new Label("Type:");
-		ComboBox<CooDBTypes> txtType = new ComboBox<>(
+		ComboBox<CooDBTypes> cbType = new ComboBox<>(
 			FXCollections.observableArrayList(CooDBTypes.values()));
 		Label lblHost = new Label("Host:");
 		TextField txtHost = new TextField();
@@ -260,8 +290,8 @@ public class CooDialogs
 		TextField txtUser = new TextField();
 		Label lblPassword = new Label("Passwort:");
 		PasswordField txtPasword = new PasswordField();
-
-		txtType.setMinWidth(280);
+		
+		cbType.setMinWidth(280);
 		txtHost.setMinWidth(280);
 		txtPort.setMinWidth(280);
 		txtName.setMinWidth(280);
@@ -269,7 +299,7 @@ public class CooDialogs
 		txtPasword.setMinWidth(280);
 
 		GridPane.setRowIndex(lblType, 1);
-		GridPane.setRowIndex(txtType, 1);
+		GridPane.setRowIndex(cbType, 1);
 		GridPane.setRowIndex(lblHost, 2);
 		GridPane.setRowIndex(txtHost, 2);
 		GridPane.setRowIndex(lblPort, 3);
@@ -282,7 +312,7 @@ public class CooDialogs
 		GridPane.setRowIndex(txtPasword, 6);
 
 		GridPane.setColumnIndex(lblType, 1);
-		GridPane.setColumnIndex(txtType, 2);
+		GridPane.setColumnIndex(cbType, 2);
 		GridPane.setColumnIndex(lblHost, 1);
 		GridPane.setColumnIndex(txtHost, 2);
 		GridPane.setColumnIndex(lblPort, 1);
@@ -294,7 +324,31 @@ public class CooDialogs
 		GridPane.setColumnIndex(lblPassword, 1);
 		GridPane.setColumnIndex(txtPasword, 2);
 		
-		pane.getChildren().addAll(lblType, txtType, lblHost, 
+		CooDBModel model = new CooDBModel();
+		cbType.getSelectionModel().selectedItemProperty()
+			.addListener((obs, old, newV) ->
+		{
+			// Get the sample configuration
+			getDefaultConfig(model, cbType.getSelectionModel()
+				.getSelectedItem());
+			
+//			txtHost.setPromptText(model.dbHostProperty().get());
+//			txtPort.setPromptText(model.dbPortProperty().get());
+//			txtName.setPromptText(model.dbNameProperty().get());
+//			txtUser.setPromptText(model.dbUserProperty().get());
+//			txtPasword.setPromptText(model.dbPasswordProperty().get());
+			
+			txtHost.textProperty().bind(model.dbHostProperty());
+			txtPort.textProperty().bind(model.dbPortProperty());
+			txtName.textProperty().bind(model.dbNameProperty());
+			txtUser.textProperty().bind(model.dbUserProperty());
+			txtPasword.textProperty().bind(model.dbPasswordProperty());
+		});
+		
+		// Auto select the default SQL server
+		cbType.getSelectionModel().select(CooDBTypes.SQLSERVER);
+		
+		pane.getChildren().addAll(lblType, cbType, lblHost, 
 			txtHost, lblPort, txtPort, lblName, txtName, 
 			lblUser, txtUser, lblPassword, txtPasword);
 
@@ -307,27 +361,47 @@ public class CooDialogs
 		dlg.getDialogPane().setContent(pane);
 		dlg.showAndWait();
 		
-		CooDB database = null;
-		if(dlg.getResult().equals(ButtonType.OK))
-		{
-			try
-			{
-				CooDBTypes type = txtType.getSelectionModel().getSelectedItem();
-				database = type.getInstance().newInstance();
-				database.connect(txtHost.getText(), txtPort.getText(),
-					txtName.getText(), txtUser.getText(), 
-					txtPasword.getText(), Boolean.FALSE);
-			}
-			catch(Exception e)
-			{
-				showExceptionDialog(owner, 
-					"Fehler beim Verbinden", e);
-			}
-		}
-		
-		return database;
+		return dlg.getResult().equals(ButtonType.OK) ? model : null;
 	}
 	
+	private static CooDBModel getDefaultConfig(CooDBModel model,
+		CooDBTypes selectedItem)
+	{
+		model.dbTypeProperty().set(selectedItem);
+		model.dbCreateProperty().set(Boolean.FALSE);
+
+		// TODO $TO: Add this to system settings
+		switch(selectedItem)
+		{
+			case DERBY:
+			case MARIADB:
+			case MYSQL:
+			default:
+				model.dbHostProperty().set("localhost");
+				model.dbPortProperty().set("3306");
+				model.dbNameProperty().set("CoordzDB");
+				model.dbUserProperty().set("Coordz");
+				model.dbPasswordProperty().set("P4$$w0rd");
+				break;
+			case ORACLE:
+				model.dbHostProperty().set("localhost");
+				model.dbPortProperty().set("1521");
+				model.dbNameProperty().set("XE");
+				model.dbUserProperty().set("Coordz");
+				model.dbPasswordProperty().set("P4$$w0rd");
+				break;
+			case SQLSERVER:
+				model.dbHostProperty().set("UTSRV29\\SQLEXPRESS_12");
+				model.dbPortProperty().set("1434");
+				model.dbNameProperty().set("Coords");
+				model.dbUserProperty().set(System.getProperty("user.name"));
+				model.dbPasswordProperty().set("**********");
+				break;
+		}
+		
+		return model;
+	}
+
 	public static CooLAPClient showConnectToLAPSoft(Window owner)
 	{
 		GridPane pane = new GridPane();

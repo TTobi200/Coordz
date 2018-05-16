@@ -98,7 +98,9 @@ public class CooNativeUtils {
         File temp = new File(temporaryDir, filename);
 
         try (InputStream is = CooNativeUtils.class.getResourceAsStream(path)) {
-            Files.copy(is, temp.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        	if(!temp.exists()) {
+        		Files.copy(is, temp.toPath());
+        	}
         } catch (IOException e) {
             temp.delete();
             throw e;
