@@ -325,7 +325,7 @@ public abstract class CooDBDao
 		}
 		
 		stmt.append(" WHERE ")
-			.append(tablePKey.toUpperCase())
+			.append(database.escapeColumn(tablePKey.toUpperCase()))
 			.append(" = ")
 			.append(CooSQLUtil.escapeString(
 				columnToProperty.get(tablePKey.toUpperCase())));
