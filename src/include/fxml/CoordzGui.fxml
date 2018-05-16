@@ -23,13 +23,15 @@
 <?import javafx.scene.input.KeyCombination?>
 <?import de.gui.comp.CooImageGallery?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane xmlns="http://javafx.com/javafx/8"
+	xmlns:fx="http://javafx.com/fxml/1">
 	<top>
 		<MenuBar BorderPane.alignment="CENTER">
 			<menus>
 				<Menu mnemonicParsing="false" text="Datei">
 					<items>
-						<MenuItem fx:id="itmNew" mnemonicParsing="false" text="Neu" onAction="#newXMLDB">
+						<MenuItem fx:id="itmNew" mnemonicParsing="false"
+							text="Neu" onAction="#newXMLDB">
 							<accelerator>
 								<KeyCombination fx:value="Ctrl+N" />
 							</accelerator>
@@ -41,7 +43,8 @@
 								</ImageView>
 							</graphic>
 						</MenuItem>
-						<MenuItem fx:id="itmOpen" mnemonicParsing="false" text="Öffnen" onAction="#openXMLDB">
+						<MenuItem fx:id="itmOpen" mnemonicParsing="false"
+							text="Öffnen" onAction="#openXMLDB">
 							<accelerator>
 								<KeyCombination fx:value="Ctrl+O" />
 							</accelerator>
@@ -53,7 +56,8 @@
 								</ImageView>
 							</graphic>
 						</MenuItem>
-						<MenuItem fx:id="itmConnDB" mnemonicParsing="false" text="Verbinden" onAction="#connectDB">
+						<MenuItem fx:id="itmConnDB" mnemonicParsing="false"
+							text="Verbinden" onAction="#connectDB">
 							<accelerator>
 								<KeyCombination fx:value="Ctrl+D" />
 							</accelerator>
@@ -166,7 +170,21 @@
 								</ImageView>
 							</graphic>
 						</MenuItem>
-						<MenuItem mnemonicParsing="false" text="Über">
+						<MenuItem mnemonicParsing="false" text="Update"
+							onAction="#update">
+							<accelerator>
+								<KeyCombination fx:value="Ctrl+Shift+U" />
+							</accelerator>
+							<graphic>
+								<ImageView pickOnBounds="true" preserveRatio="true">
+									<image>
+										<Image url="/include/icons/update.png" />
+									</image>
+								</ImageView>
+							</graphic>
+						</MenuItem>
+						<MenuItem mnemonicParsing="false" text="Über" 
+							onAction="#openAbout">
 							<accelerator>
 								<KeyCombination fx:value="Ctrl+Shift+A" />
 							</accelerator>
@@ -184,7 +202,8 @@
 		</MenuBar>
 	</top>
 	<center>
-		<SplitPane dividerPositions="0.23" BorderPane.alignment="CENTER">
+		<SplitPane dividerPositions="0.23"
+			BorderPane.alignment="CENTER">
 			<items>
 				<CooTreeViewPnl fx:id="treeViewPnl" />
 				<BorderPane>

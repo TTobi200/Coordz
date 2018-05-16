@@ -243,6 +243,32 @@ public class CooController implements Initializable, CooDataChanged
 			customerTreeItm.getChildren().add(prjTreeItm);
 		}
 	}
+	
+	@FXML
+	public void openAbout()
+	{
+		StringBuilder about = new StringBuilder();
+		about.append(System.lineSeparator())
+			.append("Version: ")
+			.append(CooSystem.VERSION)
+			.append(System.lineSeparator())
+			.append("E-Mail: info@unitechnik.com")
+			.append(System.lineSeparator())
+			.append("Website: http://www.unitechnik.de")
+			.append(System.lineSeparator())
+			.append("Copyright: T.Ohm Unitechnik Systems GmbH 2018")
+			.append(System.lineSeparator());
+
+		CooDialogs.showInfoDialog(primaryStage,
+			CooMainFrame.TITLE, about.toString());
+	}
+
+	@FXML
+	public void update()
+	{
+		CooUpdateUtil.update(primaryStage,
+			Boolean.TRUE);
+	}
 
 	@FXML
 	protected void exit()

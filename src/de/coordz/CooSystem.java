@@ -33,9 +33,8 @@ public class CooSystem
 	public static final boolean REORG_LOGS = Boolean.TRUE;
 	public static final int DAYS_TO_SAVE_LOGS = 7;
 	public static final String LOGGING_FOLDER = "./logging";
-
-	// Decoded with default key
-	public static final String ADMIN_PASSWORD = "HtkkjeFirns";
+	
+	public static final double VERSION = 2.001; 
 
 //	private static RandomAccessFile randomAccessFile;
 //	private static FileLock fileLock;
