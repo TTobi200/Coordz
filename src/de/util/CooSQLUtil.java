@@ -14,7 +14,7 @@ import javax.sql.rowset.serial.SerialBlob;
 import de.coordz.CooSystem;
 import de.coordz.db.*;
 import de.coordz.db.impl.*;
-import de.gui.comp.CooTableView;
+import de.gui.comp.*;
 import de.util.log.CooLog;
 import javafx.beans.property.*;
 import javafx.collections.*;
@@ -119,24 +119,31 @@ public class CooSQLUtil
 		}		
 	}
 	
-	public static void updateDao(CooDBDao dao, 
-		ReadOnlyBooleanProperty focused)
+	public static void updateDao(CooDBDao dao,
+		CooTextArea txt)
 	{
-		focused.addListener((obs, old, newv) -> 
+		txt.setOnFocusedLost(ev ->
+			updateDao(dao));
+	}
+	
+	public static void updateDao(CooDBDao dao, 
+		CooTextField txt)
+	{
+		txt.setOnFocusedLost(ev ->
+			updateDao(dao));
+	}
+	
+	private static void updateDao(CooDBDao dao)
+	{
+		try
 		{
-			// Update dao when focused lost only
-			if(!newv)
-			{
-				try
-				{
-					dao.update();
-				}
-				catch(SQLException e)
-				{
-					CooLog.error("Error while updating dao", e);
-				}
-			}
-		});
+			// Update DAO when focused lost
+			dao.update();
+		}
+		catch(SQLException e)
+		{
+			CooLog.error("Error while updating dao", e);
+		}		
 	}
 	
 	public static <T extends CooDBDao> void updateDaos(

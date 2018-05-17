@@ -74,10 +74,10 @@ public class CooCoreDataPnl extends BorderPane implements CooDataChanged
 			try
 			{
 				customer.fromDB(CooSystem.getDatabase());
-				updateDao(customer, txtCustomer.focusedProperty());
-				updateDao(customer, txtStreet.focusedProperty());
-				updateDao(customer, txtPLZ.focusedProperty());
-				updateDao(customer, txtLocation.focusedProperty());
+				updateDao(customer, txtCustomer);
+				updateDao(customer, txtStreet);
+				updateDao(customer, txtPLZ);
+				updateDao(customer, txtLocation);
 				
 				Integer customerID = customer.customerIdProperty().get();
 				updateDaos(tblContacts, customerID);

@@ -97,14 +97,14 @@ public class CooProjectDataPnl extends BorderPane implements CooDataChanged
 			try
 			{
 				project.fromDB(CooSystem.getDatabase());
-				updateDao(project, txtPrjName.focusedProperty());
-				updateDao(project, txtSoftName.focusedProperty());
-				updateDao(project, txtSoftVersion.focusedProperty());
-				updateDao(project, txtGateIp.focusedProperty());
-				updateDao(project, txtGateMAC.focusedProperty());
+				updateDao(project, txtPrjName);
+				updateDao(project.lapSoftwareProperty()
+					.get(), txtSoftName);
+				updateDao(project.lapSoftwareProperty()
+					.get(), txtSoftVersion);
 				
-				updateDaos(tblStations, 
-					project.projectIdProperty().get());
+				updateDaos(tblStations, project.
+					projectIdProperty().get());
 			}
 			catch(SQLException e)
 			{
@@ -118,12 +118,10 @@ public class CooProjectDataPnl extends BorderPane implements CooDataChanged
 		// txtPrjDate.textProperty().bindBidirectional(project.dateProperty());
 
 		// LAP Software fields
-		txtSoftName.bindBidirectional(project.lapSoftwareProperty()
-			.get()
-			.nameProperty());
-		txtSoftVersion.bindBidirectional(project.lapSoftwareProperty()
-			.get()
-			.versionProperty());
+		txtSoftName.bindBidirectional(project
+			.lapSoftwareProperty().get().nameProperty());
+		txtSoftVersion.bindBidirectional(project
+			.lapSoftwareProperty().get().versionProperty());
 
 		// Station fields
 		tblStations.setItems(project.getStations());
@@ -136,6 +134,28 @@ public class CooProjectDataPnl extends BorderPane implements CooDataChanged
 	{
 		if(Objects.nonNull(station))
 		{
+			// FORTEST $TO: Load the station from database
+			if(CooSystem.USE_DB)
+			{
+				try
+				{
+					station.fromDB(CooSystem.getDatabase());
+					updateDao(station.gatewayProperty()
+						.get(),txtGateIp);
+					updateDao(station.gatewayProperty()
+						.get(),txtGateMAC);
+					
+					updateDaos(tblLaser, station.
+						gatewayProperty().get()
+						.gatewayIdProperty().get());
+				}
+				catch(SQLException e)
+				{
+					CooLog.error("Error while loading "
+						+ "station from db", e);
+				}
+			}
+			
 			// Get the gateway for this station 
 			CooGateway gateway = station.gatewayProperty().get();
 			// And set the fields

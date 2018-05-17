@@ -468,7 +468,7 @@ public class CooMeasurementsPnl extends BorderPane implements CooDataChanged, Co
 			updateDaos(tblReticles, measurementId);
 			updateDaos(tblTargets, measurementId);
 			updateDaos(tblTotalStation, measurementId);
-			updateDao(measurement, txtNotes.focusedProperty());
+			updateDao(measurement, txtNotes);
 		}
 		
 		tblReticles.setItems(Objects.nonNull(measurement) ?
