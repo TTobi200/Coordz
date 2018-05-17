@@ -6,7 +6,6 @@
  */
 package de.gui;
 
-import java.io.File;
 import java.util.prefs.*;
 
 import de.gui.sett.CooSettingsDialog;
@@ -14,12 +13,12 @@ import de.util.*;
 import de.util.log.CooLog;
 import javafx.stage.Stage;
 
-public class UTPreferences extends CooSettingsDialog
+public class CooPreferences extends CooSettingsDialog
 {
-	public static final String GROUP_GENERAL = "Allgemein";
-	public static final String GENERAL_DATABASE_FOLDER = "Datenbank Ordner";
+	public static final String GROUP_UPDATE = "Update";
+	public static final String AUTO_UPDATE = "Automatisch überprüfen";
 	
-	public UTPreferences(Stage parent)
+	public CooPreferences(Stage parent)
 	{
 		super(parent, CooMainFrame.TITLE, 
 			CooFileUtil.getResourceIcon("Logo.png"));
@@ -28,13 +27,9 @@ public class UTPreferences extends CooSettingsDialog
 
 	private void init(String name)
 	{
-		// Add the general settings
-		addSetting(GROUP_GENERAL, GENERAL_DATABASE_FOLDER, SettingType.TEXT, 
-			".\\CoordzXML");
-
 		// Add the update settings
-		addSetting("Update", "Automatisch überprüfen",
-			SettingType.BOOLEAN);
+		addSetting(GROUP_UPDATE, AUTO_UPDATE,
+			SettingType.BOOLEAN, Boolean.TRUE.toString());
 
 		// User decides what to do on cancel
 		setOnCancel(l ->
@@ -70,9 +65,9 @@ public class UTPreferences extends CooSettingsDialog
 		showAndWait();	
 	}
 	
-	public File getDBFolder()
+	public Boolean getAutoUpdate()
 	{
-		return new File(groups.get(GROUP_GENERAL).getProps()
-			.get(GENERAL_DATABASE_FOLDER).getValue().toString());
+		return Boolean.valueOf(groups.get(GROUP_UPDATE).getProps()
+			.get(AUTO_UPDATE).getValue().toString());
 	}
 }

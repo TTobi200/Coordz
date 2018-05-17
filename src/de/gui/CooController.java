@@ -21,6 +21,7 @@ import de.gui.comp.*;
 import de.gui.comp.CooCustomerTreeItem.CooProjectTreeItem;
 import de.gui.pnl.*;
 import de.util.*;
+import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.concurrent.Task;
 import javafx.fxml.*;
@@ -61,7 +62,7 @@ public class CooController implements Initializable, CooDataChanged
 	@FXML
 	protected CooImageGallery imageGallery;
 
-	protected UTPreferences prefs;
+	protected CooPreferences prefs;
 	private Property<String> xmlDbPath;
 	private RandomAccessFile randomAccessFile;
 	private FileLock fileLock;
@@ -81,6 +82,17 @@ public class CooController implements Initializable, CooDataChanged
 		this.primaryStage = primaryStage;
 		xmlDbPath = new SimpleStringProperty();
 		
+		primaryStage.setOnShowing(e ->
+		{
+			// Check if auto update enables
+			if(prefs.getAutoUpdate())
+			{
+				// Hide info if no update
+				Platform.runLater(() -> 
+					update(Boolean.FALSE));
+			}
+		});
+		
 		// Exit System on close requested
 		primaryStage.setOnCloseRequest(e -> 
 		{
@@ -93,7 +105,7 @@ public class CooController implements Initializable, CooDataChanged
 	public void initialize(URL location, ResourceBundle resources)
 	{
 		// Load the system preferences
-		prefs = new UTPreferences(primaryStage);
+		prefs = new CooPreferences(primaryStage);
 		
 		treeViewPnl.addDataChangedListener(coreDataPnl);
 		treeViewPnl.addDataChangedListener(projectDataPnl);
@@ -276,8 +288,13 @@ public class CooController implements Initializable, CooDataChanged
 	@FXML
 	public void update()
 	{
+		update(Boolean.TRUE);
+	}
+	
+	public void update(Boolean showInfo)
+	{
 		CooUpdateUtil.update(primaryStage,
-			Boolean.TRUE);
+			showInfo);
 	}
 
 	@FXML
