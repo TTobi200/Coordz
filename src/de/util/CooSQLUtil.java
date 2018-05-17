@@ -195,6 +195,11 @@ public class CooSQLUtil
 			{
 				dao.cre(res);
 			}
+			else
+			{
+				dao.cre();
+				dao.insert(database, i);
+			}
 		}
 		catch(InstantiationException | IllegalAccessException e)
 		{

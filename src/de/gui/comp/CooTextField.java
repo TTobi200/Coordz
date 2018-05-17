@@ -22,7 +22,7 @@ public class CooTextField extends TextField
 		focusedProperty().addListener((obs, old, newv) -> 
 		{
 			// Update DAO when focused lost only
-			if(old != newv && !newv)
+			if(Objects.nonNull(listener) && old != newv && !newv)
 			{
 				listener.actionPerformed(
 					new ActionEvent(this, 0, ""));

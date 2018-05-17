@@ -557,7 +557,7 @@
 							<content>
 								<BorderPane>
 									<center>
-										<CooTextArea fx:id="txtNotes" />
+										<CooTextArea fx:id="txtNotes" wrapText="true"/>
 									</center>
 								</BorderPane>
 							</content>
