@@ -60,6 +60,10 @@ public class CooTableView<T extends CooDBDao> extends TableView<T>
 				
 				// Inform the table listener
 				informListener(dao, Action.ADD);
+
+				// Reselect DAO to reload data
+				getSelectionModel().clearSelection();
+				getSelectionModel().select(dao);
 			}
 			catch(IllegalAccessException | InstantiationException e)
 			{
