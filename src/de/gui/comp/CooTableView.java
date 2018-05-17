@@ -69,10 +69,14 @@ public class CooTableView<T extends CooDBDao> extends TableView<T>
 
 		remMenuItm.setOnAction(event ->
 		{
-			T dao = getSelectionModel().getSelectedItem();
-			getItems().remove(dao);
-			// Inform the table listener
-			informListener(dao, Action.DELETE);
+			if(CooDialogs.showConfirmDialog(getScene().getWindow(),
+				"Eintrag löschen", "Wollen Sie diesen Eintrag wirklich löschen?"))
+			{
+				T dao = getSelectionModel().getSelectedItem();
+				getItems().remove(dao);
+				// Inform the table listener
+				informListener(dao, Action.DELETE);
+			}
 		});
 
 		contextMenu.getItems().addAll(addMenuItm,
